@@ -1,5 +1,65 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Mail, Phone, Linkedin, ArrowRight, ChevronDown, Image as ImageIcon, ArrowLeft, ExternalLink } from 'lucide-react';
+
+// --- Icons (Renamed to avoid potential conflicts) ---
+const MenuIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+  </svg>
+);
+
+const XIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+  </svg>
+);
+
+const MailIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+  </svg>
+);
+
+const PhoneIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+);
+
+const LinkedinIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>
+  </svg>
+);
+
+const ArrowRightIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+  </svg>
+);
+
+const ArrowLeftIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+  </svg>
+);
+
+const ChevronDownIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="m6 9 6 6 6-6"/>
+  </svg>
+);
+
+const ExternalLinkIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/>
+  </svg>
+);
+
+const PhotoIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+  </svg>
+);
 
 // --- Types & Interfaces ---
 interface Section {
@@ -40,6 +100,30 @@ interface GalleryItem {
   alt?: string;
 }
 
+// Helper for path resolution (Supports both Vite and Create React App)
+const getBaseUrl = () => {
+  try {
+    // @ts-ignore: Check for Vite environment
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
+      // @ts-ignore
+      return import.meta.env.BASE_URL;
+    }
+  } catch (e) {
+    // Ignore error if import.meta is not supported
+  }
+  
+  // Check for Create React App / Node environment
+  // @ts-ignore
+  if (typeof process !== 'undefined' && process.env && process.env.PUBLIC_URL) {
+    // @ts-ignore
+    return process.env.PUBLIC_URL;
+  }
+  
+  return '';
+};
+
+const PUBLIC_URL = getBaseUrl().replace(/\/$/, ''); // Ensure no trailing slash
+
 // --- Data ---
 const projects: Project[] = [
   {
@@ -54,7 +138,7 @@ const projects: Project[] = [
     hoverColor: "hover:text-purple-600",
     badge: "bg-purple-100 text-purple-700",
     content: {
-      heroImage: "placeholder-classflow-hero.jpg",
+      heroImage: "placeholder-classflow-hero.jpg", // Keeps the placeholder logic
       challenge: "Academic scheduling is manual and prone to error. Syllabuses are locked in static PDFs, requiring tedious manual entry to create a functional digital calendar.",
       role: "Creator & Lead Developer",
       sections: [
@@ -95,7 +179,7 @@ const projects: Project[] = [
     hoverColor: "hover:text-sky-600",
     badge: "bg-sky-100 text-sky-700",
     content: {
-      heroImage: "https://i.ibb.co/6JH7j8h2/We-Pick-Hero-2.png",
+      heroImage: `${PUBLIC_URL}/images/WePick/WePick Hero 2.png`,
       challenge: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants—making it hard to decide and move forward.",
       role: "UI/UX Designer",
       sections: [
@@ -118,11 +202,11 @@ const projects: Project[] = [
           content: "To visualize the solution, we created comparative storyboards. The first illustrates the friction of the current method, while the second demonstrates the seamless flow using WePick.",
           images: [
             {
-              src: "https://i.ibb.co/4wKbQmhw/storyboard-without-app.png",
+              src: `${PUBLIC_URL}/images/WePick/storyboard_without_app.png`,
               caption: "Without the App: The chaos of fragmented communication."
             },
             {
-              src: "https://i.ibb.co/fYp1ZFmC/storyboard-with-app.png",
+              src: `${PUBLIC_URL}/images/WePick/storyboard_with_app.png`,
               caption: "With the App: Streamlined collaboration and voting."
             }
           ]
@@ -141,7 +225,7 @@ const projects: Project[] = [
           content: "To define the aesthetic direction of WePick, we curated a moodboard focusing on vibrant, energetic colors and clean, modern typography. The goal was to create an interface that feels fun, social, and trustworthy.",
           images: [
             {
-              src: "https://i.ibb.co/8gpNhM2P/We-Pick-Moodboard.png",
+              src: `${PUBLIC_URL}/images/WePick/WePick Moodboard.png`,
               caption: "WePick Visual Identity Moodboard"
             }
           ]
@@ -151,7 +235,7 @@ const projects: Project[] = [
           content: "Before moving to high-fidelity screens, we established a comprehensive design system including typography, color palettes, and component libraries to ensure consistency across the application.",
           images: [
             {
-              src: "https://i.ibb.co/Q0pc68g/We-Pick-Design-System.png",
+              src: `${PUBLIC_URL}/images/WePick/WePick Design System.png`,
               caption: "WePick Design System & Components"
             }
           ]
@@ -176,7 +260,7 @@ const projects: Project[] = [
     hoverColor: "hover:text-rose-900",
     badge: "bg-rose-100 text-rose-900",
     content: {
-      heroImage: "https://i.ibb.co/xS0DsNpV/Dino-Spread-Hero-Image.png",
+      heroImage: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Hero Image.png`,
       challenge: "Improving hygiene and usability in campus canteen condiment stations.",
       role: "Industrial Designer",
       sections: [
@@ -188,11 +272,11 @@ const projects: Project[] = [
           imageHeight: 'md:h-48', 
           images: [
             {
-              src: "https://i.ibb.co/pvYWwsWm/Dino-Spread-Knife-Mess.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Knife Mess.png`,
               caption: "The messy reality of shared condiment jars."
             },
             {
-              src: "https://i.ibb.co/gLkHsm6T/applying-condiments.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/applying condiments.png`,
               caption: "Hygiene concerns during application."
             }
           ]
@@ -204,11 +288,11 @@ const projects: Project[] = [
           imageHeight: 'md:h-80', 
           images: [
             {
-              src: "https://i.ibb.co/xtVG8R8Z/Dino-Spread-Sketches.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Sketches.png`,
               caption: "Sketch iterations exploring form and mechanism."
             },
             {
-              src: "https://i.ibb.co/ZzXxSF6Q/Dino-Spread-Final-Sketch.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Final Sketch.png`,
               caption: "Final concept sketch."
             }
           ]
@@ -219,15 +303,15 @@ const projects: Project[] = [
           imageLayout: 'mixed', 
           images: [
             {
-              src: "https://i.ibb.co/dsJbNFkd/Jash-Creating-Prototype.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/Jash Creating Prototype.png`,
               caption: "Creating the XPS foam prototype."
             },
             {
-              src: "https://i.ibb.co/DgMgPtMn/Teammate-and-I-Drying-POP.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/Teammate and I Drying POP.png`,
               caption: "Applying Plaster of Paris for reinforcement."
             },
             {
-              src: "https://i.ibb.co/3mmj199Z/Form-Variations.png",
+              src: `${PUBLIC_URL}/images/Dino Spread/Form Variations.png`,
               caption: "Exploring various form iterations.",
               fullWidth: true
             }
@@ -240,11 +324,11 @@ const projects: Project[] = [
           imageHeight: 'md:h-96', 
           images: [
              {
-               src: "https://i.ibb.co/7tfPCvW4/Sketching-Final-Prototype.png",
+               src: `${PUBLIC_URL}/images/Dino Spread/Sketching Final Prototype.png`,
                caption: "Final Prototype"
              },
              {
-               src: "https://i.ibb.co/RGnxMZLg/Sketching-Team-Photo.png",
+               src: `${PUBLIC_URL}/images/Dino Spread/Sketching Team Photo.png`,
                caption: "Design Jury Presentation"
              }
           ]
@@ -255,9 +339,9 @@ const projects: Project[] = [
 ];
 
 const galleryItems: GalleryItem[] = [
-  { type: 'image', src: 'https://i.ibb.co/bj3P3pfW/la-la-land.jpg', alt: 'La La Land Art' },
-  { type: 'image', src: 'https://i.ibb.co/dwZj9pTH/Mrs-jordan.jpg', alt: 'Mrs Jordan Art' },
-  { type: 'image', src: 'https://i.ibb.co/dwzSzc98/Geometric-Design.gif', alt: 'Geometric Design GIF' }
+  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/la la land.jpg`, alt: 'La La Land Art' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/Mrs jordan.jpg`, alt: 'Mrs Jordan Art' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/Geometric-Design.gif`, alt: 'Geometric Design GIF' }
 ];
 
 const skills = [
@@ -376,7 +460,7 @@ const ProjectDetail = ({
             onClick={onBack}
             className="group flex items-center gap-2 text-slate-500 hover:text-sky-600 mb-12 transition-colors text-sm font-medium"
           >
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeftIcon size={18} className="group-hover:-translate-x-1 transition-transform" />
             Back to Projects
           </button>
           
@@ -420,12 +504,12 @@ const ProjectDetail = ({
 
         {/* Hero Image */}
         <div className="w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm">
-           {project.content.heroImage.startsWith('http') ? (
+           {!project.content.heroImage.includes('placeholder') ? (
               <img src={project.content.heroImage} alt={`${project.title} Hero`} className="w-full h-auto block" />
            ) : (
               <div className="w-full aspect-video flex items-center justify-center">
                 <div className="text-center text-slate-400">
-                  <ImageIcon size={48} className="mx-auto mb-4 opacity-50" />
+                  <PhotoIcon size={48} className="mx-auto mb-4 opacity-50" />
                   <span className="text-sm font-medium tracking-wide uppercase">Project Hero Image</span>
                 </div>
               </div>
@@ -487,7 +571,7 @@ const ProjectDetail = ({
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-medium text-lg hover:bg-slate-800 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5"
                     >
-                      {section.cta.text} <ExternalLink size={20} className="opacity-80" />
+                      {section.cta.text} <ExternalLinkIcon size={20} className="opacity-80" />
                     </a>
                   </div>
                 )}
@@ -502,13 +586,13 @@ const ProjectDetail = ({
             onClick={onBack}
             className="text-base font-medium text-slate-500 hover:text-sky-600 transition-colors flex items-center gap-2"
           >
-            <ArrowLeft size={18} /> Back to Home
+            <ArrowLeftIcon size={18} /> Back to Home
           </button>
            <button 
              onClick={onNext}
              className="group flex items-center gap-2 px-6 py-3 bg-slate-900 text-white hover:bg-sky-600 rounded-full font-medium transition-all hover:pr-8"
            >
-             Next Project <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+             Next Project <ArrowRightIcon size={18} className="group-hover:translate-x-1 transition-transform" />
            </button>
         </div>
 
@@ -636,7 +720,7 @@ const App = () => {
             className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full"
             onClick={() => setSelectedImage(null)}
           >
-            <X size={32} />
+            <XIcon size={32} />
           </button>
           <img 
             src={selectedImage} 
@@ -675,7 +759,7 @@ const App = () => {
             {/* Mobile Menu Button */}
             <div className="md:hidden">
               <button onClick={toggleMenu} className="text-slate-600 hover:text-sky-600 p-2">
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
               </button>
             </div>
           </div>
@@ -717,7 +801,7 @@ const App = () => {
                   onClick={() => scrollToSection('work')}
                   className="px-8 py-4 bg-sky-600 text-white rounded-full font-medium hover:bg-sky-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-200"
                 >
-                  View My Work <ArrowRight size={18} />
+                  View My Work <ArrowRightIcon size={18} />
                 </button>
                 <button 
                   onClick={() => scrollToSection('contact')}
@@ -729,7 +813,7 @@ const App = () => {
             </div>
             
             <div className="mt-20 flex justify-center animate-bounce text-slate-400">
-              <ChevronDown size={32} />
+              <ChevronDownIcon size={32} />
             </div>
           </section>
 
@@ -770,11 +854,11 @@ const App = () => {
                   {/* Project Visual Placeholder */}
                   <div className="w-full md:w-1/2 group cursor-pointer" onClick={() => handleProjectClick(project)}>
                     <div className={`aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 ${project.color} flex flex-col items-center justify-center relative border border-slate-100`}>
-                        {project.content.heroImage.startsWith('http') ? (
+                        {!project.content.heroImage.includes('placeholder') ? (
                           <img src={project.content.heroImage} alt={`${project.title} Thumbnail`} className="w-full h-full object-cover" />
                         ) : (
                           <div className="text-center p-8">
-                            <ImageIcon className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                            <PhotoIcon className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                             <p className="text-slate-400 font-medium">Click to view {project.title}</p>
                           </div>
                         )}
@@ -819,7 +903,7 @@ const App = () => {
                       onClick={() => handleProjectClick(project)}
                       className={`font-semibold flex items-center gap-2 hover:gap-3 transition-all ${project.accentColor}`}
                     >
-                      Read Full Case Study <ArrowRight size={18} />
+                      Read Full Case Study <ArrowRightIcon size={18} />
                     </button>
                   </div>
                 </div>
@@ -862,68 +946,10 @@ const App = () => {
                               </div>
                             </>
                           ) : (
-                            <ImageIcon className="text-slate-300" size={24} />
+                            <PhotoIcon className="text-slate-300" size={24} />
                           )}
                        </div>
                     )})}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* About Section */}
-          <section id="about" className="py-24 bg-white border-y border-slate-100 scroll-mt-28">
-            <div className="max-w-6xl mx-auto px-4">
-              <div className="grid md:grid-cols-2 gap-16 items-start">
-                <div>
-                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">About Me</h2>
-                   <div className="prose prose-lg text-slate-600">
-                     <p className="mb-4">
-                       I believe design is not just about aesthetics, but about creating meaningful connections between people and technology. My philosophy centers on inclusive immersive intelligence—using tech to bridge gaps in human interaction.
-                     </p>
-                     <p className="mb-4">
-                       Currently studying design, I enjoy tackling diverse problems, from digital interfaces to physical products like canteen dispensers. I thrive in environments where research drives creativity.
-                     </p>
-                   </div>
-                </div>
-                
-                <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6">Skill Set</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
-                        <span>Design</span>
-                      </div>
-                      <ul className="space-y-2 text-slate-600 text-sm">
-                        <li>Product Design</li>
-                        <li>UI/UX Design</li>
-                        <li>Industrial Design</li>
-                        <li>Design Systems</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
-                        <span>Tools</span>
-                      </div>
-                      <ul className="space-y-2 text-slate-600 text-sm">
-                        <li>Adobe Photoshop</li>
-                        <li>Adobe Animate</li>
-                        <li>Figma</li>
-                        <li>3D Modeling</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
-                        <span>Process</span>
-                      </div>
-                      <ul className="space-y-2 text-slate-600 text-sm">
-                        <li>User Research</li>
-                        <li>Wireframing</li>
-                        <li>Prototyping</li>
-                        <li>Usability Testing</li>
-                      </ul>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -940,7 +966,7 @@ const App = () => {
             <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12">
               <a href="mailto:jash.bhatt@flame.edu.in" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
                 <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <Mail size={24} />
+                  <MailIcon size={24} />
                 </div>
                 <div className="text-left">
                   <p className="text-sm text-slate-500 font-medium">Email Me</p>
@@ -950,7 +976,7 @@ const App = () => {
 
               <a href="tel:+918329318577" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
                  <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <Phone size={24} />
+                  <PhoneIcon size={24} />
                 </div>
                 <div className="text-left">
                   <p className="text-sm text-slate-500 font-medium">Call Me</p>
@@ -960,7 +986,7 @@ const App = () => {
 
                <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
                  <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <Linkedin size={24} />
+                  <LinkedinIcon size={24} />
                 </div>
                 <div className="text-left">
                   <p className="text-sm text-slate-500 font-medium">LinkedIn</p>
