@@ -1,0 +1,993 @@
+import { useState, useEffect, useRef } from 'react';
+import { Menu, X, Mail, Phone, Linkedin, ArrowRight, ChevronDown, Image as ImageIcon, ArrowLeft, ExternalLink } from 'lucide-react';
+
+// --- Types & Interfaces ---
+interface Section {
+  title: string;
+  content: string;
+  listItems?: string[];
+  images?: { src: string; caption: string; fullWidth?: boolean }[]; 
+  cta?: { text: string; url: string };
+  embedUrl?: string;
+  imageLayout?: 'row' | 'stack' | 'mixed'; 
+  imageHeight?: string; 
+}
+
+interface ProjectContent {
+  heroImage: string;
+  challenge: string;
+  role: string;
+  sections: Section[];
+}
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  timeline: string;
+  description: string;
+  tags: string[];
+  color: string;
+  accentColor: string;
+  hoverColor: string;
+  badge: string;
+  content: ProjectContent;
+}
+
+interface GalleryItem {
+  type: 'image' | 'placeholder';
+  src?: string;
+  alt?: string;
+}
+
+// --- Data ---
+const projects: Project[] = [
+  {
+    id: 0,
+    title: "ClassFlow",
+    category: "AI Agent / Full Stack",
+    timeline: "Ongoing",
+    description: "A smart, web-based application that automates the translation of course syllabi into actionable, digital schedules. ClassFlow uses Generative AI to 'read' messy course documents and map them onto a real-world calendar.",
+    tags: ["React", "Firebase", "Gemini AI", "Google Calendar API"],
+    color: "bg-purple-50",
+    accentColor: "text-purple-600",
+    hoverColor: "hover:text-purple-600",
+    badge: "bg-purple-100 text-purple-700",
+    content: {
+      heroImage: "placeholder-classflow-hero.jpg",
+      challenge: "Academic scheduling is manual and prone to error. Syllabuses are locked in static PDFs, requiring tedious manual entry to create a functional digital calendar.",
+      role: "Creator & Lead Developer",
+      sections: [
+        {
+          title: "The Core Solution",
+          content: "ClassFlow is designed around a simple premise: 'Upload your syllabus. Set your availability. Get a perfect Google Calendar instantly.'\n\nIt leverages Google Gemini to parse messy course documents, understand teaching timelines, and map them onto a user's specific constraints (e.g., 'Tuesdays & Thursdays, Sept-Dec').",
+          listItems: ["Automated Syllabus Parsing", "Intelligent Date Calculation", "One-Click Google Calendar Export"]
+        },
+        {
+          title: "Design Process & UX",
+          content: "I designed the application around a linear, 3-step flow to minimize cognitive load for students and professors:\n\n1. Input: User uploads PDF/Excel and defines semester dates.\n2. Processing: The system uses AI to parse topics and calculate exact session dates.\n3. Output: User reviews the generated schedule and exports it."
+        },
+        {
+          title: "Technical Architecture",
+          content: "ClassFlow is built on a modern stack ensuring speed and scalability:\n• Frontend: React (Vite) with Tailwind CSS for a modular UI.\n• Backend: Google Firebase (Auth & Firestore) for secure persistence.\n• AI Engine: Google Gemini API (gemini-1.5-flash) for OCR and semantic extraction.\n• Integration: Google Calendar API for direct read/write access.",
+          listItems: ["React & Tailwind CSS", "Firebase Auth & Firestore", "Google Gemini AI", "Google Calendar API"]
+        },
+        {
+          title: "Key Features & Algorithms",
+          content: "To make this work, I developed two core technologies:\n\nSmart Import (AI-Powered): A prompt-engineered LLM pipeline that instructs Gemini to ignore 'fluff' (grading policies) and strictly extract topics.\n\n'Greedy' Week Mapping: A sophisticated allocation algorithm that detects course frequency and ensures multi-session weeks are fully populated without gaps."
+        },
+        {
+          title: "Challenges & Roadmap",
+          content: "The biggest challenge was handling 'messy data'—every professor formats syllabi differently. Instead of writing 50 regex parsers, I used AI to normalize text into standard JSON.\n\nFuture Roadmap: \n• Conflict Detection with existing calendar events.\n• Direct LMS Integration (Canvas/Blackboard).\n• Mobile App implementation."
+        }
+      ]
+    }
+  },
+  {
+    id: 1,
+    title: "WePick",
+    category: "UI/UX App Design",
+    timeline: "Completed",
+    description: "WePick is a social shopping app where friends can share products, vote, and shop together in real time. By turning feedback into collaboration, it cuts decision fatigue and makes online shopping more confident, interactive, and fun.",
+    tags: ["UX Research", "Design System", "App Design"],
+    color: "bg-sky-50",
+    accentColor: "text-sky-600",
+    hoverColor: "hover:text-sky-600",
+    badge: "bg-sky-100 text-sky-700",
+    content: {
+      heroImage: "https://i.ibb.co/6JH7j8h2/We-Pick-Hero-2.png",
+      challenge: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants—making it hard to decide and move forward.",
+      role: "UI/UX Designer",
+      sections: [
+        {
+          title: "The Process",
+          content: "The project timeline spanned several weeks, moving through distinct phases: Research > Problem Statement > Insights > Ideation > MVP Definition > Prototyping > Final App.",
+          listItems: ["Defined User Problem", "Gathered User Insights", "Ideation", "Storyboarding", "Visual Identity", "Prototyping"]
+        },
+        {
+          title: "Research & Insights",
+          content: "Our quantitative research validated the hypothesis that the target demographic views shopping as an inherently social activity, creating a clear demand for structured collaboration tools.",
+          listItems: [
+            "81.5% of respondents were aged 18–24, validating this age group as the primary target audience.",
+            "48.1% regularly seek others’ opinions before making a purchase, highlighting that shopping decisions are inherently social.",
+            "68.4% showed strong interest in real-time acceptance or rejection, reinforcing demand for faster collaboration."
+          ]
+        },
+        {
+          title: "Storyboarding",
+          content: "To visualize the solution, we created comparative storyboards. The first illustrates the friction of the current method, while the second demonstrates the seamless flow using WePick.",
+          images: [
+            {
+              src: "https://i.ibb.co/4wKbQmhw/storyboard-without-app.png",
+              caption: "Without the App: The chaos of fragmented communication."
+            },
+            {
+              src: "https://i.ibb.co/fYp1ZFmC/storyboard-with-app.png",
+              caption: "With the App: Streamlined collaboration and voting."
+            }
+          ]
+        },
+        {
+          title: "Collaborative Overview",
+          content: "Goal: Enable faster, clearer purchase decisions by bringing social feedback and product discovery into one shared shopping experience.\n\nWe designed distinct modes to cater to different social contexts:\n\n\u00A0\u00A0\u00A0\u00A0• WE Mode: Real-time group shopping with shared browsing and decisions.\n\u00A0\u00A0\u00A0\u00A0• ME Mode: Personalized recommendations for solo shopping.\n\u00A0\u00A0\u00A0\u00A0• THEM Mode: Guided shopping for gifting or needs-based purchasing.",
+          listItems: [
+            "Shared Cart: A single space to collect opinions and compare options, eliminating scattered chats.",
+            "AI Feedback Summary: Condenses group reactions into clear accept/reject insights.",
+            "Outcome: Less chaos. Clear consensus. Faster checkouts."
+          ]
+        },
+        {
+          title: "Visual Identity & Moodboard",
+          content: "To define the aesthetic direction of WePick, we curated a moodboard focusing on vibrant, energetic colors and clean, modern typography. The goal was to create an interface that feels fun, social, and trustworthy.",
+          images: [
+            {
+              src: "https://i.ibb.co/8gpNhM2P/We-Pick-Moodboard.png",
+              caption: "WePick Visual Identity Moodboard"
+            }
+          ]
+        },
+        {
+          title: "Design System",
+          content: "Before moving to high-fidelity screens, we established a comprehensive design system including typography, color palettes, and component libraries to ensure consistency across the application.",
+          images: [
+            {
+              src: "https://i.ibb.co/Q0pc68g/We-Pick-Design-System.png",
+              caption: "WePick Design System & Components"
+            }
+          ]
+        },
+        {
+          title: "Final Output",
+          content: "The final deliverable included a polished app walkthrough demonstrating the 'WePick' flow. You can experience the interactive prototype directly below, inviting friends and voting in real-time.",
+          embedUrl: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FZSnz5vTUKNzYNRuOs1uxWt%2FWePick%3Fnode-id%3D0-1%26t%3DvsCOeZePPSny2dOa-1"
+        }
+      ]
+    }
+  },
+  {
+    id: 2,
+    title: "Dino Spread",
+    category: "Industrial Design",
+    timeline: "Completed",
+    description: "Dino Spread is a Jam and Butter dispensing machine that can be used in school and college canteens so there is no messy countertops and no dirty utensils such as knives when applying jam or butter to your toast.",
+    tags: ["Physical Prototyping", "Sketching", "3D Modeling"],
+    color: "bg-rose-50",
+    accentColor: "text-rose-900",
+    hoverColor: "hover:text-rose-900",
+    badge: "bg-rose-100 text-rose-900",
+    content: {
+      heroImage: "https://i.ibb.co/xS0DsNpV/Dino-Spread-Hero-Image.png",
+      challenge: "Improving hygiene and usability in campus canteen condiment stations.",
+      role: "Industrial Designer",
+      sections: [
+        {
+          title: "The Problem",
+          content: "We observed a recurring issue in the campus canteen setup. Knives were often left slipping into open jam and butter jars. This caused handle stickiness and hygiene concerns, leading to messy hands and cross-contamination.",
+          listItems: ["Knives slipping into jars", "Sticky handles", "Hygiene concerns"],
+          imageLayout: 'row', 
+          imageHeight: 'md:h-48', 
+          images: [
+            {
+              src: "https://i.ibb.co/pvYWwsWm/Dino-Spread-Knife-Mess.png",
+              caption: "The messy reality of shared condiment jars."
+            },
+            {
+              src: "https://i.ibb.co/gLkHsm6T/applying-condiments.png",
+              caption: "Hygiene concerns during application."
+            }
+          ]
+        },
+        {
+          title: "Ideation & Mechanism Design",
+          content: "We chose a Dinosaur theme to hide the mechanism and create a sense of joy for the target users (kids/students). The form factor allows for a fun interaction where pulling the head/lever dispenses the condiment.\n\nDispensing Action: The jam comes out from the dinosaur's mouth. The teeth act as the dispensing nozzle to control flow. The user pulls down the head to trigger the pump mechanism inside.",
+          imageLayout: 'row', 
+          imageHeight: 'md:h-80', 
+          images: [
+            {
+              src: "https://i.ibb.co/xtVG8R8Z/Dino-Spread-Sketches.png",
+              caption: "Sketch iterations exploring form and mechanism."
+            },
+            {
+              src: "https://i.ibb.co/ZzXxSF6Q/Dino-Spread-Final-Sketch.png",
+              caption: "Final concept sketch."
+            }
+          ]
+        },
+        {
+          title: "Prototyping Journey",
+          content: "As part of the project, we created a low-fidelity prototype using XPS foam, reinforced with Plaster of Paris to add structural strength and allow surface finishing. The final form was finished using acrylic paint. Alongside this, we explored multiple form iterations across different shapes and sizes to evaluate ergonomics, proportions, and overall form before finalizing a direction.",
+          imageLayout: 'mixed', 
+          images: [
+            {
+              src: "https://i.ibb.co/dsJbNFkd/Jash-Creating-Prototype.png",
+              caption: "Creating the XPS foam prototype."
+            },
+            {
+              src: "https://i.ibb.co/DgMgPtMn/Teammate-and-I-Drying-POP.png",
+              caption: "Applying Plaster of Paris for reinforcement."
+            },
+            {
+              src: "https://i.ibb.co/3mmj199Z/Form-Variations.png",
+              caption: "Exploring various form iterations.",
+              fullWidth: true
+            }
+          ]
+        },
+        {
+          title: "Final Prototype",
+          content: "Our final prototype displayed during our design jury.",
+          imageLayout: 'row',
+          imageHeight: 'md:h-96', 
+          images: [
+             {
+               src: "https://i.ibb.co/7tfPCvW4/Sketching-Final-Prototype.png",
+               caption: "Final Prototype"
+             },
+             {
+               src: "https://i.ibb.co/RGnxMZLg/Sketching-Team-Photo.png",
+               caption: "Design Jury Presentation"
+             }
+          ]
+        }
+      ]
+    }
+  }
+];
+
+const galleryItems: GalleryItem[] = [
+  { type: 'image', src: 'https://i.ibb.co/bj3P3pfW/la-la-land.jpg', alt: 'La La Land Art' },
+  { type: 'image', src: 'https://i.ibb.co/dwZj9pTH/Mrs-jordan.jpg', alt: 'Mrs Jordan Art' },
+  { type: 'image', src: 'https://i.ibb.co/dwzSzc98/Geometric-Design.gif', alt: 'Geometric Design GIF' }
+];
+
+const skills = [
+  "User Research", "Prototyping", "Industrial Design", "UI/UX", "Adobe Suite", "Figma", 
+  "Problem Solving", "Inclusive Design"
+  ];
+
+// --- Sub-Components ---
+
+const ProjectDetail = ({ 
+  project, 
+  onBack, 
+  onNext, 
+  isTransitioning, 
+  onImageClick 
+}: { 
+  project: Project | null, 
+  onBack: () => void, 
+  onNext: () => void, 
+  isTransitioning: boolean,
+  onImageClick: (src: string) => void 
+}) => {
+  if (!project) return null;
+
+  // Helper to render mixed layout images
+  const renderImages = (section: Section) => {
+    if (!section.images) return null;
+
+    if (section.imageLayout === 'mixed') {
+       // Separate full width and row images
+       const rowImages = section.images.filter(img => !img.fullWidth);
+       const fullWidthImages = section.images.filter(img => img.fullWidth);
+
+       return (
+         <div className="mt-10 flex flex-col gap-8 w-fit mx-auto">
+            {rowImages.length > 0 && (
+              <div className="flex flex-col md:flex-row gap-4 justify-center"> {/* Reduced gap to 4 */}
+                 {rowImages.map((img, i) => (
+                    <div key={`row-${i}`} className="flex flex-col gap-3 items-center">
+                       <div 
+                         className="rounded-lg overflow-hidden border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-md cursor-zoom-in w-fit"
+                         onClick={() => onImageClick(img.src)}
+                       >
+                         <img 
+                            src={img.src} 
+                            alt={img.caption} 
+                            className={`w-full h-auto md:w-auto ${section.imageHeight || 'md:h-80'}`} 
+                            loading="lazy" 
+                         />
+                       </div>
+                       <p className="text-sm text-slate-500 text-center">{img.caption}</p>
+                    </div>
+                 ))}
+              </div>
+            )}
+            {fullWidthImages.map((img, i) => (
+               <div key={`full-${i}`} className="flex flex-col gap-3 w-full">
+                  <div 
+                     className="rounded-lg overflow-hidden border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-md cursor-zoom-in"
+                     onClick={() => onImageClick(img.src)}
+                   >
+                     <img 
+                        src={img.src} 
+                        alt={img.caption} 
+                        className="w-full h-auto"
+                        loading="lazy" 
+                     />
+                   </div>
+                   <p className="text-sm text-slate-500 text-center">{img.caption}</p>
+               </div>
+            ))}
+         </div>
+       );
+    }
+
+    // Default or Row layout logic
+    return (
+      <div className={`mt-10 ${
+        section.imageLayout === 'row' 
+          ? 'flex flex-col md:flex-row gap-8 justify-between items-start' 
+          : 'grid grid-cols-1 gap-12' 
+      }`}>
+        {section.images.map((img, i) => (
+          <div key={i} className={`flex flex-col gap-3 ${section.imageLayout === 'row' ? 'flex-shrink-0' : ''}`}>
+            <div 
+              className={`rounded-lg overflow-hidden border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-md cursor-zoom-in ${
+                section.imageLayout === 'row' ? 'w-fit' : ''
+              }`}
+              onClick={() => onImageClick(img.src)}
+            >
+              <img 
+                src={img.src} 
+                alt={img.caption} 
+                className={`${
+                  section.imageLayout === 'row' 
+                    ? `w-full h-auto md:w-auto ${section.imageHeight || 'md:h-48'} max-w-full` 
+                    : 'w-full h-auto'
+                }`}
+                loading="lazy" 
+              />
+            </div>
+            <p className="text-sm text-slate-500 text-center">{img.caption}</p>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className={`bg-white min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+      
+      {/* Project Hero */}
+      <div className={`w-full ${project.color} pt-32 pb-24 px-4 border-b border-slate-100`}>
+        <div className="max-w-5xl mx-auto">
+           <button 
+            onClick={onBack}
+            className="group flex items-center gap-2 text-slate-500 hover:text-sky-600 mb-12 transition-colors text-sm font-medium"
+          >
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+            Back to Projects
+          </button>
+          
+          <div className="flex flex-wrap items-center gap-3 mb-8">
+             <span className="text-xs font-bold tracking-widest uppercase text-slate-500">{project.category}</span>
+             <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+             <span className="text-xs font-bold tracking-widest uppercase text-slate-500">{project.timeline}</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-8 tracking-tight">{project.title}</h1>
+          <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-2xl font-light">
+            {project.description}
+          </p>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="max-w-5xl mx-auto px-4 py-16">
+        
+        {/* Project Meta */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-20 pb-12 border-b border-slate-200">
+           <div className="md:col-span-1">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Role</h3>
+              <p className="font-medium text-slate-900 text-sm leading-6">{project.content.role}</p>
+           </div>
+           <div className="md:col-span-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">The Challenge</h3>
+              <p className="font-medium text-slate-900 text-sm leading-6">{project.content.challenge}</p>
+           </div>
+            <div className="md:col-span-1">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tech & Tools</h3>
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((tag, i) => (
+                  <span key={i} className="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-1 rounded">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+           </div>
+        </div>
+
+        {/* Hero Image */}
+        <div className="w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm">
+           {project.content.heroImage.startsWith('http') ? (
+              <img src={project.content.heroImage} alt={`${project.title} Hero`} className="w-full h-auto block" />
+           ) : (
+              <div className="w-full aspect-video flex items-center justify-center">
+                <div className="text-center text-slate-400">
+                  <ImageIcon size={48} className="mx-auto mb-4 opacity-50" />
+                  <span className="text-sm font-medium tracking-wide uppercase">Project Hero Image</span>
+                </div>
+              </div>
+           )}
+        </div>
+
+        {/* Narrative Sections */}
+        <div className="space-y-24">
+          {project.content.sections.map((section, idx) => (
+            <div key={idx} className="grid md:grid-cols-12 gap-8 items-start group">
+              
+              {/* Left Column: Heading */}
+              <div className="md:col-span-4 sticky top-24">
+                <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80`}></div>
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                  {section.title}
+                </h2>
+              </div>
+
+              {/* Right Column: Content */}
+              <div className="md:col-span-8">
+                <p className="text-lg text-slate-600 leading-relaxed whitespace-pre-line mb-8 font-normal">
+                  {section.content}
+                </p>
+                
+                {section.listItems && (
+                  <ul className="space-y-3 mb-8 pl-1">
+                    {section.listItems.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-slate-700">
+                        <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.badge.replace('text', 'bg').split(' ')[0]}`}></span>
+                        <span className="leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* Dynamic Image Rendering */}
+                {renderImages(section)}
+                
+                {/* Embed (Figma etc) */}
+                {section.embedUrl && (
+                  <div className="mt-12 w-full max-w-[360px] mx-auto aspect-[9/19] bg-slate-900 rounded-[2.5rem] overflow-hidden border-[8px] border-slate-800 shadow-2xl relative">
+                    <iframe 
+                      src={section.embedUrl}
+                      className="w-full h-full bg-white"
+                      allowFullScreen
+                      style={{ border: 'none' }}
+                      title="Interactive Prototype"
+                    ></iframe>
+                  </div>
+                )}
+                
+                {/* CTA Button (Only if cta exists) */}
+                {section.cta && (
+                  <div className="mt-10">
+                    <a 
+                      href={section.cta.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-medium text-lg hover:bg-slate-800 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5"
+                    >
+                      {section.cta.text} <ExternalLink size={20} className="opacity-80" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Footer Navigation */}
+        <div className="mt-32 pt-12 border-t border-slate-200 flex justify-between items-center">
+           <button 
+            onClick={onBack}
+            className="text-base font-medium text-slate-500 hover:text-sky-600 transition-colors flex items-center gap-2"
+          >
+            <ArrowLeft size={18} /> Back to Home
+          </button>
+           <button 
+             onClick={onNext}
+             className="group flex items-center gap-2 px-6 py-3 bg-slate-900 text-white hover:bg-sky-600 rounded-full font-medium transition-all hover:pr-8"
+           >
+             Next Project <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+           </button>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+// --- Main Component ---
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [currentView, setCurrentView] = useState<'home' | 'project'>('home');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  const isManualScroll = useRef(false);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  // --- Navigation & Transition Handlers ---
+
+  const scrollToSection = (sectionId: string) => {
+    isManualScroll.current = true;
+    
+    if (currentView !== 'home') {
+      // If in project view: Fade out -> Switch to Home -> Jump to Section -> Fade In
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentView('home');
+        setSelectedProject(null);
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) element.scrollIntoView({ behavior: 'auto' });
+          setIsTransitioning(false);
+          setTimeout(() => { isManualScroll.current = false; }, 300);
+        }, 50);
+      }, 300);
+    } else {
+      // If in home view: Just smooth scroll
+      const element = document.getElementById(sectionId);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+      setActiveSection(sectionId);
+      setTimeout(() => { isManualScroll.current = false; }, 1000);
+    }
+    
+    setIsMenuOpen(false);
+    setActiveSection(sectionId);
+  };
+
+  const handleProjectClick = (project: Project) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+        setSelectedProject(project);
+        setCurrentView('project');
+        window.scrollTo(0, 0);
+        setTimeout(() => {
+            setIsTransitioning(false);
+        }, 50);
+    }, 300);
+  };
+
+  const handleBackToHome = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentView('home');
+      setSelectedProject(null);
+      setActiveSection('work');
+      setTimeout(() => {
+        const element = document.getElementById('work');
+        if (element) element.scrollIntoView({ behavior: 'auto' });
+        setIsTransitioning(false);
+      }, 50);
+    }, 300);
+  };
+
+  const handleNextProject = () => {
+    if (selectedProject) {
+        const currentIndex = projects.findIndex(p => p.id === selectedProject.id);
+        const nextIndex = (currentIndex + 1) % projects.length;
+        handleProjectClick(projects[nextIndex]);
+    }
+  };
+
+  // Scroll spy
+  useEffect(() => {
+    if (currentView !== 'home') return;
+
+    const handleScroll = () => {
+      if (isManualScroll.current) return;
+
+      const sections = ['home', 'work', 'about', 'contact'];
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50) {
+        setActiveSection('contact');
+        return;
+      }
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element && element.offsetTop <= scrollPosition && (element.offsetTop + element.offsetHeight) > scrollPosition) {
+          setActiveSection(section);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentView]);
+
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900">
+      
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-fade-in"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full"
+            onClick={() => setSelectedImage(null)}
+          >
+            <X size={32} />
+          </button>
+          <img 
+            src={selectedImage} 
+            alt="Full size view" 
+            className="w-full h-full max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()} // Prevent close on image click
+          />
+        </div>
+      )}
+
+      {/* Navigation */}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('home')}>
+              <h1 className="text-2xl font-bold tracking-tight text-sky-600">JB</h1>
+            </div>
+            
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-8">
+              {['Home', 'Work', 'About', 'Contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    activeSection === item.toLowerCase() && currentView === 'home'
+                      ? 'text-sky-600' 
+                      : 'text-slate-600 hover:text-sky-700'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button onClick={toggleMenu} className="text-slate-600 hover:text-sky-600 p-2">
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {['Home', 'Work', 'About', 'Contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-sky-700 hover:bg-slate-50 rounded-md"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
+      {currentView === 'home' ? (
+        <div className={`transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+          {/* Hero Section */}
+          <section id="home" className="pt-32 pb-20 md:pt-40 md:pb-32 px-4 max-w-6xl mx-auto scroll-mt-28">
+            <div className="max-w-3xl animate-fade-in-up">
+              <p className="text-sky-600 font-semibold mb-4 tracking-wide uppercase text-sm">Design Portfolio 2025</p>
+              <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
+                Hi, I'm <span className="text-sky-600">Jash Bhatt</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl">
+                I design inclusive experiences and tangible products that solve real-world problems. From AI wearables to playful industrial design.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={() => scrollToSection('work')}
+                  className="px-8 py-4 bg-sky-600 text-white rounded-full font-medium hover:bg-sky-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-200"
+                >
+                  View My Work <ArrowRight size={18} />
+                </button>
+                <button 
+                  onClick={() => scrollToSection('contact')}
+                  className="px-8 py-4 bg-white text-slate-700 border border-slate-300 rounded-full font-medium hover:border-sky-600 hover:text-sky-600 transition-all"
+                >
+                  Get in Touch
+                </button>
+              </div>
+            </div>
+            
+            <div className="mt-20 flex justify-center animate-bounce text-slate-400">
+              <ChevronDown size={32} />
+            </div>
+          </section>
+
+          {/* Skills Marquee */}
+          <div className="bg-sky-900 py-12 -mx-4 overflow-hidden flex">
+            <style>{`
+              @keyframes marquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-100%); }
+              }
+              .animate-marquee {
+                animation: marquee 30s linear infinite;
+              }
+            `}</style>
+            <div className="flex gap-12 items-center animate-marquee whitespace-nowrap shrink-0 px-6">
+              {skills.map((skill, index) => (
+                <span key={index} className="text-sky-200 text-2xl font-bold opacity-70">{skill}</span>
+              ))}
+            </div>
+            <div className="flex gap-12 items-center animate-marquee whitespace-nowrap shrink-0 px-6">
+              {skills.map((skill, index) => (
+                <span key={`dup-${index}`} className="text-sky-200 text-2xl font-bold opacity-70">{skill}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Work Section */}
+          <section id="work" className="py-24 px-4 max-w-6xl mx-auto scroll-mt-28">
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Selected Projects</h2>
+              <div className="h-1 w-20 bg-sky-600 rounded-full"></div>
+            </div>
+
+            <div className="space-y-32">
+              {projects.map((project, index) => (
+                <div key={project.id} className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-12 items-center`}>
+                  
+                  {/* Project Visual Placeholder */}
+                  <div className="w-full md:w-1/2 group cursor-pointer" onClick={() => handleProjectClick(project)}>
+                    <div className={`aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 ${project.color} flex flex-col items-center justify-center relative border border-slate-100`}>
+                        {project.content.heroImage.startsWith('http') ? (
+                          <img src={project.content.heroImage} alt={`${project.title} Thumbnail`} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="text-center p-8">
+                            <ImageIcon className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                            <p className="text-slate-400 font-medium">Click to view {project.title}</p>
+                          </div>
+                        )}
+                      
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 flex items-center justify-center">
+                         <span className="opacity-0 group-hover:opacity-100 bg-white px-6 py-3 rounded-full font-medium text-slate-900 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                           View Case Study
+                         </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Project Content */}
+                  <div className="w-full md:w-1/2">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${project.badge}`}>
+                        {project.timeline}
+                      </span>
+                      <span className="text-slate-500 text-sm font-medium">{project.category}</span>
+                    </div>
+                    
+                    <h3 
+                      className={`text-3xl font-bold text-slate-900 mb-4 cursor-pointer transition-colors ${project.hoverColor}`} 
+                      onClick={() => handleProjectClick(project)}
+                    >
+                      {project.title}
+                    </h3>
+                    <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                      {project.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {project.tags.map((tag, i) => (
+                        <span key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={() => handleProjectClick(project)}
+                      className={`font-semibold flex items-center gap-2 hover:gap-3 transition-all ${project.accentColor}`}
+                    >
+                      Read Full Case Study <ArrowRight size={18} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Photoshop Creations Mini-Section */}
+            <div className="mt-32 p-12 bg-white rounded-3xl border border-slate-100 shadow-xl">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Photoshop & Animation</h3>
+                  <p className="text-slate-600 mb-4">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+                    {galleryItems.map((item, i) => {
+                       const isGif = item.src?.toLowerCase().endsWith('.gif');
+                       return (
+                       <div 
+                         key={i} 
+                         className="aspect-square bg-slate-100 rounded-xl flex items-center justify-center hover:bg-slate-200 transition-colors cursor-pointer overflow-hidden relative group"
+                         onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
+                       >
+                          {item.type === 'image' ? (
+                            <>
+                              <img 
+                                src={item.src} 
+                                alt={item.alt} 
+                                loading="lazy"
+                                decoding="async"
+                                className={`w-full h-full object-cover ${!isGif ? 'group-hover:scale-105 transition-transform duration-500' : ''}`}
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.onerror = null; 
+                                  if (target.parentElement) {
+                                    target.parentElement.innerHTML = '<div class="flex flex-col items-center justify-center text-slate-400 p-2"><span class="text-xs text-center">Image failed to load.<br/>Check URL.</span></div>';
+                                  }
+                                }} 
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <span className="opacity-0 group-hover:opacity-100 text-white font-medium bg-black/50 px-3 py-1 rounded-full text-sm backdrop-blur-sm transition-opacity">View Full</span>
+                              </div>
+                            </>
+                          ) : (
+                            <ImageIcon className="text-slate-300" size={24} />
+                          )}
+                       </div>
+                    )})}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* About Section */}
+          <section id="about" className="py-24 bg-white border-y border-slate-100 scroll-mt-28">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="grid md:grid-cols-2 gap-16 items-start">
+                <div>
+                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">About Me</h2>
+                   <div className="prose prose-lg text-slate-600">
+                     <p className="mb-4">
+                       I believe design is not just about aesthetics, but about creating meaningful connections between people and technology. My philosophy centers on inclusive immersive intelligence—using tech to bridge gaps in human interaction.
+                     </p>
+                     <p className="mb-4">
+                       Currently studying design, I enjoy tackling diverse problems, from digital interfaces to physical products like canteen dispensers. I thrive in environments where research drives creativity.
+                     </p>
+                   </div>
+                </div>
+                
+                <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6">Skill Set</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
+                        <span>Design</span>
+                      </div>
+                      <ul className="space-y-2 text-slate-600 text-sm">
+                        <li>Product Design</li>
+                        <li>UI/UX Design</li>
+                        <li>Industrial Design</li>
+                        <li>Design Systems</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
+                        <span>Tools</span>
+                      </div>
+                      <ul className="space-y-2 text-slate-600 text-sm">
+                        <li>Adobe Photoshop</li>
+                        <li>Adobe Animate</li>
+                        <li>Figma</li>
+                        <li>3D Modeling</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
+                        <span>Process</span>
+                      </div>
+                      <ul className="space-y-2 text-slate-600 text-sm">
+                        <li>User Research</li>
+                        <li>Wireframing</li>
+                        <li>Prototyping</li>
+                        <li>Usability Testing</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section id="contact" className="py-24 px-4 max-w-6xl mx-auto text-center scroll-mt-28">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Let's Create Together</h2>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-12">
+              I'm currently looking for new opportunities in Product and UI/UX design. Have a project in mind or just want to say hi?
+            </p>
+
+            <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12">
+              <a href="mailto:jash.bhatt@flame.edu.in" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
+                <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                  <Mail size={24} />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm text-slate-500 font-medium">Email Me</p>
+                  <p className="text-slate-900 font-semibold">jash.bhatt@flame.edu.in</p>
+                </div>
+              </a>
+
+              <a href="tel:+918329318577" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
+                 <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                  <Phone size={24} />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm text-slate-500 font-medium">Call Me</p>
+                  <p className="text-slate-900 font-semibold">+91 8329318577</p>
+                </div>
+              </a>
+
+               <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
+                 <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                  <Linkedin size={24} />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm text-slate-500 font-medium">LinkedIn</p>
+                  <p className="text-slate-900 font-semibold">/in/jash-bhatt</p>
+                </div>
+              </a>
+            </div>
+          </section>
+        </div>
+      ) : (
+        /* PROJECT DETAIL VIEW */
+        <ProjectDetail 
+          project={selectedProject} 
+          onBack={handleBackToHome} 
+          onNext={handleNextProject}
+          isTransitioning={isTransitioning}
+          onImageClick={setSelectedImage}
+        />
+      )}
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400 py-12 text-center">
+        <p className="mb-2">© 2025 Jash Bhatt. All Rights Reserved.</p>
+        <p className="text-sm">Designed & Developed with React</p>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
