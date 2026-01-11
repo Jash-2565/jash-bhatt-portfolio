@@ -179,7 +179,7 @@ const projects: Project[] = [
     hoverColor: "hover:text-sky-600",
     badge: "bg-sky-100 text-sky-700",
     content: {
-      heroImage: `${PUBLIC_URL}/images/WePick/WePick Hero 2.png`,
+      heroImage: `${PUBLIC_URL}/images/WePick/wepick-hero-2.webp`,
       challenge: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants—making it hard to decide and move forward.",
       role: "UI/UX Designer",
       sections: [
@@ -202,11 +202,11 @@ const projects: Project[] = [
           content: "To visualize the solution, we created comparative storyboards. The first illustrates the friction of the current method, while the second demonstrates the seamless flow using WePick.",
           images: [
             {
-              src: `${PUBLIC_URL}/images/WePick/storyboard_without_app.png`,
+              src: `${PUBLIC_URL}/images/WePick/storyboard-without-app.webp`,
               caption: "Without the App: The chaos of fragmented communication."
             },
             {
-              src: `${PUBLIC_URL}/images/WePick/storyboard_with_app.png`,
+              src: `${PUBLIC_URL}/images/WePick/storyboard-with-app.webp`,
               caption: "With the App: Streamlined collaboration and voting."
             }
           ]
@@ -225,7 +225,7 @@ const projects: Project[] = [
           content: "To define the aesthetic direction of WePick, we curated a moodboard focusing on vibrant, energetic colors and clean, modern typography. The goal was to create an interface that feels fun, social, and trustworthy.",
           images: [
             {
-              src: `${PUBLIC_URL}/images/WePick/WePick Moodboard.png`,
+              src: `${PUBLIC_URL}/images/WePick/wepick-moodboard.webp`,
               caption: "WePick Visual Identity Moodboard"
             }
           ]
@@ -235,7 +235,7 @@ const projects: Project[] = [
           content: "Before moving to high-fidelity screens, we established a comprehensive design system including typography, color palettes, and component libraries to ensure consistency across the application.",
           images: [
             {
-              src: `${PUBLIC_URL}/images/WePick/WePick Design System.png`,
+              src: `${PUBLIC_URL}/images/WePick/wepick-design-system.webp`,
               caption: "WePick Design System & Components"
             }
           ]
