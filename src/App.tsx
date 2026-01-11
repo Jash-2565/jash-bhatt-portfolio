@@ -260,7 +260,7 @@ const projects: Project[] = [
     hoverColor: "hover:text-rose-900",
     badge: "bg-rose-100 text-rose-900",
     content: {
-      heroImage: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Hero Image.png`,
+      heroImage: `${PUBLIC_URL}/images/Dino Spread/dino-spread-hero.webp`,
       challenge: "Improving hygiene and usability in campus canteen condiment stations.",
       role: "Industrial Designer",
       sections: [
@@ -272,11 +272,11 @@ const projects: Project[] = [
           imageHeight: 'md:h-48', 
           images: [
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Knife Mess.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/dino-spread-knife-mess.webp`,
               caption: "The messy reality of shared condiment jars."
             },
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/applying condiments.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/dino-spread-applying-condiments.webp`,
               caption: "Hygiene concerns during application."
             }
           ]
@@ -288,11 +288,11 @@ const projects: Project[] = [
           imageHeight: 'md:h-80', 
           images: [
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Sketches.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/dino-spread-sketches.webp`,
               caption: "Sketch iterations exploring form and mechanism."
             },
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/Dino Spread Final Sketch.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/dino-spread-final-sketch.webp`,
               caption: "Final concept sketch."
             }
           ]
@@ -303,15 +303,15 @@ const projects: Project[] = [
           imageLayout: 'mixed', 
           images: [
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/Jash Creating Prototype.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/jash-creating-prototype.webp`,
               caption: "Creating the XPS foam prototype."
             },
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/Teammate and I Drying POP.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/drying-pop-prototype.webp`,
               caption: "Applying Plaster of Paris for reinforcement."
             },
             {
-              src: `${PUBLIC_URL}/images/Dino Spread/Form Variations.png`,
+              src: `${PUBLIC_URL}/images/Dino Spread/form-variations.webp`,
               caption: "Exploring various form iterations.",
               fullWidth: true
             }
@@ -324,11 +324,11 @@ const projects: Project[] = [
           imageHeight: 'md:h-96', 
           images: [
              {
-               src: `${PUBLIC_URL}/images/Dino Spread/Sketching Final Prototype.png`,
+               src: `${PUBLIC_URL}/images/Dino Spread/sketching-final-prototype.webp`,
                caption: "Final Prototype"
              },
              {
-               src: `${PUBLIC_URL}/images/Dino Spread/Sketching Team Photo.png`,
+               src: `${PUBLIC_URL}/images/Dino Spread/sketching-team-photo.webp`,
                caption: "Design Jury Presentation"
              }
           ]
