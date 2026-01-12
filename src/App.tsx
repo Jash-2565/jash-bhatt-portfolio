@@ -61,7 +61,6 @@ const PhotoIcon = ({ size = 24, ...props }: any) => (
   </svg>
 );
 
-
 // --- Types & Interfaces ---
 interface Section {
   title: string;
@@ -345,6 +344,12 @@ const galleryItems: GalleryItem[] = [
   { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/Geometric-Design.gif`, alt: 'Geometric Design GIF' }
 ];
 
+const aiItems: GalleryItem[] = [
+  { type: 'image', src: `${PUBLIC_URL}/images/Lamborghini Jetski/aquatoro-blue.webp`, alt: 'Lamborghini Jetski Concept 1' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Lamborghini Jetski/aquatoro-black.webp`, alt: 'Lamborghini Jetski Concept 2' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Lamborghini Jetski/jetski final.gif`, alt: 'Lamborghini Jetski Concept 3' }
+];
+
 const skills = [
   "User Research", "Prototyping", "Industrial Design", "UI/UX", "Adobe Suite", "Figma", 
   "Problem Solving", "Inclusive Design"
@@ -523,7 +528,7 @@ const ProjectDetail = ({
             <div key={idx} className="grid md:grid-cols-12 gap-8 items-start group">
               
               {/* Left Column: Heading */}
-              <div className="md:col-span-4 sticky top-24">
+              <div className="md:col-span-4 md:sticky md:top-24">
                 <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80`}></div>
                 <h2 className="text-xl font-bold text-slate-900 tracking-tight leading-tight">
                   {section.title}
@@ -951,6 +956,51 @@ const App = () => {
                           )}
                        </div>
                     )})}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Lamborghini Jetski AI Generations Section */}
+            <div className="mt-12 p-12 bg-white rounded-3xl border border-slate-100 shadow-xl">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-2xl font-bold text-slate-900">Lamborghini Jetski AI Generations</h3>
+                  </div>
+                  <p className="text-slate-600 mb-4">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+                    {aiItems.map((item, i) => (
+                       <div 
+                         key={i} 
+                         className="aspect-square bg-slate-100 rounded-xl flex items-center justify-center hover:bg-slate-200 transition-colors cursor-pointer overflow-hidden relative group"
+                         onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
+                       >
+                          {item.type === 'image' ? (
+                            <>
+                              <img 
+                                src={item.src} 
+                                alt={item.alt} 
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.onerror = null; 
+                                  if (target.parentElement) {
+                                    target.parentElement.innerHTML = '<div class="flex flex-col items-center justify-center text-slate-400 p-2"><span class="text-xs text-center">Image failed to load.<br/>Check URL.</span></div>';
+                                  }
+                                }} 
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <span className="opacity-0 group-hover:opacity-100 text-white font-medium bg-black/50 px-3 py-1 rounded-full text-sm backdrop-blur-sm transition-opacity">View Full</span>
+                              </div>
+                            </>
+                          ) : (
+                            <PhotoIcon className="text-slate-300" size={24} />
+                          )}
+                       </div>
+                    ))}
                   </div>
                 </div>
               </div>
