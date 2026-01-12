@@ -61,6 +61,7 @@ const PhotoIcon = ({ size = 24, ...props }: any) => (
   </svg>
 );
 
+
 // --- Types & Interfaces ---
 interface Section {
   title: string;
@@ -950,6 +951,54 @@ const App = () => {
                           )}
                        </div>
                     )})}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* About Section */}
+          <section id="about" className="py-24 bg-white border-y border-slate-100 scroll-mt-28">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="grid md:grid-cols-2 gap-16 items-start">
+                <div>
+                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">About Me</h2>
+                   <div className="prose prose-lg text-slate-600">
+                     <p className="mb-4">
+                       I believe design is not just about aesthetics, but about creating meaningful connections between people and technology. My philosophy centers on inclusive immersive intelligence—using tech to bridge gaps in human interaction.
+                     </p>
+                     <p className="mb-4">
+                       Currently studying design, I enjoy tackling diverse problems, from digital interfaces to physical products like canteen dispensers. I thrive in environments where research drives creativity.
+                     </p>
+                   </div>
+                </div>
+                
+                <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6">Skill Set</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
+                        <span>Design</span>
+                      </div>
+                      <ul className="space-y-2 text-slate-600 text-sm">
+                        <li>Product Design</li>
+                        <li>UI/UX Design</li>
+                        <li>Industrial Design</li>
+                        <li>Design Systems</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-3 text-sky-600 font-semibold">
+                        <span>Tools</span>
+                      </div>
+                      <ul className="space-y-2 text-slate-600 text-sm">
+                        <li>Adobe Photoshop</li>
+                        <li>Adobe Animate</li>
+                        <li>Figma</li>
+                        <li>3D Modeling</li>
+                        <li>VS Code</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
