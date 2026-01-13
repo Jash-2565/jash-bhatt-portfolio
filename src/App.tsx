@@ -1022,14 +1022,24 @@ const App = () => {
                     </p>
                   </div>
 
-                  <div className="mt-12 grid grid-cols-2 gap-6">
+                  <div className="mt-12">
                     <div className="border-l-2 border-sky-600 pl-4">
-                      <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Education</div>
-                      <div className="font-medium text-slate-900">Design Student at FLAME University</div>
-                    </div>
-                    <div className="border-l-2 border-sky-600 pl-4">
-                      <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Location</div>
-                      <div className="font-medium text-slate-900">Pune, India</div>
+                      <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Education</div>
+                      <div className="space-y-6">
+                        {/* Primary / Current */}
+                        <div>
+                          <h4 className="text-lg font-bold text-slate-900">Bachelor of Design (B.Des)</h4>
+                          <p className="text-slate-700 font-medium">FLAME University</p>
+                          <p className="text-sm text-sky-600 font-medium mt-1">2023 – 2027</p>
+                        </div>
+                        
+                        {/* Secondary / Past */}
+                        <div className="opacity-80">
+                          <h4 className="text-base font-medium text-slate-800">VIBGYOR High School, NIBM, Pune</h4>
+                          <p className="text-sm text-slate-500">Cambridge International (CIE)</p>
+                          <p className="text-xs text-slate-400 mt-0.5">2018 – 2023</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1043,7 +1053,7 @@ const App = () => {
                         <h4 className="font-semibold text-slate-900">Design</h4>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {['Product Design', 'UI/UX Design', 'Industrial Design', 'Design Systems'].map((skill) => (
+                        {['Product Design', 'UI/UX Design', 'Industrial Design', 'Design Systems', 'Circuit Design'].map((skill) => (
                           <span key={skill} className="px-3 py-1.5 text-sm font-medium text-sky-700 bg-sky-50 rounded-lg border border-sky-100">
                             {skill}
                           </span>
@@ -1057,7 +1067,7 @@ const App = () => {
                         <h4 className="font-semibold text-slate-900">Tools & Tech</h4>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {['Figma', 'Adobe Suite', '3D Modeling', 'Prototyping', 'User Research'].map((tool) => (
+                        {['Figma', 'Coding', 'Adobe Suite', 'Fusion 360'].map((tool) => (
                           <span key={tool} className="px-3 py-1.5 text-sm font-medium text-sky-700 bg-sky-50 rounded-lg border border-sky-100">
                             {tool}
                           </span>
