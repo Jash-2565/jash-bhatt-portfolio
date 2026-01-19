@@ -355,12 +355,12 @@ const projects: Project[] = [
     timeline: "Completed",
     description: "A holistic service design project streamlining the adoption of residential solar energy through a unified digital and physical ecosystem.",
     tags: ["Service Blueprinting", "User Journey", "System Mapping"],
-    color: "bg-amber-50",
-    accentColor: "text-amber-600",
-    hoverColor: "group-hover:text-amber-600",
-    badge: "bg-amber-100 text-amber-700",
+    color: "bg-[#E3FC03]",
+    accentColor: "text-[#053738]",
+    hoverColor: "group-hover:text-[#053738]",
+    badge: "bg-[#E3FC03]/60 text-[#053738]",
     content: {
-      heroImage: "placeholder-solarlink.jpg",
+      heroImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
       challenge: "Navigating the transition to solar energy is complex, involving regulatory hurdles, financial uncertainty, and lack of trust in providers.",
       role: "Service Designer",
       sections: [
@@ -405,6 +405,11 @@ const ProjectDetail = ({
   onImageClick: (src: string) => void 
 }) => {
   if (!project) return null;
+  const isSolarLink = project.title === 'SolarLink';
+  const heroBgClass = isSolarLink ? 'bg-[#053738]' : project.color;
+  const heroTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-900';
+  const heroMutedTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-500';
+  const heroBodyTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-600';
 
   // Helper to render mixed layout images
   const renderImages = (section: Section) => {
@@ -494,24 +499,26 @@ const ProjectDetail = ({
     <div className={`bg-white min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
       
       {/* Project Hero */}
-      <div className={`w-full ${project.color} pt-32 pb-24 px-4 border-b border-slate-100`}>
+      <div className={`w-full ${heroBgClass} pt-32 pb-24 px-4 border-b border-slate-100`}>
         <div className="max-w-5xl mx-auto">
            <button 
             onClick={onBack}
-            className="group flex items-center gap-2 text-slate-500 hover:text-sky-600 mb-12 transition-colors text-sm font-medium"
+            className={`group flex items-center gap-2 mb-12 transition-colors text-sm font-medium ${
+              isSolarLink ? 'text-slate-300 hover:text-sky-600' : 'text-slate-500 hover:text-sky-600'
+            }`}
           >
             <ArrowLeftIcon size={18} className="group-hover:-translate-x-1 transition-transform" />
             Back to Projects
           </button>
           
           <div className="flex flex-wrap items-center gap-3 mb-8">
-             <span className="text-xs font-bold tracking-widest uppercase text-slate-500">{project.category}</span>
-             <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-             <span className="text-xs font-bold tracking-widest uppercase text-slate-500">{project.timeline}</span>
+             <span className={`text-xs font-bold tracking-widest uppercase ${heroMutedTextClass}`}>{project.category}</span>
+             <span className={`w-1 h-1 rounded-full ${isSolarLink ? 'bg-[#E3FC03]' : 'bg-slate-300'}`}></span>
+             <span className={`text-xs font-bold tracking-widest uppercase ${heroMutedTextClass}`}>{project.timeline}</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-8 tracking-tight">{project.title}</h1>
-          <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-2xl font-light">
+          <h1 className={`text-4xl md:text-6xl font-bold mb-8 tracking-tight ${heroTextClass}`}>{project.title}</h1>
+          <p className={`text-lg md:text-xl leading-relaxed max-w-2xl font-light ${heroBodyTextClass}`}>
             {project.description}
           </p>
         </div>
