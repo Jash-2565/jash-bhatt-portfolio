@@ -347,6 +347,33 @@ const projects: Project[] = [
         }
       ]
     }
+  },
+  {
+    id: 3,
+    title: "SolarLink",
+    category: "Service Design",
+    timeline: "Completed",
+    description: "A holistic service design project streamlining the adoption of residential solar energy through a unified digital and physical ecosystem.",
+    tags: ["Service Blueprinting", "User Journey", "System Mapping"],
+    color: "bg-amber-50",
+    accentColor: "text-amber-600",
+    hoverColor: "group-hover:text-amber-600",
+    badge: "bg-amber-100 text-amber-700",
+    content: {
+      heroImage: "placeholder-solarlink.jpg",
+      challenge: "Navigating the transition to solar energy is complex, involving regulatory hurdles, financial uncertainty, and lack of trust in providers.",
+      role: "Service Designer",
+      sections: [
+        {
+          title: "Service Concept",
+          content: "SolarLink bridges the gap between homeowners and renewable energy providers. It offers a transparent, step-by-step service that handles feasibility analysis, financing, and installation coordination."
+        },
+        {
+          title: "Research & Insights",
+          content: "Through interviews with homeowners and installers, we identified that the primary barrier to adoption wasn't cost, but the complexity of the process. SolarLink simplifies this into a guided 3-stage journey."
+        }
+      ]
+    }
   }
 ];
 
@@ -624,6 +651,8 @@ const App = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   
   const isManualScroll = useRef(false);
+  const navRef = useRef<HTMLElement | null>(null);
+  const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -719,19 +748,85 @@ const App = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [currentView]);
 
+  // Close mobile menu on outside click or Escape
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (navRef.current && !navRef.current.contains(target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMenuOpen]);
+
+  // Lightbox escape, focus, and scroll lock
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    lightboxCloseRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSelectedImage(null);
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        lightboxCloseRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedImage]);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden transition-colors duration-300">
+      <a
+        href="#home"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-full focus:shadow-lg"
+      >
+        Skip to content
+      </a>
       
       {/* Lightbox Modal */}
       {selectedImage && (
         <div 
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-fade-in"
           onClick={() => setSelectedImage(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image preview"
         >
           <button 
             className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full"
             onClick={() => setSelectedImage(null)}
+            ref={lightboxCloseRef}
+            aria-label="Close image preview"
           >
             <XIcon size={32} />
           </button>
@@ -745,7 +840,7 @@ const App = () => {
       )}
 
       {/* Navigation */}
-      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 border-b border-slate-200 shadow-sm transition-all duration-300">
+      <nav ref={navRef} className="fixed w-full bg-white/90 backdrop-blur-sm z-50 border-b border-slate-200 shadow-sm transition-all duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('home')}>
@@ -753,24 +848,26 @@ const App = () => {
             </div>
             
             {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              {['Home', 'Work', 'About', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`text-sm font-medium transition-colors duration-200 ${
-                    activeSection === item.toLowerCase() && currentView === 'home'
-                      ? 'text-sky-600' 
-                      : 'text-slate-600 hover:text-sky-700'
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
+            <div className="hidden md:flex items-center gap-6">
+              <div className="flex space-x-8">
+                {['Home', 'Work', 'About', 'Contact'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className={`text-sm font-medium transition-colors duration-200 ${
+                      activeSection === item.toLowerCase() && currentView === 'home'
+                        ? 'text-sky-600' 
+                        : 'text-slate-600 hover:text-sky-700'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            <div className="md:hidden flex items-center gap-2">
               <button onClick={toggleMenu} className="text-slate-600 hover:text-sky-600 p-2">
                 {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
               </button>
@@ -859,8 +956,17 @@ const App = () => {
               {projects.map((project, index) => (
                 <div 
                   key={project.id} 
-                  className="group cursor-pointer" 
+                  className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-4 rounded-2xl"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Open case study for ${project.title}`}
                   onClick={() => handleProjectClick(project)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      handleProjectClick(project);
+                    }
+                  }}
                 >
                   <div className="grid md:grid-cols-12 gap-8 items-center">
                     
@@ -917,7 +1023,13 @@ const App = () => {
                       </div>
 
                       <button 
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleProjectClick(project);
+                        }}
                         className={`font-semibold flex items-center gap-2 hover:gap-3 transition-all ${project.accentColor}`}
+                        aria-label={`Read full case study for ${project.title}`}
                       >
                         Read Full Case Study <ArrowRightIcon size={18} />
                       </button>
