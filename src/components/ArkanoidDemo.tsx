@@ -340,6 +340,7 @@ const ArkanoidDemo = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const state = stateRef.current;
       if (event.code === 'Space') {
         event.preventDefault();
         event.stopPropagation();
