@@ -1029,34 +1029,11 @@ const ArkanoidDemo = () => {
   }, [isRunning]);
 
   return (
-    <div className="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm lg:h-[640px] flex flex-col">
+    <div className="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm lg:h-[680px] flex flex-col">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
           <p className="text-sm font-semibold text-slate-700">Play the demo</p>
           <p className="text-xs text-slate-500">Arrow keys to move. Space to launch. Shift for boost. ESC pauses.</p>
-        </div>
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={(event) => {
-              setIsRunning((prev) => !prev);
-              event.currentTarget.blur();
-            }}
-            className="px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition"
-          >
-            {isRunning ? 'Pause Demo' : 'Run Demo'}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              resetGame();
-              setIsRunning(false);
-              renderOnce();
-            }}
-            className="px-4 py-2 rounded-full text-sm font-semibold border border-slate-200 text-slate-700 hover:border-slate-400 transition"
-          >
-            Reset
-          </button>
         </div>
       </div>
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-900 flex-1">
@@ -1071,6 +1048,29 @@ const ArkanoidDemo = () => {
           }}
           className="w-full h-full block focus:outline-none"
         />
+      </div>
+      <div className="mt-4 flex flex-wrap gap-3 justify-start">
+        <button
+          type="button"
+          onClick={(event) => {
+            setIsRunning((prev) => !prev);
+            event.currentTarget.blur();
+          }}
+          className="px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition"
+        >
+          {isRunning ? 'Pause Demo' : 'Run Demo'}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            resetGame();
+            setIsRunning(false);
+            renderOnce();
+          }}
+          className="px-4 py-2 rounded-full text-sm font-semibold border border-slate-200 text-slate-700 hover:border-slate-400 transition"
+        >
+          Reset
+        </button>
       </div>
     </div>
   );

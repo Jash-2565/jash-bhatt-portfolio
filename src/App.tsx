@@ -88,7 +88,7 @@ interface Section {
   imageLayout?: 'row' | 'stack' | 'mixed'; 
   imageHeight?: string; 
   codeBlock?: string;
-  demoId?: 'arkanoid';
+  demoId?: 'arkanoid' | 'yolov8';
 }
 
 interface ProjectContent {
@@ -396,6 +396,39 @@ const projects: Project[] = [
         }
       ]
     }
+  },
+  {
+    id: 4,
+    title: "Python Codes",
+    category: "Python / Computer Vision",
+    timeline: "Ongoing",
+    description: "Two Python builds showcased side-by-side: a YOLOv8 webcam object detector and a Python arcade game with live in-browser demos.",
+    tags: ["Python", "YOLOv8", "Computer Vision", "WebAssembly", "ONNX"],
+    color: "bg-emerald-50",
+    accentColor: "text-emerald-700",
+    hoverColor: "group-hover:text-emerald-700",
+    badge: "bg-emerald-100 text-emerald-700",
+    content: {
+      heroImage: "placeholder-python-hero.jpg",
+      challenge: "Showcase native Python projects inside a portfolio without running external servers by pairing code snippets with browser-native live demos.",
+      role: "Developer",
+      sections: [
+        {
+          title: "YOLOv8 Live Object Detection",
+          content: "The Python workflow uses Ultralytics YOLO for webcam inference. For the web demo, the model is exported to ONNX and runs locally in the browser with a live webcam feed and real-time overlays.",
+          listItems: ["Threaded capture & inference in Python", "ONNX export for browser runtime", "Live webcam detections on-device"],
+          codeBlock: YOLOV8_SNIPPET,
+          demoId: "yolov8"
+        },
+        {
+          title: "Python Arcade: Arkanoid",
+          content: "A classic arcade build written in Python, mirrored here as a playable JavaScript demo that preserves the feel of the original logic and visuals.",
+          listItems: ["Physics-based ball motion", "Power-ups and scoring system", "Live playable demo"],
+          codeBlock: ARKANOID_SNIPPET,
+          demoId: "arkanoid"
+        }
+      ]
+    }
   }
 ];
 
@@ -428,10 +461,60 @@ const ProjectDetail = ({
 }) => {
   if (!project) return null;
   const isSolarLink = project.title === 'SolarLink';
+  const isPythonCodes = project.title === 'Python Codes';
   const heroBgClass = isSolarLink ? 'bg-[#053738]' : project.color;
   const heroTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-900';
   const heroMutedTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-500';
   const heroBodyTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-600';
+
+  const renderDemoBlock = (section: Section) => {
+    const demoComponent = section.demoId === 'arkanoid'
+      ? <ArkanoidDemo />
+      : section.demoId === 'yolov8'
+        ? <YoloV8Demo />
+        : null;
+
+    if (demoComponent && section.codeBlock) {
+      return (
+        <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div className="rounded-2xl border border-slate-200 bg-slate-950 text-slate-100 shadow-sm">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+              <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
+              <span className="text-[10px] text-slate-500">read-only</span>
+            </div>
+            <pre className="max-h-[520px] overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre">
+              {section.codeBlock}
+            </pre>
+          </div>
+          {demoComponent}
+        </div>
+      );
+    }
+
+    if (demoComponent) {
+      return (
+        <div className="mt-8">
+          {demoComponent}
+        </div>
+      );
+    }
+
+    if (section.codeBlock) {
+      return (
+        <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-950 text-slate-100 shadow-sm">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+            <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
+            <span className="text-[10px] text-slate-500">read-only</span>
+          </div>
+          <pre className="max-h-[520px] overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre">
+            {section.codeBlock}
+          </pre>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   // Helper to render mixed layout images
   const renderImages = (section: Section) => {
@@ -572,117 +655,113 @@ const ProjectDetail = ({
         </div>
 
         {/* Hero Image */}
-        <div className="w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm">
-           {!project.content.heroImage.includes('placeholder') ? (
-              <img src={project.content.heroImage} alt={`${project.title} Hero`} className="w-full h-auto block" />
-           ) : (
-              <div className="w-full aspect-video flex items-center justify-center">
-                <div className="text-center text-slate-400">
-                  <PhotoIcon size={48} className="mx-auto mb-4 opacity-50" />
-                  <span className="text-sm font-medium tracking-wide uppercase">Project Hero Image</span>
+        {!isPythonCodes && (
+          <div className="w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm">
+             {!project.content.heroImage.includes('placeholder') ? (
+                <img src={project.content.heroImage} alt={`${project.title} Hero`} className="w-full h-auto block" />
+             ) : (
+                <div className="w-full aspect-video flex items-center justify-center">
+                  <div className="text-center text-slate-400">
+                    <PhotoIcon size={48} className="mx-auto mb-4 opacity-50" />
+                    <span className="text-sm font-medium tracking-wide uppercase">Project Hero Image</span>
+                  </div>
                 </div>
-              </div>
-           )}
-        </div>
+             )}
+          </div>
+        )}
 
         {/* Narrative Sections */}
-        <div className="space-y-24">
-          {project.content.sections.map((section, idx) => (
-            <div key={idx} className="grid md:grid-cols-12 gap-8 items-start group">
-              
-              {/* Left Column: Heading */}
-              <div className="md:col-span-4 md:sticky md:top-24">
-                <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80`}></div>
-                <h2 className="text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                  {section.title}
-                </h2>
-              </div>
-
-              {/* Right Column: Content */}
-              <div className="md:col-span-8">
-                <p className="text-lg text-slate-600 leading-relaxed whitespace-pre-line mb-8 font-normal">
-                  {section.content}
-                </p>
-                
+        {isPythonCodes ? (
+          <div className="space-y-16">
+            {project.content.sections.map((section, idx) => (
+              <div key={idx} className="rounded-3xl border border-emerald-100/70 bg-white/80 p-8 md:p-10 shadow-sm">
+                <div className="mb-6">
+                  <div className="text-xs uppercase tracking-[0.35em] text-emerald-600/70 mb-3">Python Project</div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">{section.title}</h2>
+                  <p className="text-lg text-slate-600 leading-relaxed whitespace-pre-line">
+                    {section.content}
+                  </p>
+                </div>
                 {section.listItems && (
-                  <ul className="space-y-3 mb-8 pl-1">
+                  <ul className="space-y-3 mb-4 pl-1">
                     {section.listItems.map((item, i) => (
                       <li key={i} className="flex items-start gap-3 text-slate-700">
-                        <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.badge.replace('text', 'bg').split(' ')[0]}`}></span>
+                        <span className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-emerald-400"></span>
                         <span className="leading-relaxed">{item}</span>
                       </li>
                     ))}
                   </ul>
                 )}
-
-                {section.demoId === 'arkanoid' && section.codeBlock ? (
-                  <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="rounded-2xl border border-slate-200 bg-slate-950 text-slate-100 shadow-sm">
-                      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
-                        <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-                        <span className="text-[10px] text-slate-500">read-only</span>
-                      </div>
-                      <pre className="max-h-[460px] overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre">
-                        {section.codeBlock}
-                      </pre>
-                    </div>
-                    <ArkanoidDemo />
-                  </div>
-                ) : (
-                  <>
-                    {section.demoId === 'arkanoid' && (
-                      <div className="mt-8">
-                        <ArkanoidDemo />
-                      </div>
-                    )}
-
-                    {section.codeBlock && (
-                      <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-950 text-slate-100 shadow-sm">
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
-                          <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-                          <span className="text-[10px] text-slate-500">read-only</span>
-                        </div>
-                        <pre className="max-h-[460px] overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre">
-                          {section.codeBlock}
-                        </pre>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* Dynamic Image Rendering */}
-                {renderImages(section)}
-                
-                {/* Embed (Figma etc) */}
-                {section.embedUrl && (
-                  <div className="mt-12 w-full max-w-[360px] mx-auto aspect-[9/19] bg-slate-900 rounded-[2.5rem] overflow-hidden border-[8px] border-slate-800 shadow-2xl relative">
-                    <iframe 
-                      src={section.embedUrl}
-                      className="w-full h-full bg-white"
-                      allowFullScreen
-                      style={{ border: 'none' }}
-                      title="Interactive Prototype"
-                    ></iframe>
-                  </div>
-                )}
-                
-                {/* CTA Button (Only if cta exists) */}
-                {section.cta && (
-                  <div className="mt-10">
-                    <a 
-                      href={section.cta.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-medium text-lg hover:bg-slate-800 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5"
-                    >
-                      {section.cta.text} <ExternalLinkIcon size={20} className="opacity-80" />
-                    </a>
-                  </div>
-                )}
+                {renderDemoBlock(section)}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-24">
+            {project.content.sections.map((section, idx) => (
+              <div key={idx} className="grid md:grid-cols-12 gap-8 items-start group">
+                
+                {/* Left Column: Heading */}
+                <div className="md:col-span-4 md:sticky md:top-24">
+                  <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80`}></div>
+                  <h2 className="text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                    {section.title}
+                  </h2>
+                </div>
+
+                {/* Right Column: Content */}
+                <div className="md:col-span-8">
+                  <p className="text-lg text-slate-600 leading-relaxed whitespace-pre-line mb-8 font-normal">
+                    {section.content}
+                  </p>
+                  
+                  {section.listItems && (
+                    <ul className="space-y-3 mb-8 pl-1">
+                      {section.listItems.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-slate-700">
+                          <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.badge.replace('text', 'bg').split(' ')[0]}`}></span>
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {renderDemoBlock(section)}
+
+                  {/* Dynamic Image Rendering */}
+                  {renderImages(section)}
+                  
+                  {/* Embed (Figma etc) */}
+                  {section.embedUrl && (
+                    <div className="mt-12 w-full max-w-[360px] mx-auto aspect-[9/19] bg-slate-900 rounded-[2.5rem] overflow-hidden border-[8px] border-slate-800 shadow-2xl relative">
+                      <iframe 
+                        src={section.embedUrl}
+                        className="w-full h-full bg-white"
+                        allowFullScreen
+                        style={{ border: 'none' }}
+                        title="Interactive Prototype"
+                      ></iframe>
+                    </div>
+                  )}
+                  
+                  {/* CTA Button (Only if cta exists) */}
+                  {section.cta && (
+                    <div className="mt-10">
+                      <a 
+                        href={section.cta.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-medium text-lg hover:bg-slate-800 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5"
+                      >
+                        {section.cta.text} <ExternalLinkIcon size={20} className="opacity-80" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         
         {/* Footer Navigation */}
         <div className="mt-32 pt-12 border-t border-slate-200 flex justify-between items-center">
@@ -1177,52 +1256,6 @@ const App = () => {
                       )}
                     </div>
                   ))}
-                </div>
-              </div>
-
-              {/* Python Demo Section */}
-              <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-amber-300 hover:shadow-lg transition-all">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center">
-                    <BriefcaseIcon size={20} className="text-amber-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900">Python Arcade Demo</h3>
-                </div>
-                <p className="text-slate-600 mb-6">Code snippet on the left, live playable output on the right. Arrow keys to move, Space to launch.</p>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="rounded-2xl border border-slate-200 bg-slate-950 text-slate-100 shadow-sm lg:h-[640px] flex flex-col">
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
-                      <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-                      <span className="text-[10px] text-slate-500">read-only</span>
-                    </div>
-                    <pre className="flex-1 overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre">
-                      {ARKANOID_SNIPPET}
-                    </pre>
-                  </div>
-                  <ArkanoidDemo />
-                </div>
-              </div>
-
-              {/* YOLOv8 Webcam Demo Section */}
-              <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-emerald-300 hover:shadow-lg transition-all">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center">
-                    <BriefcaseIcon size={20} className="text-emerald-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900">YOLOv8 Object Detection</h3>
-                </div>
-                <p className="text-slate-600 mb-6">Your Python pipeline on the left, live webcam inference in the browser on the right. Model runs locally with ONNX.</p>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="rounded-2xl border border-slate-200 bg-slate-950 text-slate-100 shadow-sm lg:h-[640px] flex flex-col">
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
-                      <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-                      <span className="text-[10px] text-slate-500">read-only</span>
-                    </div>
-                    <pre className="flex-1 overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre">
-                      {YOLOV8_SNIPPET}
-                    </pre>
-                  </div>
-                  <YoloV8Demo />
                 </div>
               </div>
 

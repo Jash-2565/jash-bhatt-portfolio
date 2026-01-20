@@ -421,6 +421,14 @@ const YoloV8Demo = () => {
     setStatus('Stopped');
   };
 
+  const handleToggle = async () => {
+    if (isRunningRef.current) {
+      handleStop();
+      return;
+    }
+    await handleStart();
+  };
+
   return (
     <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -449,18 +457,17 @@ const YoloV8Demo = () => {
       <div className="flex flex-wrap gap-3 mt-5">
         <button
           type="button"
-          onClick={handleStart}
-          disabled={isRunning}
-          className="px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          onClick={handleToggle}
+          className="px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition"
         >
-          Start Demo
+          {isRunning ? 'Pause Demo' : 'Run Demo'}
         </button>
         <button
           type="button"
           onClick={handleStop}
-          className="px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition"
+          className="px-4 py-2 rounded-full text-sm font-semibold border border-slate-200 text-slate-700 hover:border-slate-400 transition"
         >
-          Stop
+          Reset
         </button>
       </div>
     </div>
