@@ -1,5 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 
+declare global {
+  interface Window {
+    loadPyodide?: (config: { indexURL: string }) => Promise<any>;
+  }
+}
+
 // --- Icons (Renamed to avoid potential conflicts) ---
 const MenuIcon = ({ size = 24, ...props }: any) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -112,6 +118,16 @@ interface GalleryItem {
   alt?: string;
 }
 
+interface Detection {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  conf: number;
+  cls: number;
+  name: string;
+}
+
 // Helper for path resolution (Supports both Vite and Create React App)
 const getBaseUrl = () => {
   try {
@@ -135,6 +151,10 @@ const getBaseUrl = () => {
 };
 
 const PUBLIC_URL = getBaseUrl().replace(/\/$/, ''); // Ensure no trailing slash
+// @ts-ignore: Vite environment access
+const YOLO_WS_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_YOLO_WS_URL)
+  ? import.meta.env.VITE_YOLO_WS_URL
+  : 'ws://localhost:8000/ws';
 
 // --- Data ---
 const projects: Project[] = [
@@ -361,16 +381,28 @@ const projects: Project[] = [
     badge: "bg-[#E3FC03]/60 text-[#053738]",
     content: {
       heroImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
-      challenge: "Navigating the transition to solar energy is complex, involving regulatory hurdles, financial uncertainty, and lack of trust in providers.",
+      challenge: "Clean energy is not a technology problem; it’s a decision problem. Solar adoption fails not because people don’t care, but because deciding together is hard.",
       role: "Service Designer",
       sections: [
+        {
+          title: "SDG 7 Context",
+          content: "SDG 7: Affordable & Clean Energy (Sub-goal 7.2) focuses on increasing the share of renewable energy in the global energy mix.\n\nIndia has vast rooftop solar potential, especially in urban housing societies, yet community-level adoption remains slow. The gap is not infrastructure. It's decision-making."
+        },
+        {
+          title: "Problem Statement",
+          content: "Housing societies want solar, but struggle to move forward due to:\n\n• Confusion and misinformation\n• Multiple stakeholders and opinions\n• Fear of wrong decisions\n• Lack of neutral guidance\n\nSolar keeps becoming \"next year's agenda\"."
+        },
         {
           title: "Service Concept",
           content: "SolarLink bridges the gap between homeowners and renewable energy providers. It offers a transparent, step-by-step service that handles feasibility analysis, financing, and installation coordination."
         },
         {
           title: "Research & Insights",
-          content: "Through interviews with homeowners and installers, we identified that the primary barrier to adoption wasn't cost, but the complexity of the process. SolarLink simplifies this into a guided 3-stage journey."
+          content: "Why adoption stalls in housing societies:\n\n• Residential societies contribute under 20% of rooftop solar installations\n• Decision-making takes 2–3x longer due to multiple stakeholders\n• 60%+ residents cite lack of clear information as a bigger barrier than cost\n\nIndia’s estimated rooftop solar potential is ~124 GW, yet only ~11 GW is installed—less than 10% utilized."
+        },
+        {
+          title: "Core Concept: Solar Sunday",
+          content: "A one-day, on-site experience designed to help societies explore solar without pressure. It transforms the society terrace into a learning space—calm, interactive, and human."
         }
       ]
     }
@@ -656,6 +688,34 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pythonCode, setPythonCode] = useState(
+    `# Try editing and running this in the browser!
+def fibonacci(n):
+    a, b = 0, 1
+    seq = []
+    for _ in range(n):
+        seq.append(a)
+        a, b = b, a + b
+    return seq
+
+print("First 10:", fibonacci(10))
+`
+  );
+  const [pythonOutput, setPythonOutput] = useState('');
+  const [pythonStatus, setPythonStatus] = useState<'idle' | 'loading' | 'ready' | 'running' | 'error'>('idle');
+  const pyodideRef = useRef<any>(null);
+  const pyodideLoadingRef = useRef<Promise<any> | null>(null);
+  const [yoloStatus, setYoloStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle');
+  const [yoloError, setYoloError] = useState<string | null>(null);
+  const [detections, setDetections] = useState<Detection[]>([]);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const overlayRef = useRef<HTMLCanvasElement | null>(null);
+  const captureCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const wsRef = useRef<WebSocket | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const sendIntervalRef = useRef<number | null>(null);
+  const lastFrameSizeRef = useRef({ width: 640, height: 480 });
+  const yoloHasErrorRef = useRef(false);
   
   const isManualScroll = useRef(false);
   const navRef = useRef<HTMLElement | null>(null);
@@ -728,6 +788,205 @@ const App = () => {
     }
   };
 
+  const drawDetections = (items: Detection[]) => {
+    const video = videoRef.current;
+    const canvas = overlayRef.current;
+    if (!video || !canvas) return;
+
+    const width = video.videoWidth || 640;
+    const height = video.videoHeight || 480;
+    canvas.width = width;
+    canvas.height = height;
+
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    context.clearRect(0, 0, width, height);
+    context.lineWidth = 2;
+    context.font = '14px ui-sans-serif, system-ui, -apple-system';
+    context.strokeStyle = '#38bdf8';
+    context.fillStyle = '#38bdf8';
+
+    const scaleX = width / lastFrameSizeRef.current.width;
+    const scaleY = height / lastFrameSizeRef.current.height;
+
+    items.forEach((det) => {
+      const x = det.x1 * scaleX;
+      const y = det.y1 * scaleY;
+      const w = (det.x2 - det.x1) * scaleX;
+      const h = (det.y2 - det.y1) * scaleY;
+      context.strokeRect(x, y, w, h);
+      const label = `${det.name} ${Math.round(det.conf * 100)}%`;
+      const textPadding = 4;
+      const textWidth = context.measureText(label).width;
+      context.fillRect(x, Math.max(0, y - 18), textWidth + textPadding * 2, 18);
+      context.fillStyle = '#0f172a';
+      context.fillText(label, x + textPadding, Math.max(12, y - 5));
+      context.fillStyle = '#38bdf8';
+    });
+  };
+
+  const cleanupYoloResources = () => {
+    if (sendIntervalRef.current) {
+      window.clearInterval(sendIntervalRef.current);
+      sendIntervalRef.current = null;
+    }
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    setDetections([]);
+  };
+
+  const stopYoloDemo = () => {
+    cleanupYoloResources();
+    yoloHasErrorRef.current = false;
+    setYoloStatus('idle');
+  };
+
+  const startYoloDemo = async () => {
+    yoloHasErrorRef.current = false;
+    setYoloError(null);
+    setYoloStatus('connecting');
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 640, height: 480 }
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+
+      const socket = new WebSocket(YOLO_WS_URL);
+      wsRef.current = socket;
+
+      socket.onopen = () => {
+        setYoloStatus('connected');
+        sendIntervalRef.current = window.setInterval(() => {
+          const video = videoRef.current;
+          const canvas = captureCanvasRef.current;
+          if (!video || !canvas) return;
+          if (socket.readyState !== WebSocket.OPEN) return;
+          if (video.readyState < 2) return;
+
+          const targetWidth = 640;
+          const scale = video.videoWidth ? targetWidth / video.videoWidth : 1;
+          const targetHeight = Math.round((video.videoHeight || 480) * scale);
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+          ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          socket.send(JSON.stringify({ image: dataUrl }));
+        }, 200);
+      };
+
+      socket.onmessage = (event) => {
+        try {
+          const payload = JSON.parse(event.data);
+          const width = typeof payload.width === 'number' ? payload.width : 640;
+          const height = typeof payload.height === 'number' ? payload.height : 480;
+          lastFrameSizeRef.current = { width, height };
+          setDetections(payload.detections || []);
+        } catch (error) {
+          setYoloError('Failed to parse detection response.');
+          setYoloStatus('error');
+        }
+      };
+
+      socket.onerror = () => {
+        cleanupYoloResources();
+        yoloHasErrorRef.current = true;
+        setYoloError('WebSocket connection failed.');
+        setYoloStatus('error');
+      };
+
+      socket.onclose = () => {
+        cleanupYoloResources();
+        if (!yoloHasErrorRef.current) {
+          setYoloStatus('idle');
+        }
+      };
+    } catch (error) {
+      cleanupYoloResources();
+      yoloHasErrorRef.current = true;
+      setYoloError('Camera access failed. Check browser permissions.');
+      setYoloStatus('error');
+    }
+  };
+
+  const loadPyodideRuntime = async () => {
+    if (pyodideRef.current) return pyodideRef.current;
+    if (pyodideLoadingRef.current) return pyodideLoadingRef.current;
+
+    setPythonStatus('loading');
+    pyodideLoadingRef.current = new Promise<void>((resolve, reject) => {
+      if (window.loadPyodide) {
+        resolve();
+        return;
+      }
+
+      const existing = document.getElementById('pyodide-script');
+      if (existing) {
+        existing.addEventListener('load', () => resolve());
+        existing.addEventListener('error', () => reject(new Error('Failed to load Pyodide.')));
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.id = 'pyodide-script';
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Failed to load Pyodide.'));
+      document.body.appendChild(script);
+    })
+      .then(async () => {
+        if (!window.loadPyodide) {
+          throw new Error('Pyodide loader not available.');
+        }
+        const instance = await window.loadPyodide({
+          indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
+        });
+        pyodideRef.current = instance;
+        setPythonStatus('ready');
+        return instance;
+      })
+      .catch((error) => {
+        setPythonStatus('error');
+        setPythonOutput(String(error));
+        throw error;
+      });
+
+    return pyodideLoadingRef.current;
+  };
+
+  const runPythonCode = async () => {
+    setPythonOutput('');
+    setPythonStatus('running');
+
+    try {
+      const pyodide = await loadPyodideRuntime();
+      pyodide.setStdout({
+        batched: (text: string) => setPythonOutput((prev) => prev + text)
+      });
+      pyodide.setStderr({
+        batched: (text: string) => setPythonOutput((prev) => prev + text)
+      });
+      await pyodide.runPythonAsync(pythonCode);
+      setPythonStatus('ready');
+    } catch (error) {
+      setPythonStatus('error');
+      setPythonOutput((prev) => (prev ? prev : String(error)));
+    }
+  };
+
   // Scroll spy
   useEffect(() => {
     if (currentView !== 'home') return;
@@ -735,7 +994,7 @@ const App = () => {
     const handleScroll = () => {
       if (isManualScroll.current) return;
 
-      const sections = ['home', 'work', 'about', 'contact'];
+      const sections = ['home', 'work', 'python', 'about', 'contact'];
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50) {
@@ -811,6 +1070,16 @@ const App = () => {
     };
   }, [selectedImage]);
 
+  useEffect(() => {
+    drawDetections(detections);
+  }, [detections]);
+
+  useEffect(() => {
+    return () => {
+      stopYoloDemo();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden transition-colors duration-300">
       <a
@@ -857,7 +1126,7 @@ const App = () => {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-6">
               <div className="flex space-x-8">
-                {['Home', 'Work', 'About', 'Contact'].map((item) => (
+                {['Home', 'Work', 'Python', 'About', 'Contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item.toLowerCase())}
@@ -886,7 +1155,7 @@ const App = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {['Home', 'Work', 'About', 'Contact'].map((item) => (
+              {['Home', 'Work', 'Python', 'About', 'Contact'].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
@@ -1123,6 +1392,127 @@ const App = () => {
                 </div>
               </div>
 
+            </div>
+          </section>
+
+          {/* Python Demo Section */}
+          <section id="python" className="py-24 px-4 scroll-mt-28 bg-slate-50 border-y border-slate-100">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Python Demo</h2>
+                <div className="h-1 w-20 bg-sky-600 rounded-full"></div>
+                <p className="mt-6 text-lg text-slate-600 max-w-2xl">
+                  Paste any Python script here and run it directly in the browser. This uses Pyodide (Python in WebAssembly), so it works without a server.
+                </p>
+              </div>
+
+              <div className="grid gap-8 lg:grid-cols-2">
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-slate-900">Code</h3>
+                    <button
+                      type="button"
+                      className="text-sm font-medium text-sky-600 hover:text-sky-700"
+                      onClick={() => setPythonCode('')}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <textarea
+                    value={pythonCode}
+                    onChange={(event) => setPythonCode(event.target.value)}
+                    className="w-full min-h-[320px] rounded-xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    spellCheck={false}
+                  />
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={runPythonCode}
+                      disabled={pythonStatus === 'loading' || pythonStatus === 'running'}
+                      className="px-6 py-3 bg-sky-600 text-white rounded-full font-medium hover:bg-sky-700 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    >
+                      {pythonStatus === 'loading' && 'Loading Python...'}
+                      {pythonStatus === 'running' && 'Running...'}
+                      {(pythonStatus === 'idle' || pythonStatus === 'ready' || pythonStatus === 'error') && 'Run Code'}
+                    </button>
+                    <span className="text-sm text-slate-500">
+                      Status: {pythonStatus === 'ready' ? 'ready' : pythonStatus}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-slate-900 text-slate-100 rounded-2xl shadow-sm p-6 border border-slate-800">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-white">Output</h3>
+                    <button
+                      type="button"
+                      className="text-sm font-medium text-slate-300 hover:text-white"
+                      onClick={() => setPythonOutput('')}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <pre className="min-h-[320px] whitespace-pre-wrap text-sm text-slate-200 font-mono">
+                    {pythonOutput || 'Output will appear here.'}
+                  </pre>
+                  <p className="mt-4 text-xs text-slate-400">
+                    Note: Browser Python has limited file and network access.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-16 grid gap-8 lg:grid-cols-5 items-start">
+                <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Live YOLO Demo</h3>
+                  <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                    Stream your camera to a FastAPI backend that runs YOLO and returns live detections. This requires the backend to be running locally or deployed.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {yoloStatus === 'connected' ? (
+                      <button
+                        type="button"
+                        onClick={stopYoloDemo}
+                        className="px-5 py-3 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-800 transition-all"
+                      >
+                        Stop Demo
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={startYoloDemo}
+                        className="px-5 py-3 rounded-full bg-sky-600 text-white font-medium hover:bg-sky-700 transition-all"
+                      >
+                        Start Demo
+                      </button>
+                    )}
+                    <span className="text-sm text-slate-500 self-center">
+                      Status: {yoloStatus}
+                    </span>
+                  </div>
+                  {yoloError && (
+                    <p className="mt-4 text-sm text-red-600">{yoloError}</p>
+                  )}
+                  <p className="mt-6 text-xs text-slate-400">
+                    Backend WebSocket: {YOLO_WS_URL}
+                  </p>
+                </div>
+
+                <div className="lg:col-span-3">
+                  <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-sm aspect-video">
+                    <video
+                      ref={videoRef}
+                      className="w-full h-full object-cover"
+                      muted
+                      playsInline
+                    />
+                    <canvas
+                      ref={overlayRef}
+                      className="absolute inset-0 w-full h-full pointer-events-none"
+                    />
+                  </div>
+                </div>
+              </div>
+              <canvas ref={captureCanvasRef} className="hidden" aria-hidden="true" />
             </div>
           </section>
 
