@@ -257,9 +257,10 @@ const YoloV8Demo = () => {
   };
 
   const startCamera = async () => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: 'environment',
+        facingMode: isMobile ? 'user' : 'environment',
         width: { ideal: 640 },
         height: { ideal: 480 }
       },
