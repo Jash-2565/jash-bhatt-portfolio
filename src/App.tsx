@@ -113,7 +113,7 @@ interface Project {
 }
 
 interface GalleryItem {
-  type: 'image' | 'placeholder';
+  type: 'image' | 'video' | 'placeholder';
   src?: string;
   alt?: string;
 }
@@ -1198,10 +1198,21 @@ const App = () => {
                   {galleryItems.map((item, i) => (
                     <div 
                       key={i} 
-                      className="aspect-square rounded-lg overflow-hidden bg-slate-100 cursor-pointer border border-slate-200 hover:border-sky-300 hover:shadow-md transition-all group"
-                      onClick={() => item.src && setSelectedImage(item.src)}
+                      className={`aspect-square rounded-lg overflow-hidden bg-slate-100 border border-slate-200 transition-all group ${item.type === 'video' ? 'hover:border-slate-300 hover:shadow-md' : 'cursor-pointer hover:border-sky-300 hover:shadow-md'}`}
+                      onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
                     >
-                      {item.src ? (
+                      {item.type === 'video' && item.src ? (
+                        <video
+                          className="w-full h-full object-cover"
+                          controls
+                          playsInline
+                          preload="metadata"
+                          aria-label={item.alt}
+                        >
+                          <source src={item.src} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : item.src ? (
                         <img 
                           src={item.src} 
                           alt={item.alt} 
@@ -1219,6 +1230,29 @@ const App = () => {
                       )}
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Brand Animation Section */}
+              <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-slate-300 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <PhotoIcon size={20} className="text-slate-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900">Nothing Brand Animation</h3>
+                </div>
+                <p className="text-slate-600 mb-6">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
+                <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                  <video
+                    className="w-full h-auto"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    aria-label="Nothing brand animation video"
+                  >
+                    <source src={`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.mp4`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
 
