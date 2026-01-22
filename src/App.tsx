@@ -363,8 +363,8 @@ const projects: Project[] = [
   {
     id: 3,
     title: "SolarLink",
-    category: "Service Design · Sustainability · Systems Thinking",
-    timeline: "Academic Project",
+    category: "Service Design",
+    timeline: "Completed",
     description: "Designing confidence for community solar adoption.",
     tags: ["Service Design", "Sustainability", "Systems Thinking"],
     color: "bg-[#E3FC03]",
@@ -887,6 +887,7 @@ const App = () => {
 
   const scrollToSection = (sectionId: string) => {
     isManualScroll.current = true;
+    const targetProjectId = selectedProject?.id ?? null;
     
     if (currentView !== 'home') {
       // If in project view: Fade out -> Switch to Home -> Jump to Section -> Fade In
@@ -895,8 +896,14 @@ const App = () => {
         setCurrentView('home');
         setSelectedProject(null);
         setTimeout(() => {
-          const element = document.getElementById(sectionId);
-          if (element) element.scrollIntoView({ behavior: 'auto' });
+          const targetId =
+            sectionId === 'work' && targetProjectId !== null
+              ? `project-${targetProjectId}`
+              : sectionId;
+          const element = document.getElementById(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+          }
           setIsTransitioning(false);
           setTimeout(() => { isManualScroll.current = false; }, 300);
         }, 50);
@@ -927,14 +934,19 @@ const App = () => {
   };
 
   const handleBackToHome = () => {
+    const targetProjectId = selectedProject?.id ?? null;
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentView('home');
       setSelectedProject(null);
       setActiveSection('work');
       setTimeout(() => {
-        const element = document.getElementById('work');
-        if (element) element.scrollIntoView({ behavior: 'auto' });
+        const targetId =
+          targetProjectId !== null ? `project-${targetProjectId}` : 'work';
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+        }
         setIsTransitioning(false);
       }, 50);
     }, 300);
@@ -1183,6 +1195,7 @@ const App = () => {
               {projects.map((project, index) => (
                 <div 
                   key={project.id} 
+                  id={`project-${project.id}`}
                   className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-4 rounded-2xl"
                   role="button"
                   tabIndex={0}
