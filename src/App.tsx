@@ -884,6 +884,20 @@ const App = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   // --- Navigation & Transition Handlers ---
+  const scrollToElementWithOffset = (
+    element: HTMLElement,
+    align: 'center' | 'start'
+  ) => {
+    if (align === 'center') {
+      element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+      return;
+    }
+
+    const navHeight = navRef.current?.offsetHeight ?? 0;
+    const extraOffset = 16;
+    const top = element.getBoundingClientRect().top + window.scrollY - navHeight - extraOffset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+  };
 
   const scrollToSection = (sectionId: string) => {
     isManualScroll.current = true;
@@ -905,7 +919,7 @@ const App = () => {
           const element = document.getElementById(targetId);
           if (element) {
             const block = targetId === 'work' ? 'start' : getProjectScrollAlignment();
-            element.scrollIntoView({ behavior: 'auto', block, inline: 'nearest' });
+            scrollToElementWithOffset(element, block);
           }
           setIsTransitioning(false);
           setTimeout(() => { isManualScroll.current = false; }, 300);
@@ -951,7 +965,7 @@ const App = () => {
         const element = document.getElementById(targetId);
         if (element) {
           const block = targetId === 'work' ? 'start' : getProjectScrollAlignment();
-          element.scrollIntoView({ behavior: 'auto', block, inline: 'nearest' });
+          scrollToElementWithOffset(element, block);
         }
         setIsTransitioning(false);
       }, 50);
