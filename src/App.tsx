@@ -1311,11 +1311,11 @@ const App = () => {
                   <h3 className="text-xl font-bold text-slate-900">Photoshop & Animation</h3>
                 </div>
                 <p className="text-slate-600 mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
-                <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
                   {galleryItems.map((item, i) => (
                     <div 
                       key={i} 
-                      className={`aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 border border-slate-200 transition-all group md:aspect-square ${item.type === 'video' ? 'hover:border-slate-300 hover:shadow-md' : 'cursor-pointer hover:border-sky-300 hover:shadow-md'}`}
+                      className={`w-full rounded-lg overflow-hidden bg-slate-100 border border-slate-200 transition-all group md:aspect-square ${item.type === 'video' ? 'hover:border-slate-300 hover:shadow-md' : 'cursor-pointer hover:border-sky-300 hover:shadow-md'}`}
                       onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
                     >
                       {item.type === 'video' && item.src ? (
@@ -1387,11 +1387,11 @@ const App = () => {
                   <h3 className="text-xl font-bold text-slate-900">Lamborghini Jetski AI</h3>
                 </div>
                 <p className="text-slate-600 mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
-                <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
                   {aiItems.map((item, i) => (
                     <div 
                       key={i} 
-                      className="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 cursor-pointer border border-slate-200 hover:border-purple-300 hover:shadow-md transition-all group md:aspect-square"
+                      className="w-full rounded-lg overflow-hidden bg-slate-100 cursor-pointer border border-slate-200 hover:border-purple-300 hover:shadow-md transition-all group md:aspect-square"
                       onClick={() => item.src && setSelectedImage(item.src)}
                     >
                       {item.src ? (
@@ -1424,7 +1424,7 @@ const App = () => {
                   <h3 className="text-xl font-bold text-slate-900">Photography Gallery</h3>
                 </div>
                 <p className="text-slate-600 mb-6">A compact collage layout that highlights material studies, sketches, and form exploration.</p>
-                <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
+                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
                   {gallerySnippetItems.map((item, i) => {
                     const positionClass = i === 0
                       ? 'md:col-start-1 md:row-start-1'
@@ -1434,8 +1434,8 @@ const App = () => {
                           ? 'md:col-start-2 md:row-span-2 md:h-full'
                           : 'md:col-start-3 md:row-span-2 md:h-full';
                     const shapeClass = i < 2
-                      ? 'aspect-[4/3] md:aspect-[4/3]'
-                      : 'aspect-[4/3] md:aspect-auto md:h-full';
+                      ? 'w-full md:aspect-[4/3]'
+                      : 'w-full md:aspect-auto md:h-full';
 
                     return (
                       <div
