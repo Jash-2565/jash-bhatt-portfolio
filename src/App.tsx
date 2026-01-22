@@ -65,6 +65,22 @@ const PhotoIcon = ({ size = 24, ...props }: any) => (
   </svg>
 );
 
+const CameraIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M14.5 4h-5l-2 3H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.5z"/><circle cx="12" cy="13" r="3"/>
+  </svg>
+);
+
+const AiSparkIcon = ({ size = 24, ...props }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="3" y="4" width="16" height="16" rx="3" ry="3" />
+    <path d="M8.5 15l2-6 2 6" />
+    <line x1="9.3" y1="13" x2="11.7" y2="13" />
+    <line x1="14" y1="9" x2="14" y2="15" />
+    <path d="M18.5 6.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z" />
+  </svg>
+);
+
 const BriefcaseIcon = ({ size = 24, ...props }: any) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
@@ -361,38 +377,113 @@ const projects: Project[] = [
   {
     id: 3,
     title: "SolarLink",
-    category: "Service Design",
-    timeline: "Completed",
-    description: "A holistic service design project streamlining the adoption of residential solar energy through a unified digital and physical ecosystem.",
-    tags: ["Service Blueprinting", "User Journey", "System Mapping"],
+    category: "Service Design · Sustainability · Systems Thinking",
+    timeline: "Academic Project",
+    description: "Designing confidence for community solar adoption.",
+    tags: ["Service Design", "Sustainability", "Systems Thinking"],
     color: "bg-[#E3FC03]",
     accentColor: "text-[#053738]",
     hoverColor: "group-hover:text-[#053738]",
     badge: "bg-[#E3FC03]/60 text-[#053738]",
     content: {
       heroImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
-      challenge: "Clean energy is not a technology problem; it’s a decision problem. Solar adoption fails not because people don’t care, but because deciding together is hard.",
-      role: "Service Designer",
+      challenge: "Clean energy is not a technology problem; it is a decision problem. Solar adoption fails not because people do not care, but because deciding together is hard.",
+      role: "Service Design · Research · Insight Synthesis · Journey Mapping · Concept & Experience Design",
       sections: [
         {
           title: "SDG 7 Context",
           content: "SDG 7: Affordable & Clean Energy (Sub-goal 7.2) focuses on increasing the share of renewable energy in the global energy mix.\n\nIndia has vast rooftop solar potential, especially in urban housing societies, yet community-level adoption remains slow. The gap is not infrastructure. It's decision-making."
         },
         {
+          title: "Overview",
+          content: "India has vast rooftop solar potential, especially within urban housing societies. Yet adoption at the community level remains slow.\n\nSolarLink is a service design concept that reframes solar adoption from a technology challenge into a decision-making problem.\n\nThe project explores how housing societies can move from confusion and indecision to shared clarity and confidence before any installation begins."
+        },
+        {
+          title: "Why This Project Exists",
+          content: "Despite falling costs, government subsidies, and increasing awareness, solar adoption in housing societies continues to stall.\n\nSolar does not fail because people do not care. It fails because deciding together is hard.",
+          listItems: [
+            "Information is fragmented",
+            "Opinions clash",
+            "Responsibility feels risky",
+            "Decisions get endlessly postponed",
+            "Solar becomes \"next year's agenda\""
+          ]
+        },
+        {
           title: "Problem Statement",
-          content: "Housing societies want solar, but struggle to move forward due to:\n\n• Confusion and misinformation\n• Multiple stakeholders and opinions\n• Fear of wrong decisions\n• Lack of neutral guidance\n\nSolar keeps becoming \"next year's agenda\"."
+          content: "How might we help housing societies confidently decide on solar adoption in a system involving multiple stakeholders, high perceived risk, and unclear information?\n\nThe challenge was not infrastructure. It was clarity, trust, and shared understanding."
         },
         {
-          title: "Service Concept",
-          content: "SolarLink bridges the gap between homeowners and renewable energy providers. It offers a transparent, step-by-step service that handles feasibility analysis, financing, and installation coordination."
+          title: "Research & Understanding",
+          content: "Key observations:",
+          listItems: [
+            "Residential societies contribute less than 20% of rooftop solar installations",
+            "Decision-making in societies takes 2-3x longer than individual homes",
+            "Lack of clear information is a bigger barrier than cost",
+            "Committee members fear irreversible decisions"
+          ]
         },
         {
-          title: "Research & Insights",
-          content: "Why adoption stalls in housing societies:\n\n• Residential societies contribute under 20% of rooftop solar installations\n• Decision-making takes 2–3x longer due to multiple stakeholders\n• 60%+ residents cite lack of clear information as a bigger barrier than cost\n\nIndia’s estimated rooftop solar potential is ~124 GW, yet only ~11 GW is installed—less than 10% utilized."
+          title: "Primary User",
+          content: "Society office bearers (especially secretaries) act as informal decision-makers. They are practical and risk-averse, responsible for long-term outcomes, overloaded with coordination, and highly dependent on peer validation.\n\nTheir biggest concern is not price. It is making the wrong decision for everyone."
         },
         {
-          title: "Core Concept: Solar Sunday",
-          content: "A one-day, on-site experience designed to help societies explore solar without pressure. It transforms the society terrace into a learning space—calm, interactive, and human."
+          title: "Core Insight",
+          content: "Clean energy is not a technology problem. It is a decision problem.\n\nHousing societies do not need persuasion. They need confidence.\n\nSolar adoption must begin before panels, with clarity, trust, and shared understanding."
+        },
+        {
+          title: "Design Question",
+          content: "How might we move housing societies from confusion to clarity before any solar installation begins?"
+        },
+        {
+          title: "Design Direction",
+          content: "The solution needed to:",
+          listItems: [
+            "Be neutral, not vendor-driven",
+            "Support collective decision-making",
+            "Reduce fear around long-term commitments",
+            "Make solar understandable and discussable",
+            "Build trust before execution"
+          ]
+        },
+        {
+          title: "The Solution: SolarLink",
+          content: "SolarLink is a service ecosystem designed to guide housing societies through solar adoption with confidence.\n\nWe are not a solar vendor. We are a neutral facilitator.",
+          listItems: [
+            "Understand solar",
+            "Discuss options together",
+            "Decide confidently"
+          ]
+        },
+        {
+          title: "Core Intervention: Solar Sunday",
+          content: "Solar Sunday is a one-day, on-site experience designed to help housing societies explore solar without pressure.\n\nInstead of sales presentations, Solar Sunday turns the society terrace into a calm, interactive learning space where:\n\n• Questions are safe\n• Myths are surfaced\n• Understanding is shared\n\nSolar adoption begins with understanding. Solar Sunday is where that understanding is built."
+        },
+        {
+          title: "Key Experience Touchpoints",
+          content: "Solar Confession Booth: A private, judgment-free space where residents openly express doubts and myths. Most common confession: \"I do not really understand solar.\" Surfacing uncertainty early reduces resistance later.\n\nAR Energy Visualiser: Residents see projected costs, savings, and energy generation mapped onto their own building. Solar becomes tangible, not abstract.\n\nPledge Wall: Residents make small, non-binding commitments to show intent and interest. Small signals build collective ownership.\n\nGuided Decision Framework: Structured comparisons replace opinion-based debates. No selling. Only shared understanding."
+        },
+        {
+          title: "Redefined Journey",
+          content: "Before SolarLink:\n\n• Fragmented information\n• Vendor bias\n• Endless discussions\n• Decisions delayed\n\nWith SolarLink:\n\n• Structured learning\n• Neutral facilitation\n• Transparent comparisons\n• Confidence before approvals\n\nSolar does not move faster by pushing harder. It moves faster when people feel ready."
+        },
+        {
+          title: "Impact & SDG Alignment",
+          content: "SolarLink directly supports SDG 7: Affordable & Clean Energy by addressing the decision layer of adoption.\n\nThe impact is not measured in panels installed, but in:\n\n• Reduced decision friction\n• Increased trust\n• Higher likelihood of adoption\n\nSolarLink does not install panels. We install confidence."
+        },
+        {
+          title: "What I Learned",
+          content: "This project strengthened my understanding that:",
+          listItems: [
+            "Sustainability adoption is a systems problem",
+            "Designing for confidence is as important as efficiency",
+            "Service design can unlock stalled behaviors",
+            "Community decisions require facilitation, not persuasion"
+          ]
+        },
+        {
+          title: "Why This Project Matters in My Portfolio",
+          content: "SolarLink reflects my approach to design: insight-led, not solution-first; human-centered at a systems scale; focused on clarity, trust, and behavior.\n\nIt demonstrates how design can enable sustainable change by reshaping how decisions are made."
         }
       ]
     }
@@ -442,6 +533,13 @@ const aiItems: GalleryItem[] = [
   { type: 'image', src: `${PUBLIC_URL}/images/Lamborghini Jetski/aquatoro-blue.webp`, alt: 'Lamborghini Jetski Concept 1' },
   { type: 'image', src: `${PUBLIC_URL}/images/Lamborghini Jetski/aquatoro-black.webp`, alt: 'Lamborghini Jetski Concept 2' },
   { type: 'image', src: `${PUBLIC_URL}/images/Lamborghini Jetski/jetski final.gif`, alt: 'Lamborghini Jetski Concept 3' }
+];
+
+const gallerySnippetItems: GalleryItem[] = [
+  { type: 'image', src: `${PUBLIC_URL}/images/Photography/flowers.webp`, alt: 'White flowers close-up' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photography/fire-sunset.webp`, alt: 'City skyline at sunset' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photography/sunrise-bird.webp`, alt: 'Sunrise over valley with bird' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photography/sunroof-water.webp`, alt: 'Water texture on glass' }
 ];
 
 // --- Sub-Components ---
@@ -1048,7 +1146,7 @@ const App = () => {
                   Hi, I'm <span className="text-sky-600">Jash Bhatt</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl">
-                  I design inclusive experiences and tangible products that solve real-world problems. From AI wearables to playful industrial design.
+                  I am an aspiring designer who is aiming to go into the technology side of design.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button 
@@ -1259,8 +1357,13 @@ const App = () => {
               {/* AI Generations Section */}
               <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-sky-300 hover:shadow-lg transition-all">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-                    <PhotoIcon size={20} className="text-purple-600" />
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                    <img
+                      src={`${PUBLIC_URL}/images/Lamborghini.png`}
+                      alt="Lamborghini logo"
+                      className="w-7 h-7 object-contain"
+                      loading="lazy"
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">Lamborghini Jetski AI</h3>
                 </div>
@@ -1290,6 +1393,54 @@ const App = () => {
                       )}
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Gallery Snippet Section */}
+              <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-slate-300 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-sky-200">
+                    <CameraIcon size={20} className="text-sky-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900">Photography Gallery</h3>
+                </div>
+                <p className="text-slate-600 mb-6">A compact collage layout that highlights material studies, sketches, and form exploration.</p>
+                <div className="grid gap-6 md:grid-cols-3 md:grid-rows-2 md:auto-rows-fr">
+                  {gallerySnippetItems.map((item, i) => {
+                    const positionClass = i === 0
+                      ? 'md:col-start-1 md:row-start-1'
+                      : i === 1
+                        ? 'md:col-start-1 md:row-start-2'
+                        : i === 2
+                          ? 'md:col-start-2 md:row-span-2 md:h-full'
+                          : 'md:col-start-3 md:row-span-2 md:h-full';
+                    const shapeClass = i < 2 ? 'aspect-[4/3]' : 'h-full';
+
+                    return (
+                      <div
+                        key={`gallery-snippet-${i}`}
+                        className={`${shapeClass} rounded-lg overflow-hidden bg-slate-100 cursor-pointer border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all group ${positionClass}`}
+                        onClick={() => item.src && setSelectedImage(item.src)}
+                      >
+                        {item.src ? (
+                          <img
+                            src={item.src}
+                            alt={item.alt}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.onerror = null;
+                              if (target.parentElement) {
+                                target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-300"><svg width="24" height="24" ...><rect .../></svg></div>';
+                              }
+                            }}
+                          />
+                        ) : (
+                          <PhotoIcon className="text-slate-300 w-full h-full p-4" />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -1324,8 +1475,8 @@ const App = () => {
                         
                         {/* Secondary / Past */}
                         <div className="opacity-80">
-                          <h4 className="text-base font-medium text-slate-800">VIBGYOR High School, NIBM, Pune</h4>
-                          <p className="text-sm text-slate-500">Cambridge International (CIE)</p>
+                          <h4 className="text-base font-medium text-slate-800">Cambridge International Education</h4>
+                          <p className="text-sm text-slate-500">VIBGYOR High School, NIBM, Pune</p>
                           <p className="text-xs text-slate-400 mt-0.5">2018 – 2023</p>
                         </div>
                       </div>
@@ -1384,16 +1535,6 @@ const App = () => {
                 <div className="text-left">
                   <p className="text-sm text-slate-500 font-medium">Email Me</p>
                   <p className="text-slate-900 font-semibold">jash.bhatt@flame.edu.in</p>
-                </div>
-              </a>
-
-              <a href="tel:+918329318577" className="flex items-center justify-center gap-3 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-sky-300 transition-all group min-w-[280px]">
-                 <div className="p-3 bg-sky-50 text-sky-600 rounded-full group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <PhoneIcon size={24} />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm text-slate-500 font-medium">Call Me</p>
-                  <p className="text-slate-900 font-semibold">+91 8329318577</p>
                 </div>
               </a>
 
