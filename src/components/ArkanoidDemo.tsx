@@ -339,7 +339,14 @@ const ArkanoidDemo = () => {
   };
 
   useEffect(() => {
+    const isTypingTarget = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      const tag = target.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || target.isContentEditable;
+    };
+
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (isTypingTarget(event.target)) return;
       const state = stateRef.current;
       if (event.code === 'Space') {
         event.preventDefault();
@@ -372,6 +379,7 @@ const ArkanoidDemo = () => {
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
+      if (isTypingTarget(event.target)) return;
       if (event.code === 'Space') {
         event.preventDefault();
         event.stopPropagation();
@@ -1033,7 +1041,7 @@ const ArkanoidDemo = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
           <p className="text-sm font-semibold text-slate-700">Play the demo</p>
-          <p className="text-xs text-slate-500">Arrow keys to move. Space to launch. Shift for boost. ESC pauses.</p>
+          <p className="text-xs text-slate-500">Arrow keys to move. Tap to launch. Shift for boost. ESC pauses.</p>
         </div>
       </div>
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-900 flex-1">

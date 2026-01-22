@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import ArkanoidDemo from './components/ArkanoidDemo';
 import YoloV8Demo from './components/YoloV8Demo';
+import MovieRecsDemo from './components/MovieRecsDemo';
 import { ARKANOID_CODE } from './data/arkanoidCode';
 import { YOLOV8_CODE } from './data/yolov8Code';
+import { MOVIE_RECS_CODE } from './data/movieRecsCode';
 
 // --- Icons (Renamed to avoid potential conflicts) ---
 const MenuIcon = ({ size = 24, ...props }: any) => (
@@ -90,12 +92,11 @@ interface Section {
   imageLayout?: 'row' | 'stack' | 'mixed'; 
   imageHeight?: string; 
   codeBlock?: string;
-  demoId?: 'arkanoid' | 'yolov8';
+  demoId?: 'arkanoid' | 'yolov8' | 'movie-recs';
 }
 
 interface ProjectContent {
   heroImage: string;
-  challenge: string;
   role: string;
   sections: Section[];
 }
@@ -148,6 +149,7 @@ const PUBLIC_URL = getBaseUrl().replace(/\/$/, ''); // Ensure no trailing slash
 // --- Data ---
 const ARKANOID_SNIPPET = ARKANOID_CODE;
 const YOLOV8_SNIPPET = YOLOV8_CODE;
+const MOVIE_RECS_SNIPPET = MOVIE_RECS_CODE;
 
 const projects: Project[] = [
   {
@@ -163,7 +165,6 @@ const projects: Project[] = [
     badge: "bg-purple-100 text-purple-700",
     content: {
       heroImage: "placeholder-classflow-hero.jpg", // Keeps the placeholder logic
-      challenge: "Academic scheduling is manual and prone to error. Syllabuses are locked in static PDFs, requiring tedious manual entry to create a functional digital calendar.",
       role: "Creator & Lead Developer",
       sections: [
         {
@@ -204,13 +205,16 @@ const projects: Project[] = [
     badge: "bg-sky-100 text-sky-700",
     content: {
       heroImage: `${PUBLIC_URL}/images/WePick/wepick-hero-2.webp`,
-      challenge: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants—making it hard to decide and move forward.",
       role: "UI/UX Designer",
       sections: [
         {
           title: "The Process",
           content: "The project timeline spanned several weeks, moving through distinct phases: Research > Problem Statement > Insights > Ideation > MVP Definition > Prototyping > Final App.",
           listItems: ["Defined User Problem", "Gathered User Insights", "Ideation", "Storyboarding", "Visual Identity", "Prototyping"]
+        },
+        {
+          title: "The User Problem",
+          content: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants—making it hard to decide and move forward."
         },
         {
           title: "Research & Insights",
@@ -285,7 +289,6 @@ const projects: Project[] = [
     badge: "bg-rose-100 text-rose-900",
     content: {
       heroImage: `${PUBLIC_URL}/images/Dino Spread/dino-spread-hero.webp`,
-      challenge: "Improving hygiene and usability in campus canteen condiment stations.",
       role: "Industrial Designer",
       sections: [
         {
@@ -373,7 +376,6 @@ const projects: Project[] = [
     badge: "bg-[#E3FC03]/60 text-[#053738]",
     content: {
       heroImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
-      challenge: "Clean energy is not a technology problem; it is a decision problem. Solar adoption fails not because people do not care, but because deciding together is hard.",
       role: "Service Design · Research · Insight Synthesis · Journey Mapping · Concept & Experience Design",
       sections: [
         {
@@ -487,7 +489,6 @@ const projects: Project[] = [
     badge: "bg-emerald-100 text-emerald-700",
     content: {
       heroImage: "placeholder-python-hero.jpg",
-      challenge: "Showcase native Python projects inside a portfolio without running external servers by pairing code snippets with browser-native live demos.",
       role: "Developer",
       sections: [
         {
@@ -503,6 +504,13 @@ const projects: Project[] = [
           listItems: ["Physics-based ball motion", "Power-ups and scoring system", "Live playable demo"],
           codeBlock: ARKANOID_SNIPPET,
           demoId: "arkanoid"
+        },
+        {
+          title: "Movie Recommendation Engine",
+          content: "A content-based recommender that blends genres, directors, cast, and country into a single feature vector, then ranks similar films using cosine similarity.",
+          listItems: ["CountVectorizer-style bag of words", "Cosine similarity ranking", "Fuzzy title matching"],
+          codeBlock: MOVIE_RECS_SNIPPET,
+          demoId: "movie-recs"
         }
       ]
     }
@@ -556,7 +564,9 @@ const ProjectDetail = ({
       ? <ArkanoidDemo />
       : section.demoId === 'yolov8'
         ? <YoloV8Demo />
-        : null;
+        : section.demoId === 'movie-recs'
+          ? <MovieRecsDemo />
+          : null;
 
     if (demoComponent && section.codeBlock) {
       return (
@@ -717,16 +727,12 @@ const ProjectDetail = ({
       <div className="max-w-5xl mx-auto px-4 py-16">
         
         {/* Project Meta */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-20 pb-12 border-b border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 pb-12 border-b border-slate-200">
            <div className="md:col-span-1">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Role</h3>
               <p className="font-medium text-slate-900 text-sm leading-6">{project.content.role}</p>
            </div>
-           <div className="md:col-span-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">The Challenge</h3>
-              <p className="font-medium text-slate-900 text-sm leading-6">{project.content.challenge}</p>
-           </div>
-            <div className="md:col-span-1">
+           <div className="md:col-span-1">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tech & Tools</h3>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag, i) => (
@@ -1423,7 +1429,7 @@ const App = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">Photography Gallery</h3>
                 </div>
-                <p className="text-slate-600 mb-6">A compact collage layout that highlights material studies, sketches, and form exploration.</p>
+                <p className="text-slate-600 mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
                 <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
                   {gallerySnippetItems.map((item, i) => {
                     const positionClass = i === 0
