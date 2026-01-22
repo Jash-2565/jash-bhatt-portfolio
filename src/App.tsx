@@ -888,6 +888,8 @@ const App = () => {
   const scrollToSection = (sectionId: string) => {
     isManualScroll.current = true;
     const targetProjectId = selectedProject?.id ?? null;
+    const getProjectScrollAlignment = () =>
+      window.innerWidth < 768 ? 'start' : 'center';
     
     if (currentView !== 'home') {
       // If in project view: Fade out -> Switch to Home -> Jump to Section -> Fade In
@@ -902,7 +904,8 @@ const App = () => {
               : sectionId;
           const element = document.getElementById(targetId);
           if (element) {
-            element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+            const block = targetId === 'work' ? 'start' : getProjectScrollAlignment();
+            element.scrollIntoView({ behavior: 'auto', block, inline: 'nearest' });
           }
           setIsTransitioning(false);
           setTimeout(() => { isManualScroll.current = false; }, 300);
@@ -935,6 +938,8 @@ const App = () => {
 
   const handleBackToHome = () => {
     const targetProjectId = selectedProject?.id ?? null;
+    const getProjectScrollAlignment = () =>
+      window.innerWidth < 768 ? 'start' : 'center';
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentView('home');
@@ -945,7 +950,8 @@ const App = () => {
           targetProjectId !== null ? `project-${targetProjectId}` : 'work';
         const element = document.getElementById(targetId);
         if (element) {
-          element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+          const block = targetId === 'work' ? 'start' : getProjectScrollAlignment();
+          element.scrollIntoView({ behavior: 'auto', block, inline: 'nearest' });
         }
         setIsTransitioning(false);
       }, 50);
