@@ -1315,7 +1315,7 @@ const App = () => {
                   {galleryItems.map((item, i) => (
                     <div 
                       key={i} 
-                      className={`aspect-square rounded-lg overflow-hidden bg-slate-100 border border-slate-200 transition-all group ${item.type === 'video' ? 'hover:border-slate-300 hover:shadow-md' : 'cursor-pointer hover:border-sky-300 hover:shadow-md'}`}
+                      className={`aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 border border-slate-200 transition-all group md:aspect-square ${item.type === 'video' ? 'hover:border-slate-300 hover:shadow-md' : 'cursor-pointer hover:border-sky-300 hover:shadow-md'}`}
                       onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
                     >
                       {item.type === 'video' && item.src ? (
@@ -1391,7 +1391,7 @@ const App = () => {
                   {aiItems.map((item, i) => (
                     <div 
                       key={i} 
-                      className="aspect-square rounded-lg overflow-hidden bg-slate-100 cursor-pointer border border-slate-200 hover:border-purple-300 hover:shadow-md transition-all group"
+                      className="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 cursor-pointer border border-slate-200 hover:border-purple-300 hover:shadow-md transition-all group md:aspect-square"
                       onClick={() => item.src && setSelectedImage(item.src)}
                     >
                       {item.src ? (
