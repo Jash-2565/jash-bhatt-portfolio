@@ -91,12 +91,14 @@ interface Section {
   embedUrl?: string;
   imageLayout?: 'row' | 'stack' | 'mixed'; 
   imageHeight?: string; 
+  imageCrop?: boolean;
   codeBlock?: string;
   demoId?: 'arkanoid' | 'yolov8' | 'movie-recs';
 }
 
 interface ProjectContent {
   heroImage: string;
+  thumbnailImage?: string;
   role: string;
   sections: Section[];
 }
@@ -156,38 +158,65 @@ const projects: Project[] = [
     id: 0,
     title: "ClassFlow",
     category: "AI Agent / Full Stack",
-    timeline: "Ongoing",
-    description: "A smart, web-based application that automates the translation of course syllabi into actionable, digital schedules. ClassFlow uses Generative AI to 'read' messy course documents and map them onto a real-world calendar.",
-    tags: ["React", "Firebase", "Gemini AI", "Google Calendar API"],
-    color: "bg-purple-50",
-    accentColor: "text-purple-600",
-    hoverColor: "group-hover:text-purple-600",
-    badge: "bg-purple-100 text-purple-700",
+    timeline: "Completed",
+    description: "A chat-first class scheduling app that turns plain language into structured, exportable calendars for students and instructors.",
+    tags: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI", "Google Calendar API"],
+    color: "bg-[#F2F1FF]",
+    accentColor: "text-[#4239C4]",
+    hoverColor: "group-hover:text-[#4239C4]",
+    badge: "bg-[#E3E0FF] text-[#2F2895]",
     content: {
-      heroImage: "placeholder-classflow-hero.jpg", // Keeps the placeholder logic
+      heroImage: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Home.webp`,
+      thumbnailImage: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Thumbnail.webp`,
       role: "Creator & Lead Developer",
       sections: [
         {
-          title: "The Core Solution",
-          content: "ClassFlow is designed around a simple premise: 'Upload your syllabus. Set your availability. Get a perfect Google Calendar instantly.'\n\nIt leverages Google Gemini to parse messy course documents, understand teaching timelines, and map them onto a user's specific constraints (e.g., 'Tuesdays & Thursdays, Sept-Dec').",
-          listItems: ["Automated Syllabus Parsing", "Intelligent Date Calculation", "One-Click Google Calendar Export"]
+          title: "Problem",
+          content: "Students and instructors often know what they need to schedule but do not have time to manually structure it into a clean calendar. Traditional tools assume you already have a formatted plan, which is unrealistic for many people."
         },
         {
-          title: "Design Process & UX",
-          content: "I designed the application around a linear, 3-step flow to minimize cognitive load for students and professors:\n\n1. Input: User uploads PDF/Excel and defines semester dates.\n2. Processing: The system uses AI to parse topics and calculate exact session dates.\n3. Output: User reviews the generated schedule and exports it."
+          title: "Solution",
+          content: "I built ClassFlow, a chat-first scheduling app that lets users build a full class plan through conversation.",
+          listItems: [
+            "AI assistant captures topics, dates, times, and recurring patterns.",
+            "Generates a structured calendar that can be reviewed, edited, and exported to Google Calendar or .ics."
+          ]
         },
         {
-          title: "Technical Architecture",
-          content: "ClassFlow is built on a modern stack ensuring speed and scalability:\n• Frontend: React (Vite) with Tailwind CSS for a modular UI.\n• Backend: Google Firebase (Auth & Firestore) for secure persistence.\n• AI Engine: Google Gemini API (gemini-1.5-flash) for OCR and semantic extraction.\n• Integration: Google Calendar API for direct read/write access.",
-          listItems: ["React & Tailwind CSS", "Firebase Auth & Firestore", "Google Gemini AI", "Google Calendar API"]
+          title: "How it works",
+          content: "A guided workflow that turns conversation into a usable schedule.",
+          listItems: [
+            "Chat-only input: users describe topics, dates, and patterns in natural language.",
+            "Structured output: assistant returns updates and waits for approval before applying them.",
+            "Schedule generation: scheduling engine maps topics to recurring class slots.",
+            "Preview + export: calendar or list view with Google Calendar and .ics export.",
+            "Persistence: Firebase Auth + Firestore save schedules and chat context."
+          ]
         },
         {
-          title: "Key Features & Algorithms",
-          content: "To make this work, I developed two core technologies:\n\nSmart Import (AI-Powered): A prompt-engineered LLM pipeline that instructs Gemini to ignore 'fluff' (grading policies) and strictly extract topics.\n\n'Greedy' Week Mapping: A sophisticated allocation algorithm that detects course frequency and ensures multi-session weeks are fully populated without gaps."
+          title: "Tech Stack",
+          content: "Core technologies powering ClassFlow.",
+          listItems: [
+            "React 19, Vite, Tailwind CSS",
+            "Firebase Auth + Firestore",
+            "Google Gemini API",
+            "Google Calendar API"
+          ]
         },
         {
-          title: "Challenges & Roadmap",
-          content: "The biggest challenge was handling 'messy data'—every professor formats syllabi differently. Instead of writing 50 regex parsers, I used AI to normalize text into standard JSON.\n\nFuture Roadmap: \n• Conflict Detection with existing calendar events.\n• Direct LMS Integration (Canvas/Blackboard).\n• Mobile App implementation."
+          title: "Key Features / Impact",
+          content: "Highlights that make the experience fast and reliable.",
+          listItems: [
+            "Chat-first UX that converts plain language into structured schedules.",
+            "Review-and-apply workflow prevents unintended edits.",
+            "Automated weekly schedule generation from recurring patterns.",
+            "Google Calendar sync and .ics export.",
+            "Per-user saved schedules with Firebase."
+          ]
+        },
+        {
+          title: "Why it's meaningful",
+          content: "ClassFlow removes the friction between “I have a plan in my head” and “I have a calendar I can use.” It turns conversation into structure, making scheduling faster and more accessible."
         }
       ]
     }
@@ -480,7 +509,7 @@ const projects: Project[] = [
     id: 4,
     title: "Python Codes",
     category: "Python / Computer Vision",
-    timeline: "Ongoing",
+    timeline: "Completed",
     description: "Two Python builds showcased side-by-side: a YOLOv8 webcam object detector and a Python arcade game with live in-browser demos.",
     tags: ["Python", "YOLOv8", "Computer Vision", "WebAssembly", "ONNX"],
     color: "bg-emerald-50",
@@ -511,6 +540,91 @@ const projects: Project[] = [
           listItems: ["CountVectorizer-style bag of words", "Cosine similarity ranking", "Fuzzy title matching"],
           codeBlock: MOVIE_RECS_SNIPPET,
           demoId: "movie-recs"
+        }
+      ]
+    }
+  },
+  {
+    id: 5,
+    title: "Tinkering",
+    category: "Experimental / Prototyping",
+    timeline: "Ongoing",
+    description: "A sandbox for quick experiments, sketches, and small builds that explore new tools, ideas, and interactions.",
+    tags: ["Prototyping", "R&D", "Creative Coding"],
+    color: "bg-rose-50",
+    accentColor: "text-rose-600",
+    hoverColor: "group-hover:text-rose-600",
+    badge: "bg-rose-100 text-rose-700",
+    content: {
+      heroImage: `${PUBLIC_URL}/images/Tinkering/tinkering-hero-2.webp`,
+      role: "Maker",
+      sections: [
+        {
+          title: "Circuit Diagram",
+          content: "My teammate and I decided to create a double 7-segment display that would count down and trigger a motor to start spinning.\n\nThe project uses:\n• 36 LEDs\n• ESP32\n• Ultrasonic Sensor\n• Relay\n• Motor",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Tinkering/Circuit-Design.webp`,
+              caption: "Circuit diagram experiment"
+            }
+          ]
+        },
+        {
+          title: "First Light Test",
+          content: "Initial power-on of the first 7-segment LED to validate wiring and segment mapping.",
+          imageLayout: "row",
+          imageHeight: "md:h-[28rem]",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Tinkering/segment-1-light.webp`,
+              caption: "First light-up of the 1st 7-segment LED"
+            },
+            {
+              src: `${PUBLIC_URL}/images/Tinkering/soldering.webp`,
+              caption: "Soldering the connections"
+            }
+          ]
+        },
+        {
+          title: "Prototype Countdown",
+          content: "The coded prototype driving a 1-segment and 2-segment countdown sequence.",
+          imageLayout: "row",
+          imageHeight: "md:h-[28rem]",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Tinkering/1-segment-countdown.gif`,
+              caption: "1-segment countdown"
+            },
+            {
+              src: `${PUBLIC_URL}/images/Tinkering/2-segment-countdown.gif`,
+              caption: "2-segment countdown"
+            }
+          ]
+        },
+        {
+          title: "Final Countdown Prototype",
+          content: "Final working countdown sequence running end-to-end on the prototype.",
+          imageCrop: true,
+          imageHeight: "h-[20rem] w-full max-w-[24rem] md:h-[26rem] md:w-[26rem]",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Tinkering/final-countdown.gif`,
+              caption: "Final working prototype countdown"
+            }
+          ]
+        },
+        {
+          title: "What I Am Exploring",
+          content: "These experiments target new tech and interaction models, from playful UI mechanics to small automation workflows.",
+          listItems: ["Rapid prototypes", "New libraries and APIs", "Micro-interactions and motion studies"]
+        },
+        {
+          title: "Sample Experiments",
+          content: "Small builds might include a one-weekend demo, a novel UI pattern, or a data visualization sketch that informs future work."
+        },
+        {
+          title: "Next Steps",
+          content: "Promising experiments graduate into polished projects, while the rest stay archived as reference material."
         }
       ]
     }
@@ -554,6 +668,7 @@ const ProjectDetail = ({
   if (!project) return null;
   const isSolarLink = project.title === 'SolarLink';
   const isPythonCodes = project.title === 'Python Codes';
+  const isTinkering = project.title === 'Tinkering';
   const heroBgClass = isSolarLink ? 'bg-[#053738]' : project.color;
   const heroTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-900';
   const heroMutedTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-500';
@@ -665,25 +780,34 @@ const ProjectDetail = ({
     return (
       <div className={`mt-10 ${
         section.imageLayout === 'row' 
-          ? 'flex flex-col md:flex-row gap-8 justify-between items-start' 
+          ? 'flex flex-col md:flex-row gap-4 justify-start items-start' 
           : 'grid grid-cols-1 gap-12' 
       }`}>
         {section.images.map((img, i) => (
-          <div key={i} className={`flex flex-col gap-3 ${section.imageLayout === 'row' ? 'flex-shrink-0' : ''}`}>
+          <div
+            key={i}
+            className={`flex flex-col gap-3 ${
+              section.imageLayout === 'row' ? 'flex-shrink-0' : ''
+            } ${section.imageCrop ? 'w-fit items-center' : ''}`}
+          >
             <div 
               className={`rounded-lg overflow-hidden border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-md cursor-zoom-in ${
-                section.imageLayout === 'row' ? 'w-fit' : ''
-              }`}
+                section.imageLayout === 'row'
+                  ? section.imageCrop ? 'w-full' : 'w-fit'
+                  : ''
+              } ${section.imageCrop && section.imageHeight ? section.imageHeight : ''}`}
               onClick={() => onImageClick(img.src)}
             >
               <img 
                 src={img.src} 
                 alt={img.caption} 
-                className={`${
-                  section.imageLayout === 'row' 
-                    ? `w-full h-auto md:w-auto ${section.imageHeight || 'md:h-48'} max-w-full` 
-                    : 'w-full h-auto'
-                }`}
+                className={
+                  section.imageCrop
+                    ? 'w-full h-full object-cover object-center'
+                    : section.imageLayout === 'row' 
+                      ? `w-full h-auto md:w-auto ${section.imageHeight || 'md:h-48'} max-w-full` 
+                      : 'w-full h-auto'
+                }
                 loading="lazy" 
               />
             </div>
@@ -746,9 +870,13 @@ const ProjectDetail = ({
 
         {/* Hero Image */}
         {!isPythonCodes && (
-          <div className="w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm">
+          <div className={`w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm ${isTinkering ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
              {!project.content.heroImage.includes('placeholder') ? (
-                <img src={project.content.heroImage} alt={`${project.title} Hero`} className="w-full h-auto block" />
+                <img
+                  src={project.content.heroImage}
+                  alt={`${project.title} Hero`}
+                  className={isTinkering ? 'w-full h-full object-cover object-center' : 'w-full h-auto block'}
+                />
              ) : (
                 <div className="w-full aspect-video flex items-center justify-center">
                   <div className="text-center text-slate-400">
@@ -1241,9 +1369,9 @@ const App = () => {
                       <div className={`relative overflow-hidden rounded-2xl ${project.color} border border-slate-200 aspect-[4/3] shadow-sm group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1`}>
                           {!project.content.heroImage.includes('placeholder') ? (
                             <img 
-                              src={project.content.heroImage} 
+                              src={project.content.thumbnailImage || project.content.heroImage} 
                               alt={project.title} 
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                              className={`w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 ${project.title === 'ClassFlow' ? 'scale-[1.12]' : ''}`} 
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center p-8 text-center">
