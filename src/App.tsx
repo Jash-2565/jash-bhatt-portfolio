@@ -158,7 +158,7 @@ const projects: Project[] = [
     id: 0,
     title: "ClassFlow",
     category: "AI Agent / Full Stack",
-    timeline: "Completed",
+    timeline: "Ongoing",
     description: "A chat-first class scheduling app that turns plain language into structured, exportable calendars for students and instructors.",
     tags: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI", "Google Calendar API"],
     color: "bg-[#F2F1FF]",
@@ -233,7 +233,8 @@ const projects: Project[] = [
     hoverColor: "group-hover:text-sky-600",
     badge: "bg-sky-100 text-sky-700",
     content: {
-      heroImage: `${PUBLIC_URL}/images/WePick/wepick-hero-2.webp`,
+      heroImage: `${PUBLIC_URL}/images/WePick/WePick-Hero.webp`,
+      thumbnailImage: `${PUBLIC_URL}/images/WePick/wepick-thumbnail.webp`,
       role: "UI/UX Designer",
       sections: [
         {
@@ -278,6 +279,28 @@ const projects: Project[] = [
           ]
         },
         {
+          title: "User Task Flows",
+          content: "",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/WePick/Onboarding.webp`,
+              caption: "User Onboarding"
+            },
+            {
+              src: `${PUBLIC_URL}/images/WePick/Shared-Cart.webp`,
+              caption: "Adding Items to Shared Cart"
+            },
+            {
+              src: `${PUBLIC_URL}/images/WePick/Giving-Feedback.webp`,
+              caption: "Giving Feedback to Other Users"
+            },
+            {
+              src: `${PUBLIC_URL}/images/WePick/Viewing-Feedback.webp`,
+              caption: "Viewing Feedback"
+            }
+          ]
+        },
+        {
           title: "Visual Identity & Moodboard",
           content: "To define the aesthetic direction of WePick, we curated a moodboard focusing on vibrant, energetic colors and clean, modern typography. The goal was to create an interface that feels fun, social, and trustworthy.",
           images: [
@@ -292,7 +315,7 @@ const projects: Project[] = [
           content: "Before moving to high-fidelity screens, we established a comprehensive design system including typography, color palettes, and component libraries to ensure consistency across the application.",
           images: [
             {
-              src: `${PUBLIC_URL}/images/WePick/wepick-design-system.webp`,
+              src: `${PUBLIC_URL}/images/WePick/WePick Design System 2.webp`,
               caption: "WePick Design System & Components"
             }
           ]
@@ -512,12 +535,13 @@ const projects: Project[] = [
     timeline: "Completed",
     description: "Two Python builds showcased side-by-side: a YOLOv8 webcam object detector and a Python arcade game with live in-browser demos.",
     tags: ["Python", "YOLOv8", "Computer Vision", "WebAssembly", "ONNX"],
-    color: "bg-emerald-50",
-    accentColor: "text-emerald-700",
-    hoverColor: "group-hover:text-emerald-700",
-    badge: "bg-emerald-100 text-emerald-700",
+    color: "bg-[#ffd343]/20",
+    accentColor: "text-[#b88a00]",
+    hoverColor: "group-hover:text-[#b88a00]",
+    badge: "bg-[#ffd343]/30 text-[#9a7400]",
     content: {
       heroImage: "placeholder-python-hero.jpg",
+      thumbnailImage: `${PUBLIC_URL}/images/python.webp`,
       role: "Developer",
       sections: [
         {
@@ -546,9 +570,9 @@ const projects: Project[] = [
   },
   {
     id: 5,
-    title: "Tinkering",
+    title: "Countdown Motor Control",
     category: "Experimental / Prototyping",
-    timeline: "Ongoing",
+    timeline: "Completed",
     description: "A sandbox for quick experiments, sketches, and small builds that explore new tools, ideas, and interactions.",
     tags: ["Prototyping", "R&D", "Creative Coding"],
     color: "bg-rose-50",
@@ -559,6 +583,10 @@ const projects: Project[] = [
       heroImage: `${PUBLIC_URL}/images/Tinkering/tinkering-hero-2.webp`,
       role: "Maker",
       sections: [
+        {
+          title: "Project Introduction",
+          content: "This project focused on hands-on circuit design and electronic prototyping. The objective was to build a functional system by designing and assembling complex circuits, working with multiple electronic components, and validating performance through testing and iteration, with creative freedom in defining the final prototype."
+        },
         {
           title: "Circuit Diagram",
           content: "My teammate and I decided to create a double 7-segment display that would count down and trigger a motor to start spinning.\n\nThe project uses:\n• 36 LEDs\n• ESP32\n• Ultrasonic Sensor\n• Relay\n• Motor",
@@ -612,19 +640,6 @@ const projects: Project[] = [
               caption: "Final working prototype countdown"
             }
           ]
-        },
-        {
-          title: "What I Am Exploring",
-          content: "These experiments target new tech and interaction models, from playful UI mechanics to small automation workflows.",
-          listItems: ["Rapid prototypes", "New libraries and APIs", "Micro-interactions and motion studies"]
-        },
-        {
-          title: "Sample Experiments",
-          content: "Small builds might include a one-weekend demo, a novel UI pattern, or a data visualization sketch that informs future work."
-        },
-        {
-          title: "Next Steps",
-          content: "Promising experiments graduate into polished projects, while the rest stay archived as reference material."
         }
       ]
     }
@@ -668,7 +683,7 @@ const ProjectDetail = ({
   if (!project) return null;
   const isSolarLink = project.title === 'SolarLink';
   const isPythonCodes = project.title === 'Python Codes';
-  const isTinkering = project.title === 'Tinkering';
+  const isCountdownMotorControl = project.id === 5 || project.title === 'Countdown Motor Control';
   const heroBgClass = isSolarLink ? 'bg-[#053738]' : project.color;
   const heroTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-900';
   const heroMutedTextClass = isSolarLink ? 'text-[#E3FC03]' : 'text-slate-500';
@@ -870,12 +885,12 @@ const ProjectDetail = ({
 
         {/* Hero Image */}
         {!isPythonCodes && (
-          <div className={`w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm ${isTinkering ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
+          <div className={`w-full bg-slate-50 rounded-lg mb-24 border border-slate-100 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
              {!project.content.heroImage.includes('placeholder') ? (
                 <img
                   src={project.content.heroImage}
                   alt={`${project.title} Hero`}
-                  className={isTinkering ? 'w-full h-full object-cover object-center' : 'w-full h-auto block'}
+                  className={isCountdownMotorControl ? 'w-full h-full object-cover object-center' : 'w-full h-auto block'}
                 />
              ) : (
                 <div className="w-full aspect-video flex items-center justify-center">
@@ -1318,16 +1333,16 @@ const App = () => {
                 {/* Stats Cards */}
                 <div className="grid grid-cols-3 gap-6 mt-16 max-w-2xl">
                   <div className="border-l-2 border-sky-600 pl-4">
-                    <div className="text-3xl font-bold text-slate-900">3+</div>
+                    <div className="text-3xl font-bold text-slate-900">6+</div>
                     <div className="text-sm text-slate-600 mt-1">Featured Projects</div>
-                  </div>
-                  <div className="border-l-2 border-sky-600 pl-4">
-                    <div className="text-3xl font-bold text-slate-900">2+</div>
-                    <div className="text-sm text-slate-600 mt-1">Years Experience</div>
                   </div>
                   <div className="border-l-2 border-sky-600 pl-4">
                     <div className="text-3xl font-bold text-slate-900">8+</div>
                     <div className="text-sm text-slate-600 mt-1">Core Skills</div>
+                  </div>
+                  <div className="border-l-2 border-sky-600 pl-4">
+                    <div className="text-3xl font-bold text-slate-900">3rd</div>
+                    <div className="text-sm text-slate-600 mt-1">Year B.Des Program</div>
                   </div>
                 </div>
               </div>
@@ -1346,32 +1361,36 @@ const App = () => {
             </div>
 
             <div className="space-y-32">
-              {projects.map((project, index) => (
-                <div 
-                  key={project.id} 
-                  id={`project-${project.id}`}
-                  className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-4 rounded-2xl"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Open case study for ${project.title}`}
-                  onClick={() => handleProjectClick(project)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                      event.preventDefault();
-                      handleProjectClick(project);
-                    }
-                  }}
-                >
+              {projects.map((project, index) => {
+                const projectThumbnail =
+                  project.content.thumbnailImage ?? project.content.heroImage;
+
+                return (
+                  <div 
+                    key={project.id} 
+                    id={`project-${project.id}`}
+                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-4 rounded-2xl"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Open case study for ${project.title}`}
+                    onClick={() => handleProjectClick(project)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        handleProjectClick(project);
+                      }
+                    }}
+                  >
                   <div className="grid md:grid-cols-12 gap-8 items-center">
                     
                     {/* Image Column (7 cols) */}
                     <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                       <div className={`relative overflow-hidden rounded-2xl ${project.color} border border-slate-200 aspect-[4/3] shadow-sm group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1`}>
-                          {!project.content.heroImage.includes('placeholder') ? (
+                          {!projectThumbnail.includes('placeholder') ? (
                             <img 
-                              src={project.content.thumbnailImage || project.content.heroImage} 
+                              src={projectThumbnail} 
                               alt={project.title} 
-                              className={`w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 ${project.title === 'ClassFlow' ? 'scale-[1.12]' : ''}`} 
+                              className={`w-full h-full transition-transform duration-700 ${project.title === 'ClassFlow' ? 'scale-[1.12]' : ''} ${project.title === 'Python Codes' ? 'object-contain p-6' : 'object-cover object-center group-hover:scale-105'}`} 
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center p-8 text-center">
@@ -1429,8 +1448,9 @@ const App = () => {
                       </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Additional Work Grid */}
@@ -1440,7 +1460,12 @@ const App = () => {
               <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-sky-300 hover:shadow-lg transition-all">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-sky-50 rounded-lg flex items-center justify-center">
-                    <PhotoIcon size={20} className="text-sky-600" />
+                    <img
+                      src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
+                      alt="Photoshop icon"
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">Photoshop & Animation</h3>
                 </div>
@@ -1488,7 +1513,12 @@ const App = () => {
               <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-slate-300 hover:shadow-lg transition-all">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <PhotoIcon size={20} className="text-slate-600" />
+                    <img
+                      src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
+                      alt="Photoshop icon"
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">Nothing Brand Animation</h3>
                 </div>
@@ -1648,7 +1678,7 @@ const App = () => {
                         <h4 className="font-semibold text-slate-900">Design</h4>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {['Product Design', 'UI/UX Design', 'Industrial Design', 'Design Systems', 'Circuit Design'].map((skill) => (
+                        {['Product Design', 'UI/UX Design', 'Industrial Design', 'Design Systems', 'Generative AI in Design', 'Agentic AI Workflows', 'Circuit Design'].map((skill) => (
                           <span key={skill} className="px-3 py-1.5 text-sm font-medium text-sky-700 bg-sky-50 rounded-lg border border-sky-100">
                             {skill}
                           </span>
@@ -1662,7 +1692,7 @@ const App = () => {
                         <h4 className="font-semibold text-slate-900">Tools & Tech</h4>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {['Figma', 'Coding', 'Adobe Suite', 'Fusion 360'].map((tool) => (
+                        {['Figma', 'Python', 'React.js', 'Arduino IDE', 'n8n', 'Adobe Suite', 'Fusion 360'].map((tool) => (
                           <span key={tool} className="px-3 py-1.5 text-sm font-medium text-sky-700 bg-sky-50 rounded-lg border border-sky-100">
                             {tool}
                           </span>
