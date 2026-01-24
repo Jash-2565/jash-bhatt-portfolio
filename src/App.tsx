@@ -1674,7 +1674,7 @@ const App = () => {
                       I believe design is about creating meaningful connections between people and technology. My philosophy centers on inclusive immersive intelligence—using technology to bridge gaps in human interaction.
                     </p>
                     <p>
-                      Currently studying design, I enjoy tackling diverse problems, from digital interfaces to physical products. I thrive in environments where research drives creativity and human-centered design principles guide every decision.
+                      Currently studying design, I enjoy tackling diverse problems, from digital interfaces to physical products. I thrive in creating physical tech products which involve a human and computer interaction to make the life of a user easier.
                     </p>
                   </div>
 
