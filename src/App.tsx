@@ -89,7 +89,7 @@ interface Section {
   images?: { src: string; caption: string; fullWidth?: boolean }[]; 
   cta?: { text: string; url: string };
   embedUrl?: string;
-  imageLayout?: 'row' | 'stack' | 'mixed'; 
+  imageLayout?: 'row' | 'stack' | 'mixed' | 'grid'; 
   imageHeight?: string; 
   imageCrop?: boolean;
   codeBlock?: string;
@@ -436,18 +436,7 @@ const projects: Project[] = [
         },
         {
           title: "Overview",
-          content: "India has vast rooftop solar potential, especially within urban housing societies. Yet adoption at the community level remains slow.\n\nSolarLink is a service design concept that reframes solar adoption from a technology challenge into a decision-making problem.\n\nThe project explores how housing societies can move from confusion and indecision to shared clarity and confidence before any installation begins."
-        },
-        {
-          title: "Why This Project Exists",
-          content: "Despite falling costs, government subsidies, and increasing awareness, solar adoption in housing societies continues to stall.\n\nSolar does not fail because people do not care. It fails because deciding together is hard.",
-          listItems: [
-            "Information is fragmented",
-            "Opinions clash",
-            "Responsibility feels risky",
-            "Decisions get endlessly postponed",
-            "Solar becomes \"next year's agenda\""
-          ]
+          content: "SolarLink is a service design concept that reframes solar adoption from a technology challenge into a decision-making problem.\n\nThe project explores how housing societies can move from confusion and indecision to shared clarity and confidence before any installation begins."
         },
         {
           title: "Problem Statement",
@@ -473,7 +462,26 @@ const projects: Project[] = [
         },
         {
           title: "Design Question",
-          content: "How might we move housing societies from confusion to clarity before any solar installation begins?"
+          content: "How might we move housing societies from confusion to clarity before any solar installation begins?",
+          imageLayout: "grid",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/SolarLink/making-solar-relatable.webp`,
+              caption: "Making Solar Relatable"
+            },
+            {
+              src: `${PUBLIC_URL}/images/SolarLink/Inclusive-Decision_Making.webp`,
+              caption: "Inclusive Decision Making"
+            },
+            {
+              src: `${PUBLIC_URL}/images/SolarLink/Solar-Process-Support.webp`,
+              caption: "Solar Process Support"
+            },
+            {
+              src: `${PUBLIC_URL}/images/SolarLink/Solar_Financing.webp`,
+              caption: "Solar Financing"
+            }
+          ]
         },
         {
           title: "Design Direction",
@@ -789,6 +797,29 @@ const ProjectDetail = ({
             ))}
          </div>
        );
+    }
+
+    if (section.imageLayout === 'grid') {
+      return (
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {section.images.map((img, i) => (
+            <div key={i} className="flex flex-col gap-3">
+              <div
+                className="rounded-lg overflow-hidden border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-md cursor-zoom-in h-56 md:h-64"
+                onClick={() => onImageClick(img.src)}
+              >
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <p className="text-sm text-slate-500 text-center">{img.caption}</p>
+            </div>
+          ))}
+        </div>
+      );
     }
 
     // Default or Row layout logic
