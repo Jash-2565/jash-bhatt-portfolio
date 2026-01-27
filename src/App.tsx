@@ -62,12 +62,6 @@ const PhotoIcon = ({ size = 24, ...props }: any) => (
   </svg>
 );
 
-const CameraIcon = ({ size = 24, ...props }: any) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M14.5 4h-5l-2 3H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.5z"/><circle cx="12" cy="13" r="3"/>
-  </svg>
-);
-
 
 const BriefcaseIcon = ({ size = 24, ...props }: any) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -1613,8 +1607,13 @@ const App = () => {
               {/* Gallery Snippet Section */}
               <div className="border border-slate-200 rounded-2xl p-8 bg-white hover:border-slate-300 hover:shadow-lg transition-all">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-sky-200">
-                    <CameraIcon size={20} className="text-sky-600" />
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white">
+                    <img
+                      src={`${PUBLIC_URL}/images/Photography/camera.png`}
+                      alt="Camera icon"
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">Photography Gallery</h3>
                 </div>
