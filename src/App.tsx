@@ -1545,8 +1545,8 @@ const App = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
                     <img
-                      src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
-                      alt="Photoshop icon"
+                      src={`${PUBLIC_URL}/images/Photoshop and Animation/after-effects.png`}
+                      alt="After Effects icon"
                       className="w-full h-full object-cover rounded-lg"
                       loading="lazy"
                     />
