@@ -176,7 +176,7 @@ const projects: Project[] = [
     category: "AI Agent / Full Stack",
     timeline: "Ongoing",
     description: "A chat-first class scheduling app that turns plain language into structured, exportable calendars for students and instructors.",
-    tags: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI", "Google Calendar API"],
+    tags: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI", "Google Calendar API", "n8n"],
     color: "bg-[#F2F1FF]",
     accentColor: "text-[#4239C4]",
     hoverColor: "group-hover:text-[#4239C4]",
@@ -2112,7 +2112,7 @@ const App = () => {
               <div className="grid lg:grid-cols-12 gap-10 items-stretch animate-fade-in-up">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
                   <h1 className="text-[3.1rem] md:text-[4.2rem] font-display text-slate-100 mb-5 leading-[1.05]">
-                    I design <span className="text-[#01F5D1]">polished tech products</span> that blend hardware, software, and human behavior.
+                    I design <span className="text-[#01F5D1]">intuitive tech products</span> that blend hardware, software, and human behavior.
                   </h1>
                   <p className="text-[1.18rem] md:text-[1.34rem] text-slate-300 mb-6 leading-relaxed max-w-3xl">
                     I am <span className="text-[#01F5D1] font-semibold">Jash Bhatt</span>, a third-year Design student at FLAME University focused on technology-led design.
@@ -2664,7 +2664,7 @@ const App = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-4 w-fit">
+                <div className="grid grid-cols-2 gap-4 w-fit">
                   <a href="mailto:jash.bhatt@flame.edu.in" className="flex items-center gap-3 p-4 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-[#01F5D1] hover:-translate-y-1 transition-all group">
                     <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full group-hover:bg-[#01F5D1] group-hover:text-slate-950 transition-colors">
                       <MailIcon size={22} />
