@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink-900: #e5e8ea;
+  --ink-700: #c8ccce;
+  --accent-blue: #00a19b;
+  --accent-cyan: #01f5d1;
+  --accent-lime: #01f5d1;
+  --surface: #000000;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  color: var(--ink-900);
+  background:
+    radial-gradient(circle at 14% -12%, rgba(1, 245, 209, 0.16), transparent 34%),
+    radial-gradient(circle at 90% -6%, rgba(0, 161, 155, 0.18), transparent 30%),
+    linear-gradient(180deg, #0a0c0d 0%, #000000 100%),
+    var(--surface);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.font-display {
+  font-family: 'Oxanium', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+@keyframes drift {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.animate-drift {
+  animation: drift 8s ease-in-out infinite;
+}
+
+.circuit-overlay {
+  opacity: 0.08;
+  background-image:
+    linear-gradient(90deg, transparent 0 8%, rgba(1, 245, 209, 0.32) 8% 8.15%, transparent 8.15% 100%),
+    linear-gradient(180deg, transparent 0 18%, rgba(0, 161, 155, 0.26) 18% 18.15%, transparent 18.15% 100%);
+  background-size: 300px 300px, 300px 300px;
+  background-repeat: repeat;
+}
