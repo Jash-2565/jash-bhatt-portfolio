@@ -2664,7 +2664,7 @@ const App = () => {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 w-fit">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                   <a href="mailto:jash.bhatt@flame.edu.in" className="flex items-center gap-3 p-4 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm hover:shadow-md hover:border-[#01F5D1] hover:-translate-y-1 transition-all group">
                     <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full group-hover:bg-[#01F5D1] group-hover:text-slate-950 transition-colors">
                       <MailIcon size={22} />
