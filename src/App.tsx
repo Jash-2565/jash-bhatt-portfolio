@@ -175,8 +175,8 @@ const projects: Project[] = [
     title: "ClassFlow",
     category: "AI Agent / Full Stack",
     timeline: "Ongoing",
-    description: "A chat-first class scheduling app that turns plain language into structured, exportable calendars for students and instructors.",
-    tags: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI", "Google Calendar API", "n8n"],
+    description: "An AI-powered course scheduling tool for professors — describe your semester in plain language and get a fully structured, exportable calendar in minutes.",
+    tags: ["React 19", "Vite 7", "Tailwind CSS", "Firebase", "Gemini 2.5 Flash", "Google Calendar API"],
     color: "bg-[#F2F1FF]",
     accentColor: "text-[#4239C4]",
     hoverColor: "group-hover:text-[#4239C4]",
@@ -187,63 +187,121 @@ const projects: Project[] = [
       role: "Creator & Lead Developer",
       sections: [
         {
-          title: "Problem",
-          content: "Students and instructors often know what they need to schedule but do not have time to manually structure it into a clean calendar. Traditional tools assume you already have a formatted plan, which is unrealistic for many people."
-        },
-        {
-          title: "Solution",
-          content: "I built ClassFlow, a chat-first scheduling app that lets users build a full class plan through conversation.",
-          imageLayout: "stack",
-          listItems: [
-            "AI assistant captures topics, dates, times, and recurring patterns.",
-            "Generates a structured calendar that can be reviewed, edited, and exported to Google Calendar or .ics."
-          ],
+          title: "Overview",
+          content: "ClassFlow is a full-stack AI scheduling assistant built specifically for professors. Instead of manually building 45+ calendar events at the start of every semester, professors simply describe their course in a chat — topics, meeting days, times, and dates — and ClassFlow generates the entire semester schedule automatically. It is live, actively used, and still being developed.",
           images: [
             {
-              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Mainscreen.webp`,
-              caption: "ClassFlow Main Screen"
-            },
-            {
-              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Calendar.webp`,
-              caption: "ClassFlow Calendar"
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Landing.webp`,
+              caption: "ClassFlow landing page — V2.0, AI-powered"
             }
           ]
         },
         {
-          title: "How it works",
-          content: "A guided workflow that turns conversation into a usable schedule.",
+          title: "The Problem",
+          content: "At the start of every semester, professors face the same invisible labour: planning an entire course calendar by hand. For a typical 15-week course meeting three times a week, that is 45+ events to create — topics mapped to weeks, recurring sessions set up, assignment deadlines tracked, all entered into a calendar one by one. It is repetitive, error-prone, and burns hours that professors don't have."
+        },
+        {
+          title: "The Solution",
+          content: "ClassFlow removes that burden entirely. A professor describes their course once in a natural language chat — topics by week, meeting days and times, semester dates — and Gemini 2.5 Flash generates the full semester schedule instantly. The result is a structured, visual, editable calendar ready to export to Google Calendar or download as a .ics file.",
+          imageLayout: "stack",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Import-Chatbot.webp`,
+              caption: "Import Data screen: AI chatbot (left), live Parsed Plan with schedule pattern and events (centre), Assignment tracker (right)"
+            }
+          ]
+        },
+        {
+          title: "How It Works",
+          content: "The entire app is built around a three-step flow: describe, review, export.",
           listItems: [
-            "Chat-only input: users describe topics, dates, and patterns in natural language.",
-            "Structured output: assistant returns updates and waits for approval before applying them.",
-            "Schedule generation: scheduling engine maps topics to recurring class slots.",
-            "Preview + export: calendar or list view with Google Calendar and .ics export.",
-            "Persistence: Firebase Auth + Firestore save schedules and chat context."
+            "Describe — the professor types their course details into the AI chatbot: topics by week, meeting days and times, semester start and end dates.",
+            "Parse — Gemini 2.5 Flash extracts a recurring schedule pattern, maps topics to specific class sessions, and populates a live Parsed Plan panel in real time.",
+            "Review — the professor switches to View Schedule and sees the full semester across three views: month grid, hourly week grid, or searchable event list.",
+            "Refine — events can be edited directly on the calendar, or adjusted via follow-up chat ('Move the midterm to March 20', 'Add office hours every Thursday at 2pm').",
+            "Export — one-click push to Google Calendar via OAuth with a live progress bar, or download as a standards-compliant .ics file for Outlook, Apple Calendar, or any client.",
+            "Persist — authenticated users have all courses and schedules auto-saved to Firestore across sessions."
+          ]
+        },
+        {
+          title: "Calendar Views",
+          content: "Once a schedule is generated, professors can explore it in three different views — each designed for a different purpose.",
+          imageLayout: "grid",
+          imageHeight: "auto",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Calendar-March.webp`,
+              caption: "Month grid — full semester at a glance. Assignment deadlines appear as colour-coded markers (DUE: Midterm Essay visible on March 1)."
+            },
+            {
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Week-View.webp`,
+              caption: "Hourly week grid — shows exact session times (10:00–11:00am), today's date highlighted, and Mon/Wed/Fri pattern clearly visible."
+            }
+          ]
+        },
+        {
+          title: "Event List View",
+          content: "The searchable list view gives professors a chronological breakdown of every event across all their courses — with date, time, topic, and course label all visible at once. Useful for reviewing the full semester quickly or finding specific sessions.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-List-View.webp`,
+              caption: "List view — every session listed chronologically with date, time, topic, and course tag. Fully searchable."
+            }
+          ]
+        },
+        {
+          title: "AI Chatbot Architecture",
+          content: "The chatbot is the core of ClassFlow — not a wrapper around a chat UI, but a structured AI pipeline that turns natural language into calendar data. Every message sent to Gemini 2.5 Flash includes the full current schedule state, a persistent chat memory object, the last 12 conversation turns, and date/time hints pre-extracted via regex.",
+          listItems: [
+            "Response types: answer (info only), clarify (asking for missing info), or update (modify the schedule).",
+            "Supports replace, append, remove, and targeted update operations on individual events.",
+            "Returns a recurringConfig object (days[], startDate, endDate, startTime, endTime) that drives the schedule generation engine.",
+            "Maintains a chatMemory object across turns — topics, times, recurring config — so professors never have to repeat context.",
+            "Handles API overload with exponential backoff retry: 500ms → 1000ms → 1800ms before surfacing an error.",
+            "Pending updates shown in-chat as a 'Review & Apply' card with Apply, Discard, and Replace options before any state change."
+          ]
+        },
+        {
+          title: "Schedule Generation Engine",
+          content: "Once the AI extracts a recurring config from the chat, a custom scheduling engine maps topics to class sessions deterministically — no AI involvement at this step, so the output is always predictable and correct.",
+          listItems: [
+            "generateRecurringDates() iterates across the full date range, filters to the configured weekdays, and assigns week numbers to each session.",
+            "Topics tagged by week (e.g. week: 3) are distributed evenly across that week's available class slots.",
+            "If a week has more topics than sessions, extras are appended to the notes field of existing events rather than dropped.",
+            "If sessions outnumber topics, slots are created as blank placeholders the professor can fill manually.",
+            "Assignment deadlines are injected as special marker events: Given (blue), Check-in (amber), Due (orange) — visible on the calendar alongside regular sessions."
+          ]
+        },
+        {
+          title: "Key Features",
+          content: "Every feature in ClassFlow was built around a real professor workflow — not what looks impressive in a demo.",
+          listItems: [
+            "AI chatbot as the only input method — no file uploads, no forms, just conversation.",
+            "Multi-course support — each course gets its own colour, isolated state, and appears in a shared calendar view.",
+            "Three calendar views: month grid, hourly week grid (7am–10pm), and searchable event list.",
+            "Conflict detection — flags overlapping sessions across courses with a badge count and highlighted rows in list view.",
+            "Undo stack — per-course snapshots (last 10 actions) for safe experimentation and mistake recovery.",
+            "Assignment tracker — professors add Given, Check-in, and Due dates per assignment; these inject as colour-coded marker events in the calendar.",
+            "Google Calendar export — OAuth 2.0 flow with batched API calls and a real-time progress bar showing export status.",
+            ".ics download — custom VEVENT serialisation, importable into any calendar client.",
+            "Guest mode — full scheduling functionality without login; login with Firebase to save across sessions."
           ]
         },
         {
           title: "Tech Stack",
-          content: "Core technologies powering ClassFlow.",
+          content: "Built entirely as a solo project over multiple iterations.",
           listItems: [
-            "React 19, Vite, Tailwind CSS",
-            "Firebase Auth + Firestore",
-            "Google Gemini API",
-            "Google Calendar API"
+            "React 19 + Vite 7 — component-based frontend with fast HMR development",
+            "Tailwind CSS + Lucide React — utility-first styling with consistent iconography",
+            "Google Gemini 2.5 Flash — AI model handling both the chatbot responses and schedule parsing",
+            "Firebase Auth + Firestore — Google sign-in and per-user cloud persistence",
+            "Google Calendar API — OAuth 2.0 token flow with batched event creation requests",
+            "Custom ICS serialisation — VEVENT generation without any third-party calendar library"
           ]
         },
         {
-          title: "Key Features / Impact",
-          content: "Highlights that make the experience fast and reliable.",
-          listItems: [
-            "Chat-first UX that converts plain language into structured schedules.",
-            "Review-and-apply workflow prevents unintended edits.",
-            "Automated weekly schedule generation from recurring patterns.",
-            "Google Calendar sync and .ics export.",
-            "Per-user saved schedules with Firebase."
-          ]
-        },
-        {
-          title: "Why it's meaningful",
-          content: "ClassFlow removes the friction between “I have a plan in my head” and “I have a calendar I can use.” It turns conversation into structure, making scheduling faster and more accessible."
+          title: "What I Learned",
+          content: "ClassFlow taught me what it actually means to build an AI-powered product — not just call an API and display a response, but architect a system where AI output is structured, validated, and applied to real state. The hardest problem was not making the AI generate a schedule. It was making it feel trustworthy: handling edge cases, surfacing pending changes before applying them, keeping memory across turns, and recovering gracefully when the model returns unexpected output. A professor is trusting this tool with their entire semester. That shaped every design and engineering decision."
         }
       ]
     }
