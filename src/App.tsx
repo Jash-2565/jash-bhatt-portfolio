@@ -1010,11 +1010,6 @@ const App = () => {
 
       {/* Footer */}
       <footer className="bg-[#02060f] border-t border-slate-800 text-slate-400 py-12 text-center">
-        <div className="flex justify-center gap-8 mb-5 text-slate-400">
-          <a href="mailto:jash.bhatt@flame.edu.in" className="hover:text-[#01F5D1] transition-colors text-sm">Email</a>
-          <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="hover:text-[#01F5D1] transition-colors text-sm">LinkedIn</a>
-          <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="hover:text-[#01F5D1] transition-colors text-sm">Resume</a>
-        </div>
         <p className="mb-2">© 2026 Jash Bhatt. All Rights Reserved.</p>
         <p className="text-sm">Designed & built by Jash Bhatt</p>
       </footer>
