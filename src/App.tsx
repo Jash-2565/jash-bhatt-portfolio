@@ -27,7 +27,6 @@ const App = () => {
   const navItemsRef = useRef<HTMLDivElement | null>(null);
   const navButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [underline, setUnderline] = useState<{ left: number; width: number; visible: boolean }>({ left: 0, width: 0, visible: false });
   const isWhiteBgLightboxImage = selectedImage?.includes('Circuit-Design.webp');
 
@@ -260,22 +259,6 @@ const App = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [currentView]);
 
-  // Scroll progress bar (0 → 1 across the document)
-  useEffect(() => {
-    const handleProgress = () => {
-      const doc = document.documentElement;
-      const max = (doc.scrollHeight - window.innerHeight) || 1;
-      setScrollProgress(Math.min(1, Math.max(0, window.scrollY / max)));
-    };
-    handleProgress();
-    window.addEventListener('scroll', handleProgress, { passive: true });
-    window.addEventListener('resize', handleProgress);
-    return () => {
-      window.removeEventListener('scroll', handleProgress);
-      window.removeEventListener('resize', handleProgress);
-    };
-  }, []);
-
   // Active-nav underline — recalc when active section, view, or resize changes
   useEffect(() => {
     const recalc = () => {
@@ -396,11 +379,6 @@ const App = () => {
 
       {/* Navigation */}
       <nav ref={navRef} className="fixed w-full bg-slate-950/70 backdrop-blur-md z-50 border-b border-slate-800 shadow-sm transition-all duration-300">
-        <div
-          className="scroll-progress"
-          style={{ width: '100%', transform: `scaleX(${scrollProgress})` }}
-          aria-hidden="true"
-        />
         <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
           <div className="flex justify-between items-center h-[4.5rem]">
             <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('home')}>
