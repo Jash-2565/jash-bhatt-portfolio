@@ -127,18 +127,6 @@ body {
   pointer-events: none;
 }
 
-/* Top-of-nav scroll progress bar. */
-.scroll-progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #01f5d1 0%, #00a19b 100%);
-  transition: transform 80ms linear;
-  transform-origin: left;
-  pointer-events: none;
-}
-
 /* Respect the user's motion preference — collapse every custom motion to a short fade. */
 @media (prefers-reduced-motion: reduce) {
   .animate-drift,
@@ -161,8 +149,7 @@ body {
     transform: none;
     box-shadow: none;
   }
-  .nav-underline,
-  .scroll-progress {
+  .nav-underline {
     transition: none;
   }
   *,

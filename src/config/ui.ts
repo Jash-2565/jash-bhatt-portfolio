@@ -8,7 +8,7 @@ export const ui = {
   cardBase: 'border border-slate-800 rounded-2xl bg-slate-900/70 backdrop-blur-sm transition-all duration-300',
   cardHover: 'hover:-translate-y-1 hover:shadow-[0_22px_55px_-20px_rgba(1,245,209,0.35)] hover:border-[#01F5D1]/60',
   chipBase: 'px-3 py-1.5 text-sm font-medium text-slate-200 bg-slate-900 border border-slate-700 rounded-full transition-colors duration-200 hover:border-[#01F5D1]/70 hover:text-[#9EF7EA]',
-  chipAccent: 'px-3 py-1.5 text-sm font-medium text-[#01F5D1] bg-[#00A19B]/15 border border-[#00A19B]/50 rounded-full transition-colors duration-200 hover:bg-[#00A19B]/25 hover:border-[#01F5D1]',
+  chipAccent: 'px-3 py-1.5 text-sm font-medium text-[#01F5D1] bg-[#00A19B]/15 border border-[#00A19B]/50 rounded-full',
 } as const;
 
 export const personalitySignals = [
