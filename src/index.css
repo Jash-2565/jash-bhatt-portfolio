@@ -69,7 +69,7 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: shimmer 6s linear infinite;
+  animation: shimmer 3s linear infinite;
 }
 
 /* Cyan glow lift used on project cards and contact cards on hover. */

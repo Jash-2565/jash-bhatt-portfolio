@@ -439,7 +439,11 @@ const App = () => {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className="block w-full text-left px-3 py-2 text-lg font-medium text-slate-300 hover:text-[#9EF7EA] hover:bg-slate-900 rounded-md"
+                  className={`block w-full text-left px-3 py-2 text-lg font-medium rounded-md transition-colors ${
+                    activeSection === item.toLowerCase() && currentView === 'home'
+                      ? 'text-[#01F5D1] bg-slate-900'
+                      : 'text-slate-300 hover:text-[#9EF7EA] hover:bg-slate-900'
+                  }`}
                 >
                   {item}
                 </button>
@@ -678,10 +682,17 @@ const App = () => {
                           {/* Sheen sweep on hover */}
                           <div className="sheen-layer"></div>
 
-                          {/* Overlay */}
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 flex items-center justify-center">
+                          {/* Overlay — desktop hover */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 hidden md:flex items-center justify-center">
                             <span className="opacity-0 group-hover:opacity-100 bg-slate-950/90 border border-slate-700 px-6 py-3 rounded-full font-medium text-[#9EF7EA] shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
                               View Project
+                            </span>
+                          </div>
+
+                          {/* Mobile CTA — always visible on touch */}
+                          <div className="absolute bottom-3 right-3 md:hidden pointer-events-none">
+                            <span className="bg-slate-950/85 backdrop-blur-sm border border-slate-700 px-3 py-1.5 rounded-full text-xs font-medium text-[#9EF7EA]">
+                              View →
                             </span>
                           </div>
                         </div>
@@ -1019,7 +1030,8 @@ const App = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                   <Reveal delay={80} asChild>
-                    <a href="mailto:jash.bhatt@flame.edu.in" className="flex items-center gap-3 p-4 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group">
+                    <a href="mailto:jash.bhatt@flame.edu.in" className="relative flex items-center gap-4 p-5 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
                       <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                         <Mail size={22} />
                       </div>
@@ -1031,7 +1043,8 @@ const App = () => {
                   </Reveal>
 
                   <Reveal delay={160} asChild>
-                    <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-4 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group">
+                    <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
                       <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                         <Linkedin size={22} />
                       </div>
@@ -1043,7 +1056,8 @@ const App = () => {
                   </Reveal>
 
                   <Reveal delay={240} asChild>
-                    <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="flex items-center gap-3 p-4 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group">
+                    <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
                       <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                         <Download size={22} />
                       </div>
@@ -1070,9 +1084,11 @@ const App = () => {
       )}
 
       {/* Footer */}
-      <footer className="bg-[#02060f] border-t border-slate-800 text-slate-400 py-12 text-center">
-        <p className="mb-2">© 2026 Jash Bhatt. All Rights Reserved.</p>
-        <p className="text-sm">Designed & built by Jash Bhatt</p>
+      <footer className="bg-[#02060f] border-t border-slate-800 py-12 text-center">
+        <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center gap-3">
+          <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
+          <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
+        </div>
       </footer>
     </div>
   );

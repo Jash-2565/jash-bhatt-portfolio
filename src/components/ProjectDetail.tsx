@@ -1,11 +1,40 @@
-import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon } from 'lucide-react';
-import ArkanoidDemo from './ArkanoidDemo';
-import YoloV8Demo from './YoloV8Demo';
-import MovieRecsDemo from './MovieRecsDemo';
+import { lazy, Suspense, useState } from 'react';
+import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check } from 'lucide-react';
+const ArkanoidDemo = lazy(() => import('./ArkanoidDemo'));
+const YoloV8Demo = lazy(() => import('./YoloV8Demo'));
+const MovieRecsDemo = lazy(() => import('./MovieRecsDemo'));
 import ResponsiveImage from './ResponsiveImage';
 import type { Project, Section } from '../types';
 import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME } from '../config/projects';
 import { ui } from '../config/ui';
+
+const DemoLoader = () => (
+  <div className="h-full lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 flex items-center justify-center">
+    <div className="flex flex-col items-center gap-3 text-slate-500">
+      <div className="w-7 h-7 border-2 border-slate-700 border-t-[#01F5D1] rounded-full animate-spin" />
+      <span className="text-[10px] tracking-widest uppercase">Loading Demo</span>
+    </div>
+  </div>
+);
+
+const CopyButton = ({ text }: { text: string }) => {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+  return (
+    <button
+      onClick={copy}
+      className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-[#01F5D1] transition-colors"
+    >
+      {copied ? <Check size={11} /> : <Copy size={11} />}
+      {copied ? 'copied' : 'copy'}
+    </button>
+  );
+};
 
 interface ProjectDetailProps {
   project: Project | null;
@@ -30,7 +59,7 @@ const ProjectDetail = ({
   const { heroBgClass, heroTextClass, heroMutedTextClass, heroBodyTextClass } = projectHeroTheme;
 
   const renderDemoBlock = (section: Section) => {
-    const demoComponent =
+    const demoInner =
       section.demoId === 'arkanoid'
         ? <ArkanoidDemo />
         : section.demoId === 'yolov8'
@@ -38,6 +67,10 @@ const ProjectDetail = ({
           : section.demoId === 'movie-recs'
             ? <MovieRecsDemo />
             : null;
+
+    const demoComponent = demoInner
+      ? <Suspense fallback={<DemoLoader />}>{demoInner}</Suspense>
+      : null;
 
     const snippetContainerClass =
       'h-full lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 text-slate-100 shadow-sm flex flex-col';
@@ -50,7 +83,7 @@ const ProjectDetail = ({
           <div className={snippetContainerClass}>
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
               <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-              <span className="text-[10px] text-slate-500">read-only</span>
+              <CopyButton text={section.codeBlock} />
             </div>
             <pre className={snippetPreClass}>{section.codeBlock}</pre>
           </div>
@@ -68,7 +101,7 @@ const ProjectDetail = ({
         <div className={`mt-8 ${snippetContainerClass}`}>
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
             <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-            <span className="text-[10px] text-slate-500">read-only</span>
+            <CopyButton text={section.codeBlock} />
           </div>
           <pre className={snippetPreClass}>{section.codeBlock}</pre>
         </div>
