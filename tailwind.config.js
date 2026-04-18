@@ -37,7 +37,7 @@ export default {
         "fade-in": "fadeIn 500ms ease-out both",
         "fade-in-up": "fadeInUp 650ms ease-out both",
         nudge: "nudge 2.4s ease-in-out infinite",
-        shimmer: "shimmer 6s linear infinite",
+        shimmer: "shimmer 3s linear infinite",
         sheen: "sheen 900ms ease-out",
       },
     },
