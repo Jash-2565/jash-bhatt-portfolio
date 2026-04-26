@@ -493,7 +493,7 @@ const App = () => {
                   <div className="lg:hidden w-full rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg mb-6">
                     <div className="rounded-2xl overflow-hidden aspect-[4/5]">
                       <ResponsiveImage
-                        src={`${PUBLIC_URL}/images/Jash.webp`}
+                        src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                         alt="Portrait of Jash Bhatt"
                         className="w-full h-full object-cover"
                         loading="eager"
@@ -589,7 +589,7 @@ const App = () => {
                   <div className="max-w-[324px] h-full lg:ml-auto rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-20px_rgba(1,245,209,0.35)] hover:border-[#01F5D1]/50">
                     <div className="rounded-2xl overflow-hidden aspect-[4/5]">
                       <ResponsiveImage
-                        src={`${PUBLIC_URL}/images/Jash.webp`}
+                        src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                         alt="Portrait of Jash Bhatt"
                         className="w-full h-full object-cover"
                         loading="lazy"
