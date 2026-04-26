@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
   Menu, X, Mail, Linkedin, ArrowRight,
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
 } from 'lucide-react';
-import ProjectDetail from './components/ProjectDetail';
+const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 import ResponsiveImage from './components/ResponsiveImage';
 import ImageWithFallback from './components/ImageWithFallback';
 import Reveal from './components/Reveal';
@@ -493,7 +493,7 @@ const App = () => {
                   <div className="lg:hidden w-full rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg mb-6">
                     <div className="rounded-2xl overflow-hidden aspect-[4/5]">
                       <ResponsiveImage
-                        src={`${PUBLIC_URL}/images/Jash.jpeg`}
+                        src={`${PUBLIC_URL}/images/Jash.webp`}
                         alt="Portrait of Jash Bhatt"
                         className="w-full h-full object-cover"
                         loading="eager"
@@ -589,7 +589,7 @@ const App = () => {
                   <div className="max-w-[324px] h-full lg:ml-auto rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-20px_rgba(1,245,209,0.35)] hover:border-[#01F5D1]/50">
                     <div className="rounded-2xl overflow-hidden aspect-[4/5]">
                       <ResponsiveImage
-                        src={`${PUBLIC_URL}/images/Jash.jpeg`}
+                        src={`${PUBLIC_URL}/images/Jash.webp`}
                         alt="Portrait of Jash Bhatt"
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -824,7 +824,7 @@ const App = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center">
                     <ResponsiveImage
-                      src={`${PUBLIC_URL}/images/Lamborghini.png`}
+                      src={`${PUBLIC_URL}/images/Lamborghini.webp`}
                       alt="Lamborghini logo"
                       className="w-7 h-7 object-contain"
                       loading="lazy"
@@ -1065,13 +1065,15 @@ const App = () => {
         </div>
       ) : (
         /* PROJECT DETAIL VIEW */
-        <ProjectDetail
-          project={selectedProject}
-          onBack={handleBackToHome}
-          onNext={handleNextProject}
-          isTransitioning={isTransitioning}
-          onImageClick={setSelectedImage}
-        />
+        <Suspense fallback={<div className="min-h-screen bg-[#02060f]" />}>
+          <ProjectDetail
+            project={selectedProject}
+            onBack={handleBackToHome}
+            onNext={handleNextProject}
+            isTransitioning={isTransitioning}
+            onImageClick={setSelectedImage}
+          />
+        </Suspense>
       )}
 
       {/* Footer */}

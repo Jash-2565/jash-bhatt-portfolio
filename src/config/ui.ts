@@ -31,8 +31,8 @@ export const operatorStats = [
 ];
 
 export const galleryItems: GalleryItem[] = [
-  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/la la land.jpg`, alt: 'La La Land Art' },
-  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/Mrs jordan.jpg`, alt: 'Mrs Jordan Art' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/la la land.webp`, alt: 'La La Land Art' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/Mrs jordan.webp`, alt: 'Mrs Jordan Art' },
   { type: 'image', src: `${PUBLIC_URL}/images/Photoshop and Animation/Geometric-Design.gif`, alt: 'Geometric Design GIF' },
 ];
 
