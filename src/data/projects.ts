@@ -323,12 +323,12 @@ export const projects: Project[] = [
           imageHeight: "h-[22rem] md:h-[30rem]",
           images: [
             {
-              src: `${PUBLIC_URL}/images/RAHI/RAHI-dropdown.jpg`,
+              src: `${PUBLIC_URL}/images/RAHI/RAHI-dropdown.webp`,
               bgClass: "bg-[#ededed]",
               caption: "Dropdown component patterns across states and use cases"
             },
             {
-              src: `${PUBLIC_URL}/images/RAHI/RAHI-accordian.jpg`,
+              src: `${PUBLIC_URL}/images/RAHI/RAHI-accordian.webp`,
               bgClass: "bg-[#ededed]",
               caption: "Accordion structures for compact and content-rich layouts"
             }
@@ -386,8 +386,8 @@ export const projects: Project[] = [
     hoverColor: "group-hover:text-[#DC2626]",
     badge: "bg-[#FEE2E2] text-[#991B1B]",
     content: {
-      heroImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.png`,
-      thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.png`,
+      heroImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.webp`,
+      thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.webp`,
       role: "Circuit Design · Hardware Prototyping · Physical Computing",
       sections: [
         {
@@ -423,7 +423,7 @@ export const projects: Project[] = [
           ],
           images: [
             {
-              src: `${PUBLIC_URL}/images/Revela/Exploded View.jpg`,
+              src: `${PUBLIC_URL}/images/Revela/Exploded View.webp`,
               caption: "Exploded view of the system architecture"
             }
           ]
