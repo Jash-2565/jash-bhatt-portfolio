@@ -7,11 +7,33 @@ const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 import ResponsiveImage from './components/ResponsiveImage';
 import ImageWithFallback from './components/ImageWithFallback';
 import Reveal from './components/Reveal';
+import Typewriter from './components/Typewriter';
+import TiltCard from './components/TiltCard';
+import Marquee from './components/Marquee';
+import BackToTop from './components/BackToTop';
+import MagneticButton from './components/MagneticButton';
+import CursorGlow from './components/CursorGlow';
+import CopyEmail from './components/CopyEmail';
+import HeroParticles from './components/HeroParticles';
 import { projects } from './data/projects';
 import { orderedProjects } from './config/projects';
 import { ui, personalitySignals, currentlyExploring, operatorStats, galleryItems, aiItems, gallerySnippetItems } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import type { Project } from './types';
+
+// Editorial numbered label shown above each main section heading.
+const SectionLabel = ({ index, title }: { index: string; title: string }) => (
+  <div className="flex items-center gap-4 mb-5">
+    <span className="font-mono text-xs tracking-[0.3em] text-[#01F5D1]/90 uppercase">{index}</span>
+    <span className="h-px w-12 bg-gradient-to-r from-[#01F5D1]/60 to-transparent" />
+    <span className="font-mono text-xs tracking-[0.3em] text-slate-500 uppercase">{title}</span>
+  </div>
+);
+
+const marqueeItems = [
+  'Product Design', 'UI/UX', 'Circuit Design', 'Interaction Design', 'Figma',
+  'React', 'Arduino', 'Generative AI', 'Prototyping', 'Motion Design', 'Photography',
+];
 
 // --- Main Component ---
 const App = () => {
@@ -27,7 +49,16 @@ const App = () => {
   const navItemsRef = useRef<HTMLDivElement | null>(null);
   const navButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
+  const heroSpotlightRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState<{ left: number; width: number; visible: boolean }>({ left: 0, width: 0, visible: false });
+
+  // Mouse-tracking spotlight in the hero — written directly to the DOM to avoid re-renders.
+  const handleHeroMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    const el = heroSpotlightRef.current;
+    if (!el) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    el.style.background = `radial-gradient(640px circle at ${event.clientX - rect.left}px ${event.clientY - rect.top}px, rgba(1, 245, 209, 0.08), transparent 45%)`;
+  };
   const isWhiteBgLightboxImage = selectedImage?.includes('Circuit-Design.webp');
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -342,6 +373,9 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 overflow-x-hidden transition-colors duration-300">
+      <CursorGlow />
+      <BackToTop />
+      <div className="grain-overlay" aria-hidden="true" />
       <a
         href="#home"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-full focus:shadow-lg"
@@ -467,7 +501,8 @@ const App = () => {
           {/* Hero Section */}
           <section
             id="home"
-            className={`relative min-h-[calc(100vh-4.5rem)] md:min-h-[calc(100vh-5rem)] pt-[5.5rem] pb-8 md:pt-28 md:pb-10 scroll-mt-28 overflow-hidden ${
+            onMouseMove={handleHeroMouseMove}
+            className={`relative min-h-[calc(100vh-4.5rem)] md:min-h-[calc(100vh-5rem)] pt-[5.5rem] pb-8 md:pt-24 md:pb-10 scroll-mt-28 overflow-hidden ${
               !isTransitioning && activeSection === 'home'
                 ? 'bg-gradient-to-b from-[#031018] via-[#062126] to-[#02060f]'
                 : 'bg-[#02060f]'
@@ -477,13 +512,20 @@ const App = () => {
               <>
                 <div className="absolute -top-24 -right-8 w-64 h-64 rounded-full bg-[#01F5D1]/25 blur-3xl animate-drift"></div>
                 <div className="absolute top-20 -left-12 w-52 h-52 rounded-full bg-[#00A19B]/30 blur-3xl animate-drift"></div>
-                <div className="absolute inset-0 pointer-events-none circuit-overlay"></div>
+                <HeroParticles />
+                <div ref={heroSpotlightRef} className="absolute inset-0 pointer-events-none" aria-hidden="true"></div>
               </>
             )}
             <div className="px-4 sm:px-8 lg:px-12 max-w-[84rem] mx-auto relative">
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
-                  <h1 className="text-[3.1rem] md:text-[4.2rem] font-display text-slate-100 mb-5 leading-[1.05] animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+                  <div className="mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+                    <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#01F5D1]/40 bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
+                      <span className="pulse-dot" aria-hidden="true" />
+                      Open to Summer 2026 internships
+                    </span>
+                  </div>
+                  <h1 className="text-[3.1rem] md:text-[4.2rem] font-display text-slate-100 mb-5 leading-[1.05] animate-fade-in-up" style={{ animationDelay: '60ms' }}>
                     I design <span className="accent-shimmer font-semibold">intuitive tech products</span> that blend hardware, software, and human behavior.
                   </h1>
                   <p className="text-[1.18rem] md:text-[1.34rem] text-slate-300 mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
@@ -508,15 +550,12 @@ const App = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-y-1.5 mb-6 lg:hidden text-[#9EF7EA] animate-fade-in-up" style={{ animationDelay: '260ms' }}>
-                    {personalitySignals.map((signal, index) => (
-                      <span key={`mobile-${signal}`} className="text-base font-semibold leading-relaxed">
-                        {signal}
-                        {index < personalitySignals.length - 1 && (
-                          <span className="mx-2 text-[#64d7c6] font-normal">|</span>
-                        )}
-                      </span>
-                    ))}
+                  <div className="flex items-baseline gap-2.5 mb-6 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                    <span className="text-[#01F5D1] text-lg" aria-hidden="true">{'>'}</span>
+                    <Typewriter
+                      phrases={personalitySignals}
+                      className="text-base font-semibold text-[#9EF7EA]"
+                    />
                   </div>
 
                   <div className="flex flex-col items-start gap-3 mb-8 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
@@ -550,38 +589,36 @@ const App = () => {
                     </a>
                   </div>
 
-                  <div className="hidden lg:flex flex-nowrap items-center mb-8 text-[#9EF7EA] whitespace-nowrap animate-fade-in-up" style={{ animationDelay: '260ms' }}>
-                    {personalitySignals.map((signal, index) => (
-                      <span key={signal} className="text-base font-semibold leading-relaxed shrink-0">
-                        {signal}
-                        {index < personalitySignals.length - 1 && (
-                          <span className="mx-2.5 text-[#64d7c6] font-normal">|</span>
-                        )}
-                      </span>
-                    ))}
+                  <div className="hidden lg:flex items-baseline gap-2.5 mb-8 min-h-[36px] font-mono whitespace-nowrap animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                    <span className="text-[#01F5D1] text-xl" aria-hidden="true">{'>'}</span>
+                    <Typewriter
+                      phrases={personalitySignals}
+                      className="text-lg font-semibold text-[#9EF7EA]"
+                    />
                   </div>
 
                   <div className="hidden lg:flex flex-col sm:flex-row gap-4 mt-auto animate-fade-in-up" style={{ animationDelay: '380ms' }}>
-                    <button
+                    <MagneticButton
                       onClick={() => scrollToSection('work')}
                       className={`group ${ui.btnBase} ${ui.btnPrimary}`}
                     >
                       View My Work <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
-                    <button
+                    </MagneticButton>
+                    <MagneticButton
                       onClick={() => scrollToSection('contact')}
                       className={`${ui.btnBase} ${ui.btnSecondary}`}
                     >
                       Get in Touch
-                    </button>
-                    <a
+                    </MagneticButton>
+                    <MagneticButton
+                      as="a"
                       href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                       target="_blank"
                       rel="noreferrer"
                       className={`${ui.btnBase} ${ui.btnSecondary}`}
                     >
                       <Download size={18} /> Resume
-                    </a>
+                    </MagneticButton>
                   </div>
                 </div>
 
@@ -622,9 +659,13 @@ const App = () => {
             </div>
           </section>
 
+          {/* Discipline Marquee */}
+          <Marquee items={marqueeItems} />
+
           {/* Work Section */}
           <section id="work" className="py-24 px-4 sm:px-8 lg:px-12 max-w-[84rem] mx-auto scroll-mt-28 bg-[#02060f]">
             <Reveal className="mb-16">
+              <SectionLabel index="01" title="Selected Work" />
               <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-4">Selected Projects</h2>
               <p className="text-slate-300 max-w-2xl mb-6">From circuit-led builds to AI-enabled interfaces — each project reflects how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" delay={180} duration={700}>
@@ -662,6 +703,7 @@ const App = () => {
 
                       {/* Image Column (7 cols) */}
                       <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
+                        <TiltCard>
                         <div className={`relative overflow-hidden rounded-2xl ${project.color} aspect-[4/3] shadow-sm card-glow`}>
                           {!projectThumbnail.includes('placeholder') ? (
                             <ResponsiveImage
@@ -690,13 +732,15 @@ const App = () => {
                           </div>
 
                         </div>
+                        </TiltCard>
                       </div>
 
                       {/* Text Column (5 cols) */}
                       <div className={`md:col-span-5 ${index % 2 === 1 ? 'md:order-1' : ''}`}>
-                        <div className="flex items-center gap-3 mb-4">
-                          <span className="text-slate-600 text-xs font-mono font-medium">{String(index + 1).padStart(2, '0')}</span>
-                          <span className="text-slate-500 text-sm font-medium">{project.category}</span>
+                        <div className="flex items-center gap-4 mb-5">
+                          <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                          <span className="h-px w-10 bg-gradient-to-r from-[#01F5D1]/50 to-transparent" />
+                          <span className="text-slate-400 text-xs font-mono uppercase tracking-[0.2em]">{project.category}</span>
                         </div>
 
                         <h3 className={`text-3xl md:text-4xl font-bold text-slate-100 mb-4 transition-colors ${project.hoverColor}`}>
@@ -762,7 +806,7 @@ const App = () => {
                   {galleryItems.map((item, i) => (
                     <div
                       key={i}
-                      className={`w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all group md:aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-slate-600 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
+                      className={`relative w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all group md:aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-slate-600 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
                       onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
                     >
                       {item.type === 'video' && item.src ? (
@@ -777,12 +821,17 @@ const App = () => {
                           Your browser does not support the video tag.
                         </video>
                       ) : item.src ? (
-                        <ImageWithFallback
-                          src={item.src}
-                          alt={item.alt}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          deferGifOnConstrainedNetwork
-                        />
+                        <>
+                          <ImageWithFallback
+                            src={item.src}
+                            alt={item.alt}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            deferGifOnConstrainedNetwork
+                          />
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
+                            {item.alt}
+                          </div>
+                        </>
                       ) : (
                         <PhotoIcon className="text-slate-300 w-full h-full p-4" />
                       )}
@@ -837,16 +886,21 @@ const App = () => {
                   {aiItems.map((item, i) => (
                     <div
                       key={i}
-                      className="w-full rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-[#01F5D1] hover:shadow-md transition-all group md:aspect-square hover:-translate-y-1"
+                      className="relative w-full rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-[#01F5D1] hover:shadow-md transition-all group md:aspect-square hover:-translate-y-1"
                       onClick={() => item.src && setSelectedImage(item.src)}
                     >
                       {item.src ? (
-                        <ImageWithFallback
-                          src={item.src}
-                          alt={item.alt}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          deferGifOnConstrainedNetwork
-                        />
+                        <>
+                          <ImageWithFallback
+                            src={item.src}
+                            alt={item.alt}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            deferGifOnConstrainedNetwork
+                          />
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
+                            {item.alt}
+                          </div>
+                        </>
                       ) : (
                         <PhotoIcon className="text-slate-300 w-full h-full p-4" />
                       )}
@@ -885,16 +939,21 @@ const App = () => {
                     return (
                       <div
                         key={`gallery-snippet-${i}`}
-                        className={`${shapeClass} rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-slate-500 hover:shadow-md transition-all group ${positionClass} hover:-translate-y-1`}
+                        className={`relative ${shapeClass} rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-slate-500 hover:shadow-md transition-all group ${positionClass} hover:-translate-y-1`}
                         onClick={() => item.src && setSelectedImage(item.src)}
                       >
                         {item.src ? (
-                          <ImageWithFallback
-                            src={item.src}
-                            alt={item.alt}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            deferGifOnConstrainedNetwork
-                          />
+                          <>
+                            <ImageWithFallback
+                              src={item.src}
+                              alt={item.alt}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                              deferGifOnConstrainedNetwork
+                            />
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
+                              {item.alt}
+                            </div>
+                          </>
                         ) : (
                           <PhotoIcon className="text-slate-300 w-full h-full p-4" />
                         )}
@@ -911,6 +970,7 @@ const App = () => {
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid md:grid-cols-2 gap-16">
                 <Reveal>
+                  <SectionLabel index="02" title="About" />
                   <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-8">About Me</h2>
                   <div className="space-y-6 text-lg text-slate-300 leading-relaxed">
                     <p>
@@ -1013,24 +1073,20 @@ const App = () => {
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid md:grid-cols-2 gap-16">
                 <Reveal>
-                  <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-6">Let's Build Something</h2>
-                  <p className="text-xl text-slate-300">
+                  <SectionLabel index="03" title="Contact" />
+                  <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-6">Let's Build <span className="accent-shimmer">Something</span></h2>
+                  <p className="text-xl text-slate-300 mb-6">
                     I am actively looking for internship opportunities in UI/UX, product design, and phygital interaction — where I can contribute from research through to implementation.
                   </p>
+                  <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#01F5D1]/40 bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
+                    <span className="pulse-dot" aria-hidden="true" />
+                    Currently available — Summer 2026
+                  </span>
                 </Reveal>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                  <Reveal delay={80} asChild>
-                    <a href="mailto:jash.bhatt@flame.edu.in" className="relative flex items-center gap-4 p-5 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
-                      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                      <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
-                        <Mail size={22} />
-                      </div>
-                      <div className="text-left">
-                        <p className="text-sm text-slate-400 font-medium">Email Me</p>
-                        <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-[#01F5D1] transition-colors">jash.bhatt@flame.edu.in</p>
-                      </div>
-                    </a>
+                  <Reveal delay={80}>
+                    <CopyEmail email="jash.bhatt@flame.edu.in" />
                   </Reveal>
 
                   <Reveal delay={160} asChild>
@@ -1068,6 +1124,14 @@ const App = () => {
         <Suspense fallback={<div className="min-h-screen bg-[#02060f]" />}>
           <ProjectDetail
             project={selectedProject}
+            nextProject={
+              selectedProject
+                ? orderedProjects[
+                    (orderedProjects.findIndex((p) => p.id === selectedProject.id) + 1) %
+                      orderedProjects.length
+                  ]
+                : null
+            }
             onBack={handleBackToHome}
             onNext={handleNextProject}
             isTransitioning={isTransitioning}
@@ -1077,10 +1141,68 @@ const App = () => {
       )}
 
       {/* Footer */}
-      <footer className="bg-[#02060f] border-t border-slate-800 py-12 text-center">
-        <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center gap-3">
-          <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
-          <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
+      <footer className="bg-[#02060f] border-t border-slate-800 py-12">
+        <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]">JB</span>
+              <p className="text-slate-400 text-sm max-w-xs text-center md:text-left">
+                Designing at the edge of hardware, software, and human behavior.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center md:items-start gap-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-slate-500">Navigate</p>
+              <div className="flex items-center gap-6">
+                {['Home', 'Work', 'About', 'Contact'].map((item) => (
+                  <button
+                    key={`footer-${item}`}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className="link-underline text-sm text-slate-300 hover:text-[#9EF7EA] transition-colors"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center md:items-end gap-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-slate-500">Connect</p>
+              <div className="flex items-center gap-3">
+                <a
+                  href="mailto:jash.bhatt@flame.edu.in"
+                  aria-label="Email Jash Bhatt"
+                  className="p-2.5 rounded-full border border-slate-700 text-slate-300 hover:text-[#01F5D1] hover:border-[#01F5D1] hover:shadow-[0_0_18px_-6px_rgba(1,245,209,0.5)] transition-all duration-300"
+                >
+                  <Mail size={18} />
+                </a>
+                <a
+                  href="https://linkedin.com/in/jash-bhatt"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Jash Bhatt on LinkedIn"
+                  className="p-2.5 rounded-full border border-slate-700 text-slate-300 hover:text-[#01F5D1] hover:border-[#01F5D1] hover:shadow-[0_0_18px_-6px_rgba(1,245,209,0.5)] transition-all duration-300"
+                >
+                  <Linkedin size={18} />
+                </a>
+                <a
+                  href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Download resume"
+                  className="p-2.5 rounded-full border border-slate-700 text-slate-300 hover:text-[#01F5D1] hover:border-[#01F5D1] hover:shadow-[0_0_18px_-6px_rgba(1,245,209,0.5)] transition-all duration-300"
+                >
+                  <Download size={18} />
+                </a>
+              </div>
+              <p className="font-mono text-xs text-slate-500">Pune, India · GMT+5:30</p>
+            </div>
+          </div>
+
+          <div className="mt-10 pt-6 border-t border-slate-800/70 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
+            <p className="font-mono text-xs text-slate-600">v2.0 · React + Tailwind</p>
+          </div>
         </div>
       </footer>
     </div>

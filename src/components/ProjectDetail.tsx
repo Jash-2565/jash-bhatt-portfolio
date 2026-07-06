@@ -1,9 +1,10 @@
-import { lazy, Suspense, useState } from 'react';
-import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check } from 'lucide-react';
+import { lazy, Suspense, useState, useEffect } from 'react';
+import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase } from 'lucide-react';
 const ArkanoidDemo = lazy(() => import('./ArkanoidDemo'));
 const YoloV8Demo = lazy(() => import('./YoloV8Demo'));
 const MovieRecsDemo = lazy(() => import('./MovieRecsDemo'));
 import ResponsiveImage from './ResponsiveImage';
+import Reveal from './Reveal';
 import type { Project, Section } from '../types';
 import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME } from '../config/projects';
 import { ui } from '../config/ui';
@@ -38,6 +39,7 @@ const CopyButton = ({ text }: { text: string }) => {
 
 interface ProjectDetailProps {
   project: Project | null;
+  nextProject?: Project | null;
   onBack: () => void;
   onNext: () => void;
   isTransitioning: boolean;
@@ -46,11 +48,24 @@ interface ProjectDetailProps {
 
 const ProjectDetail = ({
   project,
+  nextProject,
   onBack,
   onNext,
   isTransitioning,
   onImageClick,
 }: ProjectDetailProps) => {
+  // Keyboard shortcuts for the case study: Esc → back, → → next project.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'Escape') onBack();
+      if (e.key === 'ArrowRight') onNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onBack, onNext]);
+
   if (!project) return null;
 
   const projectHeroTheme = PROJECT_HERO_THEMES[project.slug] ?? DEFAULT_PROJECT_HERO_THEME;
@@ -381,15 +396,23 @@ const ProjectDetail = ({
       <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12 py-16">
 
         {/* Project Meta */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 pb-12 border-b border-slate-800">
-          <div className="md:col-span-1">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Role</h3>
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 mb-20 pb-12 border-b border-slate-800">
+          <div className="md:col-span-3">
+            <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+              <Briefcase size={13} className="text-[#01F5D1]" /> Role
+            </h3>
             <p className="font-medium text-slate-100 text-sm leading-6">{project.content.role}</p>
           </div>
-          <div className="md:col-span-1">
+          <div className="md:col-span-3">
+            <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+              <Clock size={13} className="text-[#01F5D1]" /> Timeline
+            </h3>
+            <p className="font-medium text-slate-100 text-sm leading-6">{project.timeline}</p>
+          </div>
+          <div className="col-span-2 md:col-span-6">
             <div className="w-full md:w-fit md:max-w-full md:ml-auto">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 text-left">Tech & Tools</h3>
-              <div className="flex flex-wrap gap-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 text-left md:text-right">Tech &amp; Tools</h3>
+              <div className="flex flex-wrap gap-2 md:justify-end">
                 {project.tags.map((tag, i) => (
                   <span key={i} className={ui.chipBase}>{tag}</span>
                 ))}
@@ -450,12 +473,15 @@ const ProjectDetail = ({
 
                 {/* Left Column: Heading */}
                 <div className="md:col-span-4 md:sticky md:top-24">
-                  <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80`}></div>
+                  <span className="block font-mono text-xs tracking-[0.3em] text-slate-500 mb-3">
+                    {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
+                  </span>
+                  <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80 transition-all duration-300 group-hover:w-14`}></div>
                   <h2 className="text-xl font-bold text-slate-100 tracking-tight leading-tight">{section.title}</h2>
                 </div>
 
                 {/* Right Column: Content */}
-                <div className="md:col-span-8">
+                <Reveal variant="fade-up" className="md:col-span-8" threshold={0.08}>
                   <p className="text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-8 font-normal">{section.content}</p>
 
                   {section.listItems && (
@@ -510,26 +536,67 @@ const ProjectDetail = ({
                       </a>
                     </div>
                   )}
-                </div>
+                </Reveal>
               </div>
             ))}
           </div>
         )}
 
+        {/* Next Project Preview */}
+        {nextProject && (
+          <div className="mt-32">
+            <button
+              onClick={onNext}
+              className="group relative w-full overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 p-6 md:p-8 text-left transition-all duration-300 hover:border-[#01F5D1]/60 hover:shadow-[0_28px_70px_-30px_rgba(1,245,209,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]"
+              aria-label={`Open next project: ${nextProject.title}`}
+            >
+              <div className="flex items-center gap-6">
+                <div className="hidden sm:block shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-950">
+                  {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
+                    <ResponsiveImage
+                      src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}
+                      alt={nextProject.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      deferGifOnConstrainedNetwork
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <PhotoIcon size={28} className="text-slate-600" />
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#01F5D1]/90">Next Project →</span>
+                  <h3 className="mt-2 text-2xl md:text-3xl font-bold text-slate-100 truncate group-hover:text-[#01F5D1] transition-colors">
+                    {nextProject.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-400 truncate">{nextProject.category}</p>
+                </div>
+                <ArrowRight
+                  size={28}
+                  className="hidden md:block shrink-0 text-slate-500 group-hover:text-[#01F5D1] group-hover:translate-x-2 transition-all duration-300"
+                />
+              </div>
+            </button>
+          </div>
+        )}
+
         {/* Footer Navigation */}
-        <div className="mt-32 pt-12 border-t border-slate-800 flex justify-between items-center">
+        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-wrap justify-between items-center gap-4">
           <button
             onClick={onBack}
-            className="text-base font-medium text-slate-300 hover:text-[#01F5D1] transition-colors flex items-center gap-2"
+            className="group text-base font-medium text-slate-300 hover:text-[#01F5D1] transition-colors flex items-center gap-2"
           >
-            <ArrowLeft size={18} /> Back to Projects
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>
-          <button
-            onClick={onNext}
-            className="group flex items-center gap-2 px-6 py-3 bg-[#01F5D1] text-slate-950 hover:bg-[#00D8B8] rounded-full font-medium transition-all hover:pr-8"
-          >
-            Next Project <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          <span className="hidden md:flex items-center gap-2 text-xs text-slate-600">
+            <kbd className="px-2 py-1 rounded border border-slate-700 bg-slate-900 font-mono text-[10px] text-slate-400">Esc</kbd>
+            back
+            <span className="mx-1 text-slate-700">·</span>
+            <kbd className="px-2 py-1 rounded border border-slate-700 bg-slate-900 font-mono text-[10px] text-slate-400">→</kbd>
+            next
+          </span>
         </div>
       </div>
     </div>
