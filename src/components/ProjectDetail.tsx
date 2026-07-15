@@ -139,7 +139,7 @@ const ProjectDetail = ({
       : null;
 
     const snippetContainerClass =
-      'h-full lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 text-slate-100 shadow-sm flex flex-col';
+      'h-[360px] sm:h-[440px] lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 text-slate-100 shadow-sm flex flex-col';
     const snippetPreClass =
       'min-h-0 flex-1 overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre';
 
@@ -607,7 +607,7 @@ const ProjectDetail = ({
               aria-label={`Open next project: ${nextProject.title}`}
             >
               <div className="flex items-center gap-6">
-                <div className="hidden sm:block shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-950">
+                <div className="block shrink-0 w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-950">
                   {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
                     <ResponsiveImage
                       src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}
