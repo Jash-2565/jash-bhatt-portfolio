@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
-  Menu, X, Mail, Linkedin, ArrowRight,
+  Menu, X, Linkedin, ArrowRight, ArrowUpRight,
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
 } from 'lucide-react';
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
@@ -11,7 +11,7 @@ import Typewriter from './components/Typewriter';
 import TiltCard from './components/TiltCard';
 import Marquee from './components/Marquee';
 import BackToTop from './components/BackToTop';
-import MagneticButton from './components/MagneticButton';
+import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
@@ -21,15 +21,6 @@ import { ui, personalitySignals, currentlyExploring, operatorStats, galleryItems
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import type { Project } from './types';
 
-// Editorial numbered label shown above each main section heading.
-const SectionLabel = ({ index, title }: { index: string; title: string }) => (
-  <div className="flex items-center gap-4 mb-5">
-    <span className="font-mono text-xs tracking-[0.3em] text-[#01F5D1]/90 uppercase">{index}</span>
-    <span className="h-px w-12 bg-gradient-to-r from-[#01F5D1]/60 to-transparent" />
-    <span className="font-mono text-xs tracking-[0.3em] text-slate-500 uppercase">{title}</span>
-  </div>
-);
-
 const marqueeItems = [
   'Product Design', 'UI/UX', 'Circuit Design', 'Interaction Design', 'Figma',
   'React', 'Arduino', 'Generative AI', 'Prototyping', 'Motion Design', 'Photography',
@@ -38,6 +29,7 @@ const marqueeItems = [
 // --- Main Component ---
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [currentView, setCurrentView] = useState<'home' | 'project'>('home');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -59,9 +51,32 @@ const App = () => {
     const rect = event.currentTarget.getBoundingClientRect();
     el.style.background = `radial-gradient(640px circle at ${event.clientX - rect.left}px ${event.clientY - rect.top}px, rgba(1, 245, 209, 0.08), transparent 45%)`;
   };
+
+  // Per-card cursor spotlight + inner-image parallax on the work cards. CSS reads
+  // the custom properties; written straight to the DOM to avoid re-renders.
+  const handleCardMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const el = event.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    el.style.setProperty('--sx', `${x}px`);
+    el.style.setProperty('--sy', `${y}px`);
+    el.style.setProperty('--mx', `${(x / rect.width - 0.5) * -14}px`);
+    el.style.setProperty('--my', `${(y / rect.height - 0.5) * -14}px`);
+  };
+
+  const handleCardMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.currentTarget.style.setProperty('--mx', '0px');
+    event.currentTarget.style.setProperty('--my', '0px');
+  };
   const isWhiteBgLightboxImage = selectedImage?.includes('Circuit-Design.webp');
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  // Keep the mobile menu mounted while its closing animation plays.
+  useEffect(() => {
+    if (isMenuOpen) setShouldRenderMenu(true);
+  }, [isMenuOpen]);
 
   // --- Navigation & Transition Handlers ---
   const scrollToElementWithOffset = (
@@ -412,7 +427,7 @@ const App = () => {
       )}
 
       {/* Navigation */}
-      <nav ref={navRef} className="fixed w-full bg-slate-950/70 backdrop-blur-md z-50 border-b border-slate-800 shadow-sm transition-all duration-300">
+      <nav ref={navRef} className="fixed w-full bg-[#02060f] z-50 border-b border-slate-800 shadow-sm transition-all duration-300">
         <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
           <div className="flex justify-between items-center h-[4.5rem]">
             <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('home')}>
@@ -466,8 +481,13 @@ const App = () => {
         </div>
 
         {/* Mobile Menu Dropdown */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-slate-950 border-t border-slate-800 absolute w-full shadow-lg">
+        {shouldRenderMenu && (
+          <div
+            onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
+            className={`md:hidden bg-[#02060f] border-t border-slate-800 absolute w-full shadow-lg ${
+              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
+            }`}
+          >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {['Home', 'Work', 'About', 'Contact'].map((item) => (
                 <button
@@ -558,9 +578,9 @@ const App = () => {
                     />
                   </div>
 
-                  <div className="flex flex-col items-start gap-3 mb-8 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+                  <div className="flex flex-col gap-3 mb-8 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
                     {operatorStats.map((stat) => (
-                      <span key={`mobile-stat-${stat.label}`} className="min-h-[44px] px-4 py-2 text-sm font-semibold rounded-full border border-slate-600 bg-slate-900/85 text-slate-200 inline-flex items-center">
+                      <span key={`mobile-stat-${stat.label}`} className="w-full min-h-[44px] px-4 py-2 text-sm font-semibold rounded-full border border-slate-600 bg-slate-900/85 text-slate-200 flex items-center justify-center text-center">
                         {stat.label}: {stat.value}
                       </span>
                     ))}
@@ -598,27 +618,32 @@ const App = () => {
                   </div>
 
                   <div className="hidden lg:flex flex-col sm:flex-row gap-4 mt-auto animate-fade-in-up" style={{ animationDelay: '380ms' }}>
-                    <MagneticButton
+                    <Magnetic
+                      as="button"
+                      strength={28}
                       onClick={() => scrollToSection('work')}
                       className={`group ${ui.btnBase} ${ui.btnPrimary}`}
                     >
                       View My Work <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </MagneticButton>
-                    <MagneticButton
+                    </Magnetic>
+                    <Magnetic
+                      as="button"
+                      strength={28}
                       onClick={() => scrollToSection('contact')}
                       className={`${ui.btnBase} ${ui.btnSecondary}`}
                     >
                       Get in Touch
-                    </MagneticButton>
-                    <MagneticButton
+                    </Magnetic>
+                    <Magnetic
                       as="a"
+                      strength={28}
                       href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                       target="_blank"
                       rel="noreferrer"
                       className={`${ui.btnBase} ${ui.btnSecondary}`}
                     >
                       <Download size={18} /> Resume
-                    </MagneticButton>
+                    </Magnetic>
                   </div>
                 </div>
 
@@ -665,7 +690,6 @@ const App = () => {
           {/* Work Section */}
           <section id="work" className="py-24 px-4 sm:px-8 lg:px-12 max-w-[84rem] mx-auto scroll-mt-28 bg-[#02060f]">
             <Reveal className="mb-16">
-              <SectionLabel index="01" title="Selected Work" />
               <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-4">Selected Projects</h2>
               <p className="text-slate-300 max-w-2xl mb-6">From circuit-led builds to AI-enabled interfaces — each project reflects how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" delay={180} duration={700}>
@@ -704,14 +728,29 @@ const App = () => {
                       {/* Image Column (7 cols) */}
                       <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                         <TiltCard>
-                        <div className={`relative overflow-hidden rounded-2xl ${project.color} aspect-[4/3] shadow-sm card-glow`}>
+                        <div
+                          className={`card-media relative overflow-hidden rounded-2xl ${project.color} aspect-[4/3] shadow-sm card-glow`}
+                          onMouseMove={handleCardMouseMove}
+                          onMouseLeave={handleCardMouseLeave}
+                        >
                           {!projectThumbnail.includes('placeholder') ? (
-                            <ResponsiveImage
-                              src={projectThumbnail}
-                              alt={project.title}
-                              className={`block w-full h-full transition-transform duration-700 ${project.slug === 'python-codes' ? 'object-contain p-6' : 'object-cover object-center group-hover:scale-[1.06]'}`}
-                              loading="lazy"
-                            />
+                            project.slug === 'python-codes' ? (
+                              <ResponsiveImage
+                                src={projectThumbnail}
+                                alt={project.title}
+                                className="block w-full h-full object-contain p-6"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="card-parallax">
+                                <ResponsiveImage
+                                  src={projectThumbnail}
+                                  alt={project.title}
+                                  className="block w-full h-full object-cover object-center"
+                                  loading="lazy"
+                                />
+                              </div>
+                            )
                           ) : (
                             <div className="w-full h-full flex items-center justify-center p-8 text-center">
                               <div>
@@ -720,6 +759,9 @@ const App = () => {
                               </div>
                             </div>
                           )}
+
+                          {/* Cursor spotlight */}
+                          <div className="card-spotlight" aria-hidden="true"></div>
 
                           {/* Sheen sweep on hover */}
                           <div className="sheen-layer"></div>
@@ -970,7 +1012,6 @@ const App = () => {
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid md:grid-cols-2 gap-16">
                 <Reveal>
-                  <SectionLabel index="02" title="About" />
                   <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-8">About Me</h2>
                   <div className="space-y-6 text-lg text-slate-300 leading-relaxed">
                     <p>
@@ -1073,7 +1114,6 @@ const App = () => {
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid md:grid-cols-2 gap-16">
                 <Reveal>
-                  <SectionLabel index="03" title="Contact" />
                   <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-6">Let's Build <span className="accent-shimmer">Something</span></h2>
                   <p className="text-xl text-slate-300 mb-6">
                     I am actively looking for internship opportunities in UI/UX, product design, and phygital interaction — where I can contribute from research through to implementation.
@@ -1085,34 +1125,42 @@ const App = () => {
                 </Reveal>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                  <Reveal delay={80}>
-                    <CopyEmail email="jash.bhatt@flame.edu.in" />
+                  <Reveal delay={80} className="h-full">
+                    <Magnetic className="h-full">
+                      <CopyEmail email="jash.bhatt@flame.edu.in" />
+                    </Magnetic>
                   </Reveal>
 
-                  <Reveal delay={160} asChild>
-                    <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
-                      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                      <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
-                        <Linkedin size={22} />
-                      </div>
-                      <div className="text-left">
-                        <p className="text-sm text-slate-400 font-medium">LinkedIn</p>
-                        <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-[#01F5D1] transition-colors">/in/jash-bhatt</p>
-                      </div>
-                    </a>
+                  <Reveal delay={160} className="h-full">
+                    <Magnetic className="h-full">
+                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 w-full h-full bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
+                        <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+                          <Linkedin size={22} />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm text-slate-400 font-medium">LinkedIn</p>
+                          <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-[#01F5D1] transition-colors">/in/jash-bhatt</p>
+                        </div>
+                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#01F5D1] transition-all duration-300" />
+                      </a>
+                    </Magnetic>
                   </Reveal>
 
-                  <Reveal delay={240} asChild>
-                    <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
-                      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                      <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
-                        <Download size={22} />
-                      </div>
-                      <div className="text-left">
-                        <p className="text-sm text-slate-400 font-medium">Resume</p>
-                        <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-[#01F5D1] transition-colors">Download PDF</p>
-                      </div>
-                    </a>
+                  <Reveal delay={240} className="h-full">
+                    <Magnetic className="h-full">
+                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 w-full h-full bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
+                        <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+                          <Download size={22} />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm text-slate-400 font-medium">Resume</p>
+                          <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-[#01F5D1] transition-colors">Download PDF</p>
+                        </div>
+                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#01F5D1] transition-all duration-300" />
+                      </a>
+                    </Magnetic>
                   </Reveal>
                 </div>
               </div>
@@ -1141,68 +1189,10 @@ const App = () => {
       )}
 
       {/* Footer */}
-      <footer className="bg-[#02060f] border-t border-slate-800 py-12">
-        <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]">JB</span>
-              <p className="text-slate-400 text-sm max-w-xs text-center md:text-left">
-                Designing at the edge of hardware, software, and human behavior.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center md:items-start gap-3">
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-slate-500">Navigate</p>
-              <div className="flex items-center gap-6">
-                {['Home', 'Work', 'About', 'Contact'].map((item) => (
-                  <button
-                    key={`footer-${item}`}
-                    onClick={() => scrollToSection(item.toLowerCase())}
-                    className="link-underline text-sm text-slate-300 hover:text-[#9EF7EA] transition-colors"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center md:items-end gap-3">
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-slate-500">Connect</p>
-              <div className="flex items-center gap-3">
-                <a
-                  href="mailto:jash.bhatt@flame.edu.in"
-                  aria-label="Email Jash Bhatt"
-                  className="p-2.5 rounded-full border border-slate-700 text-slate-300 hover:text-[#01F5D1] hover:border-[#01F5D1] hover:shadow-[0_0_18px_-6px_rgba(1,245,209,0.5)] transition-all duration-300"
-                >
-                  <Mail size={18} />
-                </a>
-                <a
-                  href="https://linkedin.com/in/jash-bhatt"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Jash Bhatt on LinkedIn"
-                  className="p-2.5 rounded-full border border-slate-700 text-slate-300 hover:text-[#01F5D1] hover:border-[#01F5D1] hover:shadow-[0_0_18px_-6px_rgba(1,245,209,0.5)] transition-all duration-300"
-                >
-                  <Linkedin size={18} />
-                </a>
-                <a
-                  href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Download resume"
-                  className="p-2.5 rounded-full border border-slate-700 text-slate-300 hover:text-[#01F5D1] hover:border-[#01F5D1] hover:shadow-[0_0_18px_-6px_rgba(1,245,209,0.5)] transition-all duration-300"
-                >
-                  <Download size={18} />
-                </a>
-              </div>
-              <p className="font-mono text-xs text-slate-500">Pune, India · GMT+5:30</p>
-            </div>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-slate-800/70 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
-            <p className="font-mono text-xs text-slate-600">v2.0 · React + Tailwind</p>
-          </div>
+      <footer className="bg-[#02060f] border-t border-slate-800 py-12 text-center">
+        <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center gap-3">
+          <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
+          <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
         </div>
       </footer>
     </div>

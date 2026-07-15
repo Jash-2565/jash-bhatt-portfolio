@@ -10,6 +10,7 @@ type CopyEmailProps = {
 // Clipboard API is unavailable.
 export default function CopyEmail({ email }: CopyEmailProps) {
   const [copied, setCopied] = useState(false);
+  const [ripple, setRipple] = useState<{ x: number; y: number; key: number } | null>(null);
 
   const confirm = () => {
     setCopied(true);
@@ -30,7 +31,11 @@ export default function CopyEmail({ email }: CopyEmailProps) {
     }
   };
 
-  const handleCopy = async () => {
+  const handleCopy = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Spawn a ripple from the click point for tactile confirmation.
+    const rect = event.currentTarget.getBoundingClientRect();
+    setRipple({ x: event.clientX - rect.left, y: event.clientY - rect.top, key: Date.now() });
+
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(email);
@@ -48,8 +53,16 @@ export default function CopyEmail({ email }: CopyEmailProps) {
       type="button"
       onClick={handleCopy}
       aria-label={copied ? 'Email copied to clipboard' : `Copy email address ${email}`}
-      className="relative flex items-center gap-4 p-5 w-full text-left bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden"
+      className="relative flex items-center gap-4 p-5 w-full h-full text-left bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden"
     >
+      {ripple && (
+        <span
+          key={ripple.key}
+          className="copy-ripple"
+          style={{ left: ripple.x, top: ripple.y }}
+          onAnimationEnd={() => setRipple(null)}
+        />
+      )}
       <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
       <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
         <Mail size={22} />

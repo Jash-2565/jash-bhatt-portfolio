@@ -48,7 +48,6 @@ export interface ProjectHeroTheme {
   heroTextClass: string;
   heroMutedTextClass: string;
   heroBodyTextClass: string;
-  heroDotClass: string;
 }
 
 export interface ResponsiveImageProps extends ImgHTMLAttributes<HTMLImageElement> {
