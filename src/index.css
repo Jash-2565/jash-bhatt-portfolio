@@ -45,13 +45,9 @@ body {
   animation: drift 8s ease-in-out infinite;
 }
 
-.circuit-overlay {
-  opacity: 0.08;
-  background-image:
-    linear-gradient(90deg, transparent 0 8%, rgba(1, 245, 209, 0.32) 8% 8.15%, transparent 8.15% 100%),
-    linear-gradient(180deg, transparent 0 18%, rgba(0, 161, 155, 0.26) 18% 18.15%, transparent 18.15% 100%);
-  background-size: 300px 300px, 300px 300px;
-  background-repeat: repeat;
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 /* Accent-word shimmer — used on hero headline highlights. */
@@ -82,6 +78,43 @@ body {
   transform: translateY(-4px);
   box-shadow: 0 22px 55px -20px rgba(1, 245, 209, 0.35),
     0 0 0 1px rgba(1, 245, 209, 0.12);
+}
+
+/* Project-card cursor spotlight + inner image parallax (driven by CSS vars set
+   from a mousemove handler). Layers on top of the existing tilt + sheen. */
+.card-media .card-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 320ms ease;
+  background: radial-gradient(
+    300px circle at var(--sx, 50%) var(--sy, 50%),
+    rgba(1, 245, 209, 0.22),
+    rgba(1, 245, 209, 0.05) 40%,
+    transparent 62%
+  );
+  mix-blend-mode: screen;
+}
+.card-media:hover .card-spotlight {
+  opacity: 1;
+}
+.card-parallax {
+  width: 100%;
+  height: 100%;
+  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(1.04);
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.card-media:hover .card-parallax {
+  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(1.09);
+}
+
+@keyframes sheen {
+  0% { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%) skewX(-15deg); }
 }
 
 /* Animated sheen sweep across project card images. */
@@ -155,6 +188,25 @@ body {
 .magnetic-btn {
   transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
+}
+
+/* Cyan ripple emitted from the click point on the copy-email card. */
+.copy-ripple {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 9999px;
+  background: rgba(1, 245, 209, 0.4);
+  pointer-events: none;
+  transform: scale(0);
+  animation: copy-ripple 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  z-index: 0;
+}
+
+@keyframes copy-ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(26); opacity: 0; }
 }
 
 /* Blinking caret for the hero typewriter line. */
@@ -242,27 +294,6 @@ body {
   -webkit-text-stroke-color: rgba(1, 245, 209, 0.85);
 }
 
-/* Animated underline for footer/nav text links. */
-.link-underline {
-  position: relative;
-}
-.link-underline::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 1px;
-  width: 100%;
-  background: #01f5d1;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.link-underline:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
 /* Subtle film-grain texture over the whole page. */
 .grain-overlay {
   position: fixed;
@@ -291,13 +322,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-drift,
   .animate-nudge,
-  .animate-shimmer,
-  .animate-sheen,
   .accent-shimmer,
   .sheen-layer::before,
   .typewriter-caret,
   .pulse-dot::after,
-  .marquee-track {
+  .marquee-track,
+  .copy-ripple {
     animation: none !important;
   }
   .tilt-card,
@@ -305,8 +335,17 @@ body {
     transition: none;
     transform: none !important;
   }
-  .ghost-number,
-  .link-underline::after {
+  .card-parallax {
+    transition: none;
+    transform: none !important;
+  }
+  .card-media:hover .card-parallax {
+    transform: none !important;
+  }
+  .card-media .card-spotlight {
+    display: none;
+  }
+  .ghost-number {
     transition: none;
   }
   .accent-shimmer {

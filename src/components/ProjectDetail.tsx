@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase } from 'lucide-react';
 const ArkanoidDemo = lazy(() => import('./ArkanoidDemo'));
 const YoloV8Demo = lazy(() => import('./YoloV8Demo'));
@@ -54,6 +54,11 @@ const ProjectDetail = ({
   isTransitioning,
   onImageClick,
 }: ProjectDetailProps) => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const sectionsWrapRef = useRef<HTMLDivElement>(null);
+  const heroParallaxRef = useRef<HTMLDivElement>(null);
+  const slug = project?.slug;
+
   // Keyboard shortcuts for the case study: Esc → back, → → next project.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -65,6 +70,52 @@ const ProjectDetail = ({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onBack, onNext]);
+
+  // Highlight the section heading whose content sits near the top of the viewport.
+  useEffect(() => {
+    const wrap = sectionsWrapRef.current;
+    if (!wrap) return;
+    const els = Array.from(wrap.querySelectorAll<HTMLElement>('[data-section]'));
+    if (els.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.getAttribute('data-section'));
+            if (!Number.isNaN(idx)) setActiveIdx(idx);
+          }
+        });
+      },
+      { rootMargin: '-25% 0px -60% 0px', threshold: 0 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [slug]);
+
+  // Subtle parallax on the case-study hero image as it scrolls through view.
+  useEffect(() => {
+    const el = heroParallaxRef.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      const shift = Math.max(-26, Math.min(26, (rect.top - window.innerHeight / 2) * -0.05));
+      el.style.transform = `translateY(${shift.toFixed(1)}px) scale(1.08)`;
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [slug]);
 
   if (!project) return null;
 
@@ -368,7 +419,7 @@ const ProjectDetail = ({
   };
 
   return (
-    <div className={`bg-slate-950 text-slate-100 min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+    <div className={`bg-[#02060f] text-slate-100 min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
       {/* Project Hero */}
       <div className={`w-full ${heroBgClass} pt-32 pb-24 border-b border-slate-800`}>
@@ -425,12 +476,14 @@ const ProjectDetail = ({
         {!isPythonCodes && (
           <div className={`w-full bg-slate-900 rounded-lg mb-24 border border-slate-700 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
             {!project.content.heroImage.includes('placeholder') ? (
-              <ResponsiveImage
-                src={project.content.heroImage}
-                alt={`${project.title} Hero`}
-                className={isCountdownMotorControl ? 'w-full h-full object-cover object-center' : 'w-full h-auto block'}
-                loading="eager"
-              />
+              <div ref={heroParallaxRef} className="w-full h-full will-change-transform">
+                <ResponsiveImage
+                  src={project.content.heroImage}
+                  alt={`${project.title} Hero`}
+                  className={isCountdownMotorControl ? 'w-full h-full object-cover object-center' : 'w-full h-auto block'}
+                  loading="eager"
+                />
+              </div>
             ) : (
               <div className="w-full aspect-video flex items-center justify-center">
                 <div className="text-center text-slate-400">
@@ -467,17 +520,19 @@ const ProjectDetail = ({
             ))}
           </div>
         ) : (
-          <div className="space-y-24">
-            {project.content.sections.map((section, idx) => (
-              <div key={idx} className="grid md:grid-cols-12 gap-8 items-start group">
+          <div className="space-y-24" ref={sectionsWrapRef}>
+            {project.content.sections.map((section, idx) => {
+              const isActive = idx === activeIdx;
+              return (
+              <div key={idx} data-section={idx} className="grid md:grid-cols-12 gap-8 items-start group">
 
                 {/* Left Column: Heading */}
                 <div className="md:col-span-4 md:sticky md:top-24">
-                  <span className="block font-mono text-xs tracking-[0.3em] text-slate-500 mb-3">
+                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-[#01F5D1]' : 'text-slate-500'}`}>
                     {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
                   </span>
-                  <div className={`w-8 h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 opacity-80 transition-all duration-300 group-hover:w-14`}></div>
-                  <h2 className="text-xl font-bold text-slate-100 tracking-tight leading-tight">{section.title}</h2>
+                  <div className={`h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
+                  <h2 className={`text-xl font-bold tracking-tight leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-100'}`}>{section.title}</h2>
                 </div>
 
                 {/* Right Column: Content */}
@@ -538,7 +593,8 @@ const ProjectDetail = ({
                   )}
                 </Reveal>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

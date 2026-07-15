@@ -378,7 +378,7 @@ export const projects: Project[] = [
     slug: "revela",
     title: "Revela",
     category: "Tangible Interfaces / Interaction Design",
-    timeline: "Ongoing",
+    timeline: "Completed",
     description: "A screen-free, embedded system that uses proximity-based light feedback to guide children (ages 4–7) through real-world exploration and object-finding.",
     tags: ["ESP32", "NeoPixels", "Arduino IDE"],
     color: "bg-[#FFF1F2]",

@@ -1,31 +1,31 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
 
-type MagneticButtonProps = {
+type MagneticProps = {
   children: ReactNode;
   className?: string;
+  strength?: number; // px of pull toward the cursor
+  as?: 'div' | 'button' | 'a';
   onClick?: () => void;
-  as?: 'button' | 'a';
   href?: string;
   target?: string;
   rel?: string;
   ariaLabel?: string;
-  strength?: number; // px of pull at the edges
 };
 
-// Wraps a button/link so it drifts toward the cursor while hovered, then springs
-// back on leave. Pointer-only — reduced-motion users get a static control.
-export default function MagneticButton({
+// Wraps content so it drifts toward the cursor on hover and springs back on
+// leave. Pointer-only; reduced-motion users get a static wrapper.
+export default function Magnetic({
   children,
   className = '',
+  strength = 16,
+  as = 'div',
   onClick,
-  as = 'button',
   href,
   target,
   rel,
   ariaLabel,
-  strength = 14,
-}: MagneticButtonProps) {
+}: MagneticProps) {
   const ref = useRef<HTMLElement>(null);
 
   const handleMove = (event: React.MouseEvent) => {
@@ -35,7 +35,7 @@ export default function MagneticButton({
     const rect = el.getBoundingClientRect();
     const x = event.clientX - rect.left - rect.width / 2;
     const y = event.clientY - rect.top - rect.height / 2;
-    el.style.transform = `translate(${(x / rect.width) * strength * 2}px, ${(y / rect.height) * strength * 2}px)`;
+    el.style.transform = `translate(${(x / rect.width) * strength}px, ${(y / rect.height) * strength}px)`;
   };
 
   const reset = () => {
@@ -47,20 +47,23 @@ export default function MagneticButton({
     className: `magnetic-btn ${className}`,
     onMouseMove: handleMove,
     onMouseLeave: reset,
-    onClick,
-    'aria-label': ariaLabel,
   };
 
   if (as === 'a') {
     return (
-      <a {...shared} href={href} target={target} rel={rel}>
+      <a {...shared} href={href} target={target} rel={rel} aria-label={ariaLabel}>
         {children}
       </a>
     );
   }
-  return (
-    <button {...shared} type="button">
-      {children}
-    </button>
-  );
+
+  if (as === 'button') {
+    return (
+      <button {...shared} type="button" onClick={onClick} aria-label={ariaLabel}>
+        {children}
+      </button>
+    );
+  }
+
+  return <div {...shared}>{children}</div>;
 }
