@@ -293,6 +293,11 @@ body {
   color: rgba(1, 245, 209, 0.18);
   -webkit-text-stroke-color: rgba(1, 245, 209, 0.85);
 }
+@media (max-width: 767px) {
+  .ghost-number {
+    font-size: 1.6rem;
+  }
+}
 
 /* Subtle film-grain texture over the whole page. */
 .grain-overlay {

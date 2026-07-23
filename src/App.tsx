@@ -35,6 +35,9 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  // Mobile-only accordion for the About "signal" cards. On desktop (md+) all
+  // three are always shown, so this state is a no-op there.
+  const [openFeature, setOpenFeature] = useState<number | null>(null);
 
   const isManualScroll = useRef(false);
   const navRef = useRef<HTMLElement | null>(null);
@@ -545,32 +548,32 @@ const App = () => {
                       Open to Summer 2026 internships
                     </span>
                   </div>
-                  <h1 className="text-[3.1rem] md:text-[4.2rem] font-display text-slate-100 mb-5 leading-[1.05] animate-fade-in-up" style={{ animationDelay: '60ms' }}>
+                  <h1 className="text-[2.4rem] md:text-[4.2rem] font-display text-slate-100 mb-4 md:mb-5 leading-[1.05] animate-fade-in-up" style={{ animationDelay: '60ms' }}>
                     I design <span className="accent-shimmer font-semibold">intuitive tech products</span> that blend hardware, software, and human behavior.
                   </h1>
-                  <p className="text-[1.18rem] md:text-[1.34rem] text-slate-300 mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
+                  <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-5 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
                     I am <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a third-year Design student at FLAME University focused on technology-led design.
                   </p>
 
-                  <div className="lg:hidden w-full rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg mb-6">
-                    <div className="rounded-2xl overflow-hidden aspect-[4/5]">
+                  <div className="lg:hidden w-full rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg mb-5">
+                    <div className="rounded-2xl overflow-hidden aspect-square">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                         alt="Portrait of Jash Bhatt"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-bottom"
                         loading="eager"
                         fetchPriority="high"
                       />
                     </div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-slate-400 mt-4 px-1">Product Design Student · FLAME University</p>
-                    <div className="mt-4 rounded-xl border border-slate-700 bg-slate-950 text-[#01F5D1] p-4 font-mono text-[11px]">
+                    <p className="text-xs uppercase tracking-[0.16em] text-slate-400 mt-3 px-1">Product Design Student · FLAME University</p>
+                    <div className="mt-3 rounded-xl border border-slate-700 bg-slate-950 text-[#01F5D1] p-4 font-mono text-[11px]">
                       <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
                       <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">phygital · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
                     </div>
                   </div>
 
-                  <div className="flex items-baseline gap-2.5 mb-6 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                  <div className="flex items-baseline gap-2.5 mb-5 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '260ms' }}>
                     <span className="text-[#01F5D1] text-lg" aria-hidden="true">{'>'}</span>
                     <Typewriter
                       phrases={personalitySignals}
@@ -578,7 +581,7 @@ const App = () => {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-3 mb-8 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+                  <div className="flex flex-col gap-2.5 mb-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
                     {operatorStats.map((stat) => (
                       <span key={`mobile-stat-${stat.label}`} className="w-full min-h-[44px] px-4 py-2 text-sm font-semibold rounded-full border border-slate-600 bg-slate-900/85 text-slate-200 flex items-center justify-center text-center">
                         {stat.label}: {stat.value}
@@ -586,7 +589,7 @@ const App = () => {
                     ))}
                   </div>
 
-                  <div className="flex flex-col gap-4 lg:hidden animate-fade-in-up" style={{ animationDelay: '380ms' }}>
+                  <div className="flex flex-col gap-3 lg:hidden animate-fade-in-up" style={{ animationDelay: '380ms' }}>
                     <button
                       onClick={() => scrollToSection('work')}
                       className={`group ${ui.btnBase} ${ui.btnPrimary}`}
@@ -678,7 +681,7 @@ const App = () => {
                 ))}
               </div>
 
-              <div className="mt-7 flex justify-center animate-nudge text-slate-400">
+              <div className="mt-5 md:mt-7 flex justify-center animate-nudge text-slate-400">
                 <ChevronDown size={32} />
               </div>
             </div>
@@ -697,7 +700,7 @@ const App = () => {
               </Reveal>
             </Reveal>
 
-            <div className="space-y-32">
+            <div className="space-y-6 md:space-y-32">
               {orderedProjects.map((project, index) => {
                 const projectThumbnail =
                   project.content.thumbnailImage ?? project.content.heroImage;
@@ -711,7 +714,7 @@ const App = () => {
                   >
                   <div
                     id={`project-${project.id}`}
-                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl"
+                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl overflow-hidden border border-slate-800 bg-slate-900/50 backdrop-blur-sm transition-colors active:border-[#01F5D1]/50 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:backdrop-blur-none"
                     role="button"
                     tabIndex={0}
                     aria-label={`Open case study for ${project.title}`}
@@ -723,13 +726,13 @@ const App = () => {
                       }
                     }}
                   >
-                    <div className="grid md:grid-cols-12 gap-8 items-center">
+                    <div className="grid md:grid-cols-12 gap-0 md:gap-8 items-center">
 
                       {/* Image Column (7 cols) */}
                       <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                         <TiltCard>
                         <div
-                          className={`card-media relative overflow-hidden rounded-2xl ${project.color} aspect-[4/3] shadow-sm card-glow`}
+                          className={`card-media relative overflow-hidden rounded-none md:rounded-2xl ${project.color} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
                           onMouseMove={handleCardMouseMove}
                           onMouseLeave={handleCardMouseLeave}
                         >
@@ -778,25 +781,19 @@ const App = () => {
                       </div>
 
                       {/* Text Column (5 cols) */}
-                      <div className={`md:col-span-5 ${index % 2 === 1 ? 'md:order-1' : ''}`}>
-                        <div className="flex items-center gap-4 mb-5">
+                      <div className={`md:col-span-5 px-5 pt-4 pb-5 md:p-0 ${index % 2 === 1 ? 'md:order-1' : ''}`}>
+                        <div className="flex items-center gap-2 md:gap-4 mb-3 md:mb-5">
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-                          <span className="h-px w-10 bg-gradient-to-r from-[#01F5D1]/50 to-transparent" />
-                          <span className="text-slate-400 text-xs font-mono uppercase tracking-[0.2em]">{project.category}</span>
+                          <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-[#01F5D1]/50 to-transparent" />
+                          <span className="text-slate-400 text-[0.55rem] md:text-xs font-mono uppercase tracking-[0.05em] md:tracking-[0.2em] whitespace-nowrap md:whitespace-normal">{project.category}</span>
                         </div>
 
-                        <h3 className={`text-3xl md:text-4xl font-bold text-slate-100 mb-4 transition-colors ${project.hoverColor}`}>
+                        <h3 className={`text-xl md:text-4xl font-bold text-slate-100 mb-2 md:mb-4 transition-colors ${project.hoverColor}`}>
                           {project.title}
                         </h3>
-                        <p className="text-slate-300 text-lg leading-relaxed mb-6">
+                        <p className="text-slate-300 text-sm md:text-lg leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-none">
                           {project.description}
                         </p>
-
-                        <div className="flex flex-wrap gap-2 mb-8">
-                          {project.tags.map((tag, i) => (
-                            <span key={i} className={ui.chipBase}>{tag}</span>
-                          ))}
-                        </div>
 
                         <button
                           type="button"
@@ -804,10 +801,10 @@ const App = () => {
                             event.stopPropagation();
                             handleProjectClick(project);
                           }}
-                          className={`font-semibold flex items-center gap-2 hover:gap-3 transition-all ${project.accentColor}`}
+                          className={`font-semibold text-sm md:text-base flex items-center gap-2 hover:gap-3 transition-all ${project.accentColor}`}
                           aria-label={`Read full case study for ${project.title}`}
                         >
-                          Read Full Case Study <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+                          Read Full Case Study <ArrowRight size={16} className="md:w-[18px] md:h-[18px] transition-transform duration-300 group-hover:translate-x-1" />
                         </button>
                       </div>
                     </div>
@@ -831,7 +828,7 @@ const App = () => {
             <div className="grid grid-cols-1 gap-12">
 
               {/* Photoshop Section */}
-              <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-8`}>
+              <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">
                     <ResponsiveImage
@@ -843,12 +840,12 @@ const App = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-100">Photoshop & Animation</h3>
                 </div>
-                <p className="text-slate-300 mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
-                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
+                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
+                <div className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {galleryItems.map((item, i) => (
                     <div
                       key={i}
-                      className={`relative w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all group md:aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-slate-600 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
+                      className={`relative w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all group aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-slate-600 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
                       onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
                     >
                       {item.type === 'video' && item.src ? (
@@ -883,7 +880,7 @@ const App = () => {
               </Reveal>
 
               {/* Brand Animation Section */}
-              <Reveal delay={120} className={`${ui.cardBase} ${ui.cardHover} p-8`}>
+              <Reveal delay={120} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">
                     <ResponsiveImage
@@ -895,7 +892,7 @@ const App = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h3>
                 </div>
-                <p className="text-slate-300 mb-6">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
+                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
                 <div className="rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
                   <video
                     className="w-full h-auto"
@@ -911,7 +908,7 @@ const App = () => {
               </Reveal>
 
               {/* AI Generations Section */}
-              <Reveal delay={180} className={`${ui.cardBase} ${ui.cardHover} p-8`}>
+              <Reveal delay={180} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center">
                     <ResponsiveImage
@@ -923,12 +920,12 @@ const App = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-100">Lamborghini Jetski AI</h3>
                 </div>
-                <p className="text-slate-300 mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
-                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:gap-6">
+                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
+                <div className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {aiItems.map((item, i) => (
                     <div
                       key={i}
-                      className="relative w-full rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-[#01F5D1] hover:shadow-md transition-all group md:aspect-square hover:-translate-y-1"
+                      className="relative w-full rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-[#01F5D1] hover:shadow-md transition-all group aspect-square hover:-translate-y-1"
                       onClick={() => item.src && setSelectedImage(item.src)}
                     >
                       {item.src ? (
@@ -952,7 +949,7 @@ const App = () => {
               </Reveal>
 
               {/* Gallery Snippet Section */}
-              <Reveal delay={240} className={`${ui.cardBase} ${ui.cardHover} p-8`}>
+              <Reveal delay={240} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center">
                     <ResponsiveImage
@@ -964,8 +961,8 @@ const App = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-100">Photography Gallery</h3>
                 </div>
-                <p className="text-slate-300 mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
-                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
+                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
                   {gallerySnippetItems.map((item, i) => {
                     const positionClass = i === 0
                       ? 'md:col-start-1 md:row-start-1'
@@ -975,8 +972,8 @@ const App = () => {
                           ? 'md:col-start-2 md:row-span-2 md:h-full'
                           : 'md:col-start-3 md:row-span-2 md:h-full';
                     const shapeClass = i < 2
-                      ? 'w-full md:aspect-[4/3]'
-                      : 'w-full md:aspect-auto md:h-full';
+                      ? 'w-full aspect-square md:aspect-[4/3]'
+                      : 'w-full aspect-square md:aspect-auto md:h-full';
 
                     return (
                       <div
@@ -1008,12 +1005,12 @@ const App = () => {
           </section>
 
           {/* About Section */}
-          <section id="about" className="py-24 scroll-mt-28 bg-[#02060f]">
+          <section id="about" className="py-16 md:py-24 scroll-mt-28 bg-[#02060f]">
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
-              <div className="grid md:grid-cols-2 gap-16">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal>
-                  <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-8">About Me</h2>
-                  <div className="space-y-6 text-lg text-slate-300 leading-relaxed">
+                  <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-5 md:mb-8">About Me</h2>
+                  <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-300 leading-relaxed">
                     <p>
                       I love technology in all forms. I prefer direct communication, clear expectations, and products that behave exactly as intended.
                     </p>
@@ -1022,22 +1019,53 @@ const App = () => {
                     </p>
                   </div>
 
-                  <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="rounded-2xl border border-[#00A19B]/60 bg-[#00A19B]/20 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#01F5D1] hover:shadow-[0_14px_36px_-18px_rgba(1,245,209,0.45)]">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[#01F5D1] mb-2">Design × Engineering</p>
-                      <p className="text-sm text-slate-200 font-medium">I bridge UI, hardware, and behavior in one product view.</p>
-                    </div>
-                    <div className="rounded-2xl border border-[#C8CCCE]/40 bg-[#C8CCCE]/10 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C8CCCE] hover:shadow-[0_14px_36px_-18px_rgba(200,204,206,0.35)]">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[#C8CCCE] mb-2">Research-First</p>
-                      <p className="text-sm text-slate-200 font-medium">Every design decision is grounded in user insight before it ships.</p>
-                    </div>
-                    <div className="rounded-2xl border border-emerald-800 bg-emerald-950/30 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-[0_14px_36px_-18px_rgba(52,211,153,0.4)]">
-                      <p className="text-xs uppercase tracking-[0.18em] text-emerald-300 mb-2">End-to-End</p>
-                      <p className="text-sm text-slate-200 font-medium">I own execution from Figma through code to physical prototype.</p>
-                    </div>
+                  <div className="mt-6 md:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      {
+                        label: 'Design × Engineering',
+                        body: 'I bridge UI, hardware, and behavior in one product view.',
+                        card: 'border-[#00A19B]/60 bg-[#00A19B]/20 hover:border-[#01F5D1] hover:shadow-[0_14px_36px_-18px_rgba(1,245,209,0.45)]',
+                        label_color: 'text-[#01F5D1]',
+                      },
+                      {
+                        label: 'Research-First',
+                        body: 'Every design decision is grounded in user insight before it ships.',
+                        card: 'border-[#C8CCCE]/40 bg-[#C8CCCE]/10 hover:border-[#C8CCCE] hover:shadow-[0_14px_36px_-18px_rgba(200,204,206,0.35)]',
+                        label_color: 'text-[#C8CCCE]',
+                      },
+                      {
+                        label: 'End-to-End',
+                        body: 'I own execution from Figma through code to physical prototype.',
+                        card: 'border-emerald-800 bg-emerald-950/30 hover:border-emerald-400 hover:shadow-[0_14px_36px_-18px_rgba(52,211,153,0.4)]',
+                        label_color: 'text-emerald-300',
+                      },
+                    ].map((feature, i) => {
+                      const isOpen = openFeature === i;
+                      return (
+                        <div
+                          key={feature.label}
+                          className={`rounded-2xl border ${feature.card} transition-all duration-300 hover:-translate-y-0.5`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setOpenFeature(isOpen ? null : i)}
+                            aria-expanded={isOpen}
+                            className="w-full flex items-center justify-between gap-3 px-4 pt-4 pb-2.5 text-left md:cursor-default"
+                          >
+                            <span className={`text-xs uppercase tracking-[0.18em] ${feature.label_color}`}>{feature.label}</span>
+                            <ChevronDown
+                              size={16}
+                              aria-hidden="true"
+                              className={`shrink-0 md:hidden ${feature.label_color} transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                            />
+                          </button>
+                          <p className={`px-4 pb-4 text-sm text-slate-200 font-medium ${isOpen ? 'block' : 'hidden'} md:block`}>{feature.body}</p>
+                        </div>
+                      );
+                    })}
                   </div>
 
-                  <div className="mt-8 rounded-2xl border border-slate-700 bg-slate-900/70 p-5 transition-colors duration-300 hover:border-[#01F5D1]/50">
+                  <div className="mt-6 md:mt-8 rounded-2xl border border-slate-700 bg-slate-900/70 p-5 transition-colors duration-300 hover:border-[#01F5D1]/50">
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300 mb-3">Design Principles</p>
                     <ul className="space-y-2 text-sm text-slate-300">
                       <li className="flex items-start gap-2"><span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-slate-300"></span><span className="[text-wrap:pretty]">Technology shifts fast — I keep my process tool-agnostic and outcome-focused.</span></li>
@@ -1048,8 +1076,8 @@ const App = () => {
                 </Reveal>
 
                 <Reveal delay={140}>
-                  <h3 className="text-3xl font-display font-semibold tracking-tight text-slate-100 mb-9">Expertise</h3>
-                  <div className="mb-8">
+                  <h3 className="text-3xl font-display font-semibold tracking-tight text-slate-100 mb-5 md:mb-9">Expertise</h3>
+                  <div className="mb-6 md:mb-8">
                     <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 mb-3">Currently exploring</p>
                     <div className="flex flex-wrap gap-2">
                       {currentlyExploring.map((item) => (
@@ -1087,10 +1115,10 @@ const App = () => {
                     </div>
                   </div>
 
-                  <div className="mt-12">
+                  <div className="mt-8 md:mt-12">
                     <div className="border-l-2 border-[#00A19B] pl-4">
                       <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</div>
-                      <div className="space-y-6">
+                      <div className="space-y-4 md:space-y-6">
                         <div>
                           <h4 className="text-lg font-bold text-slate-100">Bachelor of Design (B.Des)</h4>
                           <p className="text-slate-300 font-medium">FLAME University</p>
@@ -1110,12 +1138,12 @@ const App = () => {
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="py-24 scroll-mt-28 bg-[#02060f]">
+          <section id="contact" className="py-16 md:py-24 scroll-mt-28 bg-[#02060f]">
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
-              <div className="grid md:grid-cols-2 gap-16">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal>
-                  <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-6">Let's Build <span className="accent-shimmer">Something</span></h2>
-                  <p className="text-xl text-slate-300 mb-6">
+                  <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-5 md:mb-6">Let's Build <span className="accent-shimmer">Something</span></h2>
+                  <p className="text-lg md:text-xl text-slate-300 mb-5 md:mb-6">
                     I am actively looking for internship opportunities in UI/UX, product design, and phygital interaction — where I can contribute from research through to implementation.
                   </p>
                   <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#01F5D1]/40 bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
