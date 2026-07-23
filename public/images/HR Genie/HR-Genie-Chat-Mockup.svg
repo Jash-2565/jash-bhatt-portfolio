@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1360" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <linearGradient id="header" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <clipPath id="round">
+      <rect x="0" y="0" width="900" height="1360" rx="28"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#round)">
+    <rect width="900" height="1360" fill="#F1F5F9"/>
+
+    <!-- status bar -->
+    <rect width="900" height="44" fill="#F1F5F9"/>
+    <text x="40" y="29" font-size="18" font-weight="600" fill="#0f172a">9:41</text>
+    <g transform="translate(800,16)" fill="#0f172a">
+      <rect x="0" y="8" width="4" height="10" rx="1"/>
+      <rect x="7" y="5" width="4" height="13" rx="1"/>
+      <rect x="14" y="2" width="4" height="16" rx="1"/>
+      <rect x="24" y="2" width="26" height="16" rx="4" fill="none" stroke="#0f172a" stroke-width="1.5"/>
+      <rect x="27" y="5" width="20" height="10" rx="2"/>
+    </g>
+
+    <!-- header -->
+    <rect x="0" y="44" width="900" height="108" fill="url(#header)"/>
+    <circle cx="72" cy="98" r="26" fill="#ffffff" opacity="0.15"/>
+    <circle cx="72" cy="98" r="26" fill="none" stroke="#ffffff" stroke-width="2"/>
+    <path d="M62 98 l7 7 l14 -16" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="112" y="92" font-size="24" font-weight="700" fill="#ffffff">HR Genie</text>
+    <text x="112" y="118" font-size="15" fill="#DBEAFE">Apply Leave · CHROMA-connected</text>
+
+    <!-- chat thread -->
+    <g font-size="18">
+      <!-- bot bubble 1 -->
+      <rect x="32" y="184" width="520" height="66" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="56" y="224" fill="#1E293B">Hi! I'm HR Genie 👋 How can I help today?</text>
+
+      <!-- employee bubble 1 -->
+      <rect x="348" y="270" width="520" height="66" rx="20" fill="#2563EB"/>
+      <text x="372" y="310" fill="#FFFFFF" font-weight="500">I want to apply for leave</text>
+
+      <!-- bot bubble 2 : balance -->
+      <rect x="32" y="356" width="600" height="192" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="56" y="392" fill="#1E293B">Sure — here's your current balance:</text>
+      <text x="56" y="428" fill="#334155" font-size="16">Privilege Leave</text>
+      <text x="580" y="428" fill="#0F766E" font-size="16" font-weight="700" text-anchor="end">12 days</text>
+      <text x="56" y="458" fill="#334155" font-size="16">Sick Leave</text>
+      <text x="580" y="458" fill="#0F766E" font-size="16" font-weight="700" text-anchor="end">6 days</text>
+      <text x="56" y="488" fill="#334155" font-size="16">Casual Leave</text>
+      <text x="580" y="488" fill="#0F766E" font-size="16" font-weight="700" text-anchor="end">4 days</text>
+      <text x="56" y="524" fill="#1E293B">Which type, and what dates?</text>
+
+      <!-- employee bubble 2 -->
+      <rect x="368" y="574" width="500" height="66" rx="20" fill="#2563EB"/>
+      <text x="392" y="614" fill="#FFFFFF" font-weight="500">Privilege Leave, Aug 10–12</text>
+
+      <!-- bot bubble 3 : confirm -->
+      <rect x="32" y="660" width="640" height="176" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="56" y="696" fill="#1E293B">
+        <tspan x="56" dy="0">Got it — 3 days of Privilege Leave</tspan>
+        <tspan x="56" dy="28">(Aug 10–12). Shall I submit this request?</tspan>
+      </text>
+      <rect x="56" y="758" width="130" height="46" rx="23" fill="#DCFCE7"/>
+      <text x="121" y="787" fill="#166534" font-weight="700" text-anchor="middle" font-size="16">Confirm</text>
+      <rect x="200" y="758" width="150" height="46" rx="23" fill="#F1F5F9" stroke="#CBD5E1"/>
+      <text x="275" y="787" fill="#334155" font-weight="700" text-anchor="middle" font-size="16">Edit dates</text>
+
+      <!-- bot bubble 4 : success -->
+      <rect x="32" y="866" width="640" height="96" rx="20" fill="#ECFDF5" stroke="#A7F3D0"/>
+      <circle cx="66" cy="914" r="16" fill="#10B981"/>
+      <path d="M58 914 l6 6 l12 -13" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="94" y="908" fill="#065F46" font-weight="700">Leave request submitted!</text>
+      <text x="94" y="934" fill="#0F766E" font-size="15">Your manager has been notified for approval.</text>
+    </g>
+
+    <!-- input bar -->
+    <g transform="translate(0,1240)">
+      <rect x="0" y="0" width="900" height="120" fill="#FFFFFF"/>
+      <rect x="0" y="0" width="900" height="1" fill="#E2E8F0"/>
+      <rect x="32" y="34" width="740" height="56" rx="28" fill="#F1F5F9" stroke="#E2E8F0"/>
+      <text x="56" y="69" fill="#94A3B8" font-size="17">Type a message…</text>
+      <circle cx="822" cy="62" r="28" fill="#2563EB"/>
+      <path d="M812 62 l24 0 M826 50 l14 12 l-14 12" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <rect x="1" y="1" width="898" height="1358" rx="28" fill="none" stroke="#CBD5E1" stroke-width="2"/>
+</svg>

@@ -10,6 +10,112 @@ const MOVIE_RECS_SNIPPET = MOVIE_RECS_CODE;
 
 export const projects: Project[] = [
   {
+    id: 8,
+    slug: "hr-genie",
+    title: "HR Genie",
+    category: "Agentic AI / Enterprise UX",
+    timeline: "Summer Internship (SIP-2), 2026",
+    description: "Conversational agents that replace Bajaj Finance's form-based HR workflows — designed and shipped inside the company's Agentic AI Unit, as part of a roadmap to deploy 800+ autonomous agents across the business.",
+    tags: ["Microsoft Copilot Studio", "Power Fx", "Power Automate", "Adaptive Cards", "Azure"],
+    color: "bg-[#EAF0FF]",
+    accentColor: "text-[#1D4ED8]",
+    hoverColor: "group-hover:text-[#1D4ED8]",
+    badge: "bg-[#DCE7FF] text-[#1E3A8A]",
+    content: {
+      heroImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Hero.svg`,
+      thumbnailImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Thumbnail.svg`,
+      role: "Design & Development Intern, Agentic AI Unit — reporting through the VP, AI Unit, to the COO/CTO office",
+      sections: [
+        {
+          title: "Overview",
+          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows for a workforce of thousands. The unit's mandate is company-wide: an initiative internally called FINAI / Employee Blu, aiming to deploy 800+ autonomous agents across business functions. My job was to design and build the HR-facing agents inside that system — collectively branded HR Genie.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Scale.svg`,
+              caption: "HR Genie's agents sit inside Bajaj Finance's 800+ agent FINAI / Employee Blu roadmap."
+            }
+          ]
+        },
+        {
+          title: "The Problem",
+          content: "Bajaj Finance's HR operations ran on CHROMA, a form-based HRMS — every leave request, reimbursement claim, or document lookup meant navigating multi-step forms, manual validation, and email follow-ups. Simple, repetitive tasks were consuming real time for a workforce of thousands. The Agentic AI Unit's mandate was to replace these form-based flows with conversational agents employees could just talk to."
+        },
+        {
+          title: "Apply Leave",
+          content: "A conversational flow letting employees check leave balances and submit requests — Privilege Leave, Sick Leave, Casual Leave, Loss of Pay, Maternity, and Vacation Leave — each with its own eligibility rules and validation logic. Connected live to the CHROMA HRMS via API, with balance checks and error handling built directly into the conversation rather than a form.",
+          listItems: [
+            "Live balance lookups per leave type via the CHROMA API",
+            "Type-specific eligibility rules and validation, handled conversationally",
+            "Error handling surfaced in-chat instead of a rejected form submission"
+          ],
+          imageLayout: "row",
+          imageHeight: "md:h-[36rem]",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Chat-Mockup.svg`,
+              caption: "Apply Leave — a Figma recreation of the conversation flow (no internal CHROMA data shown)."
+            }
+          ]
+        },
+        {
+          title: "Creche Reimbursement",
+          content: "An agent that reads submitted invoices using OCR, validates them against city-tier-based reimbursement caps, checks child age eligibility, and processes the claim — turning a manual document-review process into a same-session conversational one.",
+          listItems: [
+            "OCR extraction straight from the uploaded invoice — no manual data entry",
+            "City-tier reimbursement caps and child-age eligibility validated automatically",
+            "Claim resolved in the same chat session it was opened in"
+          ],
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-Flow.svg`,
+              caption: "Before vs after — a multi-day manual review becomes a same-session conversation."
+            }
+          ]
+        },
+        {
+          title: "Local Conveyance Claim",
+          content: "Matches claims against a vendor master list, calculates reimbursement based on transport mode, and was the first topic I built natively on Copilot Studio's newer no-code architecture.",
+          listItems: [
+            "Claims cross-checked against a vendor master list",
+            "Reimbursement calculated in Power Fx based on transport mode and distance",
+            "First topic built end-to-end on Copilot Studio's Gen 2 architecture"
+          ],
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conveyance-Architecture.svg`,
+              caption: "Input → validation → calculation → output — built as the template for future topics."
+            }
+          ]
+        },
+        {
+          title: "The Turning Point: Leading a Platform Migration",
+          content: "Partway through the internship, I identified a structural problem: the agents were being built on Copilot Studio's older, node-based Gen 1 architecture — powerful, but harder to scale and maintain as the number of agents grew. I evaluated Copilot Studio's newer Gen 2 architecture, a no-code, skill-based approach, built a proof-of-concept, and made the case to leadership that migrating would pay off in maintainability and speed for the 800+ agent roadmap ahead. The recommendation was adopted. I went on to lead the full migration of 17 topics from Gen 1 to Gen 2, and built the Local Conveyance Claim agent natively on the new architecture as a template for future builds. This was the shift in the internship from executing what I was asked to build to shaping how the team builds going forward — from builder to decision-influencer.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg`,
+              caption: "The Gen 1 vs Gen 2 comparison I used to make the case for migration — 17 topics migrated as a result."
+            }
+          ]
+        },
+        {
+          title: "Skills in Practice",
+          content: "This internship pulled together design, engineering, and stakeholder skills across a real enterprise system rather than a single discipline.",
+          listItems: [
+            "Conversational flow & interaction design — mapping multi-step business logic into natural, low-friction dialogue",
+            "Technical implementation — Power Fx formulas, YAML topic logic, Adaptive Card JSON for rich in-chat UI",
+            "Systems thinking — architecture evaluation, migration planning, cross-topic consistency",
+            "API integration — live connections to enterprise HRMS and document storage systems",
+            "Stakeholder communication — presenting a technical recommendation (Gen 1 → Gen 2) to leadership and getting buy-in"
+          ]
+        },
+        {
+          title: "Reflection",
+          content: "Designing for a system where the interface is a conversation, not a screen, changed how I think about validation and trust — every rule a form usually enforces silently now has to be said out loud, clearly, in the moment it matters. Leading the Gen 1 to Gen 2 migration also taught me that the most valuable design work isn't always the next feature — sometimes it's stepping back and questioning the foundation everyone else is building on."
+        }
+      ]
+    }
+  },
+  {
     id: 0,
     slug: "classflow",
     title: "ClassFlow",

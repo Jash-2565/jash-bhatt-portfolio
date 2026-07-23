@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 560" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2563EB"/>
+    </marker>
+  </defs>
+
+  <!-- badge -->
+  <g transform="translate(1020,40)">
+    <rect width="540" height="42" rx="21" fill="#0f1c33" stroke="#2563EB" stroke-opacity="0.6"/>
+    <circle cx="24" cy="21" r="4.5" fill="#01F5D1"/>
+    <text x="42" y="26" font-size="14" font-weight="600" fill="#9ec8ff">BUILT NATIVELY ON COPILOT STUDIO GEN 2</text>
+  </g>
+
+  <text x="40" y="60" font-size="15" font-weight="700" fill="#94A3B8" letter-spacing="1">LOCAL CONVEYANCE CLAIM — TOPIC ARCHITECTURE</text>
+
+  <g font-size="16">
+    <!-- Input -->
+    <rect x="40" y="130" width="330" height="230" rx="16" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="66" y="172" fill="#9ec8ff" font-size="13" font-weight="700" letter-spacing="1">01 · INPUT</text>
+    <text x="66" y="204" fill="#F1F5F9" font-weight="700" font-size="19">Claim Details</text>
+    <text x="66" y="234" fill="#B9C7E0" font-size="14">Travel date</text>
+    <text x="66" y="260" fill="#B9C7E0" font-size="14">Mode of transport</text>
+    <text x="66" y="286" fill="#B9C7E0" font-size="14">Origin → destination</text>
+    <text x="66" y="312" fill="#B9C7E0" font-size="14">Distance travelled</text>
+    <line x1="370" y1="245" x2="412" y2="245" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arrow2)"/>
+
+    <!-- Validation -->
+    <rect x="412" y="130" width="330" height="230" rx="16" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="438" y="172" fill="#9ec8ff" font-size="13" font-weight="700" letter-spacing="1">02 · VALIDATION</text>
+    <text x="438" y="204" fill="#F1F5F9" font-weight="700" font-size="19">Vendor Match</text>
+    <text x="438" y="234" fill="#B9C7E0" font-size="14">Cross-checked against</text>
+    <text x="438" y="256" fill="#B9C7E0" font-size="14">vendor master list</text>
+    <text x="438" y="290" fill="#B9C7E0" font-size="14">Flags invalid / unlisted</text>
+    <text x="438" y="312" fill="#B9C7E0" font-size="14">vendors automatically</text>
+    <line x1="742" y1="245" x2="784" y2="245" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arrow2)"/>
+
+    <!-- Calculation -->
+    <rect x="784" y="130" width="330" height="230" rx="16" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="810" y="172" fill="#9ec8ff" font-size="13" font-weight="700" letter-spacing="1">03 · CALCULATION</text>
+    <text x="810" y="204" fill="#F1F5F9" font-weight="700" font-size="19">Reimbursement Logic</text>
+    <text x="810" y="234" fill="#B9C7E0" font-size="14">Rate applied by transport</text>
+    <text x="810" y="256" fill="#B9C7E0" font-size="14">mode (auto / cab / own)</text>
+    <text x="810" y="290" fill="#B9C7E0" font-size="14">Computed in Power Fx</text>
+    <text x="810" y="312" fill="#B9C7E0" font-size="14">against distance</text>
+    <line x1="1114" y1="245" x2="1156" y2="245" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arrow2)"/>
+
+    <!-- Output -->
+    <rect x="1156" y="130" width="404" height="230" rx="16" fill="#052e22" stroke="#059669"/>
+    <text x="1182" y="172" fill="#6EE7B7" font-size="13" font-weight="700" letter-spacing="1">04 · OUTPUT</text>
+    <text x="1182" y="204" fill="#F1F5F9" font-weight="700" font-size="19">Approved Claim</text>
+    <text x="1182" y="234" fill="#B8F5DE" font-size="14">Amount confirmed in-chat</text>
+    <text x="1182" y="256" fill="#B8F5DE" font-size="14">Employee notified instantly</text>
+    <text x="1182" y="290" fill="#7ED9B6" font-size="14">No spreadsheet reconciliation</text>
+  </g>
+
+  <text x="800" y="450" text-anchor="middle" font-size="16" fill="#7C93B8">
+    First topic built end-to-end on Copilot Studio's no-code, skill-based Gen 2 architecture —
+  </text>
+  <text x="800" y="478" text-anchor="middle" font-size="16" fill="#01F5D1" font-weight="600">
+    later used as the reference template for the 17-topic migration.
+  </text>
+</svg>
