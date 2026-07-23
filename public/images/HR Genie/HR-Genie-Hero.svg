@@ -67,11 +67,11 @@
       <text x="0" y="40" font-size="42" font-weight="700" fill="#01F5D1">800+</text>
       <text x="0" y="66" font-size="14" fill="#7C93B8">Agents in the FINAI roadmap</text>
     </g>
-    <g transform="translate(220,0)">
+    <g transform="translate(300,0)">
       <text x="0" y="40" font-size="42" font-weight="700" fill="#01F5D1">17</text>
       <text x="0" y="66" font-size="14" fill="#7C93B8">Topics migrated Gen 1 → Gen 2</text>
     </g>
-    <g transform="translate(400,0)">
+    <g transform="translate(600,0)">
       <text x="0" y="40" font-size="42" font-weight="700" fill="#01F5D1">3</text>
       <text x="0" y="66" font-size="14" fill="#7C93B8">Agents designed &amp; shipped by me</text>
     </g>
