@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060b18"/>
+      <stop offset="55%" stop-color="#0b1730"/>
+      <stop offset="100%" stop-color="#0a1224"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="80%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="15%" cy="85%" r="55%">
+      <stop offset="0%" stop-color="#01F5D1" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#01F5D1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="nodeLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#01F5D1" stop-opacity="0.7"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bgGrad)"/>
+  <rect width="1600" height="900" fill="url(#glow1)"/>
+  <rect width="1600" height="900" fill="url(#glow2)"/>
+
+  <!-- subtle grid -->
+  <g stroke="#1E293B" stroke-width="1" opacity="0.35">
+    <path d="M0 150 H1600 M0 300 H1600 M0 450 H1600 M0 600 H1600 M0 750 H1600"/>
+    <path d="M200 0 V900 M400 0 V900 M600 0 V900 M800 0 V900 M1000 0 V900 M1200 0 V900 M1400 0 V900"/>
+  </g>
+
+  <!-- top tag -->
+  <g transform="translate(96,72)">
+    <rect width="356" height="40" rx="20" fill="#0f1c33" stroke="#2563EB" stroke-opacity="0.6"/>
+    <circle cx="24" cy="20" r="4.5" fill="#01F5D1"/>
+    <text x="42" y="25" font-size="15" font-weight="600" fill="#9ec8ff" letter-spacing="0.5">BAJAJ FINANCE · AGENTIC AI UNIT</text>
+  </g>
+
+  <!-- headline -->
+  <text x="96" y="290" font-size="104" font-weight="700" fill="#F1F5F9" letter-spacing="-1">HR Genie</text>
+  <text x="98" y="340" font-size="26" font-weight="500" fill="#93A9C8">Designing Autonomous Agents for Enterprise HR</text>
+
+  <text x="98" y="410" font-size="19" fill="#7C93B8" font-weight="400">
+    <tspan x="98" dy="0">Conversational agents that replace CHROMA's form-based HR</tspan>
+    <tspan x="98" dy="30">workflows for a workforce of thousands.</tspan>
+  </text>
+
+  <!-- feature pills -->
+  <g font-size="16" font-weight="600" fill="#DCE7FB">
+    <g transform="translate(98,470)">
+      <rect width="230" height="46" rx="23" fill="#101E36" stroke="#2C4A7C"/>
+      <text x="24" y="29">Apply Leave</text>
+    </g>
+    <g transform="translate(340,470)">
+      <rect width="300" height="46" rx="23" fill="#101E36" stroke="#2C4A7C"/>
+      <text x="24" y="29">Creche Reimbursement</text>
+    </g>
+    <g transform="translate(652,470)">
+      <rect width="300" height="46" rx="23" fill="#101E36" stroke="#2C4A7C"/>
+      <text x="24" y="29">Local Conveyance Claim</text>
+    </g>
+  </g>
+
+  <!-- stat row -->
+  <g transform="translate(98,560)">
+    <g>
+      <text x="0" y="40" font-size="42" font-weight="700" fill="#01F5D1">800+</text>
+      <text x="0" y="66" font-size="14" fill="#7C93B8">Agents in the FINAI roadmap</text>
+    </g>
+    <g transform="translate(220,0)">
+      <text x="0" y="40" font-size="42" font-weight="700" fill="#01F5D1">17</text>
+      <text x="0" y="66" font-size="14" fill="#7C93B8">Topics migrated Gen 1 → Gen 2</text>
+    </g>
+    <g transform="translate(400,0)">
+      <text x="0" y="40" font-size="42" font-weight="700" fill="#01F5D1">3</text>
+      <text x="0" y="66" font-size="14" fill="#7C93B8">Agents designed &amp; shipped by me</text>
+    </g>
+  </g>
+
+  <!-- agent network motif -->
+  <g transform="translate(1120,120)" opacity="0.95">
+    <g stroke="url(#nodeLine)" stroke-width="2">
+      <line x1="60" y1="90" x2="220" y2="40"/>
+      <line x1="60" y1="90" x2="200" y2="200"/>
+      <line x1="220" y1="40" x2="330" y2="150"/>
+      <line x1="200" y1="200" x2="330" y2="150"/>
+      <line x1="200" y1="200" x2="120" y2="320"/>
+      <line x1="330" y1="150" x2="300" y2="330"/>
+      <line x1="120" y1="320" x2="300" y2="330"/>
+      <line x1="330" y1="150" x2="420" y2="260"/>
+    </g>
+    <g fill="#0b1730" stroke="#2563EB" stroke-width="2">
+      <circle cx="60" cy="90" r="16"/>
+      <circle cx="220" cy="40" r="12"/>
+      <circle cx="330" cy="150" r="18"/>
+      <circle cx="120" cy="320" r="12"/>
+      <circle cx="300" cy="330" r="14"/>
+      <circle cx="420" cy="260" r="10"/>
+    </g>
+    <circle cx="200" cy="200" r="24" fill="#01F5D1" opacity="0.18"/>
+    <circle cx="200" cy="200" r="15" fill="#0b1730" stroke="#01F5D1" stroke-width="2.5"/>
+    <circle cx="200" cy="200" r="4" fill="#01F5D1"/>
+  </g>
+
+  <text x="1478" y="856" text-anchor="end" font-size="14" fill="#3E5478" font-weight="500">Summer Internship (SIP-2) · 2026</text>
+</svg>

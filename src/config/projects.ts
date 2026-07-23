@@ -2,10 +2,11 @@ import type { ProjectHeroTheme } from '../types';
 import { projects } from '../data/projects';
 
 export const PROJECT_ORDER_PRIORITY: Record<string, number> = {
-  revela: 0,
-  classflow: 1,
-  'rahi-design-system-v2': 2,
-  wepick: 3,
+  'hr-genie': 0,
+  revela: 1,
+  classflow: 2,
+  'rahi-design-system-v2': 3,
+  wepick: 4,
 };
 
 export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
@@ -16,6 +17,12 @@ export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
 };
 
 export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
+  'hr-genie': {
+    heroBgClass: 'bg-[#02060f]',
+    heroTextClass: 'text-[#3B82F6]',
+    heroMutedTextClass: 'text-[#AFC9F5]',
+    heroBodyTextClass: 'text-[#DCE7FF]',
+  },
   classflow: {
     heroBgClass: 'bg-[#02060f]',
     heroTextClass: 'text-[#4239C4]',

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <radialGradient id="scaleGlow" cx="30%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="700" fill="url(#scaleGlow)"/>
+
+  <text x="80" y="270" font-size="200" font-weight="800" fill="#F1F5F9" letter-spacing="-4">800+</text>
+  <text x="84" y="330" font-size="26" font-weight="500" fill="#93A9C8">Autonomous agents across business functions</text>
+  <text x="84" y="368" font-size="17" fill="#5F7699">FINAI / Employee Blu — Bajaj Finance's company-wide agentic AI initiative</text>
+
+  <g transform="translate(84,420)">
+    <rect width="230" height="46" rx="23" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="115" y="29" text-anchor="middle" font-size="15" font-weight="600" fill="#DCE7FB">HR · Finance · Ops</text>
+  </g>
+
+  <!-- agent field -->
+  <g transform="translate(900,90)">
+    <!-- grid of small agent nodes -->
+    <g id="dots"></g>
+  </g>
+
+  <g transform="translate(900,90)">
+    <!-- generate a 22x11 grid manually via g repeats -->
+    <g fill="#1E293B">
+      <!-- row pattern approximated by explicit circles for a clean, controlled look -->
+    </g>
+  </g>
+
+  <!-- hand-placed sparse grid representing the wider agent fleet, HR Genie's 3 highlighted -->
+  <g transform="translate(880,70)">
+    <g fill="#1E3A5F">
+      <circle cx="0" cy="0" r="7"/><circle cx="40" cy="0" r="7"/><circle cx="80" cy="0" r="7"/><circle cx="120" cy="0" r="7"/><circle cx="160" cy="0" r="7"/><circle cx="200" cy="0" r="7"/><circle cx="240" cy="0" r="7"/><circle cx="280" cy="0" r="7"/><circle cx="320" cy="0" r="7"/><circle cx="360" cy="0" r="7"/><circle cx="400" cy="0" r="7"/><circle cx="440" cy="0" r="7"/><circle cx="480" cy="0" r="7"/><circle cx="520" cy="0" r="7"/><circle cx="560" cy="0" r="7"/>
+
+      <circle cx="0" cy="44" r="7"/><circle cx="40" cy="44" r="7"/><circle cx="80" cy="44" r="7"/><circle cx="120" cy="44" r="7"/><circle cx="160" cy="44" r="7"/><circle cx="200" cy="44" r="7"/><circle cx="240" cy="44" r="7"/><circle cx="280" cy="44" r="7"/><circle cx="320" cy="44" r="7"/><circle cx="360" cy="44" r="7"/><circle cx="400" cy="44" r="7"/><circle cx="440" cy="44" r="7"/><circle cx="480" cy="44" r="7"/><circle cx="520" cy="44" r="7"/><circle cx="560" cy="44" r="7"/>
+
+      <circle cx="0" cy="88" r="7"/><circle cx="40" cy="88" r="7"/><circle cx="80" cy="88" r="7"/><circle cx="120" cy="88" r="7"/><circle cx="160" cy="88" r="7"/><circle cx="200" cy="88" r="7"/><circle cx="240" cy="88" r="7"/><circle cx="280" cy="88" r="7"/><circle cx="320" cy="88" r="7"/><circle cx="360" cy="88" r="7"/><circle cx="400" cy="88" r="7"/><circle cx="440" cy="88" r="7"/><circle cx="480" cy="88" r="7"/><circle cx="520" cy="88" r="7"/><circle cx="560" cy="88" r="7"/>
+
+      <circle cx="0" cy="132" r="7"/><circle cx="40" cy="132" r="7"/><circle cx="80" cy="132" r="7"/><circle cx="120" cy="132" r="7"/><circle cx="160" cy="132" r="7"/><circle cx="200" cy="132" r="7"/><circle cx="240" cy="132" r="7"/><circle cx="280" cy="132" r="7"/><circle cx="320" cy="132" r="7"/><circle cx="360" cy="132" r="7"/><circle cx="400" cy="132" r="7"/><circle cx="440" cy="132" r="7"/><circle cx="480" cy="132" r="7"/><circle cx="520" cy="132" r="7"/><circle cx="560" cy="132" r="7"/>
+
+      <circle cx="0" cy="176" r="7"/><circle cx="40" cy="176" r="7"/><circle cx="80" cy="176" r="7"/><circle cx="120" cy="176" r="7"/><circle cx="160" cy="176" r="7"/><circle cx="200" cy="176" r="7"/><circle cx="240" cy="176" r="7"/><circle cx="280" cy="176" r="7"/><circle cx="320" cy="176" r="7"/><circle cx="360" cy="176" r="7"/><circle cx="400" cy="176" r="7"/><circle cx="440" cy="176" r="7"/><circle cx="480" cy="176" r="7"/><circle cx="520" cy="176" r="7"/><circle cx="560" cy="176" r="7"/>
+
+      <circle cx="0" cy="220" r="7"/><circle cx="40" cy="220" r="7"/><circle cx="80" cy="220" r="7"/><circle cx="120" cy="220" r="7"/><circle cx="160" cy="220" r="7"/><circle cx="200" cy="220" r="7"/><circle cx="240" cy="220" r="7"/><circle cx="280" cy="220" r="7"/><circle cx="320" cy="220" r="7"/><circle cx="360" cy="220" r="7"/><circle cx="400" cy="220" r="7"/><circle cx="440" cy="220" r="7"/><circle cx="480" cy="220" r="7"/><circle cx="520" cy="220" r="7"/><circle cx="560" cy="220" r="7"/>
+
+      <circle cx="0" cy="264" r="7"/><circle cx="40" cy="264" r="7"/><circle cx="80" cy="264" r="7"/><circle cx="120" cy="264" r="7"/><circle cx="160" cy="264" r="7"/><circle cx="200" cy="264" r="7"/><circle cx="240" cy="264" r="7"/><circle cx="280" cy="264" r="7"/><circle cx="320" cy="264" r="7"/><circle cx="360" cy="264" r="7"/><circle cx="400" cy="264" r="7"/><circle cx="440" cy="264" r="7"/><circle cx="480" cy="264" r="7"/><circle cx="520" cy="264" r="7"/><circle cx="560" cy="264" r="7"/>
+
+      <circle cx="0" cy="308" r="7"/><circle cx="40" cy="308" r="7"/><circle cx="80" cy="308" r="7"/><circle cx="120" cy="308" r="7"/><circle cx="160" cy="308" r="7"/><circle cx="200" cy="308" r="7"/><circle cx="240" cy="308" r="7"/><circle cx="280" cy="308" r="7"/><circle cx="320" cy="308" r="7"/><circle cx="360" cy="308" r="7"/><circle cx="400" cy="308" r="7"/><circle cx="440" cy="308" r="7"/><circle cx="480" cy="308" r="7"/><circle cx="520" cy="308" r="7"/><circle cx="560" cy="308" r="7"/>
+
+      <circle cx="0" cy="352" r="7"/><circle cx="40" cy="352" r="7"/><circle cx="80" cy="352" r="7"/><circle cx="120" cy="352" r="7"/><circle cx="160" cy="352" r="7"/><circle cx="200" cy="352" r="7"/><circle cx="240" cy="352" r="7"/><circle cx="280" cy="352" r="7"/><circle cx="320" cy="352" r="7"/><circle cx="360" cy="352" r="7"/><circle cx="400" cy="352" r="7"/><circle cx="440" cy="352" r="7"/><circle cx="480" cy="352" r="7"/><circle cx="520" cy="352" r="7"/><circle cx="560" cy="352" r="7"/>
+
+      <circle cx="0" cy="396" r="7"/><circle cx="40" cy="396" r="7"/><circle cx="80" cy="396" r="7"/><circle cx="120" cy="396" r="7"/><circle cx="160" cy="396" r="7"/><circle cx="200" cy="396" r="7"/><circle cx="240" cy="396" r="7"/><circle cx="280" cy="396" r="7"/><circle cx="320" cy="396" r="7"/><circle cx="360" cy="396" r="7"/><circle cx="400" cy="396" r="7"/><circle cx="440" cy="396" r="7"/><circle cx="480" cy="396" r="7"/><circle cx="520" cy="396" r="7"/><circle cx="560" cy="396" r="7"/>
+
+      <circle cx="0" cy="440" r="7"/><circle cx="40" cy="440" r="7"/><circle cx="80" cy="440" r="7"/><circle cx="120" cy="440" r="7"/><circle cx="160" cy="440" r="7"/><circle cx="200" cy="440" r="7"/><circle cx="240" cy="440" r="7"/><circle cx="280" cy="440" r="7"/><circle cx="320" cy="440" r="7"/><circle cx="360" cy="440" r="7"/><circle cx="400" cy="440" r="7"/><circle cx="440" cy="440" r="7"/><circle cx="480" cy="440" r="7"/><circle cx="520" cy="440" r="7"/><circle cx="560" cy="440" r="7"/>
+
+      <circle cx="0" cy="484" r="7"/><circle cx="40" cy="484" r="7"/><circle cx="80" cy="484" r="7"/><circle cx="120" cy="484" r="7"/><circle cx="160" cy="484" r="7"/><circle cx="200" cy="484" r="7"/><circle cx="240" cy="484" r="7"/><circle cx="280" cy="484" r="7"/><circle cx="320" cy="484" r="7"/><circle cx="360" cy="484" r="7"/><circle cx="400" cy="484" r="7"/><circle cx="440" cy="484" r="7"/><circle cx="480" cy="484" r="7"/><circle cx="520" cy="484" r="7"/><circle cx="560" cy="484" r="7"/>
+    </g>
+
+    <!-- highlighted HR Genie nodes -->
+    <g fill="#01F5D1">
+      <circle cx="120" cy="132" r="9"/>
+      <circle cx="280" cy="220" r="9"/>
+      <circle cx="400" cy="308" r="9"/>
+    </g>
+    <g stroke="#01F5D1" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.6" fill="none">
+      <line x1="120" y1="132" x2="280" y2="220"/>
+      <line x1="280" y1="220" x2="400" y2="308"/>
+    </g>
+  </g>
+
+  <g transform="translate(900,560)">
+    <circle cx="0" cy="-4" r="6" fill="#01F5D1"/>
+    <text x="16" y="0" font-size="15" fill="#9ec8ff">HR Genie's 3 agents, inside the 800+ agent fleet</text>
+  </g>
+</svg>

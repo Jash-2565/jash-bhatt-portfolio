@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <linearGradient id="genGlow" cx="50%" cy="0%" r="1">
+      <stop offset="0%" stop-color="#01F5D1" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#01F5D1" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- top banner -->
+  <g transform="translate(500,36)">
+    <rect width="600" height="52" rx="26" fill="#0f1c33" stroke="#2563EB" stroke-opacity="0.6"/>
+    <text x="300" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#9ec8ff">17 TOPICS MIGRATED · GEN 1 → GEN 2</text>
+  </g>
+
+  <!-- column headers -->
+  <text x="400" y="150" text-anchor="middle" font-size="30" font-weight="700" fill="#94A3B8">Gen 1 — Legacy</text>
+  <text x="400" y="180" text-anchor="middle" font-size="15" fill="#64748B">Node-based canvas</text>
+
+  <text x="1200" y="150" text-anchor="middle" font-size="30" font-weight="700" fill="#01F5D1">Gen 2 — Adopted</text>
+  <text x="1200" y="180" text-anchor="middle" font-size="15" fill="#7EE8DA">No-code, skill-based</text>
+
+  <!-- recommended badge -->
+  <g transform="translate(1330,104)">
+    <rect width="150" height="34" rx="17" fill="#052e22" stroke="#059669"/>
+    <text x="75" y="23" text-anchor="middle" font-size="13" font-weight="700" fill="#6EE7B7">✓ RECOMMENDED</text>
+  </g>
+
+  <!-- divider -->
+  <line x1="800" y1="120" x2="800" y2="860" stroke="#1E293B" stroke-width="2"/>
+
+  <!-- Gen1 card -->
+  <rect x="80" y="220" width="640" height="600" rx="20" fill="#12121a" stroke="#3f3f52"/>
+  <g font-size="17" fill="#CBD5E1">
+    <g transform="translate(120,280)">
+      <circle r="5" cy="-5" fill="#F87171"/>
+      <text x="24" y="0">Manual, wire-by-wire node logic</text>
+    </g>
+    <g transform="translate(120,340)">
+      <circle r="5" cy="-5" fill="#F87171"/>
+      <text x="24" y="0">Each topic built &amp; maintained separately</text>
+    </g>
+    <g transform="translate(120,400)">
+      <circle r="5" cy="-5" fill="#F87171"/>
+      <text x="24" y="0">Hard to scale past a few dozen agents</text>
+    </g>
+    <g transform="translate(120,460)">
+      <circle r="5" cy="-5" fill="#F87171"/>
+      <text x="24" y="0">Slower to test, update, and debug</text>
+    </g>
+    <g transform="translate(120,520)">
+      <circle r="5" cy="-5" fill="#F87171"/>
+      <text x="24" y="0">Inconsistent patterns across topics</text>
+    </g>
+    <g transform="translate(120,580)">
+      <circle r="5" cy="-5" fill="#F87171"/>
+      <text x="24" y="0">Not built for an 800+ agent roadmap</text>
+    </g>
+  </g>
+  <text x="400" y="770" text-anchor="middle" font-size="15" fill="#7C7C8C">Where all three HR Genie topics started</text>
+
+  <!-- Gen2 card -->
+  <rect x="880" y="220" width="640" height="600" rx="20" fill="#08201c" stroke="#0E7A63" fill-opacity="0.9"/>
+  <rect x="880" y="220" width="640" height="600" rx="20" fill="url(#genGlow)"/>
+  <g font-size="17" fill="#D1FAE5">
+    <g transform="translate(920,280)">
+      <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="0">Reusable, skill-based building blocks</text>
+    </g>
+    <g transform="translate(920,340)">
+      <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="0">Shared skills reused across topics</text>
+    </g>
+    <g transform="translate(920,400)">
+      <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="0">Built to scale toward 800+ agents</text>
+    </g>
+    <g transform="translate(920,460)">
+      <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="0">Faster to build, test, and maintain</text>
+    </g>
+    <g transform="translate(920,520)">
+      <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="0">Consistent architecture across topics</text>
+    </g>
+    <g transform="translate(920,580)">
+      <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="0">Local Conveyance built natively as the template</text>
+    </g>
+  </g>
+  <text x="1200" y="770" text-anchor="middle" font-size="15" fill="#7EE8DA">Proposed by me, evaluated via a POC, adopted by leadership</text>
+
+  <!-- arrow between -->
+  <g transform="translate(800,500)">
+    <circle r="34" fill="#0b1730" stroke="#01F5D1" stroke-width="2.5"/>
+    <path d="M-12 0 h20 M0 -12 l12 12 l-12 12" stroke="#01F5D1" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <text x="800" y="920" text-anchor="middle" font-size="18" font-weight="600" fill="#F1F5F9">I led the full migration — 17 topics, Gen 1 → Gen 2.</text>
+</svg>
