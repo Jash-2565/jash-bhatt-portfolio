@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Image } from 'lucide-react';
 import type { ResponsiveImageProps } from '../types';
+import AutoVideo from './AutoVideo';
 
 const ImageWithFallback = ({
   src,
@@ -10,6 +11,11 @@ const ImageWithFallback = ({
   ...imgProps
 }: ResponsiveImageProps) => {
   const [hasError, setHasError] = useState(false);
+
+  // GIFs are shipped as encoded video (see scripts-gif-to-video.sh).
+  if (typeof src === 'string' && /\.gif$/i.test(src)) {
+    return <AutoVideo src={src} alt={alt} className={className} />;
+  }
 
   if (hasError) {
     return (

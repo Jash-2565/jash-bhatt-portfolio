@@ -30,3 +30,6 @@ backend/.venv*
 node_modules
 dist
 .DS_Store
+
+# Claude Code working files
+scratchpad/

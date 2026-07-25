@@ -549,10 +549,10 @@ const App = () => {
                     </span>
                   </div>
                   <h1 className="text-[2.4rem] md:text-[4.2rem] font-display text-slate-100 mb-4 md:mb-5 leading-[1.05] animate-fade-in-up" style={{ animationDelay: '60ms' }}>
-                    I design <span className="accent-shimmer font-semibold">intuitive tech products</span> that blend hardware, software, and human behavior.
+                    I design and build <span className="accent-shimmer font-semibold">tech products</span> that blend hardware, software, and human behavior.
                   </h1>
                   <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-5 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
-                    I am <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a third-year Design student at FLAME University focused on technology-led design.
+                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a product designer and design engineer studying B.Des at FLAME University. Recently: agentic AI at Bajaj Finance, and a screen-free wand for kids.
                   </p>
 
                   <div className="lg:hidden w-full rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg mb-5">
@@ -652,12 +652,13 @@ const App = () => {
 
                 <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
                   <div className="max-w-[324px] h-full lg:ml-auto rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-20px_rgba(1,245,209,0.35)] hover:border-[#01F5D1]/50">
-                    <div className="rounded-2xl overflow-hidden aspect-[4/5]">
+                    <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                         alt="Portrait of Jash Bhatt"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
+                        className="w-full h-full object-cover object-top"
+                        loading="eager"
+                        fetchPriority="high"
                       />
                     </div>
                     <p className="text-xs uppercase tracking-[0.16em] text-slate-400 mt-4 px-1">Product Design Student · FLAME University</p>
