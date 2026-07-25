@@ -147,6 +147,14 @@ body {
   animation: sheen 900ms ease-out;
 }
 
+/* When the custom ring is active, hide the native OS cursor (arrow + pointer)
+   so only the ring shape is visible. Added by CursorGlow on desktop pointer
+   devices only, so touch/reduced-motion users keep the normal cursor. */
+.hide-native-cursor,
+.hide-native-cursor * {
+  cursor: none !important;
+}
+
 /* Cursor-following glow blob and easing ring (desktop pointer only). */
 .cursor-glow {
   position: fixed;
@@ -159,29 +167,52 @@ body {
   background: radial-gradient(circle, rgba(1, 245, 209, 0.09), transparent 62%);
   pointer-events: none;
   z-index: 44;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  will-change: transform;
+}
+/* Precise dot pinned to the exact pointer position — the point to actually
+   follow. The trailing ring below just adds feel. */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 9999px;
+  background: rgba(1, 245, 209, 0.95);
+  box-shadow: 0 0 8px rgba(1, 245, 209, 0.7);
+  pointer-events: none;
+  /* Above every overlay (lightbox z-60, skip-link z-70) so the custom cursor
+     stays visible when an image or video is opened full screen. */
+  z-index: 101;
+  opacity: 0;
+  transition: opacity 200ms ease;
   will-change: transform;
 }
 .cursor-ring {
   position: fixed;
   top: 0;
   left: 0;
-  width: 26px;
-  height: 26px;
-  margin: -13px 0 0 -13px;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
   border: 1.5px solid rgba(1, 245, 209, 0.55);
   border-radius: 9999px;
   pointer-events: none;
-  z-index: 56;
+  z-index: 100;
+  opacity: 0;
   will-change: transform;
-  transition: width 220ms ease, height 220ms ease, margin 220ms ease,
-    background-color 220ms ease, border-color 220ms ease;
+  transition: width 200ms ease, height 200ms ease, margin 200ms ease,
+    background-color 200ms ease, border-color 200ms ease, opacity 200ms ease;
 }
 .cursor-ring[data-hover='true'] {
-  width: 46px;
-  height: 46px;
-  margin: -23px 0 0 -23px;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
   background: rgba(1, 245, 209, 0.1);
-  border-color: rgba(1, 245, 209, 0.8);
+  border-color: rgba(1, 245, 209, 0.85);
 }
 
 /* Magnetic button — smooth spring back to rest via transition on transform. */
