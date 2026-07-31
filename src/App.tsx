@@ -16,7 +16,7 @@ import CursorGlow from './components/CursorGlow';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
 import { projects } from './data/projects';
-import { orderedProjects } from './config/projects';
+import { orderedProjects, featuredProjects, archivedProjects } from './config/projects';
 import { ui, personalitySignals, currentlyExploring, operatorStats, galleryItems, aiItems, gallerySnippetItems } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import type { Project } from './types';
@@ -279,6 +279,32 @@ const App = () => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentView, selectedProject]);
+
+  // Per-view document title and description. Social scrapers read the static
+  // tags in index.html, but this keeps tab titles, browser history, and
+  // bookmarks meaningful when navigating between case studies.
+  useEffect(() => {
+    const setMeta = (selector: string, value: string) => {
+      document.head.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', value);
+    };
+
+    if (currentView === 'project' && selectedProject) {
+      const title = `${selectedProject.title} — ${selectedProject.category} | Jash Bhatt`;
+      document.title = title;
+      setMeta('meta[name="description"]', selectedProject.description);
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', selectedProject.description);
+      return;
+    }
+
+    const defaultTitle = 'Jash Bhatt | Product Designer & Design Engineer';
+    const defaultDescription =
+      'I design and build tech products that blend hardware, software, and human behavior. Recently: agentic AI at Bajaj Finance.';
+    document.title = defaultTitle;
+    setMeta('meta[name="description"]', defaultDescription);
+    setMeta('meta[property="og:title"]', defaultTitle);
+    setMeta('meta[property="og:description"]', defaultDescription);
   }, [currentView, selectedProject]);
 
   // Scroll spy
@@ -702,7 +728,7 @@ const App = () => {
             </Reveal>
 
             <div className="space-y-6 md:space-y-32">
-              {orderedProjects.map((project, index) => {
+              {featuredProjects.map((project, index) => {
                 const projectThumbnail =
                   project.content.thumbnailImage ?? project.content.heroImage;
 
@@ -787,6 +813,12 @@ const App = () => {
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                           <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-[#01F5D1]/50 to-transparent" />
                           <span className="text-slate-400 text-[0.55rem] md:text-xs font-mono uppercase tracking-[0.05em] md:tracking-[0.2em] whitespace-nowrap md:whitespace-normal">{project.category}</span>
+                          {project.content.sections.some((section) => section.demoId) && (
+                            <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-full border border-[#01F5D1]/45 bg-[#01F5D1]/10 text-[#9EF7EA] text-[0.55rem] md:text-[0.65rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                              <span className="pulse-dot" aria-hidden="true" />
+                              Try it live
+                            </span>
+                          )}
                         </div>
 
                         <h3 className={`text-xl md:text-4xl font-bold text-slate-100 mb-2 md:mb-4 transition-colors ${project.hoverColor}`}>
@@ -815,8 +847,54 @@ const App = () => {
               })}
             </div>
 
+            {/* Coursework & Experiments — earlier work, kept but demoted */}
+            {archivedProjects.length > 0 && (
+              <div className="mt-24 md:mt-32">
+                <Reveal className="mb-8">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Earlier work</p>
+                  <h2 className="text-2xl font-display text-slate-300">Coursework &amp; Experiments</h2>
+                </Reveal>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {archivedProjects.map((project, index) => {
+                    const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
+                    return (
+                      <Reveal key={project.id} delay={index * 80}>
+                        <button
+                          type="button"
+                          id={`project-${project.id}`}
+                          onClick={() => handleProjectClick(project)}
+                          aria-label={`Open case study for ${project.title}`}
+                          className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
+                        >
+                          <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-slate-700 bg-slate-950">
+                            {!thumbnail.includes('placeholder') ? (
+                              <ResponsiveImage
+                                src={thumbnail}
+                                alt={project.title}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <PhotoIcon size={20} className="text-slate-600" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
+                            <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-[#01F5D1] transition-colors">{project.title}</h3>
+                          </div>
+                          <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-[#01F5D1] group-hover:translate-x-1 transition-all duration-300" />
+                        </button>
+                      </Reveal>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Creative Explorations Divider */}
-            <Reveal className="mt-32 mb-16 flex items-center gap-6">
+            <Reveal className="mt-24 md:mt-32 mb-16 flex items-center gap-6">
               <div className="h-px flex-1 bg-slate-800"></div>
               <div className="text-center">
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Beyond case studies</p>
@@ -893,7 +971,8 @@ const App = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h3>
                 </div>
-                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
+                <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
+                <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
                 <div className="rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
                   <video
                     className="w-full h-auto"

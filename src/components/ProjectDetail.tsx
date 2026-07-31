@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase, Users } from 'lucide-react';
 const ArkanoidDemo = lazy(() => import('./ArkanoidDemo'));
 const YoloV8Demo = lazy(() => import('./YoloV8Demo'));
 const MovieRecsDemo = lazy(() => import('./MovieRecsDemo'));
@@ -8,6 +8,7 @@ import Reveal from './Reveal';
 import type { Project, Section } from '../types';
 import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME } from '../config/projects';
 import { ui } from '../config/ui';
+import { formatNameList } from '../utils/formatNameList';
 
 const DemoLoader = () => (
   <div className="h-full lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 flex items-center justify-center">
@@ -470,6 +471,16 @@ const ProjectDetail = ({
               </div>
             </div>
           </div>
+          {project.content.team && project.content.team.length > 0 && (
+            <div className="col-span-2 md:col-span-12">
+              <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                <Users size={13} className="text-[#01F5D1]" /> Team
+              </h3>
+              <p className="font-medium text-slate-100 text-sm leading-6">
+                Built alongside {formatNameList(project.content.team)}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Hero Image */}

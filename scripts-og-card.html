@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1200px; height:630px; }
+  body {
+    background:
+      radial-gradient(900px circle at 78% 18%, rgba(1,245,209,.16), transparent 55%),
+      radial-gradient(700px circle at 12% 88%, rgba(0,161,155,.18), transparent 55%),
+      linear-gradient(160deg,#031018 0%,#062126 42%,#02060f 100%);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color:#f1f5f9;
+    padding:66px 84px 60px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    position:relative; overflow:hidden;
+  }
+  .grid {
+    position:absolute; inset:0;
+    background-image:linear-gradient(rgba(1,245,209,.045) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(1,245,209,.045) 1px,transparent 1px);
+    background-size:56px 56px;
+  }
+  .row { display:flex; align-items:center; gap:18px; position:relative; }
+  .mark { font-size:44px; font-weight:800; letter-spacing:-1.5px; color:#01F5D1; }
+  .pill {
+    font-size:19px; font-weight:600; color:#9EF7EA;
+    border:1.5px solid rgba(1,245,209,.42); background:rgba(1,245,209,.10);
+    padding:9px 20px; border-radius:999px; display:flex; align-items:center; gap:10px;
+  }
+  .dot { width:9px; height:9px; border-radius:50%; background:#01F5D1; }
+  h1 {
+    position:relative; font-size:63px; line-height:1.08; font-weight:800;
+    letter-spacing:-1.9px; max-width:980px;
+  }
+  h1 .accent { color:#01F5D1; }
+  .sub { position:relative; font-size:25px; color:#cbd5e1; margin-top:22px; max-width:900px; line-height:1.4; }
+  .foot { display:flex; justify-content:space-between; align-items:flex-end; position:relative; }
+  .tags { display:flex; gap:11px; }
+  .tag {
+    font-size:17px; color:#cbd5e1; border:1px solid #334155;
+    background:rgba(15,23,42,.75); padding:8px 17px; border-radius:999px;
+  }
+  .url { font-size:20px; color:#64748b; font-weight:500; letter-spacing:.3px; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <div class="row">
+    <span class="mark">JB</span>
+    <span class="pill"><span class="dot"></span>Open to Summer 2026 internships</span>
+  </div>
+
+  <div>
+    <h1>I design and build <span class="accent">tech products</span> that blend hardware, software, and human behavior.</h1>
+    <p class="sub">Jash Bhatt — product designer &amp; design engineer. Recently: agentic AI at Bajaj Finance.</p>
+  </div>
+
+  <div class="foot">
+    <div class="tags">
+      <span class="tag">Product Design</span>
+      <span class="tag">UI/UX</span>
+      <span class="tag">Agentic AI</span>
+      <span class="tag">Circuits</span>
+    </div>
+    <span class="url">Portfolio &amp; case studies</span>
+  </div>
+</body>
+</html>

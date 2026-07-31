@@ -277,6 +277,7 @@ export const projects: Project[] = [
       heroImage: `${PUBLIC_URL}/images/WePick/WePick-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/WePick/wepick-thumbnail.webp`,
       role: "UI/UX Designer",
+      team: ["Dhruv Tolani", "Yash Khanna"],
       sections: [
         {
           title: "The Process",
@@ -495,6 +496,7 @@ export const projects: Project[] = [
       heroImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.webp`,
       role: "Circuit Design · Hardware Prototyping · Physical Computing",
+      team: ["Khushii Mehta", "Kaushal Gajipara", "Parinita Shiralige"],
       sections: [
         {
           title: "Overview",
@@ -672,6 +674,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/Dino Spread/dino-spread-hero.webp`,
       role: "Industrial Designer",
+      team: ["Analise Periera"],
       sections: [
         {
           title: "The Problem",
@@ -761,6 +764,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
       role: "Service Design · Research · Insight Synthesis · Journey Mapping · Concept & Experience Design",
+      team: ["Khushii Mehta", "Kaushal Gajipara"],
       sections: [
         {
           title: "SDG 7 Context",
@@ -943,10 +947,10 @@ export const projects: Project[] = [
   {
     id: 5,
     slug: "python-codes",
-    title: "Computer Vision & Creative Coding",
-    category: "Python / Computer Vision",
+    title: "Live Demos",
+    category: "Computer Vision / Interactive",
     timeline: "Completed",
-    description: "Two Python builds showcased side-by-side: a YOLOv8 webcam object detector and a Python arcade game with live in-browser demos.",
+    description: "Three builds you can run right here in the browser — starting with a YOLOv8 object detector that runs live on your webcam, on-device, with no server round-trip.",
     tags: ["Python", "YOLOv8", "Computer Vision", "WebAssembly", "ONNX"],
     color: "bg-[#0C111B]",
     accentColor: "text-[#FFD343]",
@@ -959,8 +963,12 @@ export const projects: Project[] = [
       sections: [
         {
           title: "YOLOv8 Live Object Detection",
-          content: "The Python workflow uses Ultralytics YOLO for webcam inference. For the web demo, the model is exported to ONNX and runs locally in the browser with a live webcam feed and real-time overlays.",
-          listItems: ["Threaded capture & inference in Python", "ONNX export for browser runtime", "Live webcam detections on-device"],
+          content: "Turn on your camera and this runs a real neural network in your browser — no server, no upload, nothing leaves your device. The Python workflow uses Ultralytics YOLO for webcam inference; for the web, I exported the model to ONNX so it runs entirely client-side via WebAssembly with real-time bounding-box overlays.",
+          listItems: [
+            "Runs fully on-device — the video feed never leaves your machine",
+            "Threaded capture & inference in the original Python build",
+            "ONNX export + WebAssembly runtime for live in-browser detection"
+          ],
           codeBlock: YOLOV8_SNIPPET,
           demoId: "yolov8"
         },
