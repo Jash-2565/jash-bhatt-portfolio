@@ -7,7 +7,14 @@ export const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   classflow: 2,
   'rahi-design-system-v2': 3,
   wepick: 4,
+  // Playable in-browser demos — surfaced above the remaining case studies so
+  // the interactive work is found rather than buried at the end.
+  'python-codes': 5,
 };
+
+// Earlier coursework kept on the site but demoted out of the main case-study
+// list, so the flagship work sets the perceived level of the portfolio.
+export const ARCHIVED_PROJECT_SLUGS = new Set(['dino-spread', 'tinkering']);
 
 export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
   heroBgClass: 'bg-[#02060f]',
@@ -73,9 +80,25 @@ export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
   },
 };
 
+// Archived work always sorts after everything else, so next-project navigation
+// runs through the flagship case studies before reaching the coursework.
+const archiveRank = (slug: string) => (ARCHIVED_PROJECT_SLUGS.has(slug) ? 1 : 0);
+
 export const orderedProjects = [...projects].sort((a, b) => {
+  const archiveDelta = archiveRank(a.slug) - archiveRank(b.slug);
+  if (archiveDelta !== 0) return archiveDelta;
   const rankA = PROJECT_ORDER_PRIORITY[a.slug] ?? Number.MAX_SAFE_INTEGER;
   const rankB = PROJECT_ORDER_PRIORITY[b.slug] ?? Number.MAX_SAFE_INTEGER;
   if (rankA !== rankB) return rankA - rankB;
   return a.id - b.id;
 });
+
+/** Flagship case studies — the main "Selected Projects" list. */
+export const featuredProjects = orderedProjects.filter(
+  (project) => !ARCHIVED_PROJECT_SLUGS.has(project.slug)
+);
+
+/** Earlier coursework, shown compactly below the flagship work. */
+export const archivedProjects = orderedProjects.filter((project) =>
+  ARCHIVED_PROJECT_SLUGS.has(project.slug)
+);

@@ -19,6 +19,7 @@ export interface ProjectContent {
   heroImage: string;
   thumbnailImage?: string;
   role: string;
+  team?: string[];
   sections: Section[];
 }
 
