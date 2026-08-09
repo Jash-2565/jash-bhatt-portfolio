@@ -53,7 +53,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
       type="button"
       onClick={handleCopy}
       aria-label={copied ? 'Email copied to clipboard' : `Copy email address ${email}`}
-      className="relative flex items-center gap-4 p-5 w-full h-full text-left bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden"
+      className="glass relative flex items-center gap-4 p-5 w-full h-full text-left rounded-2xl card-glow group overflow-hidden"
     >
       {ripple && (
         <span

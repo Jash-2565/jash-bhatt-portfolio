@@ -11,7 +11,7 @@ import { ui } from '../config/ui';
 import { formatNameList } from '../utils/formatNameList';
 
 const DemoLoader = () => (
-  <div className="h-full lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 flex items-center justify-center">
+  <div className="glass !bg-slate-950/75 h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
     <div className="flex flex-col items-center gap-3 text-slate-500">
       <div className="w-7 h-7 border-2 border-slate-700 border-t-[#01F5D1] rounded-full animate-spin" />
       <span className="text-[10px] tracking-widest uppercase">Loading Demo</span>
@@ -140,7 +140,7 @@ const ProjectDetail = ({
       : null;
 
     const snippetContainerClass =
-      'h-[360px] sm:h-[440px] lg:h-[620px] rounded-2xl border border-slate-700 bg-slate-950 text-slate-100 shadow-sm flex flex-col';
+      'glass !bg-slate-950/75 h-[360px] sm:h-[440px] lg:h-[620px] rounded-2xl text-slate-100 flex flex-col';
     const snippetPreClass =
       'min-h-0 flex-1 overflow-auto p-4 text-xs leading-relaxed md:text-sm font-mono whitespace-pre';
 
@@ -148,7 +148,7 @@ const ProjectDetail = ({
       return (
         <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
           <div className={snippetContainerClass}>
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
               <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
               <CopyButton text={section.codeBlock} />
             </div>
@@ -166,7 +166,7 @@ const ProjectDetail = ({
     if (section.codeBlock) {
       return (
         <div className={`mt-8 ${snippetContainerClass}`}>
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
             <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
             <CopyButton text={section.codeBlock} />
           </div>
@@ -190,7 +190,7 @@ const ProjectDetail = ({
               return (
                 <div key={`story-${i}`} className="min-w-0 lg:min-w-[14rem] flex flex-col gap-3">
                   <div
-                    className={`rounded-xl overflow-hidden border border-slate-700 bg-slate-900/70 shadow-sm transition-all hover:shadow-md h-56 ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
+                    className={`rounded-xl overflow-hidden border border-white/10 bg-white/5 shadow-sm transition-all hover:shadow-md h-56 ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
                     onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
                   >
                     {isPlaceholder ? (
@@ -232,7 +232,7 @@ const ProjectDetail = ({
         return (
           <div key={key} className="flex flex-col gap-3">
             <div
-              className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-slate-700 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-slate-900/70')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
+              className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
               onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
             >
               {isPlaceholder ? (
@@ -282,7 +282,7 @@ const ProjectDetail = ({
                 return (
                   <div key={`row-${i}`} className="flex flex-col gap-3 items-center">
                     <div
-                      className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-slate-700 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-slate-900/70')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-48 md:h-56' : 'cursor-zoom-in w-fit'}`}
+                      className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-48 md:h-56' : 'cursor-zoom-in w-fit'}`}
                       onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
                     >
                       {isPlaceholder ? (
@@ -309,7 +309,7 @@ const ProjectDetail = ({
           {fullWidthImages.map((img, i) => (
             <div key={`full-${i}`} className={`flex flex-col gap-3 ${img.containerClass || 'w-full'}`}>
               <div
-                className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-slate-700 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-slate-900/70')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-56 md:h-64 w-full' : 'cursor-zoom-in'}`}
+                className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-56 md:h-64 w-full' : 'cursor-zoom-in'}`}
                 onClick={() => { if (img.src && !img.src.includes('placeholder')) onImageClick(img.src); }}
               >
                 {!img.src || img.src.includes('placeholder') ? (
@@ -344,7 +344,7 @@ const ProjectDetail = ({
             return (
               <div key={i} className="flex flex-col gap-3">
                 <div
-                  className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-slate-700 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-slate-900/70')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
+                  className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
                   onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
                 >
                   {isPlaceholder ? (
@@ -387,7 +387,7 @@ const ProjectDetail = ({
               className={`flex flex-col gap-3 ${section.imageLayout === 'row' ? 'w-full md:w-auto md:flex-shrink-0' : ''} ${section.imageCrop ? 'w-fit items-center' : ''}`}
             >
               <div
-                className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-slate-700 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-slate-900/70')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-48 md:h-56' : 'cursor-zoom-in'}`}
+                className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-48 md:h-56' : 'cursor-zoom-in'}`}
                 onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
               >
                 {isPlaceholder ? (
@@ -420,10 +420,10 @@ const ProjectDetail = ({
   };
 
   return (
-    <div className={`bg-[#02060f] text-slate-100 min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+    <div className={`relative z-10 text-slate-100 min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
       {/* Project Hero */}
-      <div className={`w-full ${heroBgClass} pt-32 pb-24 border-b border-slate-800`}>
+      <div className={`w-full ${heroBgClass} pt-32 pb-24 border-b border-white/10`}>
         <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
           <button
             onClick={onBack}
@@ -448,7 +448,7 @@ const ProjectDetail = ({
       <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12 py-16">
 
         {/* Project Meta */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 mb-20 pb-12 border-b border-slate-800">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 mb-20 pb-12 border-b border-white/10">
           <div className="md:col-span-3">
             <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
               <Briefcase size={13} className="text-[#01F5D1]" /> Role
@@ -485,7 +485,7 @@ const ProjectDetail = ({
 
         {/* Hero Image */}
         {!isPythonCodes && (
-          <div className={`w-full bg-slate-900 rounded-lg mb-24 border border-slate-700 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
+          <div className={`w-full bg-white/5 rounded-lg mb-24 border border-white/10 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
             {!project.content.heroImage.includes('placeholder') ? (
               <div ref={heroParallaxRef} className="w-full h-full will-change-transform">
                 <ResponsiveImage
@@ -510,7 +510,7 @@ const ProjectDetail = ({
         {isPythonCodes ? (
           <div className="space-y-16">
             {project.content.sections.map((section, idx) => (
-              <div key={idx} className="rounded-3xl border border-emerald-800/70 bg-slate-900/80 p-8 md:p-10 shadow-sm">
+              <div key={idx} className="glass rounded-3xl !border-emerald-400/30 p-8 md:p-10">
                 <div className="mb-6">
                   <div className="text-xs uppercase tracking-[0.35em] text-emerald-600/70 mb-3">Python Project</div>
                   <h2 className="text-2xl md:text-3xl font-bold text-slate-100 mb-3">{section.title}</h2>
@@ -567,7 +567,7 @@ const ProjectDetail = ({
                   {/* Embed (Figma etc) */}
                   {section.embedUrl && (
                     section.embedWide ? (
-                      <div className="mt-10 w-full rounded-2xl overflow-hidden border border-slate-700 shadow-lg" style={{ aspectRatio: '16/9' }}>
+                      <div className="mt-10 w-full rounded-2xl overflow-hidden border border-white/10 shadow-lg" style={{ aspectRatio: '16/9' }}>
                         <iframe
                           src={section.embedUrl}
                           className="w-full h-full"
@@ -596,7 +596,7 @@ const ProjectDetail = ({
                         href={section.cta.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${ui.btnBase} gap-3 bg-slate-900 text-white hover:bg-slate-800 shadow-md hover:shadow-xl hover:-translate-y-0.5`}
+                        className={`${ui.btnBase} glass glass-hover gap-3 text-white`}
                       >
                         {section.cta.text} <ExternalLink size={20} className="opacity-80" />
                       </a>
@@ -614,11 +614,11 @@ const ProjectDetail = ({
           <div className="mt-32">
             <button
               onClick={onNext}
-              className="group relative w-full overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 p-6 md:p-8 text-left transition-all duration-300 hover:border-[#01F5D1]/60 hover:shadow-[0_28px_70px_-30px_rgba(1,245,209,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]"
+              className="glass glass-hover group relative w-full overflow-hidden rounded-3xl p-6 md:p-8 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]"
               aria-label={`Open next project: ${nextProject.title}`}
             >
               <div className="flex items-center gap-6">
-                <div className="block shrink-0 w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-950">
+                <div className="block shrink-0 w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
                   {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
                     <ResponsiveImage
                       src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}
@@ -650,7 +650,7 @@ const ProjectDetail = ({
         )}
 
         {/* Footer Navigation */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-wrap justify-between items-center gap-4">
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap justify-between items-center gap-4">
           <button
             onClick={onBack}
             className="group text-base font-medium text-slate-300 hover:text-[#01F5D1] transition-colors flex items-center gap-2"
@@ -658,10 +658,10 @@ const ProjectDetail = ({
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>
           <span className="hidden md:flex items-center gap-2 text-xs text-slate-600">
-            <kbd className="px-2 py-1 rounded border border-slate-700 bg-slate-900 font-mono text-[10px] text-slate-400">Esc</kbd>
+            <kbd className="glass-chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">Esc</kbd>
             back
             <span className="mx-1 text-slate-700">·</span>
-            <kbd className="px-2 py-1 rounded border border-slate-700 bg-slate-900 font-mono text-[10px] text-slate-400">→</kbd>
+            <kbd className="glass-chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
             next
           </span>
         </div>

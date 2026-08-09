@@ -17,7 +17,7 @@ export const PROJECT_ORDER_PRIORITY: Record<string, number> = {
 export const ARCHIVED_PROJECT_SLUGS = new Set(['dino-spread', 'tinkering']);
 
 export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
-  heroBgClass: 'bg-[#02060f]',
+  heroBgClass: 'bg-transparent',
   heroTextClass: 'text-slate-100',
   heroMutedTextClass: 'text-slate-400',
   heroBodyTextClass: 'text-slate-300',
@@ -25,55 +25,55 @@ export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
 
 export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
   'hr-genie': {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#3B82F6]',
     heroMutedTextClass: 'text-[#AFC9F5]',
     heroBodyTextClass: 'text-[#DCE7FF]',
   },
   classflow: {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#4239C4]',
     heroMutedTextClass: 'text-[#D3D0FF]',
     heroBodyTextClass: 'text-[#ECEAFF]',
   },
   wepick: {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-sky-600',
     heroMutedTextClass: 'text-sky-200',
     heroBodyTextClass: 'text-sky-100',
   },
   'rahi-design-system-v2': {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#16A197]',
     heroMutedTextClass: 'text-[#A9E2DA]',
     heroBodyTextClass: 'text-[#D7F4F0]',
   },
   revela: {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#DC2626]',
     heroMutedTextClass: 'text-rose-200',
     heroBodyTextClass: 'text-rose-100',
   },
   'dino-spread': {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-rose-900',
     heroMutedTextClass: 'text-rose-300',
     heroBodyTextClass: 'text-rose-100',
   },
   solarlink: {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#E3FC03]',
     heroMutedTextClass: 'text-[#C9DE8D]',
     heroBodyTextClass: 'text-[#EAF7C6]',
   },
   'python-codes': {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#FFD343]',
     heroMutedTextClass: 'text-[#FFF2B3]',
     heroBodyTextClass: 'text-[#FFF2B3]',
   },
   tinkering: {
-    heroBgClass: 'bg-[#02060f]',
+    heroBgClass: 'bg-transparent',
     heroTextClass: 'text-rose-600',
     heroMutedTextClass: 'text-rose-200',
     heroBodyTextClass: 'text-rose-100',

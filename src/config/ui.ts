@@ -4,11 +4,11 @@ import { PUBLIC_URL } from '../utils/getBaseUrl';
 export const ui = {
   btnBase: 'inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium transition-all duration-300',
   btnPrimary: 'bg-[#01F5D1] text-black hover:bg-[#00D8B8] hover:shadow-[0_0_32px_-4px_rgba(1,245,209,0.55)] hover:-translate-y-0.5',
-  btnSecondary: 'bg-slate-900/70 text-slate-100 border border-slate-700 hover:border-[#01F5D1] hover:text-[#01F5D1] hover:-translate-y-0.5',
-  cardBase: 'border border-slate-800 rounded-2xl bg-slate-900/70 backdrop-blur-sm transition-all duration-300',
-  cardHover: 'hover:-translate-y-1 hover:shadow-[0_22px_55px_-20px_rgba(1,245,209,0.35)] hover:border-[#01F5D1]/60',
-  chipBase: 'px-3 py-1.5 text-sm font-medium text-slate-200 bg-slate-900 border border-slate-700 rounded-full transition-colors duration-200 hover:border-[#01F5D1]/70 hover:text-[#9EF7EA]',
-  chipAccent: 'px-3 py-1.5 text-sm font-medium text-[#01F5D1] bg-[#00A19B]/15 border border-[#00A19B]/50 rounded-full',
+  btnSecondary: 'glass glass-hover text-slate-100 hover:text-[#9EF7EA]',
+  cardBase: 'glass rounded-2xl',
+  cardHover: 'glass-hover',
+  chipBase: 'glass-chip px-3 py-1.5 text-sm font-medium text-slate-200 rounded-full hover:text-[#9EF7EA]',
+  chipAccent: 'glass-chip px-3 py-1.5 text-sm font-medium text-[#9EF7EA] rounded-full !border-[#01F5D1]/40',
 } as const;
 
 export const personalitySignals = [

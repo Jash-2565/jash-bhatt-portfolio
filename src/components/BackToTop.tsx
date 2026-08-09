@@ -17,7 +17,7 @@ export default function BackToTop() {
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
-      className={`fixed bottom-6 right-6 z-40 p-3 rounded-full border border-slate-700 bg-slate-900/90 text-[#01F5D1] shadow-lg backdrop-blur transition-all duration-300 hover:border-[#01F5D1] hover:shadow-[0_0_24px_-6px_rgba(1,245,209,0.5)] hover:-translate-y-1 ${
+      className={`glass glass-hover fixed bottom-6 right-6 z-40 p-3 rounded-full text-[#01F5D1] transition-all duration-300 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
     >
