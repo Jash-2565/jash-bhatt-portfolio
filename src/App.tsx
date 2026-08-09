@@ -597,7 +597,7 @@ const App = () => {
                     I design and build <span className="accent-shimmer font-semibold">tech products</span> that blend hardware, software, and human behavior.
                   </h1>
                   <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-5 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
-                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a product designer and design engineer studying B.Des at FLAME University. Recently: agentic AI at Bajaj Finance, and a screen-free wand for kids.
+                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a product designer and design engineer studying B.Des at FLAME University.
                   </p>
 
                   <div className="glass lg:hidden w-full rounded-3xl p-4 mb-5">
@@ -718,8 +718,8 @@ const App = () => {
 
               <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
                 {operatorStats.map((stat, i) => (
-                  <Reveal key={stat.label} delay={i * 90} duration={600}>
-                    <div className="glass glass-hover rounded-2xl p-6">
+                  <Reveal key={stat.label} delay={i * 90} duration={600} className="h-full">
+                    <div className="glass glass-hover rounded-2xl p-6 h-full">
                       <div className="text-[1.95rem] md:text-[2.2rem] font-bold text-slate-100">{stat.value}</div>
                       <div className="text-sm text-slate-300 mt-1">{stat.label}</div>
                     </div>

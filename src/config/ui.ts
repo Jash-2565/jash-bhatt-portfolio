@@ -26,8 +26,8 @@ export const currentlyExploring = [
 
 export const operatorStats = [
   { label: 'Currently', value: 'B.Des · FLAME University' },
-  { label: 'Last Internship', value: 'RAHI Platform Technologies' },
-  { label: 'Status', value: 'Available — Summer 2026' },
+  { label: 'Last Internship', value: 'Agentic AI · Bajaj Finance' },
+  { label: 'Status', value: 'Available — Remote' },
 ];
 
 export const galleryItems: GalleryItem[] = [
