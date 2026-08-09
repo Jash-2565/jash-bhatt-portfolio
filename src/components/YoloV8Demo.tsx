@@ -444,28 +444,33 @@ const YoloV8Demo = () => {
       </div>
       <p className="text-xs text-slate-400 mb-3">{debug}</p>
 
-      <div className="relative rounded-xl overflow-hidden border border-slate-700 bg-slate-950">
-        <video ref={videoRef} className="w-full h-auto block" muted playsInline />
+      {/* Before the stream attaches the <video> has no intrinsic size, so the
+          box (and the overlay pinned to it) would collapse to zero height. */}
+      <div className="relative rounded-xl overflow-hidden border border-slate-700 bg-slate-950 aspect-[4/3] sm:aspect-video">
+        <video ref={videoRef} className="w-full h-full object-cover block" muted playsInline />
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
         {!isRunning && (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-950/70 text-slate-200 text-sm">
-            Click start to enable webcam
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-950/70 px-6 text-center text-slate-200 text-sm">
+            <span>Run the demo to enable your camera</span>
+            <span className="text-xs text-slate-400">
+              Downloads a ~45&nbsp;MB model — best on Wi-Fi
+            </span>
           </div>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-3 mt-5">
+      <div className="grid grid-cols-2 gap-3 mt-5 sm:flex sm:flex-wrap">
         <button
           type="button"
           onClick={handleToggle}
-          className="w-full px-4 py-2 rounded-full text-sm font-semibold bg-slate-950 text-white hover:bg-slate-900 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition sm:w-auto"
+          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold bg-slate-950 text-white hover:bg-slate-900 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {isRunning ? 'Pause Demo' : 'Run Demo'}
         </button>
         <button
           type="button"
           onClick={handleStop}
-          className="px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
+          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
         >
           Reset
         </button>

@@ -280,21 +280,21 @@ const MovieRecsDemo = () => {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Enter movie title"
-            className="w-full flex-1 min-w-0 rounded-lg border border-slate-500/80 bg-slate-950 px-3 py-2.5 text-sm text-slate-100 placeholder:text-sm placeholder:text-slate-400 focus:outline-none focus:border-[#01F5D1]/60 focus:ring-2 focus:ring-[#01F5D1]/30"
+            className="w-full flex-1 min-w-0 min-h-11 rounded-lg border border-slate-500/80 bg-slate-950 px-3 py-2.5 text-base sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#01F5D1]/60 focus:ring-2 focus:ring-[#01F5D1]/30"
           />
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto lg:flex-nowrap lg:gap-2">
+          <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:items-center lg:w-auto lg:flex-nowrap lg:gap-2">
             <button
               type="button"
               onClick={handleRecommend}
               disabled={!isReady}
-              className="w-full px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white hover:bg-slate-950 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition sm:w-auto"
+              className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white hover:bg-slate-950 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               Recommend
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="w-full px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition sm:w-auto"
+              className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
             >
               Clear
             </button>
@@ -306,7 +306,7 @@ const MovieRecsDemo = () => {
               key={item}
               type="button"
               onClick={() => setQuery(item)}
-              className="inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-full border border-slate-600 px-4 py-1.5 text-sm text-slate-300 hover:border-slate-400"
+              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-full border border-slate-600 px-4 py-1.5 text-sm text-slate-300 hover:border-slate-400 active:border-[#01F5D1]"
             >
               {item}
             </button>

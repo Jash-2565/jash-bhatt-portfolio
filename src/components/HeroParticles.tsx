@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { usePointerFine } from '../hooks/usePointerFine';
 
 type Node = { x: number; y: number; vx: number; vy: number };
 
@@ -6,10 +7,17 @@ type Node = { x: number; y: number; vx: number; vy: number };
 // lines when they're near each other, plus links to the cursor. Palette-locked to
 // the site's cyan/teal. Pointer-transparent, pauses off-screen, and renders a
 // single static frame under prefers-reduced-motion.
+//
+// Skipped entirely on touch devices: the cursor links are the whole point of the
+// effect and a phone has no cursor, so all that remains is an O(n²) scan over up
+// to 64 nodes every frame — pure battery cost for no visual payoff. The hero
+// keeps its gradient and ambient orbs there.
 export default function HeroParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const enabled = usePointerFine();
 
   useEffect(() => {
+    if (!enabled) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -171,7 +179,9 @@ export default function HeroParticles() {
       window.removeEventListener('mousemove', onMouse);
       window.removeEventListener('mouseout', onLeaveWindow);
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <canvas
