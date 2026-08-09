@@ -44,7 +44,10 @@ export default function Reveal({
     transform: inView ? 'none' : hiddenTransform[variant],
     transformOrigin: variant === 'grow-width' ? 'left center' : undefined,
     transition: `opacity ${duration}ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform ${duration}ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
-    willChange: 'opacity, transform',
+    // Reveals are one-shot (`useInView` unobserves after firing), so holding a
+    // compositor layer afterwards just burns memory — and there are dozens of
+    // these on a page. Release the hint once the element has arrived.
+    willChange: inView ? 'auto' : 'opacity, transform',
     ...style,
   };
 

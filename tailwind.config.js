@@ -1,3 +1,5 @@
+import defaultTheme from "tailwindcss/defaultTheme";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -5,6 +7,12 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
+    // Stock Tailwind starts at sm:640px, which left every phone in the same
+    // bucket. `xs` gives the 375px-class devices something to differ from.
+    screens: {
+      xs: "400px",
+      ...defaultTheme.screens,
+    },
     extend: {
       keyframes: {
         fadeIn: {

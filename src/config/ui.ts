@@ -2,13 +2,25 @@ import type { GalleryItem } from '../types';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 export const ui = {
-  btnBase: 'inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium transition-all duration-300',
+  btnBase: 'inline-flex items-center justify-center gap-2 min-h-12 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full font-medium transition-all duration-300',
   btnPrimary: 'bg-[#01F5D1] text-black hover:bg-[#00D8B8] hover:shadow-[0_0_32px_-4px_rgba(1,245,209,0.55)] hover:-translate-y-0.5',
   btnSecondary: 'glass glass-hover text-slate-100 hover:text-[#9EF7EA]',
   cardBase: 'glass rounded-2xl',
   cardHover: 'glass-hover',
   chipBase: 'glass-chip px-3 py-1.5 text-sm font-medium text-slate-200 rounded-full hover:text-[#9EF7EA]',
   chipAccent: 'glass-chip px-3 py-1.5 text-sm font-medium text-[#9EF7EA] rounded-full !border-[#01F5D1]/40',
+
+  // --- Shared layout rhythm -------------------------------------------------
+  // Defined once so mobile spacing stays consistent across the home page and
+  // the case studies, instead of every section inventing its own values.
+  gutter: 'px-5 sm:px-8 lg:px-12',
+  shell: 'max-w-[84rem] mx-auto px-5 sm:px-8 lg:px-12',
+  section: 'py-14 sm:py-20 lg:py-24',
+  scrollMt: 'scroll-mt-20 md:scroll-mt-28',
+  h1: 'text-[clamp(1.85rem,7.2vw,2.6rem)] md:text-[4.2rem] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
+  h2: 'text-[1.75rem] sm:text-3xl md:text-4xl',
+  /** 44px minimum touch target, per WCAG 2.2 target-size guidance. */
+  tapTarget: 'min-h-11 min-w-11',
 } as const;
 
 export const personalitySignals = [

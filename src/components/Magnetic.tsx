@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
+import { usePointerFine } from '../hooks/usePointerFine';
 
 type MagneticProps = {
   children: ReactNode;
@@ -14,7 +15,8 @@ type MagneticProps = {
 };
 
 // Wraps content so it drifts toward the cursor on hover and springs back on
-// leave. Pointer-only; reduced-motion users get a static wrapper.
+// leave. Pointer-only; touch and reduced-motion users get a static wrapper with
+// no mouse handlers, so a tap can't leave the element translated off-centre.
 export default function Magnetic({
   children,
   className = '',
@@ -27,11 +29,11 @@ export default function Magnetic({
   ariaLabel,
 }: MagneticProps) {
   const ref = useRef<HTMLElement>(null);
+  const pointerFine = usePointerFine();
 
   const handleMove = (event: React.MouseEvent) => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const rect = el.getBoundingClientRect();
     const x = event.clientX - rect.left - rect.width / 2;
     const y = event.clientY - rect.top - rect.height / 2;
@@ -42,12 +44,14 @@ export default function Magnetic({
     if (ref.current) ref.current.style.transform = '';
   };
 
-  const shared = {
-    ref: ref as React.Ref<never>,
-    className: `magnetic-btn ${className}`,
-    onMouseMove: handleMove,
-    onMouseLeave: reset,
-  };
+  const shared = pointerFine
+    ? {
+        ref: ref as React.Ref<never>,
+        className: `magnetic-btn ${className}`,
+        onMouseMove: handleMove,
+        onMouseLeave: reset,
+      }
+    : { className };
 
   if (as === 'a') {
     return (

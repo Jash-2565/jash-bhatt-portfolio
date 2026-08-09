@@ -76,7 +76,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
             <Copy size={13} className="text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
           )}
         </p>
-        <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-[#01F5D1] transition-colors">
+        <p className="text-slate-100 font-semibold text-sm break-all sm:break-normal group-hover:text-[#01F5D1] transition-colors">
           {copied ? 'Copied to clipboard!' : email}
         </p>
       </div>

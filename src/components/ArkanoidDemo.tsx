@@ -322,7 +322,27 @@ const ArkanoidDemo = () => {
   const particlesRef = useRef<Particle[]>([]);
   const rafRef = useRef<number | null>(null);
   const keysRef = useRef({ left: false, right: false, shift: false });
+  // Desired paddle centre in game-space X, set by dragging on the canvas. Null
+  // means "keyboard is driving". Touch devices have no arrow keys, so without
+  // this the demo is unplayable on a phone.
+  const pointerXRef = useRef<number | null>(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    setIsTouch(window.matchMedia('(hover: none)').matches);
+  }, []);
+
+  // Map a pointer position on the scaled-down canvas back into the 800×720
+  // game coordinate space.
+  const trackPointer = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width) return;
+    pointerXRef.current = ((event.clientX - rect.left) / rect.width) * WIDTH;
+  };
 
   const launchBall = () => {
     const state = stateRef.current;
@@ -352,8 +372,9 @@ const ArkanoidDemo = () => {
         event.preventDefault();
         event.stopPropagation();
       }
-      if (event.key === 'ArrowLeft') keysRef.current.left = true;
-      if (event.key === 'ArrowRight') keysRef.current.right = true;
+      // Any arrow press hands control back to the keyboard.
+      if (event.key === 'ArrowLeft') { keysRef.current.left = true; pointerXRef.current = null; }
+      if (event.key === 'ArrowRight') { keysRef.current.right = true; pointerXRef.current = null; }
       if (event.key === 'Shift') keysRef.current.shift = true;
 
       if (event.key === ' ') {
@@ -760,6 +781,12 @@ const ArkanoidDemo = () => {
 
     const prevPaddleX = state.paddleX;
     const boosting = keysRef.current.shift;
+    if (pointerXRef.current !== null) {
+      // Drag control: ease toward the finger so the paddle still carries some
+      // velocity into the ball rather than teleporting.
+      const target = pointerXRef.current - state.paddleWidth / 2;
+      state.paddleX += (target - state.paddleX) * 0.45;
+    }
     if (keysRef.current.left) {
       state.paddleX -= boosting ? state.paddleBoostSpeed : state.paddleSpeed;
     }
@@ -1037,14 +1064,20 @@ const ArkanoidDemo = () => {
   }, [isRunning]);
 
   return (
-    <div className="border border-slate-700 rounded-2xl p-6 bg-slate-900 shadow-sm lg:h-[680px] flex flex-col">
+    <div className="border border-slate-700 rounded-2xl p-4 sm:p-6 bg-slate-900 shadow-sm lg:h-[680px] flex flex-col">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
           <p className="text-sm font-semibold text-slate-200">Play the demo</p>
-          <p className="text-xs text-slate-400">Arrow keys to move. Tap to launch. Shift for boost. ESC pauses.</p>
+          <p className="text-xs text-slate-400">
+            {isTouch
+              ? 'Drag on the board to move. Tap to launch. Run Demo to start.'
+              : 'Arrow keys to move. Tap to launch. Shift for boost. ESC pauses.'}
+          </p>
         </div>
       </div>
-      <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-900 flex-1">
+      {/* Below lg the wrapper has no fixed height, so the canvas needs its own
+          aspect-driven box — `flex-1` alone resolved against nothing. */}
+      <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-900 aspect-[10/9] lg:aspect-auto lg:flex-1">
         <canvas
           ref={canvasRef}
           width={WIDTH}
@@ -1054,17 +1087,24 @@ const ArkanoidDemo = () => {
             launchBall();
             canvasRef.current?.focus();
           }}
-          className="w-full h-full block focus:outline-none"
+          onPointerDown={(event) => {
+            event.currentTarget.setPointerCapture(event.pointerId);
+            trackPointer(event);
+          }}
+          onPointerMove={(event) => {
+            if (event.pressure > 0 || event.buttons > 0) trackPointer(event);
+          }}
+          className="w-full h-full block focus:outline-none touch-none"
         />
       </div>
-      <div className="mt-4 flex flex-wrap gap-3 justify-start">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-start">
         <button
           type="button"
           onClick={(event) => {
             setIsRunning((prev) => !prev);
             event.currentTarget.blur();
           }}
-          className="w-full px-4 py-2 rounded-full text-sm font-semibold bg-slate-950 text-white hover:bg-slate-900 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition sm:w-auto"
+          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold bg-slate-950 text-white hover:bg-slate-900 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {isRunning ? 'Pause Demo' : 'Run Demo'}
         </button>
@@ -1075,7 +1115,7 @@ const ArkanoidDemo = () => {
             setIsRunning(false);
             renderOnce();
           }}
-          className="px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
+          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
         >
           Reset
         </button>

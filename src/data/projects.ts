@@ -199,7 +199,7 @@ export const projects: Project[] = [
           title: "AI Chatbot Architecture",
           content: "The chatbot is the core of ClassFlow — not a wrapper around a chat UI, but a structured AI pipeline that turns natural language into calendar data. Every message sent to Gemini 2.5 Flash includes the full current schedule state, a persistent chat memory object, the last 12 conversation turns, and date/time hints pre-extracted via regex.",
           imageLayout: 'row',
-          imageHeight: 'h-[22rem]',
+          imageHeight: 'h-[15rem] sm:h-[22rem]',
           imageCrop: true,
           images: [
             {
@@ -427,7 +427,7 @@ export const projects: Project[] = [
           title: "Dropdowns and Accordions",
           content: "I created dropdown and accordion behavior libraries that support helper text, error messaging, multi-select chips, and expandable content blocks while maintaining predictable spacing and state transitions.",
           imageLayout: "grid",
-          imageHeight: "h-[22rem] md:h-[30rem]",
+          imageHeight: "h-[15rem] sm:h-[22rem] md:h-[30rem]",
           images: [
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-dropdown.webp`,
@@ -1056,7 +1056,7 @@ export const projects: Project[] = [
           title: "Final Countdown Prototype",
           content: "Final working countdown sequence running end-to-end on the prototype.",
           imageCrop: true,
-          imageHeight: "h-[20rem] w-full max-w-[24rem] md:h-[26rem] md:w-[26rem]",
+          imageHeight: "h-[15rem] w-full max-w-full sm:h-[20rem] sm:max-w-[24rem] md:h-[26rem] md:w-[26rem]",
           images: [
             {
               src: `${PUBLIC_URL}/images/Tinkering/final-countdown.gif`,

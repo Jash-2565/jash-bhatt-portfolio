@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePointerFine } from '../hooks/usePointerFine';
 
 // A soft cyan glow that trails the cursor across the page, a precise dot pinned
 // to the exact pointer position, and a ring that eases behind the dot and grows
@@ -8,13 +9,7 @@ export default function CursorGlow() {
   const glowRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const [enabled] = useState(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return false;
-    return (
-      window.matchMedia('(pointer: fine)').matches &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    );
-  });
+  const enabled = usePointerFine();
 
   useEffect(() => {
     if (!enabled) return;

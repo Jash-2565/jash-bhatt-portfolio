@@ -11,11 +11,31 @@
   --accent-cyan: #01f5d1;
   --accent-lime: #01f5d1;
   --surface: #000000;
+  /* Single source of truth for the fixed nav's height — the nav, the mobile
+     menu's top offset, and the hero's min-height all read this, so they can't
+     drift apart. */
+  --nav-h: 4rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --nav-h: 4.5rem;
+  }
+}
+
+html {
+  /* `clip` rather than `hidden`: it still contains stray horizontal overflow,
+     but does not turn the element into a scroll container — which is what was
+     silently breaking `position: sticky` in the case-study layout. */
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   font-family: 'Sora', sans-serif;
   color: var(--ink-900);
+  overflow-x: clip;
   background:
     radial-gradient(circle at 14% -12%, rgba(1, 245, 209, 0.16), transparent 34%),
     radial-gradient(circle at 90% -6%, rgba(0, 161, 155, 0.18), transparent 30%),
@@ -23,8 +43,27 @@ body {
     var(--surface);
 }
 
+/* Touch tuning: kill the grey flash Android paints over tapped elements (we
+   supply our own :active states) and skip the 300ms double-tap-zoom delay. */
+a,
+button,
+[role='button'],
+summary,
+label {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 #root {
   min-height: 100vh;
+  /* svh = the *small* viewport height, i.e. with the mobile URL bar showing.
+     Using it avoids the layout jumping as the bar collapses on scroll. */
+  min-height: 100svh;
+}
+
+/* Bottom padding that clears the iOS home indicator / Android gesture bar. */
+.pb-safe {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 }
 
 .font-display {
@@ -74,10 +113,19 @@ body {
     box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
     border-color 300ms ease;
 }
-.card-glow:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 55px -20px rgba(1, 245, 209, 0.35),
-    0 0 0 1px rgba(1, 245, 209, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .card-glow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 55px -20px rgba(1, 245, 209, 0.35),
+      0 0 0 1px rgba(1, 245, 209, 0.12);
+  }
+}
+/* Touch gets a press state instead of a hover state. */
+@media (hover: none) {
+  .card-glow:active {
+    transform: scale(0.985);
+    box-shadow: 0 0 0 1px rgba(1, 245, 209, 0.25);
+  }
 }
 
 /* Project-card cursor spotlight + inner image parallax (driven by CSS vars set
@@ -98,8 +146,10 @@ body {
   );
   mix-blend-mode: screen;
 }
-.card-media:hover .card-spotlight {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .card-media:hover .card-spotlight {
+    opacity: 1;
+  }
 }
 .card-parallax {
   width: 100%;
@@ -108,8 +158,10 @@ body {
   transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
-.card-media:hover .card-parallax {
-  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(1.09);
+@media (hover: hover) and (pointer: fine) {
+  .card-media:hover .card-parallax {
+    transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(1.09);
+  }
 }
 
 @keyframes sheen {
@@ -143,8 +195,10 @@ body {
   transform: translateX(-120%) skewX(-15deg);
   transition: transform 0s;
 }
-.group:hover .sheen-layer::before {
-  animation: sheen 900ms ease-out;
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .sheen-layer::before {
+    animation: sheen 900ms ease-out;
+  }
 }
 
 /* When the custom ring is active, hide the native OS cursor (arrow + pointer)
@@ -298,11 +352,13 @@ body {
   width: max-content;
   animation: marquee-scroll 30s linear infinite;
 }
-.marquee-wrap:hover .marquee-track {
-  animation-play-state: paused;
-}
-.marquee-wrap:hover .marquee-item-text {
-  color: #9ef7ea;
+@media (hover: hover) and (pointer: fine) {
+  .marquee-wrap:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-wrap:hover .marquee-item-text {
+    color: #9ef7ea;
+  }
 }
 
 @keyframes marquee-scroll {
@@ -320,9 +376,11 @@ body {
   -webkit-text-stroke: 1px rgba(1, 245, 209, 0.45);
   transition: color 300ms ease, -webkit-text-stroke-color 300ms ease;
 }
-.group:hover .ghost-number {
-  color: rgba(1, 245, 209, 0.18);
-  -webkit-text-stroke-color: rgba(1, 245, 209, 0.85);
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .ghost-number {
+    color: rgba(1, 245, 209, 0.18);
+    -webkit-text-stroke-color: rgba(1, 245, 209, 0.85);
+  }
 }
 @media (max-width: 767px) {
   .ghost-number {
@@ -339,6 +397,15 @@ body {
   opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
+}
+
+/* The grain is a full-viewport fixed layer composited above all content — its
+   texture is imperceptible at phone pixel densities but it still costs a paint
+   on every scroll frame. Touch devices go without. */
+@media (hover: none) {
+  .grain-overlay {
+    display: none;
+  }
 }
 
 /* Nav underline indicator — positioned absolutely inside the nav button row. */
@@ -571,6 +638,41 @@ body {
 
   /* Browsers without backdrop-filter get an opaque equivalent, otherwise the
      panes read as barely-there tint over the ambient field. */
+}
+
+/* ------------------------------------------------------------------
+   Mobile effect budget.
+   The glass system is built from blurs, and blur is the single most
+   expensive thing a mobile GPU composites. Below md we keep the look
+   but cut the radii roughly in half, drop two of the three ambient
+   orbs, and stop their drift animations. Desktop is untouched.
+   ------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .ambient-orb--teal,
+  .ambient-orb--deep {
+    display: none;
+  }
+  .ambient-orb--cyan {
+    filter: blur(60px);
+    animation: none;
+    width: 90vw;
+    height: 90vw;
+  }
+  .glass {
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+  }
+  .glass-chip {
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+  }
+  .glass-nav,
+  .glass-nav[data-scrolled='true'],
+  .glass-menu,
+  .glass-scrim {
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
 }
 
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
