@@ -301,7 +301,7 @@ const App = () => {
 
     const defaultTitle = 'Jash Bhatt | Product Designer & Design Engineer';
     const defaultDescription =
-      'I design and build tech products that blend hardware, software, and human behavior. Recently: agentic AI at Bajaj Finance.';
+      'I design and build tech products that blend hardware, software, and human behavior.';
     document.title = defaultTitle;
     setMeta('meta[name="description"]', defaultDescription);
     setMeta('meta[property="og:title"]', defaultTitle);
@@ -590,7 +590,7 @@ const App = () => {
                   <div className="mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                     <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
-                      Open to Summer 2026 internships
+                      Open to remote internships
                     </span>
                   </div>
                   <h1 className="text-[2.4rem] md:text-[4.2rem] font-display text-slate-100 mb-4 md:mb-5 leading-[1.05] animate-fade-in-up" style={{ animationDelay: '60ms' }}>
@@ -1247,7 +1247,7 @@ const App = () => {
                   </p>
                   <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
                     <span className="pulse-dot" aria-hidden="true" />
-                    Currently available — Summer 2026
+                    Currently available — Remote
                   </span>
                 </Reveal>
 
