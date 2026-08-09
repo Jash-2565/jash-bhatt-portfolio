@@ -35,6 +35,7 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   // Mobile-only accordion for the About "signal" cards. On desktop (md+) all
   // three are always shown, so this state is a no-op there.
   const [openFeature, setOpenFeature] = useState<number | null>(null);
@@ -334,6 +335,16 @@ const App = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [currentView]);
 
+  // Nav glass condenses once content scrolls underneath it. Kept separate from
+  // the section-spy handler above, which bails out on manual scroll and on the
+  // project view — the nav should thicken in both cases.
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // Active-nav underline — recalc when active section, view, or resize changes
   useEffect(() => {
     const recalc = () => {
@@ -417,6 +428,13 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 overflow-x-hidden transition-colors duration-300">
+      {/* Ambient colour field the glass panes refract. Sits behind everything;
+          all page content is lifted above it with `relative z-10`. */}
+      <div className="ambient-field" aria-hidden="true">
+        <span className="ambient-orb ambient-orb--cyan" />
+        <span className="ambient-orb ambient-orb--teal" />
+        <span className="ambient-orb ambient-orb--deep" />
+      </div>
       <CursorGlow />
       <BackToTop />
       <div className="grain-overlay" aria-hidden="true" />
@@ -430,14 +448,14 @@ const App = () => {
       {/* Lightbox Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-fade-in"
+          className="fixed inset-0 z-[60] flex items-center justify-center glass-scrim p-4 animate-fade-in"
           onClick={() => setSelectedImage(null)}
           role="dialog"
           aria-modal="true"
           aria-label="Image preview"
         >
           <button
-            className="absolute top-4 right-4 z-10 text-white hover:text-white transition-colors bg-slate-900/80 hover:bg-slate-800 p-2 rounded-full border border-white/20 shadow-lg"
+            className="glass-chip absolute top-4 right-4 z-10 text-white p-2 rounded-full shadow-lg"
             onClick={() => setSelectedImage(null)}
             ref={lightboxCloseRef}
             aria-label="Close image preview"
@@ -456,7 +474,7 @@ const App = () => {
       )}
 
       {/* Navigation */}
-      <nav ref={navRef} className="fixed w-full bg-[#02060f] z-50 border-b border-slate-800 shadow-sm transition-all duration-300">
+      <nav ref={navRef} data-scrolled={isScrolled} className="glass-nav fixed w-full z-50">
         <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
           <div className="flex justify-between items-center h-[4.5rem]">
             <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('home')}>
@@ -508,53 +526,54 @@ const App = () => {
             </div>
           </div>
         </div>
-
-        {/* Mobile Menu Dropdown */}
-        {shouldRenderMenu && (
-          <div
-            onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
-            className={`md:hidden bg-[#02060f] border-t border-slate-800 absolute w-full shadow-lg ${
-              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
-            }`}
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {['Home', 'Work', 'About', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`block w-full text-left px-3 py-2 text-lg font-medium rounded-md transition-colors ${
-                    activeSection === item.toLowerCase() && currentView === 'home'
-                      ? 'text-[#01F5D1] bg-slate-900'
-                      : 'text-slate-300 hover:text-[#9EF7EA] hover:bg-slate-900'
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-              <a
-                href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                target="_blank"
-                rel="noreferrer"
-                className="block w-full text-left px-3 py-2 text-lg font-medium text-[#01F5D1] hover:bg-slate-900 rounded-md"
-              >
-                Resume ↗
-              </a>
-            </div>
-          </div>
-        )}
       </nav>
+
+      {/* Mobile Menu Dropdown */}
+      {shouldRenderMenu && (
+        <div
+          onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
+          className={`md:hidden glass-menu border-t border-white/10 fixed inset-x-0 top-[4.5rem] z-50 ${
+            isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
+          }`}
+        >
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {['Home', 'Work', 'About', 'Contact'].map((item) => (
+              <button
+                key={item}
+                onClick={() => scrollToSection(item.toLowerCase())}
+                className={`block w-full text-left px-3 py-2 text-lg font-medium rounded-md transition-colors ${
+                  activeSection === item.toLowerCase() && currentView === 'home'
+                    ? 'text-[#01F5D1] bg-white/10'
+                    : 'text-slate-300 hover:text-[#9EF7EA] hover:bg-white/5'
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+            <a
+              href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+              target="_blank"
+              rel="noreferrer"
+              className="block w-full text-left px-3 py-2 text-lg font-medium text-[#01F5D1] hover:bg-white/5 rounded-md"
+            >
+              Resume ↗
+            </a>
+          </div>
+        </div>
+      )}
+
 
       {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
       {currentView === 'home' ? (
-        <div className={`bg-[#02060f] transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+        <div className={`relative z-10 transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
           {/* Hero Section */}
           <section
             id="home"
             onMouseMove={handleHeroMouseMove}
             className={`relative min-h-[calc(100vh-4.5rem)] md:min-h-[calc(100vh-5rem)] pt-[5.5rem] pb-8 md:pt-24 md:pb-10 scroll-mt-28 overflow-hidden ${
               !isTransitioning && activeSection === 'home'
-                ? 'bg-gradient-to-b from-[#031018] via-[#062126] to-[#02060f]'
-                : 'bg-[#02060f]'
+                ? 'bg-gradient-to-b from-[#031018]/90 via-[#062126]/70 to-transparent'
+                : 'bg-transparent'
             }`}
           >
             {!isTransitioning && activeSection === 'home' && (
@@ -569,7 +588,7 @@ const App = () => {
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
                   <div className="mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-                    <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#01F5D1]/40 bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
+                    <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
                       Open to Summer 2026 internships
                     </span>
@@ -581,7 +600,7 @@ const App = () => {
                     I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a product designer and design engineer studying B.Des at FLAME University. Recently: agentic AI at Bajaj Finance, and a screen-free wand for kids.
                   </p>
 
-                  <div className="lg:hidden w-full rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg mb-5">
+                  <div className="glass lg:hidden w-full rounded-3xl p-4 mb-5">
                     <div className="rounded-2xl overflow-hidden aspect-square">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
@@ -592,7 +611,7 @@ const App = () => {
                       />
                     </div>
                     <p className="text-xs uppercase tracking-[0.16em] text-slate-400 mt-3 px-1">Product Design Student · FLAME University</p>
-                    <div className="mt-3 rounded-xl border border-slate-700 bg-slate-950 text-[#01F5D1] p-4 font-mono text-[11px]">
+                    <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[11px]">
                       <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
                       <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">phygital · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
@@ -609,7 +628,7 @@ const App = () => {
 
                   <div className="flex flex-col gap-2.5 mb-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
                     {operatorStats.map((stat) => (
-                      <span key={`mobile-stat-${stat.label}`} className="w-full min-h-[44px] px-4 py-2 text-sm font-semibold rounded-full border border-slate-600 bg-slate-900/85 text-slate-200 flex items-center justify-center text-center">
+                      <span key={`mobile-stat-${stat.label}`} className="glass-chip w-full min-h-[44px] px-4 py-2 text-sm font-semibold rounded-full text-slate-200 flex items-center justify-center text-center">
                         {stat.label}: {stat.value}
                       </span>
                     ))}
@@ -677,7 +696,7 @@ const App = () => {
                 </div>
 
                 <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
-                  <div className="max-w-[324px] h-full lg:ml-auto rounded-3xl border border-slate-700 bg-slate-900/85 p-4 shadow-lg flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-20px_rgba(1,245,209,0.35)] hover:border-[#01F5D1]/50">
+                  <div className="glass glass-hover max-w-[324px] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
                     <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
@@ -688,7 +707,7 @@ const App = () => {
                       />
                     </div>
                     <p className="text-xs uppercase tracking-[0.16em] text-slate-400 mt-4 px-1">Product Design Student · FLAME University</p>
-                    <div className="mt-4 rounded-xl border border-slate-700 bg-slate-950 text-[#01F5D1] p-4 font-mono text-[11px]">
+                    <div className="glass !bg-slate-950/75 mt-4 rounded-xl text-[#01F5D1] p-4 font-mono text-[11px]">
                       <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
                       <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">phygital · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
@@ -700,7 +719,7 @@ const App = () => {
               <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
                 {operatorStats.map((stat, i) => (
                   <Reveal key={stat.label} delay={i * 90} duration={600}>
-                    <div className="bg-slate-900/85 border border-slate-700 rounded-2xl p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#01F5D1]/60 hover:shadow-[0_18px_45px_-20px_rgba(1,245,209,0.4)]">
+                    <div className="glass glass-hover rounded-2xl p-6">
                       <div className="text-[1.95rem] md:text-[2.2rem] font-bold text-slate-100">{stat.value}</div>
                       <div className="text-sm text-slate-300 mt-1">{stat.label}</div>
                     </div>
@@ -718,7 +737,7 @@ const App = () => {
           <Marquee items={marqueeItems} />
 
           {/* Work Section */}
-          <section id="work" className="py-24 px-4 sm:px-8 lg:px-12 max-w-[84rem] mx-auto scroll-mt-28 bg-[#02060f]">
+          <section id="work" className="py-24 px-4 sm:px-8 lg:px-12 max-w-[84rem] mx-auto scroll-mt-28">
             <Reveal className="mb-16">
               <h2 className="text-3xl md:text-4xl font-display text-slate-100 mb-4">Selected Projects</h2>
               <p className="text-slate-300 max-w-2xl mb-6">From circuit-led builds to AI-enabled interfaces — each project reflects how I think through design, engineering, and behavior together.</p>
@@ -741,7 +760,7 @@ const App = () => {
                   >
                   <div
                     id={`project-${project.id}`}
-                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl overflow-hidden border border-slate-800 bg-slate-900/50 backdrop-blur-sm transition-colors active:border-[#01F5D1]/50 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:backdrop-blur-none"
+                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl overflow-hidden glass glass-mobile-only active:border-[#01F5D1]/50 md:overflow-visible md:rounded-none"
                     role="button"
                     tabIndex={0}
                     aria-label={`Open case study for ${project.title}`}
@@ -798,7 +817,7 @@ const App = () => {
 
                           {/* Overlay — desktop hover */}
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 hidden md:flex items-center justify-center">
-                            <span className="opacity-0 group-hover:opacity-100 bg-slate-950/90 border border-slate-700 px-6 py-3 rounded-full font-medium text-[#9EF7EA] shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span className="glass-chip opacity-0 group-hover:opacity-100 px-6 py-3 rounded-full font-medium text-[#9EF7EA] shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
                               View Project
                             </span>
                           </div>
@@ -866,7 +885,7 @@ const App = () => {
                           aria-label={`Open case study for ${project.title}`}
                           className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
                         >
-                          <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-slate-700 bg-slate-950">
+                          <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-white/5">
                             {!thumbnail.includes('placeholder') ? (
                               <ResponsiveImage
                                 src={thumbnail}
@@ -895,12 +914,12 @@ const App = () => {
 
             {/* Creative Explorations Divider */}
             <Reveal className="mt-24 md:mt-32 mb-16 flex items-center gap-6">
-              <div className="h-px flex-1 bg-slate-800"></div>
+              <div className="h-px flex-1 bg-white/10"></div>
               <div className="text-center">
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Beyond case studies</p>
                 <h2 className="text-2xl font-display text-slate-300">Creative Explorations</h2>
               </div>
-              <div className="h-px flex-1 bg-slate-800"></div>
+              <div className="h-px flex-1 bg-white/10"></div>
             </Reveal>
 
             {/* Additional Work Grid */}
@@ -909,7 +928,7 @@ const App = () => {
               {/* Photoshop Section */}
               <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">
+                  <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
                     <ResponsiveImage
                       src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
                       alt="Photoshop icon"
@@ -924,7 +943,7 @@ const App = () => {
                   {galleryItems.map((item, i) => (
                     <div
                       key={i}
-                      className={`relative w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all group aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-slate-600 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
+                      className={`relative w-full rounded-xl overflow-hidden bg-white/5 border border-white/10 transition-all group aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-white/25 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
                       onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
                     >
                       {item.type === 'video' && item.src ? (
@@ -961,7 +980,7 @@ const App = () => {
               {/* Brand Animation Section */}
               <Reveal delay={120} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">
+                  <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
                     <ResponsiveImage
                       src={`${PUBLIC_URL}/images/Photoshop and Animation/after-effects.png`}
                       alt="After Effects icon"
@@ -973,7 +992,7 @@ const App = () => {
                 </div>
                 <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
                 <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
-                <div className="rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5">
                   <video
                     className="w-full h-auto"
                     controls
@@ -1005,7 +1024,7 @@ const App = () => {
                   {aiItems.map((item, i) => (
                     <div
                       key={i}
-                      className="relative w-full rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-[#01F5D1] hover:shadow-md transition-all group aspect-square hover:-translate-y-1"
+                      className="relative w-full rounded-xl overflow-hidden bg-white/5 cursor-pointer border border-white/10 hover:border-[#01F5D1] hover:shadow-md transition-all group aspect-square hover:-translate-y-1"
                       onClick={() => item.src && setSelectedImage(item.src)}
                     >
                       {item.src ? (
@@ -1058,7 +1077,7 @@ const App = () => {
                     return (
                       <div
                         key={`gallery-snippet-${i}`}
-                        className={`relative ${shapeClass} rounded-xl overflow-hidden bg-slate-800 cursor-pointer border border-slate-700 hover:border-slate-500 hover:shadow-md transition-all group ${positionClass} hover:-translate-y-1`}
+                        className={`relative ${shapeClass} rounded-xl overflow-hidden bg-white/5 cursor-pointer border border-white/10 hover:border-white/30 hover:shadow-md transition-all group ${positionClass} hover:-translate-y-1`}
                         onClick={() => item.src && setSelectedImage(item.src)}
                       >
                         {item.src ? (
@@ -1085,7 +1104,7 @@ const App = () => {
           </section>
 
           {/* About Section */}
-          <section id="about" className="py-16 md:py-24 scroll-mt-28 bg-[#02060f]">
+          <section id="about" className="py-16 md:py-24 scroll-mt-28">
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal>
@@ -1104,19 +1123,19 @@ const App = () => {
                       {
                         label: 'Design × Engineering',
                         body: 'I bridge UI, hardware, and behavior in one product view.',
-                        card: 'border-[#00A19B]/60 bg-[#00A19B]/20 hover:border-[#01F5D1] hover:shadow-[0_14px_36px_-18px_rgba(1,245,209,0.45)]',
+                        card: '!border-[#00A19B]/60 !bg-[#00A19B]/20 hover:!border-[#01F5D1] hover:shadow-[0_14px_36px_-18px_rgba(1,245,209,0.45)]',
                         label_color: 'text-[#01F5D1]',
                       },
                       {
                         label: 'Research-First',
                         body: 'Every design decision is grounded in user insight before it ships.',
-                        card: 'border-[#C8CCCE]/40 bg-[#C8CCCE]/10 hover:border-[#C8CCCE] hover:shadow-[0_14px_36px_-18px_rgba(200,204,206,0.35)]',
+                        card: '!border-[#C8CCCE]/40 !bg-[#C8CCCE]/10 hover:!border-[#C8CCCE] hover:shadow-[0_14px_36px_-18px_rgba(200,204,206,0.35)]',
                         label_color: 'text-[#C8CCCE]',
                       },
                       {
                         label: 'End-to-End',
                         body: 'I own execution from Figma through code to physical prototype.',
-                        card: 'border-emerald-800 bg-emerald-950/30 hover:border-emerald-400 hover:shadow-[0_14px_36px_-18px_rgba(52,211,153,0.4)]',
+                        card: '!border-emerald-500/40 !bg-emerald-500/10 hover:!border-emerald-400 hover:shadow-[0_14px_36px_-18px_rgba(52,211,153,0.4)]',
                         label_color: 'text-emerald-300',
                       },
                     ].map((feature, i) => {
@@ -1124,7 +1143,7 @@ const App = () => {
                       return (
                         <div
                           key={feature.label}
-                          className={`rounded-2xl border ${feature.card} transition-all duration-300 hover:-translate-y-0.5`}
+                          className={`glass rounded-2xl ${feature.card} transition-all duration-300 hover:-translate-y-0.5`}
                         >
                           <button
                             type="button"
@@ -1145,7 +1164,7 @@ const App = () => {
                     })}
                   </div>
 
-                  <div className="mt-6 md:mt-8 rounded-2xl border border-slate-700 bg-slate-900/70 p-5 transition-colors duration-300 hover:border-[#01F5D1]/50">
+                  <div className="glass mt-6 md:mt-8 rounded-2xl p-5 transition-colors duration-300 hover:border-[#01F5D1]/50">
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300 mb-3">Design Principles</p>
                     <ul className="space-y-2 text-sm text-slate-300">
                       <li className="flex items-start gap-2"><span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-slate-300"></span><span className="[text-wrap:pretty]">Technology shifts fast — I keep my process tool-agnostic and outcome-focused.</span></li>
@@ -1161,7 +1180,7 @@ const App = () => {
                     <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 mb-3">Currently exploring</p>
                     <div className="flex flex-wrap gap-2">
                       {currentlyExploring.map((item) => (
-                        <span key={item} className="px-3 py-1.5 text-sm font-medium rounded-full border border-slate-700/80 bg-slate-900/80 text-slate-200">
+                        <span key={item} className="glass-chip px-3 py-1.5 text-sm font-medium rounded-full text-slate-200">
                           {item}
                         </span>
                       ))}
@@ -1187,7 +1206,7 @@ const App = () => {
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {['Figma', 'Python', 'React.js', 'Arduino IDE', 'n8n', 'Adobe Suite', 'Fusion 360'].map((tool) => (
-                          <span key={tool} className="px-3 py-1.5 text-sm font-medium text-emerald-300 bg-emerald-950/30 border border-emerald-800 rounded-full">
+                          <span key={tool} className="glass-chip px-3 py-1.5 text-sm font-medium text-emerald-300 !border-emerald-400/35 rounded-full">
                             {tool}
                           </span>
                         ))}
@@ -1218,7 +1237,7 @@ const App = () => {
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="py-16 md:py-24 scroll-mt-28 bg-[#02060f]">
+          <section id="contact" className="py-16 md:py-24 scroll-mt-28">
             <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal>
@@ -1226,7 +1245,7 @@ const App = () => {
                   <p className="text-lg md:text-xl text-slate-300 mb-5 md:mb-6">
                     I am actively looking for internship opportunities in UI/UX, product design, and phygital interaction — where I can contribute from research through to implementation.
                   </p>
-                  <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#01F5D1]/40 bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
+                  <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
                     <span className="pulse-dot" aria-hidden="true" />
                     Currently available — Summer 2026
                   </span>
@@ -1241,7 +1260,7 @@ const App = () => {
 
                   <Reveal delay={160} className="h-full">
                     <Magnetic className="h-full">
-                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 w-full h-full bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
                         <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
                         <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                           <Linkedin size={22} />
@@ -1257,7 +1276,7 @@ const App = () => {
 
                   <Reveal delay={240} className="h-full">
                     <Magnetic className="h-full">
-                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="relative flex items-center gap-4 p-5 w-full h-full bg-slate-900/80 border border-slate-700 rounded-2xl shadow-sm card-glow group overflow-hidden">
+                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
                         <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
                         <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                           <Download size={22} />
@@ -1277,7 +1296,7 @@ const App = () => {
         </div>
       ) : (
         /* PROJECT DETAIL VIEW */
-        <Suspense fallback={<div className="min-h-screen bg-[#02060f]" />}>
+        <Suspense fallback={<div className="min-h-screen" />}>
           <ProjectDetail
             project={selectedProject}
             nextProject={
@@ -1297,7 +1316,7 @@ const App = () => {
       )}
 
       {/* Footer */}
-      <footer className="bg-[#02060f] border-t border-slate-800 py-12 text-center">
+      <footer className="relative z-10 glass-scrim border-t border-white/10 py-12 text-center">
         <div className="max-w-[84rem] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center gap-3">
           <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
           <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>

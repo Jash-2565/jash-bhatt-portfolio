@@ -354,8 +354,284 @@ body {
   pointer-events: none;
 }
 
+/* ============================================================
+   LIQUID GLASS
+   ------------------------------------------------------------
+   Every raised surface is a translucent pane that refracts the
+   ambient colour field painted behind the page. Each pane is
+   built from four ingredients:
+     1. backdrop-filter — blur + saturation lift (the "glass")
+     2. a translucent tinted fill (the material's own body)
+     3. a bright top rim + corner glint (specular highlight)
+     4. a soft drop shadow (the pane floating off the page)
+   Panes only read as glass if something interesting sits behind
+   them, so page sections stay transparent and the ambient field
+   below supplies the colour.
+   ============================================================ */
+
+/* Ambient colour field — fixed behind all content, drifting slowly.
+   This is what the glass panes blur and refract. */
+@layer components {
+  .ambient-field {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .ambient-orb {
+    position: absolute;
+    display: block;
+    border-radius: 9999px;
+    filter: blur(90px);
+    will-change: transform;
+  }
+  .ambient-orb--cyan {
+    top: -14vh;
+    left: -8vw;
+    width: 58vw;
+    height: 58vw;
+    max-width: 780px;
+    max-height: 780px;
+    background: radial-gradient(circle, rgba(1, 245, 209, 0.20), transparent 68%);
+    animation: orb-drift-a 32s ease-in-out infinite;
+  }
+  .ambient-orb--teal {
+    top: 34vh;
+    right: -14vw;
+    width: 52vw;
+    height: 52vw;
+    max-width: 700px;
+    max-height: 700px;
+    background: radial-gradient(circle, rgba(0, 161, 155, 0.22), transparent 66%);
+    animation: orb-drift-b 41s ease-in-out infinite;
+  }
+  .ambient-orb--deep {
+    bottom: -18vh;
+    left: 22vw;
+    width: 62vw;
+    height: 62vw;
+    max-width: 860px;
+    max-height: 860px;
+    background: radial-gradient(circle, rgba(4, 96, 120, 0.20), transparent 70%);
+    animation: orb-drift-c 37s ease-in-out infinite;
+  }
+}
+
+@keyframes orb-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6vw, 7vh, 0) scale(1.12); }
+}
+@keyframes orb-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.06); }
+  50% { transform: translate3d(-7vw, -6vh, 0) scale(0.94); }
+}
+@keyframes orb-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.96); }
+  50% { transform: translate3d(4vw, -8vh, 0) scale(1.1); }
+}
+
+/* Base pane. Compose with .glass-hover for the interactive lensing. */
+@layer components {
+  .glass {
+    position: relative;
+    isolation: isolate;
+    background:
+      linear-gradient(
+        158deg,
+        rgba(255, 255, 255, 0.085) 0%,
+        rgba(255, 255, 255, 0.022) 44%,
+        rgba(1, 245, 209, 0.045) 100%
+      ),
+      rgba(9, 15, 20, 0.42);
+    backdrop-filter: blur(18px) saturate(165%);
+    -webkit-backdrop-filter: blur(18px) saturate(165%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    box-shadow:
+      0 18px 44px -22px rgba(0, 0, 0, 0.85),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 -1px 0 rgba(1, 245, 209, 0.07);
+  }
+
+  /* Specular layer: a soft sheen off the top-left plus a cyan glint in the
+     top-right corner — the two highlights that sell a curved glass edge.
+     Sits above the pane's own fill but below its content. */
+  .glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 82% at 10% -12%, rgba(255, 255, 255, 0.14), transparent 56%),
+      radial-gradient(88% 68% at 102% -4%, rgba(1, 245, 209, 0.12), transparent 60%);
+  }
+
+  /* Interactive lensing — the pane thickens, brightens and lifts on hover. */
+  .glass-hover {
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 320ms ease,
+      backdrop-filter 320ms ease;
+    will-change: transform;
+  }
+  .glass-hover:hover {
+    transform: translateY(-3px);
+    border-color: rgba(1, 245, 209, 0.34);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    box-shadow:
+      0 30px 66px -26px rgba(1, 245, 209, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.26),
+      inset 0 0 26px rgba(1, 245, 209, 0.08);
+  }
+
+  /* Navigation bar — thinner, wider-blur glass so page content reads through it. */
+  .glass-nav {
+    background: linear-gradient(180deg, rgba(9, 16, 21, 0.62), rgba(4, 9, 13, 0.44));
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 14px 36px -28px rgba(0, 0, 0, 0.95);
+    transition: background 320ms ease, backdrop-filter 320ms ease,
+      border-color 320ms ease, box-shadow 320ms ease;
+  }
+  /* Condensed state once the page scrolls under it — denser glass, brighter rim. */
+  .glass-nav[data-scrolled='true'] {
+    background: linear-gradient(180deg, rgba(7, 13, 18, 0.82), rgba(3, 7, 11, 0.68));
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border-bottom-color: rgba(1, 245, 209, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 20px 46px -30px rgba(0, 0, 0, 1);
+  }
+
+  /* Small controls: chips, pills, icon buttons. Lighter blur, tighter rim. */
+  .glass-chip {
+    position: relative;
+    background:
+      linear-gradient(150deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+      rgba(10, 16, 21, 0.4);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    transition: border-color 220ms ease, color 220ms ease, box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .glass-chip:hover {
+    transform: translateY(-1px);
+    border-color: rgba(1, 245, 209, 0.5);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
+      0 8px 20px -12px rgba(1, 245, 209, 0.5);
+  }
+
+  /* Project cards are glass panes on mobile, where the card is the surface. On
+     desktop the media tile itself carries the treatment, so the shell drops out. */
+  @media (min-width: 768px) {
+    .glass-mobile-only {
+      background: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-color: transparent;
+      box-shadow: none;
+    }
+    .glass-mobile-only::after {
+      display: none;
+    }
+  }
+
+  /* Full-bleed panes that blur real page content: lightbox scrim, the mobile
+     nav dropdown, the footer. The dropdown is rendered as a sibling of <nav>
+     rather than a child — <nav> has its own backdrop-filter, which makes it a
+     backdrop root, and a nested pane would have nothing to sample. */
+  .glass-scrim {
+    background: rgba(2, 6, 12, 0.72);
+    backdrop-filter: blur(30px) saturate(150%);
+    -webkit-backdrop-filter: blur(30px) saturate(150%);
+  }
+
+  /* Mobile nav dropdown — same material as the scrim but a denser tint, since
+     menu labels have to stay the most legible thing on screen. */
+  .glass-menu {
+    background: linear-gradient(180deg, rgba(6, 12, 17, 0.93), rgba(3, 7, 11, 0.89));
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 26px 50px -30px rgba(0, 0, 0, 1);
+  }
+
+
+  /* Browsers without backdrop-filter get an opaque equivalent, otherwise the
+     panes read as barely-there tint over the ambient field. */
+}
+
+@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+  .glass,
+  .glass-chip {
+    background: rgba(12, 19, 25, 0.94);
+  }
+  .glass-nav,
+  .glass-nav[data-scrolled='true'] {
+    background: rgba(4, 9, 14, 0.97);
+  }
+  .glass-scrim {
+    background: rgba(2, 6, 12, 0.97);
+  }
+}
+
+/* Users who ask for reduced transparency get solid, high-contrast panes. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-chip {
+    background: #0c1319;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass::after {
+    display: none;
+  }
+  .glass-nav,
+  .glass-nav[data-scrolled='true'],
+  .glass-menu {
+    background: #04090e;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-scrim {
+    background: rgba(2, 6, 12, 0.98);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-hover:hover {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .ambient-field {
+    display: none;
+  }
+}
+
 /* Respect the user's motion preference — collapse every custom motion to a short fade. */
 @media (prefers-reduced-motion: reduce) {
+  .ambient-orb {
+    animation: none !important;
+  }
+  .glass-hover,
+  .glass-chip {
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .glass-hover:hover,
+  .glass-chip:hover {
+    transform: none;
+  }
   .animate-drift,
   .animate-nudge,
   .accent-shimmer,
