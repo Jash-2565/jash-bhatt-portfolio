@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Image } from 'lucide-react';
 import type { ResponsiveImageProps } from '../types';
 import AutoVideo from './AutoVideo';
+import { getImageSources, DEFAULT_SIZES } from '../utils/imageSources';
 
 const ImageWithFallback = ({
   src,
   alt = '',
   className,
+  sizes,
   deferGifOnConstrainedNetwork: _deferGifOnConstrainedNetwork,
   ...imgProps
 }: ResponsiveImageProps) => {
@@ -25,6 +27,8 @@ const ImageWithFallback = ({
     );
   }
 
+  const sources = getImageSources(src);
+
   return (
     <img
       src={src}
@@ -33,6 +37,8 @@ const ImageWithFallback = ({
       decoding="async"
       className={className}
       onError={() => setHasError(true)}
+      {...(sources?.srcSet ? { srcSet: sources.srcSet, sizes: sizes ?? DEFAULT_SIZES } : {})}
+      {...(sources ? { width: sources.width, height: sources.height } : {})}
       {...imgProps}
     />
   );
