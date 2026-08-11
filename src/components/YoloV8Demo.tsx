@@ -55,7 +55,7 @@ const getBaseUrl = () => {
 };
 
 const baseUrl = getBaseUrl().replace(/\/$/, '');
-const modelUrl = `${baseUrl}/models/yolov8s.onnx`;
+const modelUrl = `${baseUrl}/models/yolov8s-int8.onnx`;
 const wasmBaseUrl = new URL(`${baseUrl}/onnxruntime/`, window.location.origin).toString();
 
 const preprocess = (data: Uint8ClampedArray) => {
@@ -434,7 +434,7 @@ const YoloV8Demo = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <h4 className="text-lg font-semibold text-slate-100">Live Webcam Detection</h4>
-          <p className="text-sm text-slate-400">Model: `public/models/yolov8s.onnx`</p>
+          <p className="text-sm text-slate-400">Model: `public/models/yolov8s-int8.onnx`</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs uppercase tracking-widest text-emerald-300 bg-emerald-900/30 px-3 py-1 rounded-full">
@@ -453,7 +453,7 @@ const YoloV8Demo = () => {
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-950/70 px-6 text-center text-slate-200 text-sm">
             <span>Run the demo to enable your camera</span>
             <span className="text-xs text-slate-400">
-              Downloads a ~45&nbsp;MB model — best on Wi-Fi
+              Downloads an ~11&nbsp;MB model on first run
             </span>
           </div>
         )}

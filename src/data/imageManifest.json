@@ -1,0 +1,577 @@
+{
+  "/images/ClassFlow/ClassFlow-Calendar-March.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Chatbot-Only.webp": {
+    "w": 845,
+    "h": 1220,
+    "v": [
+      480
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Home.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Import-Chatbot.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Landing.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-List-View.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Thumbnail.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Week-View.webp": {
+    "w": 2400,
+    "h": 1316,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Dino Spread/dino-spread-applying-condiments.webp": {
+    "w": 776,
+    "h": 517,
+    "v": [
+      480
+    ]
+  },
+  "/images/Dino Spread/dino-spread-final-sketch.webp": {
+    "w": 326,
+    "h": 440
+  },
+  "/images/Dino Spread/dino-spread-hero.webp": {
+    "w": 932,
+    "h": 675,
+    "v": [
+      480
+    ]
+  },
+  "/images/Dino Spread/dino-spread-knife-mess.webp": {
+    "w": 2400,
+    "h": 1309,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Dino Spread/dino-spread-sketches.webp": {
+    "w": 481,
+    "h": 400
+  },
+  "/images/Dino Spread/drying-pop-prototype.webp": {
+    "w": 464,
+    "h": 427
+  },
+  "/images/Dino Spread/form-variations.webp": {
+    "w": 669,
+    "h": 430
+  },
+  "/images/Dino Spread/jash-creating-prototype.webp": {
+    "w": 365,
+    "h": 427
+  },
+  "/images/Dino Spread/sketching-final-prototype.webp": {
+    "w": 501,
+    "h": 650
+  },
+  "/images/Dino Spread/sketching-team-photo.webp": {
+    "w": 481,
+    "h": 650
+  },
+  "/images/Jash-portrait.webp": {
+    "w": 800,
+    "h": 1067,
+    "v": [
+      480
+    ]
+  },
+  "/images/Lamborghini Jetski/aquatoro-black.webp": {
+    "w": 1024,
+    "h": 1024,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Lamborghini Jetski/aquatoro-blue.webp": {
+    "w": 1024,
+    "h": 1024,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Lamborghini.webp": {
+    "w": 728,
+    "h": 816,
+    "v": [
+      480
+    ]
+  },
+  "/images/Photography/camera.png": {
+    "w": 512,
+    "h": 512
+  },
+  "/images/Photography/fire-sunset.webp": {
+    "w": 2400,
+    "h": 1800,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Photography/flowers.webp": {
+    "w": 2400,
+    "h": 1600,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Photography/sunrise-bird.webp": {
+    "w": 1800,
+    "h": 2400,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Photography/sunroof-water.webp": {
+    "w": 1800,
+    "h": 2400,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Photoshop and Animation/Mrs jordan.webp": {
+    "w": 990,
+    "h": 1215,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Photoshop and Animation/after-effects.png": {
+    "w": 512,
+    "h": 512
+  },
+  "/images/Photoshop and Animation/la la land.webp": {
+    "w": 2000,
+    "h": 2000,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Photoshop and Animation/photoshop.png": {
+    "w": 512,
+    "h": 512
+  },
+  "/images/RAHI/RAHI Logo.webp": {
+    "w": 1600,
+    "h": 900,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/RAHI/RAHI-Calendar-1.webp": {
+    "w": 703,
+    "h": 569,
+    "v": [
+      480
+    ]
+  },
+  "/images/RAHI/RAHI-accordian.webp": {
+    "w": 1426,
+    "h": 1190,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/RAHI/RAHI-buttons.webp": {
+    "w": 1507,
+    "h": 750,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/RAHI/RAHI-calendar.webp": {
+    "w": 350,
+    "h": 528
+  },
+  "/images/RAHI/RAHI-dropdown.webp": {
+    "w": 765,
+    "h": 1016,
+    "v": [
+      480
+    ]
+  },
+  "/images/RAHI/RAHI-graphs.webp": {
+    "w": 2400,
+    "h": 1105,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/RAHI/RAHI-textboxes.webp": {
+    "w": 1424,
+    "h": 407,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/RAHI/RAHI-timepicker.webp": {
+    "w": 691,
+    "h": 502
+  },
+  "/images/Revela/Exploded View.webp": {
+    "w": 1702,
+    "h": 2400,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Revela/Revela Hero Shot.webp": {
+    "w": 1920,
+    "h": 1080,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Revela/wamd-creation-2.webp": {
+    "w": 1800,
+    "h": 2400,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Revela/wand-green-glow.webp": {
+    "w": 1344,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Revela/wand-orange-glow.webp": {
+    "w": 1344,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Revela/wand-purple-glow.webp": {
+    "w": 1344,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Revela/wand-red-glow.webp": {
+    "w": 1344,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Revela/wand-white-glow.webp": {
+    "w": 1344,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Revela/wand-yellow-glow.webp": {
+    "w": 1344,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/SolarLink/Inclusive-Decision_Making.webp": {
+    "w": 960,
+    "h": 832,
+    "v": [
+      480
+    ]
+  },
+  "/images/SolarLink/Solar-Process-Support.webp": {
+    "w": 1376,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/SolarLink/Solar-Sunday-2.webp": {
+    "w": 1157,
+    "h": 742,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/SolarLink/Solar-Sunday.webp": {
+    "w": 2400,
+    "h": 1536,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/SolarLink Affinity Map.webp": {
+    "w": 2400,
+    "h": 1915,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/SolarLink-Current-Journey.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/SolarLink-Persona-Rajesh.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/SolarLink-Service-Blueprint.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/SolarLink-Storyboard.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/Solar_Financing.webp": {
+    "w": 832,
+    "h": 768,
+    "v": [
+      480
+    ]
+  },
+  "/images/SolarLink/Solarlink-thumbnail.webp": {
+    "w": 1920,
+    "h": 1080,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/making-solar-relatable.webp": {
+    "w": 1376,
+    "h": 768,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/Tinkering/Circuit-Design.webp": {
+    "w": 2400,
+    "h": 1663,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Tinkering/segment-1-light.webp": {
+    "w": 720,
+    "h": 1280,
+    "v": [
+      480
+    ]
+  },
+  "/images/Tinkering/soldering.webp": {
+    "w": 470,
+    "h": 849
+  },
+  "/images/Tinkering/tinkering-hero-2.webp": {
+    "w": 2400,
+    "h": 2400,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/Giving-Feedback.webp": {
+    "w": 1972,
+    "h": 946,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/Onboarding.webp": {
+    "w": 2324,
+    "h": 620,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/Shared-Cart.webp": {
+    "w": 2324,
+    "h": 844,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/Viewing-Feedback.webp": {
+    "w": 1972,
+    "h": 946,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/WePick Design System 2.webp": {
+    "w": 1461,
+    "h": 1155,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/WePick-Hero.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/WePick/storyboard-with-app.webp": {
+    "w": 778,
+    "h": 389,
+    "v": [
+      480
+    ]
+  },
+  "/images/WePick/storyboard-without-app.webp": {
+    "w": 778,
+    "h": 389,
+    "v": [
+      480
+    ]
+  },
+  "/images/WePick/wepick-moodboard.webp": {
+    "w": 1170,
+    "h": 560,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/WePick/wepick-thumbnail.webp": {
+    "w": 2400,
+    "h": 1018,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/python.webp": {
+    "w": 512,
+    "h": 512
+  }
+}
