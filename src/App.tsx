@@ -960,15 +960,16 @@ const App = () => {
                           {project.description}
                         </p>
 
-                        {/* On touch this replaces the desktop hover overlay, so it
-                            needs to read as a real button and clear 44px. */}
+                        {/* Plain text link at every width. On touch it stands in
+                            for the desktop hover overlay, so it keeps a 44px
+                            target even without the chip around it. */}
                         <button
                           type="button"
                           onClick={(event) => {
                             event.stopPropagation();
                             handleProjectClick(project);
                           }}
-                          className={`glass-chip md:!bg-transparent md:!bg-none md:!backdrop-filter-none md:!border-0 md:!shadow-none md:!p-0 inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-full font-semibold text-sm md:text-base hover:gap-3 transition-all ${project.accentColor}`}
+                          className={`inline-flex items-center gap-2 min-h-11 font-semibold text-sm md:text-base hover:gap-3 transition-all ${project.accentColor}`}
                           aria-label={`Read full case study for ${project.title}`}
                         >
                           Read Full Case Study <ArrowRight size={16} className="md:w-[18px] md:h-[18px] transition-transform duration-300 group-hover:translate-x-1" />

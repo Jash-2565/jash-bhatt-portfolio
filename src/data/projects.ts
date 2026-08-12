@@ -18,7 +18,7 @@ export const projects: Project[] = [
     description: "Conversational agents that replace Bajaj Finance's form-based HR workflows — designed and shipped inside the company's Agentic AI Unit, as part of a roadmap to deploy 800+ autonomous agents across the business.",
     tags: ["Microsoft Copilot Studio", "Power Fx", "Power Automate", "Adaptive Cards", "Azure"],
     color: "bg-[#EAF0FF]",
-    accentColor: "text-[#1D4ED8]",
+    accentColor: "text-[#4B74E7]",
     hoverColor: "group-hover:text-[#1D4ED8]",
     badge: "bg-[#DCE7FF] text-[#1E3A8A]",
     content: {
@@ -124,7 +124,7 @@ export const projects: Project[] = [
     description: "An AI-powered course scheduling tool for professors — describe your semester in plain language and get a fully structured, exportable calendar in minutes.",
     tags: ["React 19", "Vite 7", "Tailwind CSS", "Firebase", "Gemini 2.5 Flash", "Google Calendar API"],
     color: "bg-[#F2F1FF]",
-    accentColor: "text-[#4239C4]",
+    accentColor: "text-[#746DD5]",
     hoverColor: "group-hover:text-[#4239C4]",
     badge: "bg-[#E3E0FF] text-[#2F2895]",
     content: {
@@ -489,7 +489,7 @@ export const projects: Project[] = [
     description: "A screen-free, embedded system that uses proximity-based light feedback to guide children (ages 4–7) through real-world exploration and object-finding.",
     tags: ["ESP32", "NeoPixels", "Arduino IDE"],
     color: "bg-[#FFF1F2]",
-    accentColor: "text-[#DC2626]",
+    accentColor: "text-[#E03E3E]",
     hoverColor: "group-hover:text-[#DC2626]",
     badge: "bg-[#FEE2E2] text-[#991B1B]",
     content: {
@@ -668,7 +668,7 @@ export const projects: Project[] = [
     description: "A dinosaur-themed jam and butter dispenser for school and college canteens — eliminating messy countertops and shared utensils through a playful, pull-to-dispense pump mechanism.",
     tags: ["Physical Prototyping", "Sketching", "3D Modeling"],
     color: "bg-rose-50",
-    accentColor: "text-rose-900",
+    accentColor: "text-[#E23167]",
     hoverColor: "group-hover:text-rose-900",
     badge: "bg-rose-100 text-rose-900",
     content: {
@@ -998,7 +998,7 @@ export const projects: Project[] = [
     description: "A double 7-segment display countdown system built with ESP32, 36 LEDs, and a relay-triggered motor — designed, wired, and soldered from scratch as a hands-on electronics project.",
     tags: ["Prototyping", "R&D", "Creative Coding"],
     color: "bg-rose-50",
-    accentColor: "text-rose-600",
+    accentColor: "text-[#E43158]",
     hoverColor: "group-hover:text-rose-600",
     badge: "bg-rose-100 text-rose-700",
     content: {
