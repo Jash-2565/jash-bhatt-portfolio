@@ -696,33 +696,7 @@ const App = () => {
                     I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a product designer and design engineer studying B.Des at FLAME University.
                   </p>
 
-                  {/* Mobile CTAs sit directly under the intro so the primary
-                      action is reachable without scrolling past the portrait.
-                      Two-up grid instead of three stacked full-width buttons. */}
-                  <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                    <button
-                      onClick={() => scrollToSection('work')}
-                      className={`group ${ui.btnBase} ${ui.btnPrimary} !px-4 text-[0.95rem]`}
-                    >
-                      View Work <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
-                    <a
-                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`${ui.btnBase} ${ui.btnSecondary} !px-4 text-[0.95rem]`}
-                    >
-                      <Download size={16} /> Resume
-                    </a>
-                    <button
-                      onClick={() => scrollToSection('contact')}
-                      className={`col-span-2 ${ui.btnBase} ${ui.btnSecondary} text-[0.95rem]`}
-                    >
-                      Get in Touch
-                    </button>
-                  </div>
-
-                  <div className="flex items-baseline gap-2.5 mb-6 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                  <div className="flex items-baseline gap-2.5 mb-6 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                     <span className="text-[#01F5D1] text-lg" aria-hidden="true">{'>'}</span>
                     <Typewriter
                       phrases={personalitySignals}
@@ -748,12 +722,42 @@ const App = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-2.5 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+                  {/* Read-only facts, so no chip/pill styling — that reads as
+                      tappable next to the CTAs. Value-first hierarchy mirrors
+                      the desktop stat cards. */}
+                  <dl className="lg:hidden border-y border-white/10 divide-y divide-white/10 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
                     {operatorStats.map((stat) => (
-                      <span key={`mobile-stat-${stat.label}`} className="glass-chip w-full min-h-[44px] px-4 py-2 text-sm font-semibold rounded-full text-slate-200 flex items-center justify-center text-center">
-                        {stat.label}: {stat.value}
-                      </span>
+                      <div key={`mobile-stat-${stat.label}`} className="py-3">
+                        <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-slate-400">{stat.label}</dt>
+                        <dd className="text-[0.95rem] font-semibold text-slate-100 mt-1">{stat.value}</dd>
+                      </div>
                     ))}
+                  </dl>
+
+                  {/* Mobile CTAs close out the hero, mirroring the desktop
+                      column where they sit below the portrait and stats.
+                      Two-up grid instead of three stacked full-width buttons. */}
+                  <div className="grid grid-cols-2 gap-3 mt-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+                    <button
+                      onClick={() => scrollToSection('work')}
+                      className={`group ${ui.btnBase} ${ui.btnPrimary} !px-4 text-[0.95rem]`}
+                    >
+                      View Work <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                    </button>
+                    <a
+                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`${ui.btnBase} ${ui.btnSecondary} !px-4 text-[0.95rem]`}
+                    >
+                      <Download size={16} /> Resume
+                    </a>
+                    <button
+                      onClick={() => scrollToSection('contact')}
+                      className={`col-span-2 ${ui.btnBase} ${ui.btnSecondary} text-[0.95rem]`}
+                    >
+                      Get in Touch
+                    </button>
                   </div>
 
                   <div className="hidden lg:flex items-baseline gap-2.5 mb-8 min-h-[36px] font-mono whitespace-nowrap animate-fade-in-up" style={{ animationDelay: '260ms' }}>
