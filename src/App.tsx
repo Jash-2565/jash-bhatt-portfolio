@@ -968,7 +968,7 @@ const App = () => {
                             event.stopPropagation();
                             handleProjectClick(project);
                           }}
-                          className={`glass-chip md:!bg-transparent md:!border-0 md:!shadow-none md:!p-0 inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-full font-semibold text-sm md:text-base hover:gap-3 transition-all ${project.accentColor}`}
+                          className={`glass-chip md:!bg-transparent md:!bg-none md:!backdrop-filter-none md:!border-0 md:!shadow-none md:!p-0 inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-full font-semibold text-sm md:text-base hover:gap-3 transition-all ${project.accentColor}`}
                           aria-label={`Read full case study for ${project.title}`}
                         >
                           Read Full Case Study <ArrowRight size={16} className="md:w-[18px] md:h-[18px] transition-transform duration-300 group-hover:translate-x-1" />
