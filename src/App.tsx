@@ -721,9 +721,9 @@ const App = () => {
                     {/* Sized to hold one line: full 12px from 375px up, easing
                         down on narrower phones where the card can't fit it. */}
                     <p className="text-[clamp(0.625rem,3.2vw,0.75rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
-                    <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5625rem,2.9vw,0.6875rem)]">
+                    <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5rem,2.75vw,0.6875rem)]">
                       <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
-                      <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">phygital · ui/ux · circuits</span></p>
+                      <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
                     </div>
                   </div>
@@ -816,9 +816,11 @@ const App = () => {
                       />
                     </div>
                     <p className="text-xs uppercase tracking-[0.1em] text-slate-400 mt-4 px-1">Design Student · FLAME University</p>
-                    <div className="glass !bg-slate-950/75 mt-4 rounded-xl text-[#01F5D1] p-4 font-mono text-[11px]">
+                    {/* 10.5px keeps the longest row clear of the fixed 324px
+                        card; 11px left only 4px of slack. */}
+                    <div className="glass !bg-slate-950/75 mt-4 rounded-xl text-[#01F5D1] p-4 font-mono text-[10.5px]">
                       <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
-                      <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">phygital · ui/ux · circuits</span></p>
+                      <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
                     </div>
                   </div>
