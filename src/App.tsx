@@ -704,12 +704,16 @@ const App = () => {
                     />
                   </div>
 
-                  <div className="glass lg:hidden w-full rounded-3xl p-4 mb-6">
-                    <div className="rounded-2xl overflow-hidden aspect-[4/3] xs:aspect-square">
+                  {/* Capped so the 3:4 portrait doesn't grow taller than the
+                      viewport once the card goes full-width on tablets. */}
+                  <div className="glass lg:hidden w-full max-w-sm mx-auto rounded-3xl p-4 mb-6">
+                    {/* Matches the source photo's 3:4 ratio so object-cover has
+                        nothing to crop. A landscape box here cut off the head. */}
+                    <div className="rounded-2xl overflow-hidden aspect-[3/4]">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                         alt="Portrait of Jash Bhatt"
-                        className="w-full h-full object-cover object-bottom"
+                        className="w-full h-full object-cover object-top"
                         loading="eager"
                         fetchPriority="high"
                       />
