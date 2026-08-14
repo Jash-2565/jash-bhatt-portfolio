@@ -53,7 +53,9 @@ export default function CopyEmail({ email }: CopyEmailProps) {
       type="button"
       onClick={handleCopy}
       aria-label={copied ? 'Email copied to clipboard' : `Copy email address ${email}`}
-      className="glass relative flex items-center gap-4 p-5 w-full h-full text-left rounded-2xl card-glow group overflow-hidden"
+      // Tighter below `lg` so the contact page fits a phone screen without
+      // scrolling; desktop keeps the roomier padding.
+      className="glass relative flex items-center gap-4 p-4 lg:p-5 w-full h-full text-left rounded-2xl card-glow group overflow-hidden"
     >
       {ripple && (
         <span
@@ -64,7 +66,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         />
       )}
       <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-      <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+      <div className="shrink-0 p-2.5 lg:p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
         <Mail size={22} />
       </div>
       <div className="text-left min-w-0">

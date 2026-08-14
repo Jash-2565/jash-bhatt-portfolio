@@ -608,7 +608,11 @@ const App = () => {
   }, [selectedImage]);
 
   return (
-    <div className="min-h-screen bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 transition-colors duration-300">
+    /* Flex column with `mt-auto` on the footer: on a page short enough to fit
+       the screen — Contact — the footer sits at the bottom instead of floating
+       with a band of dead background beneath it. Every other child here is
+       fixed-position, so only the content wrapper and the footer are in flow. */
+    <div className="min-h-[100svh] flex flex-col bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 transition-colors duration-300">
       {/* Ambient colour field the glass panes refract. Sits behind everything;
           all page content is lifted above it with `relative z-10`. */}
       <div className="ambient-field" aria-hidden="true">
@@ -796,10 +800,16 @@ const App = () => {
         /* Every page but Home opens with its section flush against the top of
            the document, where the fixed nav overlays it — the section's own
            padding was hiding entirely behind the header and leaving the title
-           jammed against it. Home is exempt: the hero carries its own offset. */
+           jammed against it. The subtraction cancels the section's own top
+           padding so the total lands on `nav-h + 1rem`, the same line the hero's
+           status pill starts on — and it has to step at `sm` because
+           `ui.section` is `py-14 sm:py-20`. Home is exempt: the hero carries
+           its own offset. */
         <div
           className={`relative z-10 transition-all duration-300 ease-in-out transform ${
-            isMobile && mobilePage !== 'home' ? 'pt-[var(--nav-h)]' : ''
+            isMobile && mobilePage !== 'home'
+              ? 'pt-[calc(var(--nav-h)-2.5rem)] sm:pt-[calc(var(--nav-h)-4rem)]'
+              : ''
           } ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}
         >
           {/* Hero Section */}
@@ -811,7 +821,11 @@ const App = () => {
             // a full screen left ~290px of void above the fold; letting the hero
             // hug its content instead brings the portrait card up into view,
             // which is a better scroll affordance than empty space.
-            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1.25rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden ${
+            // Content starts 1rem below the fixed nav. The other pages reach the
+            // same line via their section's own `py-14`, so the offsets are
+            // written differently but resolve identically — see the page
+            // container below.
+            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden ${
               !isTransitioning && activeSection === 'home'
                 ? 'bg-gradient-to-b from-[#031018]/90 via-[#062126]/70 to-transparent'
                 : 'bg-transparent'
@@ -999,9 +1013,12 @@ const App = () => {
 
           {/* Featured work preview — paged mobile Home only. Keeps Home from
               being a dead end that shows no work, without dragging the whole
-              6,300px Work section back onto it. */}
+              6,300px Work section back onto it. The `pb` matches the
+              `py-14 sm:py-20` the other pages' sections carry, so Home, Work and
+              About all end on the same gap above the footer — without it,
+              "See all projects" sat flush against the footer border. */}
           {isMobile && mobilePage === 'home' && (
-            <section className={`${ui.shell} pt-14 sm:pt-16`}>
+            <section className={`${ui.shell} pt-14 sm:pt-16 pb-14 sm:pb-20`}>
               <Reveal className="mb-6 flex items-end justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1.5">Selected work</p>
@@ -1426,14 +1443,16 @@ const App = () => {
           </section>
           )}
 
-          {/* Contact Section */}
+          {/* Contact Section. This is the one page short enough to fit a phone
+              screen without scrolling, so its mobile spacing is tuned to keep it
+              that way — desktop keeps the original rhythm via the `lg:` values. */}
           {showsPage('contact') && (
-          <section id="contact" className={`${ui.section} ${ui.scrollMt}`}>
+          <section id="contact" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
             <div className={ui.shell}>
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16">
+              <div className="grid md:grid-cols-2 gap-6 md:gap-16">
                 <Reveal>
-                  <h2 className={`${ui.h2} font-display text-slate-100 mb-5 md:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
-                  <p className="text-lg md:text-xl text-slate-300 mb-5 md:mb-6">
+                  <h2 className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
+                  <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
                     I am actively looking for internship opportunities in UI/UX, product design, and phygital interaction — where I can contribute from research through to implementation.
                   </p>
                   <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
@@ -1451,9 +1470,9 @@ const App = () => {
 
                   <Reveal delay={160} className="h-full">
                     <Magnetic className="h-full">
-                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
+                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
                         <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                        <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+                        <div className="shrink-0 p-2.5 lg:p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                           <Linkedin size={22} />
                         </div>
                         <div className="text-left">
@@ -1467,9 +1486,9 @@ const App = () => {
 
                   <Reveal delay={240} className="h-full">
                     <Magnetic className="h-full">
-                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
+                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
                         <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                        <div className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+                        <div className="shrink-0 p-2.5 lg:p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                           <Download size={22} />
                         </div>
                         <div className="text-left">
@@ -1509,10 +1528,12 @@ const App = () => {
 
       {/* Footer. Mobile padding is deliberately much tighter than desktop:
           171px of chrome for 90px of content was a third of a short page. */}
-      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-6 lg:pt-10 pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] text-center">
-        <div className={`${ui.shell} flex flex-col items-center gap-1.5 lg:gap-3`}>
-          <span className="text-xl lg:text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
-          <p className="text-slate-500 text-xs lg:text-sm">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
+      {/* One compact footer at every width — no wordmark (the header already
+          carries it) and a single line of type. It was 151px of chrome for one
+          credit line on desktop. */}
+      <footer className="relative z-10 mt-auto glass-scrim border-t border-white/10 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
+        <div className={ui.shell}>
+          <p className="text-slate-500 text-xs">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
         </div>
       </footer>
     </div>
