@@ -38,6 +38,12 @@ export interface Project {
   content: ProjectContent;
 }
 
+/**
+ * Views the paged mobile layout can show. `gallery` is a sub-page of Work
+ * reached from the Creative Explorations card, not a tab of its own.
+ */
+export type MobilePage = 'home' | 'work' | 'gallery' | 'about' | 'contact';
+
 export interface GalleryItem {
   type: 'image' | 'video' | 'placeholder';
   src?: string;
