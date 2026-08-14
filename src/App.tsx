@@ -793,10 +793,15 @@ const App = () => {
 
       {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
       {currentView === 'home' ? (
-        /* No bottom padding for the tab bar here: the footer follows every page
-           and carries the clearance itself, so this only ever inserted 64px of
-           dead space between the last section and the footer. */
-        <div className={`relative z-10 transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+        /* Every page but Home opens with its section flush against the top of
+           the document, where the fixed nav overlays it — the section's own
+           padding was hiding entirely behind the header and leaving the title
+           jammed against it. Home is exempt: the hero carries its own offset. */
+        <div
+          className={`relative z-10 transition-all duration-300 ease-in-out transform ${
+            isMobile && mobilePage !== 'home' ? 'pt-[var(--nav-h)]' : ''
+          } ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}
+        >
           {/* Hero Section */}
           {showsPage('home') && (
           <section
