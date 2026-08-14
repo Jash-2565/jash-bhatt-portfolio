@@ -15,24 +15,11 @@
      menu's top offset, and the hero's min-height all read this, so they can't
      drift apart. */
   --nav-h: 4rem;
-  /* Height the fixed bottom tab bar occupies below `lg`, including the iOS home
-     indicator. The tab bar, the page container's bottom padding, and the
-     back-to-top button all read this so nothing sits underneath the bar.
-     Collapses to zero at `lg`, where the tab bar is not rendered. */
-  /* 1px for the bar's own top border — without it the footer's bottom edge
-     lands a pixel underneath the bar. */
-  --tabbar-h: calc(3.5rem + 1px + max(0.5rem, env(safe-area-inset-bottom)));
 }
 
 @media (min-width: 768px) {
   :root {
     --nav-h: 4.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  :root {
-    --tabbar-h: 0rem;
   }
 }
 
@@ -747,8 +734,8 @@ label {
   .glass-chip:hover {
     transform: none;
   }
-  /* The bar still hides on scroll — it just snaps instead of sliding. */
-  .tabbar {
+  /* The glyph still becomes an X — it just snaps instead of morphing. */
+  .menu-glyph-bar {
     transition: none !important;
   }
   .animate-drift,
