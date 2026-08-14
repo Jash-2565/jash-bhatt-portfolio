@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
-  Menu, X, Linkedin, ArrowRight, ArrowUpRight,
+  X, Linkedin, ArrowRight, ArrowUpRight, ArrowLeft,
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
 } from 'lucide-react';
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 import ResponsiveImage from './components/ResponsiveImage';
-import ImageWithFallback from './components/ImageWithFallback';
 import Reveal from './components/Reveal';
 import Typewriter from './components/Typewriter';
 import TiltCard from './components/TiltCard';
@@ -15,11 +14,18 @@ import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
+import MobileTabBar from './components/MobileTabBar';
+import CreativeExplorations from './components/CreativeExplorations';
+import { useIsMobile } from './hooks/useIsMobile';
 import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, archivedProjects } from './config/projects';
-import { ui, personalitySignals, currentlyExploring, operatorStats, galleryItems, aiItems, gallerySnippetItems } from './config/ui';
+import { ui, personalitySignals, currentlyExploring, operatorStats } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
-import type { Project } from './types';
+import type { Project, MobilePage } from './types';
+
+const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'gallery', 'about', 'contact'];
+const isMobilePage = (value: string): value is MobilePage =>
+  (MOBILE_PAGES as string[]).includes(value);
 
 const marqueeItems = [
   'Product Design', 'UI/UX', 'Circuit Design', 'Interaction Design', 'Figma',
@@ -28,9 +34,10 @@ const marqueeItems = [
 
 // --- Main Component ---
 const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  // Below `lg` the four sections are separate pages instead of one scroll, so
+  // this — not scroll position — decides what renders. Ignored at `lg` and up.
+  const [mobilePage, setMobilePage] = useState<MobilePage>('home');
   const [currentView, setCurrentView] = useState<'home' | 'project'>('home');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -39,14 +46,13 @@ const App = () => {
   // Mobile-only accordion for the About "signal" cards. On desktop (md+) all
   // three are always shown, so this state is a no-op there.
   const [openFeature, setOpenFeature] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   const isManualScroll = useRef(false);
   const navRef = useRef<HTMLElement | null>(null);
   const navItemsRef = useRef<HTMLDivElement | null>(null);
   const navButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
-  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
-  const menuPanelRef = useRef<HTMLDivElement | null>(null);
   const heroSpotlightRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState<{ left: number; width: number; visible: boolean }>({ left: 0, width: 0, visible: false });
 
@@ -76,13 +82,6 @@ const App = () => {
     event.currentTarget.style.setProperty('--my', '0px');
   };
   const isWhiteBgLightboxImage = selectedImage?.includes('Circuit-Design.webp');
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-  // Keep the mobile menu mounted while its closing animation plays.
-  useEffect(() => {
-    if (isMenuOpen) setShouldRenderMenu(true);
-  }, [isMenuOpen]);
 
   // --- Navigation & Transition Handlers ---
   const scrollToElementWithOffset = (
@@ -129,18 +128,47 @@ const App = () => {
       return { view: 'project' as const, projectId: projectIdBySlug.get(hash)! };
     }
 
-    if (['home', 'work', 'about', 'contact'].includes(hash)) {
+    if (isMobilePage(hash)) {
       return { view: 'home' as const, section: hash };
     }
 
     return { view: 'home' as const, section: 'home' };
   };
 
+  /**
+   * The gallery has no section of its own at `lg` — it lives inside Work — so
+   * `#gallery` resolves to the work anchor when the page is scroll-based.
+   */
+  const sectionForAnchor = (section: string) => (section === 'gallery' ? 'work' : section);
+
   const scrollToSection = (
     sectionId: string,
     options?: { updateHistory?: boolean }
   ) => {
+    // Paged mobile layout: navigating swaps which page is mounted and resets
+    // scroll to the top. There is no anchor to scroll to, so none of the
+    // offset/alignment logic below applies.
+    if (isMobile) {
+      const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'home';
+      const leavingProject = currentView !== 'home';
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentView('home');
+        setSelectedProject(null);
+        setMobilePage(page);
+        setActiveSection(sectionForAnchor(page));
+        window.scrollTo(0, 0);
+        setTimeout(() => { setIsTransitioning(false); }, 50);
+      }, leavingProject ? 300 : 160);
+      if (options?.updateHistory !== false) {
+        updateHistory({ view: 'home', section: page }, page);
+      }
+      return;
+    }
+
     isManualScroll.current = true;
+    // `gallery` has no anchor of its own here; it resolves to Work.
+    const anchorId = sectionForAnchor(sectionId);
     const targetProjectId = selectedProject?.id ?? null;
     const getProjectScrollAlignment = () =>
       window.innerWidth < 768 ? 'start' : 'center';
@@ -152,9 +180,9 @@ const App = () => {
         setSelectedProject(null);
         setTimeout(() => {
           const targetId =
-            sectionId === 'work' && targetProjectId !== null
+            anchorId === 'work' && targetProjectId !== null
               ? `project-${targetProjectId}`
-              : sectionId;
+              : anchorId;
           const element = document.getElementById(targetId);
           if (element) {
             const block = targetId === 'work' ? 'start' : getProjectScrollAlignment();
@@ -165,9 +193,9 @@ const App = () => {
         }, 50);
       }, 300);
     } else {
-      const element = document.getElementById(sectionId);
+      const element = document.getElementById(anchorId);
       if (element) {
-        if (sectionId === 'work' || sectionId === 'about') {
+        if (anchorId === 'work' || anchorId === 'about') {
           scrollToElementWithOffset(element, 'start', {
             behavior: 'smooth',
             startOffsetAdjustment: -64,
@@ -176,15 +204,13 @@ const App = () => {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }
-      setIsMenuOpen(false);
-      setActiveSection(sectionId);
+      setActiveSection(anchorId);
       setTimeout(() => { isManualScroll.current = false; }, 1000);
     }
 
-    setIsMenuOpen(false);
-    setActiveSection(sectionId);
+    setActiveSection(anchorId);
     if (options?.updateHistory !== false) {
-      updateHistory({ view: 'home', section: sectionId }, sectionId);
+      updateHistory({ view: 'home', section: anchorId }, anchorId);
     }
   };
 
@@ -212,6 +238,26 @@ const App = () => {
 
   const handleBackToHome = (options?: { updateHistory?: boolean; sectionId?: string }) => {
     const sectionId = options?.sectionId ?? 'work';
+
+    // Paged mobile layout: return to the Work page rather than scrolling back
+    // to the card the case study was opened from.
+    if (isMobile) {
+      const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'work';
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentView('home');
+        setSelectedProject(null);
+        setMobilePage(page);
+        setActiveSection(sectionForAnchor(page));
+        window.scrollTo(0, 0);
+        setTimeout(() => { setIsTransitioning(false); }, 50);
+      }, 300);
+      if (options?.updateHistory !== false) {
+        updateHistory({ view: 'home', section: page }, page);
+      }
+      return;
+    }
+
     const targetProjectId = sectionId === 'work' ? (selectedProject?.id ?? null) : null;
     const getProjectScrollAlignment = () =>
       window.innerWidth < 768 ? 'start' : 'center';
@@ -236,6 +282,12 @@ const App = () => {
     }
   };
 
+  /**
+   * At `lg` every section renders into one scrolling page. Below it only the
+   * current page mounts, which is what removes the ~10,000px of scroll.
+   */
+  const showsPage = (page: MobilePage) => !isMobile || mobilePage === page;
+
   const handleNextProject = () => {
     if (selectedProject) {
       const currentIndex = orderedProjects.findIndex(p => p.id === selectedProject.id);
@@ -256,8 +308,17 @@ const App = () => {
       updateHistory({ view: 'home', section: 'home' }, 'home', true);
       return;
     }
-    scrollToSection(initialState.section ?? 'home', { updateHistory: false });
-    updateHistory({ view: 'home', section: initialState.section ?? 'home' }, initialState.section ?? 'home', true);
+    const section = initialState.section ?? 'home';
+    if (isMobile) {
+      // Set the page directly rather than routing through scrollToSection —
+      // that would play the page-change fade on first paint.
+      const page: MobilePage = isMobilePage(section) ? section : 'home';
+      setMobilePage(page);
+      setActiveSection(sectionForAnchor(page));
+    } else {
+      scrollToSection(section, { updateHistory: false });
+    }
+    updateHistory({ view: 'home', section }, section, true);
   }, []);
 
   // Handle browser back/forward
@@ -282,7 +343,9 @@ const App = () => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [currentView, selectedProject]);
+    // isMobile matters: both handlers below branch on it, so a stale value
+    // would scroll the paged layout instead of switching pages.
+  }, [currentView, selectedProject, isMobile]);
 
   // Per-view document title and description. Social scrapers read the static
   // tags in index.html, but this keeps tab titles, browser history, and
@@ -316,6 +379,9 @@ const App = () => {
   // — the most expensive thing on the page during a touch scroll.
   useEffect(() => {
     if (currentView !== 'home') return;
+    // Paged mobile layout mounts one section at a time, so there is nothing to
+    // spy on — `mobilePage` is the source of truth for the active tab there.
+    if (isMobile) return;
 
     const sections = ['home', 'work', 'about', 'contact'];
     const elements = sections
@@ -363,7 +429,48 @@ const App = () => {
       observer.disconnect();
       window.removeEventListener('scroll', handleBottom);
     };
-  }, [currentView]);
+  }, [currentView, isMobile]);
+
+  // Crossing the `lg` breakpoint swaps navigation models entirely. Carry the
+  // reader's place across it, so rotating a tablet doesn't dump them at the top
+  // of an unrelated section.
+  const wasMobile = useRef(isMobile);
+  useEffect(() => {
+    if (wasMobile.current === isMobile) return;
+    wasMobile.current = isMobile;
+    if (currentView !== 'home') return;
+
+    if (isMobile) {
+      setMobilePage(isMobilePage(activeSection) ? activeSection : 'home');
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // Now scroll-based. The whole page has just mounted, and the sections above
+    // the target keep growing as their images decode — a single scroll computed
+    // at swap time landed ~570px short. Re-align a few times while that
+    // settles, and stop the moment the reader takes over.
+    const anchor = sectionForAnchor(mobilePage);
+    setActiveSection(anchor);
+
+    let cancelled = false;
+    const stop = () => { cancelled = true; };
+    const events: (keyof WindowEventMap)[] = ['wheel', 'touchstart', 'keydown'];
+    events.forEach((event) => window.addEventListener(event, stop, { passive: true }));
+
+    const timers = [0, 80, 200, 400, 700].map((delay) =>
+      window.setTimeout(() => {
+        if (cancelled) return;
+        const element = document.getElementById(anchor);
+        if (element) scrollToElementWithOffset(element, 'start');
+      }, delay)
+    );
+
+    return () => {
+      timers.forEach(clearTimeout);
+      events.forEach((event) => window.removeEventListener(event, stop));
+    };
+  }, [isMobile]);
 
   // Nav glass condenses once content scrolls underneath it. Kept separate from
   // the section-spy handler above, which bails out on manual scroll and on the
@@ -399,61 +506,6 @@ const App = () => {
     window.addEventListener('resize', recalc);
     return () => window.removeEventListener('resize', recalc);
   }, [activeSection, currentView]);
-
-  // Close mobile menu on outside click or Escape
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as Node;
-      const insideNav = navRef.current?.contains(target);
-      const insidePanel = menuPanelRef.current?.contains(target);
-      if (!insideNav && !insidePanel) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handlePointerDown);
-    document.addEventListener('touchstart', handlePointerDown);
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
-      document.removeEventListener('touchstart', handlePointerDown);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isMenuOpen]);
-
-  // While the mobile menu is open, freeze the page behind it and move focus
-  // into the panel — otherwise the page scrolls under the overlay on touch and
-  // keyboard focus stays stranded on the content below.
-  // Depends on shouldRenderMenu as well as isMenuOpen: the panel is mounted by
-  // the effect above, one render after the menu is flagged open, so keying only
-  // on isMenuOpen would run this while the panel ref is still null.
-  useEffect(() => {
-    if (!isMenuOpen || !shouldRenderMenu) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const opener = menuButtonRef.current;
-    // Captured now rather than read in cleanup: the panel is mounted for this
-    // effect's whole lifetime, and the ref may already be null by teardown.
-    const panel = menuPanelRef.current;
-    panel?.querySelector<HTMLElement>('button, a')?.focus();
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      // Only pull focus back to the hamburger if it's still inside the panel —
-      // otherwise this would steal focus from wherever the user has moved on.
-      if (panel?.contains(document.activeElement)) opener?.focus();
-    };
-  }, [isMenuOpen, shouldRenderMenu]);
 
   // Lightbox escape, focus, and scroll lock
   useEffect(() => {
@@ -553,8 +605,9 @@ const App = () => {
               <span className="text-[1.85rem] md:text-[2.1rem] font-display tracking-tight text-[#01F5D1]">JB</span>
             </button>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-4">
+            {/* Desktop Menu — `lg`, matching where the paged mobile layout
+                ends. At `md` it would double up with the bottom tab bar. */}
+            <div className="hidden lg:flex items-center gap-4">
               <div ref={navItemsRef} className="relative flex flex-nowrap items-center gap-8 whitespace-nowrap">
                 {['Home', 'Work', 'About', 'Contact'].map((item) => (
                   <button
@@ -590,79 +643,26 @@ const App = () => {
               </a>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center gap-2">
-              <button
-                ref={menuButtonRef}
-                onClick={toggleMenu}
-                aria-expanded={isMenuOpen}
-                aria-controls="mobile-menu"
-                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-                className={`-mr-1 flex items-center justify-center rounded-xl text-slate-300 active:bg-white/10 active:text-[#9EF7EA] transition-colors ${ui.tapTarget}`}
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+            {/* The bottom tab bar owns navigation below `lg`, so the header
+                keeps only Resume — otherwise it lives nowhere once the
+                hamburger is gone. */}
+            <a
+              href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+              target="_blank"
+              rel="noreferrer"
+              className="lg:hidden -mr-1 inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-full border border-[#01F5D1]/40 text-[#01F5D1] text-sm font-medium active:bg-[#01F5D1]/10"
+            >
+              <Download size={15} /> Resume
+            </a>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu — dim scrim plus the sliding panel. The scrim gives the
-          menu an obvious tap-anywhere-to-dismiss target, which a bare dropdown
-          never had on touch. */}
-      {shouldRenderMenu && (
-        <>
-          <div
-            aria-hidden="true"
-            onClick={() => setIsMenuOpen(false)}
-            className={`md:hidden fixed inset-0 top-[var(--nav-h)] z-40 bg-black/50 transition-opacity duration-300 ${
-              isMenuOpen ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-          <div
-            id="mobile-menu"
-            ref={menuPanelRef}
-            onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
-            className={`md:hidden glass-menu border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe ${
-              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
-            }`}
-          >
-            <div className="px-3 pt-3 pb-2 space-y-1">
-              {['Home', 'Work', 'About', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl transition-colors ${
-                    activeSection === item.toLowerCase() && currentView === 'home'
-                      ? 'text-[#01F5D1] bg-[#01F5D1]/10 border border-[#01F5D1]/30'
-                      : 'text-slate-200 border border-transparent active:bg-white/10'
-                  }`}
-                >
-                  {item}
-                  {activeSection === item.toLowerCase() && currentView === 'home' && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#01F5D1]" aria-hidden="true" />
-                  )}
-                </button>
-              ))}
-              <a
-                href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex w-full items-center gap-2 min-h-12 px-4 mt-1 text-lg font-medium text-[#01F5D1] rounded-xl border border-[#01F5D1]/30 active:bg-[#01F5D1]/10"
-              >
-                <Download size={18} /> Resume
-              </a>
-            </div>
-          </div>
-        </>
-      )}
-
-
       {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
       {currentView === 'home' ? (
-        <div className={`relative z-10 transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+        <div className={`relative z-10 pb-[var(--tabbar-h)] transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
           {/* Hero Section */}
+          {showsPage('home') && (
           <section
             id="home"
             onMouseMove={handleHeroMouseMove}
@@ -704,12 +704,12 @@ const App = () => {
                     />
                   </div>
 
-                  {/* Capped so the 3:4 portrait doesn't grow taller than the
-                      viewport once the card goes full-width on tablets. */}
-                  <div className="glass lg:hidden w-full max-w-sm mx-auto rounded-3xl p-4 mb-6">
-                    {/* Matches the source photo's 3:4 ratio so object-cover has
-                        nothing to crop. A landscape box here cut off the head. */}
-                    <div className="rounded-2xl overflow-hidden aspect-[3/4]">
+                  {/* Narrower than max-w-sm and a shorter 4:5 crop: the 3:4 card
+                      at full width ran 558px, ~40% of the mobile hero. */}
+                  <div className="glass lg:hidden w-full max-w-[19rem] mx-auto rounded-3xl p-4 mb-6">
+                    {/* object-top keeps the head anchored, so the tighter 4:5
+                        box crops from the bottom rather than the face. */}
+                    <div className="rounded-2xl overflow-hidden aspect-[4/5]">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                         alt="Portrait of Jash Bhatt"
@@ -718,10 +718,15 @@ const App = () => {
                         fetchPriority="high"
                       />
                     </div>
-                    {/* Sized to hold one line: full 12px from 375px up, easing
-                        down on narrower phones where the card can't fit it. */}
-                    <p className="text-[clamp(0.625rem,3.2vw,0.75rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
-                    <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5rem,2.75vw,0.6875rem)]">
+                    {/* Ceilings are lower than the old full-width card allowed:
+                        this card is a fixed 19rem above 344px, so the vw ramp
+                        must stop where the text still fits 304px rather than
+                        keep growing with the viewport. 11px holds the caption
+                        on one line (12px needed 276px of a 270px box). */}
+                    <p className="text-[clamp(0.625rem,3.2vw,0.6875rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
+                    {/* 10px likewise: the focus row is the longest and sat at
+                        exactly 236px of 236px once the card stopped growing. */}
+                    <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5rem,2.75vw,0.625rem)]">
                       <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
                       <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
@@ -731,11 +736,11 @@ const App = () => {
                   {/* Read-only facts, so no chip/pill styling — that reads as
                       tappable next to the CTAs. Value-first hierarchy mirrors
                       the desktop stat cards. */}
-                  <dl className="lg:hidden border-y border-white/10 divide-y divide-white/10 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                  <dl className="lg:hidden border-y border-white/10 divide-y divide-white/10 animate-fade-in-up" style={{ animationDelay: '320ms' }}>
                     {operatorStats.map((stat) => (
-                      <div key={`mobile-stat-${stat.label}`} className="py-3">
+                      <div key={`mobile-stat-${stat.label}`} className="py-2.5">
                         <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-slate-400">{stat.label}</dt>
-                        <dd className="text-[0.95rem] font-semibold text-slate-100 mt-1">{stat.value}</dd>
+                        <dd className="text-[0.95rem] font-semibold text-slate-100 mt-0.5">{stat.value}</dd>
                       </div>
                     ))}
                   </dl>
@@ -743,7 +748,7 @@ const App = () => {
                   {/* Mobile CTAs close out the hero, mirroring the desktop
                       column where they sit below the portrait and stats.
                       Two-up grid instead of three stacked full-width buttons. */}
-                  <div className="grid grid-cols-2 gap-3 mt-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+                  <div className="grid grid-cols-2 gap-3 mt-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '380ms' }}>
                     <button
                       onClick={() => scrollToSection('work')}
                       className={`group ${ui.btnBase} ${ui.btnPrimary} !px-4 text-[0.95rem]`}
@@ -843,11 +848,79 @@ const App = () => {
               </div>
             </div>
           </section>
+          )}
 
           {/* Discipline Marquee */}
-          <Marquee items={marqueeItems} />
+          {showsPage('home') && <Marquee items={marqueeItems} />}
+
+          {/* Featured work preview — paged mobile Home only. Keeps Home from
+              being a dead end that shows no work, without dragging the whole
+              6,300px Work section back onto it. */}
+          {isMobile && mobilePage === 'home' && (
+            <section className={`${ui.shell} pt-14 sm:pt-16`}>
+              <Reveal className="mb-6 flex items-end justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1.5">Selected work</p>
+                  <h2 className="text-2xl font-display text-slate-100">Recent Projects</h2>
+                </div>
+                <button
+                  onClick={() => scrollToSection('work')}
+                  className="shrink-0 inline-flex items-center justify-end gap-1 min-h-11 min-w-11 px-2 -mr-2 text-sm font-medium text-[#01F5D1] active:text-[#9EF7EA]"
+                >
+                  All <ArrowRight size={15} />
+                </button>
+              </Reveal>
+
+              <div className="grid grid-cols-1 gap-4">
+                {featuredProjects.slice(0, 3).map((project, index) => {
+                  const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
+                  return (
+                    <Reveal key={`preview-${project.id}`} delay={index * 80}>
+                      <button
+                        type="button"
+                        onClick={() => handleProjectClick(project)}
+                        aria-label={`Open case study for ${project.title}`}
+                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
+                      >
+                        <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                          {!thumbnail.includes('placeholder') ? (
+                            <ResponsiveImage
+                              src={thumbnail}
+                              alt={project.title}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                              sizes="80px"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <PhotoIcon size={20} className="text-slate-600" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
+                          <h3 className="mt-1 text-base font-bold text-slate-100 group-active:text-[#01F5D1] transition-colors">{project.title}</h3>
+                        </div>
+                        <ArrowRight size={18} className="shrink-0 text-slate-600" />
+                      </button>
+                    </Reveal>
+                  );
+                })}
+              </div>
+
+              <Reveal delay={260}>
+                <button
+                  onClick={() => scrollToSection('work')}
+                  className={`${ui.btnBase} ${ui.btnSecondary} mt-5 w-full text-[0.95rem]`}
+                >
+                  See all {featuredProjects.length} projects <ArrowRight size={16} />
+                </button>
+              </Reveal>
+            </section>
+          )}
 
           {/* Work Section */}
+          {showsPage('work') && (
           <section id="work" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
             <Reveal className="mb-10 sm:mb-14 md:mb-16">
               <h2 className={`${ui.h2} font-display text-slate-100 mb-3 md:mb-4`}>Selected Projects</h2>
@@ -1029,201 +1102,53 @@ const App = () => {
               </div>
             )}
 
-            {/* Creative Explorations Divider */}
-            <Reveal className="mt-16 sm:mt-20 md:mt-32 mb-10 sm:mb-14 md:mb-16 flex items-center gap-4 sm:gap-6">
-              <div className="h-px flex-1 bg-white/10"></div>
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Beyond case studies</p>
-                <h2 className="text-2xl font-display text-slate-300">Creative Explorations</h2>
-              </div>
-              <div className="h-px flex-1 bg-white/10"></div>
-            </Reveal>
+            {/* Creative Explorations sits inside Work at `lg`. Below that
+                breakpoint these galleries are their own page — see the
+                gallery section below. */}
+            {!isMobile && <CreativeExplorations onImageClick={setSelectedImage} />}
 
-            {/* Additional Work Grid */}
-            <div className="grid grid-cols-1 gap-8 sm:gap-10 md:gap-12">
-
-              {/* Photoshop Section */}
-              <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
-                    <ResponsiveImage
-                      src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
-                      alt="Photoshop icon"
-                      className="w-full h-full object-cover rounded-lg"
-                      loading="lazy"
-                    />
+            {/* Entry point to that page on mobile, standing in for the 1,947px
+                of galleries that used to sit inline here. */}
+            {isMobile && (
+              <Reveal className="mt-14 sm:mt-16">
+                <button
+                  onClick={() => scrollToSection('gallery')}
+                  className={`${ui.cardBase} ${ui.cardHover} group flex w-full items-center gap-4 p-5 text-left`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Beyond case studies</p>
+                    <h3 className="mt-1.5 font-display text-xl text-slate-100 group-active:text-[#01F5D1]">Creative Explorations</h3>
+                    <p className="mt-1.5 text-sm text-slate-400">Photoshop, brand motion, AI generations, and photography.</p>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-100">Photoshop & Animation</h3>
-                </div>
-                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
-                <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-                  {galleryItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className={`relative w-full rounded-xl overflow-hidden bg-white/5 border border-white/10 transition-all group aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-white/25 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
-                      onClick={() => item.type === 'image' && item.src && setSelectedImage(item.src)}
-                    >
-                      {item.type === 'video' && item.src ? (
-                        <video
-                          className="w-full h-full object-cover"
-                          controls
-                          playsInline
-                          preload="metadata"
-                          aria-label={item.alt}
-                        >
-                          <source src={item.src} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      ) : item.src ? (
-                        <>
-                          <ImageWithFallback
-                            src={item.src}
-                            alt={item.alt}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            sizes="(min-width: 1024px) 340px, 45vw"
-                            deferGifOnConstrainedNetwork
-                          />
-                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                            {item.alt}
-                          </div>
-                        </>
-                      ) : (
-                        <PhotoIcon className="text-slate-300 w-full h-full p-4" />
-                      )}
-                    </div>
-                  ))}
-                </div>
+                  <ArrowRight size={20} className="shrink-0 text-[#01F5D1]" />
+                </button>
               </Reveal>
-
-              {/* Brand Animation Section */}
-              <Reveal delay={120} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
-                    <ResponsiveImage
-                      src={`${PUBLIC_URL}/images/Photoshop and Animation/after-effects.png`}
-                      alt="After Effects icon"
-                      className="w-full h-full object-cover rounded-lg"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h3>
-                </div>
-                <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
-                <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5">
-                  <video
-                    className="w-full h-auto"
-                    controls
-                    playsInline
-                    preload="metadata"
-                    aria-label="Nothing brand animation video"
-                  >
-                    <source src={`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.mp4`} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </Reveal>
-
-              {/* AI Generations Section */}
-              <Reveal delay={180} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-                    <ResponsiveImage
-                      src={`${PUBLIC_URL}/images/Lamborghini.webp`}
-                      alt="Lamborghini logo"
-                      className="w-7 h-7 object-contain"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-100">Lamborghini Jetski AI</h3>
-                </div>
-                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
-                <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-                  {aiItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="relative w-full rounded-xl overflow-hidden bg-white/5 cursor-pointer border border-white/10 hover:border-[#01F5D1] hover:shadow-md transition-all group aspect-square hover:-translate-y-1"
-                      onClick={() => item.src && setSelectedImage(item.src)}
-                    >
-                      {item.src ? (
-                        <>
-                          <ImageWithFallback
-                            src={item.src}
-                            alt={item.alt}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            sizes="(min-width: 1024px) 340px, 45vw"
-                            deferGifOnConstrainedNetwork
-                          />
-                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                            {item.alt}
-                          </div>
-                        </>
-                      ) : (
-                        <PhotoIcon className="text-slate-300 w-full h-full p-4" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-
-              {/* Gallery Snippet Section */}
-              <Reveal delay={240} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-                    <ResponsiveImage
-                      src={`${PUBLIC_URL}/images/Photography/camera.png`}
-                      alt="Camera icon"
-                      className="w-full h-full object-contain rounded-lg"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-100">Photography Gallery</h3>
-                </div>
-                <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
-                  {gallerySnippetItems.map((item, i) => {
-                    const positionClass = i === 0
-                      ? 'md:col-start-1 md:row-start-1'
-                      : i === 1
-                        ? 'md:col-start-1 md:row-start-2'
-                        : i === 2
-                          ? 'md:col-start-2 md:row-span-2 md:h-full'
-                          : 'md:col-start-3 md:row-span-2 md:h-full';
-                    const shapeClass = i < 2
-                      ? 'w-full aspect-square md:aspect-[4/3]'
-                      : 'w-full aspect-square md:aspect-auto md:h-full';
-
-                    return (
-                      <div
-                        key={`gallery-snippet-${i}`}
-                        className={`relative ${shapeClass} rounded-xl overflow-hidden bg-white/5 cursor-pointer border border-white/10 hover:border-white/30 hover:shadow-md transition-all group ${positionClass} hover:-translate-y-1`}
-                        onClick={() => item.src && setSelectedImage(item.src)}
-                      >
-                        {item.src ? (
-                          <>
-                            <ImageWithFallback
-                              src={item.src}
-                              alt={item.alt}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                              sizes="(min-width: 768px) 340px, 60vw"
-                              deferGifOnConstrainedNetwork
-                            />
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                              {item.alt}
-                            </div>
-                          </>
-                        ) : (
-                          <PhotoIcon className="text-slate-300 w-full h-full p-4" />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </Reveal>
-            </div>
+            )}
           </section>
+          )}
+
+          {/* Creative Explorations — a page of its own below `lg` only. */}
+          {isMobile && mobilePage === 'gallery' && (
+            <section id="gallery" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
+              <Reveal className="mb-10 sm:mb-14">
+                <button
+                  onClick={() => scrollToSection('work')}
+                  className="inline-flex items-center gap-1.5 -ml-1 min-h-11 pr-3 pl-1 text-sm font-medium text-slate-400 active:text-[#01F5D1]"
+                >
+                  <ArrowLeft size={16} /> Work
+                </button>
+                <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Beyond case studies</p>
+                <h2 className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h2>
+                <Reveal variant="grow-width" delay={180} duration={700}>
+                  <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#01F5D1] to-[#00A19B]"></div>
+                </Reveal>
+              </Reveal>
+              <CreativeExplorations onImageClick={setSelectedImage} showDivider={false} />
+            </section>
+          )}
 
           {/* About Section */}
+          {showsPage('about') && (
           <section id="about" className={`${ui.section} ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
@@ -1355,8 +1280,10 @@ const App = () => {
               </div>
             </div>
           </section>
+          )}
 
           {/* Contact Section */}
+          {showsPage('contact') && (
           <section id="contact" className={`${ui.section} ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
@@ -1413,6 +1340,7 @@ const App = () => {
               </div>
             </div>
           </section>
+          )}
         </div>
       ) : (
         /* PROJECT DETAIL VIEW */
@@ -1436,12 +1364,25 @@ const App = () => {
       )}
 
       {/* Footer */}
-      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-10 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] text-center">
+      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-10 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] mb-[var(--tabbar-h)] text-center">
         <div className={`${ui.shell} flex flex-col items-center gap-3`}>
           <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
           <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
         </div>
       </footer>
+
+      {/* Paged-mobile navigation. No tab owns the case-study view, and the
+          gallery reports Work since it is a sub-page of it. */}
+      <MobileTabBar
+        activePage={
+          currentView !== 'home'
+            ? null
+            : mobilePage === 'gallery'
+              ? 'work'
+              : mobilePage
+        }
+        onNavigate={(page) => scrollToSection(page)}
+      />
     </div>
   );
 };
