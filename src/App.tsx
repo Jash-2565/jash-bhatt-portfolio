@@ -14,10 +14,9 @@ import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
-import MobileTabBar from './components/MobileTabBar';
+import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
-import { useHideOnScrollDown } from './hooks/useHideOnScrollDown';
 import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, archivedProjects } from './config/projects';
 import { ui, personalitySignals, currentlyExploring, operatorStats } from './config/ui';
@@ -35,6 +34,9 @@ const marqueeItems = [
 
 // --- Main Component ---
 const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Keeps the panel mounted while its closing animation plays.
+  const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   // Below `lg` the four sections are separate pages instead of one scroll, so
   // this — not scroll position — decides what renders. Ignored at `lg` and up.
@@ -48,15 +50,14 @@ const App = () => {
   // three are always shown, so this state is a no-op there.
   const [openFeature, setOpenFeature] = useState<number | null>(null);
   const isMobile = useIsMobile();
-  // Keyed on the page so navigating never lands on a hidden tab bar. Also drives
-  // BackToTop, so the two can't disagree about where the bottom of the screen is.
-  const isTabBarHidden = useHideOnScrollDown(`${currentView}:${mobilePage}`);
 
   const isManualScroll = useRef(false);
   const navRef = useRef<HTMLElement | null>(null);
   const navItemsRef = useRef<HTMLDivElement | null>(null);
   const navButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const menuPanelRef = useRef<HTMLDivElement | null>(null);
   const heroSpotlightRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState<{ left: number; width: number; visible: boolean }>({ left: 0, width: 0, visible: false });
 
@@ -86,6 +87,18 @@ const App = () => {
     event.currentTarget.style.setProperty('--my', '0px');
   };
   const isWhiteBgLightboxImage = selectedImage?.includes('Circuit-Design.webp');
+
+  // Mounting happens here rather than in an effect keyed on isMenuOpen: both
+  // flags land in the same commit, so the panel exists on the first render that
+  // plays the open animation. Closing leaves it mounted until animationend.
+  const toggleMenu = () => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      return;
+    }
+    setShouldRenderMenu(true);
+    setIsMenuOpen(true);
+  };
 
   // --- Navigation & Transition Handlers ---
   const scrollToElementWithOffset = (
@@ -155,6 +168,7 @@ const App = () => {
     if (isMobile) {
       const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'home';
       const leavingProject = currentView !== 'home';
+      setIsMenuOpen(false);
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentView('home');
@@ -212,6 +226,7 @@ const App = () => {
       setTimeout(() => { isManualScroll.current = false; }, 1000);
     }
 
+    setIsMenuOpen(false);
     setActiveSection(anchorId);
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'home', section: anchorId }, anchorId);
@@ -511,6 +526,59 @@ const App = () => {
     return () => window.removeEventListener('resize', recalc);
   }, [activeSection, currentView]);
 
+  // Close mobile menu on outside click or Escape
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      const insideNav = navRef.current?.contains(target);
+      const insidePanel = menuPanelRef.current?.contains(target);
+      if (!insideNav && !insidePanel) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMenuOpen]);
+
+  // While the mobile menu is open, freeze the page behind it and move focus into
+  // the panel — otherwise the page scrolls under the overlay on touch and
+  // keyboard focus stays stranded on the content below. Guarded on
+  // shouldRenderMenu too, so it can never run against a null panel ref.
+  useEffect(() => {
+    if (!isMenuOpen || !shouldRenderMenu) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const opener = menuButtonRef.current;
+    // Captured now rather than read in cleanup: the panel is mounted for this
+    // effect's whole lifetime, and the ref may already be null by teardown.
+    const panel = menuPanelRef.current;
+    panel?.querySelector<HTMLElement>('button, a')?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      // Only pull focus back to the opener if it's still inside the panel —
+      // otherwise this would steal focus from wherever the user has moved on.
+      if (panel?.contains(document.activeElement)) opener?.focus();
+    };
+  }, [isMenuOpen, shouldRenderMenu]);
+
   // Lightbox escape, focus, and scroll lock
   useEffect(() => {
     if (!selectedImage) return;
@@ -649,20 +717,79 @@ const App = () => {
               </a>
             </div>
 
-            {/* The bottom tab bar owns navigation below `lg`, so the header
-                keeps only Resume — otherwise it lives nowhere once the
-                hamburger is gone. */}
-            <a
-              href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-              target="_blank"
-              rel="noreferrer"
-              className="lg:hidden -mr-1 inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-full border border-[#01F5D1]/40 text-[#01F5D1] text-sm font-medium active:bg-[#01F5D1]/10"
-            >
-              <Download size={15} /> Resume
-            </a>
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden flex items-center gap-2">
+              <button
+                ref={menuButtonRef}
+                onClick={toggleMenu}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-menu"
+                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                className={`-mr-1 flex items-center justify-center rounded-xl active:bg-white/10 transition-colors ${ui.tapTarget}`}
+              >
+                <MenuIcon open={isMenuOpen} />
+              </button>
+            </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu — dim scrim plus the sliding panel. The scrim gives the
+          menu an obvious tap-anywhere-to-dismiss target, which a bare dropdown
+          never had on touch. */}
+      {shouldRenderMenu && (
+        <>
+          <div
+            aria-hidden="true"
+            onClick={() => setIsMenuOpen(false)}
+            className={`lg:hidden fixed inset-0 top-[var(--nav-h)] z-40 bg-black/50 transition-opacity duration-300 ${
+              isMenuOpen ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+          <div
+            id="mobile-menu"
+            ref={menuPanelRef}
+            onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
+            className={`lg:hidden glass-menu border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe ${
+              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
+            }`}
+          >
+            <div className="px-3 pt-3 pb-2 space-y-1">
+              {['Home', 'Work', 'About', 'Contact'].map((item) => {
+                const page = item.toLowerCase();
+                // Gallery is a sub-page of Work, so Work stays marked while on it.
+                const isCurrent = currentView === 'home' && sectionForAnchor(mobilePage) === page;
+                return (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(page)}
+                    aria-current={isCurrent ? 'page' : undefined}
+                    className={`flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl transition-colors ${
+                      isCurrent
+                        ? 'text-[#01F5D1] bg-[#01F5D1]/10 border border-[#01F5D1]/30'
+                        : 'text-slate-200 border border-transparent active:bg-white/10'
+                    }`}
+                  >
+                    {item}
+                    {isCurrent && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#01F5D1]" aria-hidden="true" />
+                    )}
+                  </button>
+                );
+              })}
+              <a
+                href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex w-full items-center gap-2 min-h-12 px-4 mt-1 text-lg font-medium text-[#01F5D1] rounded-xl border border-[#01F5D1]/30 active:bg-[#01F5D1]/10"
+              >
+                <Download size={18} /> Resume
+              </a>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
       {currentView === 'home' ? (
@@ -1375,31 +1502,14 @@ const App = () => {
         </Suspense>
       )}
 
-      {/* Footer */}
-      {/* Mobile padding is deliberately much tighter: 171px of chrome for 90px of
-          content is a third of a short page. The mb already contains the
-          safe-area inset below `lg`, so the padding must not pay for it twice —
-          at `lg`, where --tabbar-h is 0, that allowance has to come back. */}
-      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-6 lg:pt-10 pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] mb-[var(--tabbar-h)] text-center">
+      {/* Footer. Mobile padding is deliberately much tighter than desktop:
+          171px of chrome for 90px of content was a third of a short page. */}
+      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-6 lg:pt-10 pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] text-center">
         <div className={`${ui.shell} flex flex-col items-center gap-1.5 lg:gap-3`}>
           <span className="text-xl lg:text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
           <p className="text-slate-500 text-xs lg:text-sm">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
         </div>
       </footer>
-
-      {/* Paged-mobile navigation. No tab owns the case-study view, and the
-          gallery reports Work since it is a sub-page of it. */}
-      <MobileTabBar
-        activePage={
-          currentView !== 'home'
-            ? null
-            : mobilePage === 'gallery'
-              ? 'work'
-              : mobilePage
-        }
-        onNavigate={(page) => scrollToSection(page)}
-        hidden={isTabBarHidden}
-      />
     </div>
   );
 };
