@@ -12,6 +12,8 @@ type Props = {
   /** Null while a case study is open — no tab owns that view. */
   activePage: MobilePage | null;
   onNavigate: (page: MobilePage) => void;
+  /** Slid out of view while the reader scrolls down. */
+  hidden?: boolean;
 };
 
 /**
@@ -21,11 +23,15 @@ type Props = {
  * The gallery is a sub-page of Work rather than a fifth tab, so it reports Work
  * as active — see how App maps it before passing `activePage`.
  */
-export default function MobileTabBar({ activePage, onNavigate }: Props) {
+export default function MobileTabBar({ activePage, onNavigate, hidden = false }: Props) {
   return (
     <nav
       aria-label="Primary"
-      className="glass-menu lg:hidden fixed inset-x-0 bottom-0 z-50 border-t border-white/10 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+      // Only the transform moves. The layout padding elsewhere stays pinned to
+      // --tabbar-h, so hiding the bar never reflows the page.
+      className={`tabbar glass-menu lg:hidden fixed inset-x-0 bottom-0 z-50 border-t border-white/10 pb-[max(0.5rem,env(safe-area-inset-bottom))] transition-transform duration-[250ms] ease-out ${
+        hidden ? 'translate-y-full pointer-events-none' : 'translate-y-0'
+      }`}
     >
       <ul className="grid grid-cols-4">
         {TABS.map(({ page, label, Icon }) => {
@@ -40,15 +46,9 @@ export default function MobileTabBar({ activePage, onNavigate }: Props) {
                   isActive ? 'text-[#01F5D1]' : 'text-slate-400 active:text-[#9EF7EA]'
                 }`}
               >
-                {/* The pill sits behind the icon only, so the label baseline
-                    stays put between active and inactive tabs. */}
-                <span
-                  className={`flex h-6 w-10 items-center justify-center rounded-full transition-colors duration-200 ${
-                    isActive ? 'bg-[#01F5D1]/15' : 'bg-transparent'
-                  }`}
-                >
-                  <Icon size={19} strokeWidth={isActive ? 2.4 : 2} />
-                </span>
+                {/* Colour carries the active state on its own — no pill or other
+                    shape behind the icon. */}
+                <Icon size={19} strokeWidth={isActive ? 2.4 : 2} />
                 <span className={`text-[0.65rem] leading-none tracking-wide ${isActive ? 'font-semibold' : 'font-medium'}`}>
                   {label}
                 </span>
