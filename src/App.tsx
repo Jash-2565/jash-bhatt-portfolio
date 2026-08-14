@@ -17,6 +17,7 @@ import HeroParticles from './components/HeroParticles';
 import MobileTabBar from './components/MobileTabBar';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
+import { useHideOnScrollDown } from './hooks/useHideOnScrollDown';
 import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, archivedProjects } from './config/projects';
 import { ui, personalitySignals, currentlyExploring, operatorStats } from './config/ui';
@@ -47,6 +48,9 @@ const App = () => {
   // three are always shown, so this state is a no-op there.
   const [openFeature, setOpenFeature] = useState<number | null>(null);
   const isMobile = useIsMobile();
+  // Keyed on the page so navigating never lands on a hidden tab bar. Also drives
+  // BackToTop, so the two can't disagree about where the bottom of the screen is.
+  const isTabBarHidden = useHideOnScrollDown(`${currentView}:${mobilePage}`);
 
   const isManualScroll = useRef(false);
   const navRef = useRef<HTMLElement | null>(null);
@@ -545,7 +549,9 @@ const App = () => {
         <span className="ambient-orb ambient-orb--deep" />
       </div>
       <CursorGlow />
-      <BackToTop />
+      {/* Desktop only: on mobile it collided with the compacted footer, and the
+          tab bar already scrolls the current page back to the top. */}
+      {!isMobile && <BackToTop />}
       <div className="grain-overlay" aria-hidden="true" />
       <a
         href="#home"
@@ -660,13 +666,20 @@ const App = () => {
 
       {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
       {currentView === 'home' ? (
-        <div className={`relative z-10 pb-[var(--tabbar-h)] transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+        /* No bottom padding for the tab bar here: the footer follows every page
+           and carries the clearance itself, so this only ever inserted 64px of
+           dead space between the last section and the footer. */
+        <div className={`relative z-10 transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
           {/* Hero Section */}
           {showsPage('home') && (
           <section
             id="home"
             onMouseMove={handleHeroMouseMove}
-            className={`relative min-h-[calc(100svh-var(--nav-h))] md:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1.25rem)] pb-10 md:pt-24 md:pb-10 ${ui.scrollMt} overflow-hidden ${
+            // No min-height below `lg`. Once the redundant CTAs came out, forcing
+            // a full screen left ~290px of void above the fold; letting the hero
+            // hug its content instead brings the portrait card up into view,
+            // which is a better scroll affordance than empty space.
+            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1.25rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden ${
               !isTransitioning && activeSection === 'home'
                 ? 'bg-gradient-to-b from-[#031018]/90 via-[#062126]/70 to-transparent'
                 : 'bg-transparent'
@@ -683,20 +696,20 @@ const App = () => {
             <div className={`${ui.shell} relative`}>
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
-                  <div className="mb-5 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+                  <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                     <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
                       Open to remote internships
                     </span>
                   </div>
-                  <h1 className={`${ui.h1} font-display text-slate-100 mb-4 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
+                  <h1 className={`${ui.h1} font-display text-slate-100 mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
                     I design and build <span className="accent-shimmer font-semibold">tech products</span> that blend hardware, software, and human behavior.
                   </h1>
-                  <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-6 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
-                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span>, a product designer and design engineer studying B.Des at FLAME University.
+                  <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-4 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
+                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span> — product designer and design engineer at FLAME University.
                   </p>
 
-                  <div className="flex items-baseline gap-2.5 mb-6 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                  <div className="flex items-baseline gap-2.5 mb-5 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                     <span className="text-[#01F5D1] text-lg" aria-hidden="true">{'>'}</span>
                     <Typewriter
                       phrases={personalitySignals}
@@ -704,72 +717,10 @@ const App = () => {
                     />
                   </div>
 
-                  {/* Narrower than max-w-sm and a shorter 4:5 crop: the 3:4 card
-                      at full width ran 558px, ~40% of the mobile hero. */}
-                  <div className="glass lg:hidden w-full max-w-[19rem] mx-auto rounded-3xl p-4 mb-6">
-                    {/* object-top keeps the head anchored, so the tighter 4:5
-                        box crops from the bottom rather than the face. */}
-                    <div className="rounded-2xl overflow-hidden aspect-[4/5]">
-                      <ResponsiveImage
-                        src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
-                        alt="Portrait of Jash Bhatt"
-                        className="w-full h-full object-cover object-top"
-                        loading="eager"
-                        fetchPriority="high"
-                      />
-                    </div>
-                    {/* Ceilings are lower than the old full-width card allowed:
-                        this card is a fixed 19rem above 344px, so the vw ramp
-                        must stop where the text still fits 304px rather than
-                        keep growing with the viewport. 11px holds the caption
-                        on one line (12px needed 276px of a 270px box). */}
-                    <p className="text-[clamp(0.625rem,3.2vw,0.6875rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
-                    {/* 10px likewise: the focus row is the longest and sat at
-                        exactly 236px of 236px once the card stopped growing. */}
-                    <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5rem,2.75vw,0.625rem)]">
-                      <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
-                      <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
-                      <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
-                    </div>
-                  </div>
-
-                  {/* Read-only facts, so no chip/pill styling — that reads as
-                      tappable next to the CTAs. Value-first hierarchy mirrors
-                      the desktop stat cards. */}
-                  <dl className="lg:hidden border-y border-white/10 divide-y divide-white/10 animate-fade-in-up" style={{ animationDelay: '320ms' }}>
-                    {operatorStats.map((stat) => (
-                      <div key={`mobile-stat-${stat.label}`} className="py-2.5">
-                        <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-slate-400">{stat.label}</dt>
-                        <dd className="text-[0.95rem] font-semibold text-slate-100 mt-0.5">{stat.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-
-                  {/* Mobile CTAs close out the hero, mirroring the desktop
-                      column where they sit below the portrait and stats.
-                      Two-up grid instead of three stacked full-width buttons. */}
-                  <div className="grid grid-cols-2 gap-3 mt-6 lg:hidden animate-fade-in-up" style={{ animationDelay: '380ms' }}>
-                    <button
-                      onClick={() => scrollToSection('work')}
-                      className={`group ${ui.btnBase} ${ui.btnPrimary} !px-4 text-[0.95rem]`}
-                    >
-                      View Work <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
-                    <a
-                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`${ui.btnBase} ${ui.btnSecondary} !px-4 text-[0.95rem]`}
-                    >
-                      <Download size={16} /> Resume
-                    </a>
-                    <button
-                      onClick={() => scrollToSection('contact')}
-                      className={`col-span-2 ${ui.btnBase} ${ui.btnSecondary} text-[0.95rem]`}
-                    >
-                      Get in Touch
-                    </button>
-                  </div>
+                  {/* No mobile CTAs: the tab bar already offers Work and Contact
+                      one tap away, and Resume is a pill in the header. Three
+                      buttons repeating persistent navigation cost 142px for
+                      nothing. Desktop keeps its CTAs — it has no tab bar. */}
 
                   <div className="hidden lg:flex items-baseline gap-2.5 mb-8 min-h-[36px] font-mono whitespace-nowrap animate-fade-in-up" style={{ animationDelay: '260ms' }}>
                     <span className="text-[#01F5D1] text-xl" aria-hidden="true">{'>'}</span>
@@ -824,7 +775,7 @@ const App = () => {
                     {/* 10.5px keeps the longest row clear of the fixed 324px
                         card; 11px left only 4px of slack. */}
                     <div className="glass !bg-slate-950/75 mt-4 rounded-xl text-[#01F5D1] p-4 font-mono text-[10.5px]">
-                      <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_internship</span></p>
+                      <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_remote_work</span></p>
                       <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
                       <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
                     </div>
@@ -836,18 +787,79 @@ const App = () => {
                 {operatorStats.map((stat, i) => (
                   <Reveal key={stat.label} delay={i * 90} duration={600} className="h-full">
                     <div className="glass glass-hover rounded-2xl p-6 h-full">
-                      <div className="text-[1.95rem] md:text-[2.2rem] font-bold text-slate-100">{stat.value}</div>
+                      {/* These values are phrases, not numbers, and at 2.2rem all
+                          three wrapped with a single orphaned word on line two.
+                          Sized to hold one line instead. The tightest is
+                          "Available for remote work", which caps the ramp at
+                          1.75vw (it needs <=1.82vw in a 249px card at the `lg`
+                          boundary) and the ceiling at 1.6rem, since the 84rem
+                          shell stops widening the card at 357px.
+                          Re-measure if any operatorStats value gets longer. */}
+                      <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-slate-100 [text-wrap:balance]">{stat.value}</div>
                       <div className="text-sm text-slate-300 mt-1">{stat.label}</div>
                     </div>
                   </Reveal>
                 ))}
               </div>
 
-              <div className="mt-5 md:mt-7 flex justify-center animate-nudge text-slate-400">
-                <ChevronDown size={32} />
-              </div>
+            </div>
+
+            {/* Desktop only. On mobile the portrait card below now sits partly in
+                view at rest, which advertises the scroll better than an arrow. */}
+            <div className="hidden lg:flex lg:mt-7 justify-center animate-nudge text-slate-400">
+              <ChevronDown size={32} />
             </div>
           </section>
+          )}
+
+          {/* Portrait and the at-a-glance facts. These used to sit inside the
+              hero; moving them one swipe down is what lets the hero fit a
+              single screen, and the card keeps its full size here. */}
+          {isMobile && mobilePage === 'home' && (
+            <section className={`${ui.shell} pb-4`} aria-label="About Jash at a glance">
+              {/* 19rem wide with a 4:5 crop — the 3:4 card at full width ran
+                  558px. object-top keeps the head anchored so the tighter box
+                  crops from the bottom rather than the face. */}
+              <Reveal className="glass w-full max-w-[19rem] mx-auto rounded-3xl p-4 mb-6">
+                <div className="rounded-2xl overflow-hidden aspect-[4/5]">
+                  <ResponsiveImage
+                    src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
+                    alt="Portrait of Jash Bhatt"
+                    className="w-full h-full object-cover object-top"
+                    // Below the fold now that the hero is one screen, so it no
+                    // longer competes with the headline for the first paint.
+                    loading="lazy"
+                    sizes="304px"
+                  />
+                </div>
+                {/* Ceilings are lower than the old full-width card allowed:
+                    this card is a fixed 19rem above 344px, so the vw ramp
+                    must stop where the text still fits 304px rather than
+                    keep growing with the viewport. 11px holds the caption
+                    on one line (12px needed 276px of a 270px box). */}
+                <p className="text-[clamp(0.625rem,3.2vw,0.6875rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
+                {/* 10px likewise: the focus row is the longest and sat at
+                    exactly 236px of 236px once the card stopped growing. */}
+                <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5rem,2.75vw,0.625rem)]">
+                  <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_remote_work</span></p>
+                  <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
+                  <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
+                </div>
+              </Reveal>
+
+              {/* Read-only facts, so no chip/pill styling — that would read as
+                  tappable. Value-first hierarchy mirrors the desktop stat cards. */}
+              <Reveal delay={80}>
+                <dl className="border-y border-white/10 divide-y divide-white/10">
+                  {operatorStats.map((stat) => (
+                    <div key={`mobile-stat-${stat.label}`} className="py-2.5">
+                      <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-slate-400">{stat.label}</dt>
+                      <dd className="text-[0.95rem] font-semibold text-slate-100 mt-0.5">{stat.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </Reveal>
+            </section>
           )}
 
           {/* Discipline Marquee */}
@@ -913,7 +925,7 @@ const App = () => {
                   onClick={() => scrollToSection('work')}
                   className={`${ui.btnBase} ${ui.btnSecondary} mt-5 w-full text-[0.95rem]`}
                 >
-                  See all {featuredProjects.length} projects <ArrowRight size={16} />
+                  See all projects <ArrowRight size={16} />
                 </button>
               </Reveal>
             </section>
@@ -1364,10 +1376,14 @@ const App = () => {
       )}
 
       {/* Footer */}
-      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-10 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] mb-[var(--tabbar-h)] text-center">
-        <div className={`${ui.shell} flex flex-col items-center gap-3`}>
-          <span className="text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
-          <p className="text-slate-500 text-sm">© 2026 Jash Bhatt — Designed & built from scratch.</p>
+      {/* Mobile padding is deliberately much tighter: 171px of chrome for 90px of
+          content is a third of a short page. The mb already contains the
+          safe-area inset below `lg`, so the padding must not pay for it twice —
+          at `lg`, where --tabbar-h is 0, that allowance has to come back. */}
+      <footer className="relative z-10 glass-scrim border-t border-white/10 pt-6 lg:pt-10 pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] mb-[var(--tabbar-h)] text-center">
+        <div className={`${ui.shell} flex flex-col items-center gap-1.5 lg:gap-3`}>
+          <span className="text-xl lg:text-[1.6rem] font-display tracking-tight text-[#01F5D1]/60">JB</span>
+          <p className="text-slate-500 text-xs lg:text-sm">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
         </div>
       </footer>
 
@@ -1382,6 +1398,7 @@ const App = () => {
               : mobilePage
         }
         onNavigate={(page) => scrollToSection(page)}
+        hidden={isTabBarHidden}
       />
     </div>
   );

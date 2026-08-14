@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 // Floating back-to-top button — fades in after the user scrolls past the hero.
+// Desktop only; below `lg` the tab bar returns you to the top of any page.
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
 
@@ -17,7 +18,7 @@ export default function BackToTop() {
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
-      className={`glass glass-hover fixed bottom-[calc(var(--tabbar-h)+1.25rem)] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-[#01F5D1] transition-all duration-300 ${
+      className={`glass glass-hover fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-[#01F5D1] transition-all duration-300 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
     >

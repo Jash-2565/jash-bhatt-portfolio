@@ -19,7 +19,9 @@
      indicator. The tab bar, the page container's bottom padding, and the
      back-to-top button all read this so nothing sits underneath the bar.
      Collapses to zero at `lg`, where the tab bar is not rendered. */
-  --tabbar-h: calc(3.5rem + max(0.5rem, env(safe-area-inset-bottom)));
+  /* 1px for the bar's own top border — without it the footer's bottom edge
+     lands a pixel underneath the bar. */
+  --tabbar-h: calc(3.5rem + 1px + max(0.5rem, env(safe-area-inset-bottom)));
 }
 
 @media (min-width: 768px) {
@@ -744,6 +746,10 @@ label {
   .glass-hover:hover,
   .glass-chip:hover {
     transform: none;
+  }
+  /* The bar still hides on scroll — it just snaps instead of sliding. */
+  .tabbar {
+    transition: none !important;
   }
   .animate-drift,
   .animate-nudge,

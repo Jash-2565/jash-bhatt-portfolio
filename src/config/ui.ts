@@ -17,7 +17,9 @@ export const ui = {
   shell: 'max-w-[84rem] mx-auto px-5 sm:px-8 lg:px-12',
   section: 'py-14 sm:py-20 lg:py-24',
   scrollMt: 'scroll-mt-20 md:scroll-mt-28',
-  h1: 'text-[clamp(1.85rem,7.2vw,2.6rem)] md:text-[4.2rem] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
+  /** Mobile ceiling is lower than the type scale would suggest: the paged hero
+      has to fit one screen minus the header and the bottom tab bar. */
+  h1: 'text-[clamp(1.6rem,6.4vw,2.6rem)] md:text-[4.2rem] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
   h2: 'text-[1.75rem] sm:text-3xl md:text-4xl',
   /** 44px minimum touch target, per WCAG 2.2 target-size guidance. */
   tapTarget: 'min-h-11 min-w-11',
@@ -39,7 +41,7 @@ export const currentlyExploring = [
 export const operatorStats = [
   { label: 'Currently', value: 'B.Des · FLAME University' },
   { label: 'Last Internship', value: 'Agentic AI · Bajaj Finance' },
-  { label: 'Status', value: 'Available — Remote' },
+  { label: 'Status', value: 'Available for remote work' },
 ];
 
 export const galleryItems: GalleryItem[] = [
