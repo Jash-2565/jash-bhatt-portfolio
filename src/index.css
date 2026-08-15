@@ -614,6 +614,32 @@ label {
     }
   }
 
+  /* The project card is tall and its thumbnail covers the top half, so the
+     stock .glass sweep only ever shows its dim tail below the image — which
+     read as no gradient at all. These stops are pitched so the visible lower
+     half carries the cyan, and the pane sits clearly above the near-black page.
+     Mobile only: at md+ the card has no pane at all. */
+  @media (max-width: 767.98px) {
+    .glass-project {
+      background:
+        linear-gradient(
+          158deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0.045) 40%,
+          rgba(1, 245, 209, 0.115) 100%
+        ),
+        rgba(22, 32, 38, 0.78);
+    }
+    /* Sheen along the top edge of the text block, where the image ends, plus a
+       cyan glint in the far corner — the two highlights .glass normally puts at
+       the top of the pane, moved to where they can actually be seen. */
+    .glass-project::after {
+      background:
+        radial-gradient(130% 46% at 14% 44%, rgba(255, 255, 255, 0.13), transparent 60%),
+        radial-gradient(85% 62% at 104% 104%, rgba(1, 245, 209, 0.13), transparent 64%);
+    }
+  }
+
   /* Full-bleed panes that blur real page content: lightbox scrim, the mobile
      nav dropdown, the footer. The dropdown is rendered as a sibling of <nav>
      rather than a child — <nav> has its own backdrop-filter, which makes it a
