@@ -1160,13 +1160,6 @@ const App = () => {
                           {/* Sheen sweep on hover */}
                           <div className="sheen-layer"></div>
 
-                          {/* Overlay — desktop hover */}
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 hidden md:flex items-center justify-center">
-                            <span className="glass-chip opacity-0 group-hover:opacity-100 px-6 py-3 rounded-full font-medium text-[#9EF7EA] shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                              View Project
-                            </span>
-                          </div>
-
                         </div>
                         </TiltCard>
                       </div>
