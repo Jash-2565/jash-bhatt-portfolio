@@ -1105,7 +1105,12 @@ const App = () => {
                   >
                   <div
                     id={`project-${project.id}`}
-                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl overflow-hidden glass glass-mobile-only glass-project active:border-[#01F5D1]/50 md:overflow-visible md:rounded-none"
+                    // No cyan press border: the tile's own scale-down is enough
+                    // press feedback, and on desktop the border was otherwise
+                    // transparent, so tapping made a green outline appear from
+                    // nowhere. focus-visible stays — that ring is the keyboard
+                    // indicator and does not fire on pointer clicks.
+                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl overflow-hidden glass glass-mobile-only glass-project md:overflow-visible md:rounded-none"
                     role="button"
                     tabIndex={0}
                     aria-label={`Open case study for ${project.title}`}
