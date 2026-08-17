@@ -1128,7 +1128,10 @@ const App = () => {
                       <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                         <TiltCard>
                         <div
-                          className={`card-media relative overflow-hidden rounded-none md:rounded-2xl ${project.color} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
+                          // Top corners rounded on the tile itself rather than
+                          // relying on the card's overflow clip: 15px nests
+                          // inside the card's 16px radius over its 1px border.
+                          className={`card-media relative overflow-hidden rounded-t-[15px] md:rounded-2xl ${project.color} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
                           onMouseMove={handleCardMouseMove}
                           onMouseLeave={handleCardMouseLeave}
                         >
