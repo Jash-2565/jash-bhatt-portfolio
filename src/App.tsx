@@ -1095,6 +1095,15 @@ const App = () => {
               {featuredProjects.map((project, index) => {
                 const projectThumbnail =
                   project.content.thumbnailImage ?? project.content.heroImage;
+                const isPlaceholder = projectThumbnail.includes('placeholder');
+                const fitsInside = project.slug === 'python-codes';
+                // project.color is a letterbox backdrop, only ever meant to show
+                // where the artwork does not fill the tile. Behind a cover image
+                // it is invisible except at the rounded corners, where the
+                // composited image leaves an anti-aliased sliver and a light
+                // colour rasterises as a hairline outlining the image. It also
+                // flashes near-white on a dark page while the image loads.
+                const needsBackdrop = isPlaceholder || fitsInside;
 
                 return (
                   <Reveal
@@ -1131,7 +1140,7 @@ const App = () => {
                           // Top corners rounded on the tile itself rather than
                           // relying on the card's overflow clip: 15px nests
                           // inside the card's 16px radius over its 1px border.
-                          className={`card-media relative overflow-hidden rounded-t-[15px] md:rounded-2xl ${project.color} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
+                          className={`card-media relative overflow-hidden rounded-t-[15px] md:rounded-2xl ${needsBackdrop ? project.color : ''} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
                           onMouseMove={handleCardMouseMove}
                           onMouseLeave={handleCardMouseLeave}
                         >

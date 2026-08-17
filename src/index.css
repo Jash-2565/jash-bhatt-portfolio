@@ -637,6 +637,15 @@ label {
           rgba(1, 245, 209, 0.115) 100%
         ),
         rgba(22, 32, 38, 0.78);
+      /* No white top inset and no light border. .glass puts a 1px 16%-white
+         highlight and an 11%-white border exactly where the thumbnail's top and
+         side edges land, so on a fractional-DPR screen they rasterise as a white
+         hairline framing the image. The drop shadow and cyan base inset stay —
+         neither touches the image edge. */
+      border-color: transparent;
+      box-shadow:
+        0 18px 44px -22px rgba(0, 0, 0, 0.85),
+        inset 0 -1px 0 rgba(1, 245, 209, 0.07);
     }
     /* Sheen along the top edge of the text block, where the image ends, plus a
        cyan glint in the far corner — the two highlights .glass normally puts at
