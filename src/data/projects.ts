@@ -10,6 +10,178 @@ const MOVIE_RECS_SNIPPET = MOVIE_RECS_CODE;
 
 export const projects: Project[] = [
   {
+    id: 9,
+    slug: "etsconnect",
+    title: "ETSConnect",
+    category: "Business Design / B2B Platform",
+    timeline: "Business Design Course, 2026",
+    description: "Vagabond Translink asked how to run its fleet better. The research said the real bottleneck was winning contracts at all — so we designed ETSConnect, a B2B procurement marketplace that formalises how corporates and employee-transport providers find each other.",
+    tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modelling"],
+    color: "bg-[#F3EFFF]",
+    accentColor: "text-[#8B5CF6]",
+    hoverColor: "group-hover:text-[#7C3AED]",
+    badge: "bg-[#EDE6FF] text-[#5B21B6]",
+    content: {
+      heroImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Hero.svg`,
+      thumbnailImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Thumbnail.svg`,
+      role: "Business Designer",
+      team: ["Sharvani", "Hrishika", "Vasuman"],
+      sections: [
+        {
+          title: "Overview",
+          content: "Vagabond Translink is a Pune-based B2B mobility and facility-services company. It moves employees for enterprise clients — mostly IT and service-sector firms running shift-based operations — and layers on corporate car rentals, security, and manpower services around that core.\n\nWe were brought in to look at how the business could grow. What we found over two field visits was a company that had already solved the hard operational problems and was stuck on a completely different one.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Vagabond-Scale.svg`,
+              caption: "Vagabond runs an asset-light, vendor-based fleet at 24×7 shift coverage — operations were never the weak link."
+            }
+          ]
+        },
+        {
+          title: "The Market",
+          content: "Before questioning the brief we needed to know whether the ceiling was the company or the category. India's employee transportation services market sits around $10B and is compounding at 8.2% — faster than the global average — with corporate car rental and shared mobility growing alongside it.\n\nThe number that reframed the project was penetration. India runs roughly 546 employees per corporate mobility vehicle. China is at 372, the USA at 36, Europe at 10. The demand isn't missing; the connective tissue is.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Market.svg`,
+              caption: "India's corporate mobility segment is growing faster than global markets across every sub-category we sized."
+            },
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Penetration.svg`,
+              caption: "546 employees per vehicle against Europe's 10 — the headroom is structural, not seasonal."
+            }
+          ]
+        },
+        {
+          title: "How We Researched It",
+          content: "The research was deliberately multi-method, because the gap we suspected was between what people say happens in procurement and what actually happens. Two on-site field visits with Vagabond's CEO and CTO gave us the operator's view; seven conversations across the corporate side — procurement, admin, transport management — gave us the buyer's; a survey let us check whether what we were hearing generalised.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Research.svg`,
+              caption: "Observation, stakeholder interviews, process mapping, and validation loops back to the people we'd interviewed."
+            }
+          ]
+        },
+        {
+          title: "The Ecosystem",
+          content: "Mapping the stakeholders made the shape of the problem visible. Vagabond sits at the centre of a chain it only partly controls: it contracts with corporate clients, but the vehicles belong to fleet vendors and the service quality depends on drivers it doesn't employ. Around that sit procurement teams, the employees who actually ride, competitors, financiers, and a regulatory layer.\n\nEvery pain point we found later traces back to a relationship in this map that has no formal channel running through it.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Stakeholders.svg`,
+              caption: "Primary, secondary, and tertiary layers of the Vagabond Translink ecosystem."
+            }
+          ]
+        },
+        {
+          title: "Ground Realities",
+          content: "These are the constraints that showed up on the ground rather than in the brief — the things that quietly decide who wins work in this industry.",
+          listItems: [
+            "Financial barriers — corporates pay on 45-day cycles, so vendor selection quietly favours whoever can float payroll and fuel that long, regardless of capability.",
+            "Fragmented market — there is no standardised way to discover, compare, or onboard a provider anywhere in the industry.",
+            "Mission-critical service — a delay or a safety incident hits the client's own operations, so the buying decision is really a risk decision.",
+            "Limited tech application — technology runs routing and tracking well, and touches procurement or vendor discovery not at all.",
+            "Unstable driver layer — long hours, fatigue, high churn, and inconsistent professionalism make service quality variable no matter how good the operator is."
+          ]
+        },
+        {
+          title: "Key Findings",
+          content: "Synthesising the interviews produced six findings. Each one is a place where the system behaves differently from how it describes itself.",
+          listItems: [
+            "Reliability-driven decisions — 95–97% on-time SLAs and safety requirements shift the buying decision away from cost and towards risk mitigation.",
+            "Informally gated access — the RFP process is genuinely structured, but only vendors already known to the buyer are invited into it.",
+            "A split system — trust is built informally before entry, then enforced formally after selection.",
+            "Visibility, not capability — competition is constrained by exposure; qualified vendors are excluded simply because nobody has heard of them.",
+            "Price, not discovery — procurement optimises price discovery (L1/L2) within a fixed pool, rather than searching for a better-fitting vendor.",
+            "Control, not connection — technology is deployed as a control layer over execution, never as a discovery layer between demand and supply."
+          ]
+        },
+        {
+          title: "The Real Challenge",
+          content: "Stated plainly, Vagabond's problem was not operations. It was contracts — acquiring and securing more of them, through a channel that doesn't scale.\n\nWhat made this worth designing for is that the pain is symmetrical. Vendors can't be found; corporates can't find anyone new. Both sides described the same missing thing from opposite ends, and neither could build it alone.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-System-Inefficiency.svg`,
+              caption: "The same structural gap, articulated independently by vendors and by corporate procurement teams."
+            }
+          ]
+        },
+        {
+          title: "The Direction Shift",
+          content: "This was the decision the project turned on.\n\nThe obvious move was to stay inside the brief and optimise Vagabond — tighten coordination, improve driver management, sharpen the feedback loops. We rejected it. Operations were already standardised, procurement systems on the client side were rigid and closed to us, and the realistic ceiling on that work was incremental.\n\nSo we moved up a level, from company to ecosystem. If the bottleneck is that qualified vendors and willing corporates cannot see each other, then the intervention isn't a better fleet process — it's the missing marketplace. That reframing also changed who the client is: solving it for the industry solves it for Vagabond, but not only for Vagabond.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Direction-Shift.svg`,
+              caption: "Rejecting the company-level brief in favour of ecosystem-level enablement."
+            }
+          ]
+        },
+        {
+          title: "Prioritising the Opportunity",
+          content: "We generated a wide set of options — EV fleets as an ESG offering, commute personalisation, event transport, hospitality expansion, referral networks — and plotted them against business value and customer value. Most of the operational ideas clustered as incremental. A centralised procurement platform was the one intervention sitting high on both axes, and the only one that addressed the contract bottleneck directly.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Priority-Matrix.svg`,
+              caption: "Business value vs customer value — the platform concept was the clear Big Win quadrant candidate."
+            }
+          ]
+        },
+        {
+          title: "ETSConnect",
+          content: "ETSConnect formalises the informal. It is a B2B digital procurement marketplace connecting verified corporates with verified employee-transport providers, so both sides can discover each other, bid, verify compliance, and finalise contracts in one place — matched across India by proximity and requirement.\n\nBoth sides are verified before they get access. Corporates are checked for legitimacy and genuine contract intent, so providers aren't bidding into noise. Providers are checked on fleet, compliance documents, and operational track record, so corporates are never exposed to unverified operators.",
+          listItems: [
+            "Save time — a structured digital RFQ replaces weeks of phone calls and email chains; procurement completes in days, not months.",
+            "Reduce risk — verified providers, tracked compliance documents, and auditable bid records remove hidden procurement risk.",
+            "Control costs — transparent, side-by-side bid comparison prevents over-pricing and produces data-backed contract values.",
+            "Safer commutes — only compliance-verified providers participate, raising the baseline safety standard on every contracted route."
+          ]
+        },
+        {
+          title: "What the Platform Does",
+          content: "The product is organised around the four stages of the procurement lifecycle we mapped during research — the same four stages that are currently handled by phone calls, spreadsheets, and personal relationships.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Pillars.svg`,
+              caption: "Vendor discovery, bid comparison, compliance management, and contract finalisation on one platform."
+            }
+          ]
+        },
+        {
+          title: "The Business Case",
+          content: "The revenue model is deliberately two-sided and low-friction on the demand side, because the platform is only valuable to corporates once enough verified supply is listed — so supply is what we charge for.",
+          listItems: [
+            "₹5,000 per month, per ETS provider listing — covering verified listing, bid access, and the compliance dashboard.",
+            "2.5% one-time fee on estimated contract value, calculated from the kilometre estimate submitted during bidding.",
+            "Target customer: companies of 500+ employees with recurring daily employee transport across multiple routes and shifts.",
+            "Cost structure: platform development and maintenance, cloud infrastructure, two-sided acquisition, and the legal and verification operations that make the trust layer real."
+          ]
+        },
+        {
+          title: "Impact at Scale",
+          content: "The reason this is worth building rather than just proposing is that its value compounds. Employee transport demand recurs daily, so every additional participant makes the network more useful to everyone already on it.",
+          listItems: [
+            "Reduced operational risk — structured discovery, standardised bidding, and verified compliance remove corporates' exposure to unverified operators and informal arrangements.",
+            "Expanded market access — providers receive qualified inbound demand beyond their existing networks, reducing dependence on referrals.",
+            "Network defensibility — daily, consistent demand means the platform gets more valuable to both sides as it grows, and harder to replicate.",
+            "Critical ecosystem infrastructure — at scale it becomes the operating layer for corporate mobility procurement in India, not merely a tool."
+          ]
+        },
+        {
+          title: "Validation",
+          content: "We took the concept back to a senior transport manager at HCL — someone who sits on the buying side of exactly this process. His reaction was that the transparency is the point: today he has to ask peers whether a vendor is any good, and a biased recommendation is indistinguishable from an honest one.\n\nHis pushback was equally useful, and both notes changed how we framed the concept:",
+          listItems: [
+            "Don't over-restrict access — gating the platform too tightly would recreate the closed network we set out to open.",
+            "Show limited pricing benchmarks, but stop short of full transparency that would disadvantage providers in their own negotiations.",
+            "Let employees rate provider profiles, so service quality becomes visible rather than anecdotal.",
+            "Expect trust-building and process complexity — not technology — to be the real adoption barriers."
+          ]
+        },
+        {
+          title: "Reflection",
+          content: "The most useful thing I did on this project was argue for not answering the question we were asked. Vagabond wanted help running its fleet better, and we could have delivered a competent set of operational improvements that changed very little. Sitting with the research long enough to see that the bottleneck was structural — that the market itself had no way for supply and demand to find each other — was uncomfortable, because it meant telling a client their brief was aimed at the wrong level.\n\nIt also taught me that business design has a research burden that visual work doesn't. Every claim here had to survive a conversation with someone who does this for a living, and the validation session was where the concept actually earned its shape."
+        }
+      ]
+    }
+  },
+  {
     id: 8,
     slug: "hr-genie",
     title: "HR Genie",

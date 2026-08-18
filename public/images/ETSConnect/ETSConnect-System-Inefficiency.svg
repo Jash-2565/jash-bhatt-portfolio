@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">SYSTEM INEFFICIENCY — THE SAME GAP, FELT FROM BOTH SIDES</text>
+
+  <!-- vendor column -->
+  <g transform="translate(40,84)">
+    <rect width="740" height="58" rx="14" fill="#8B5CF6" fill-opacity="0.18" stroke="#8B5CF6"/>
+    <text x="30" y="37" font-size="19" font-weight="700" fill="#F5F3FF" letter-spacing="1">VENDOR CHALLENGES</text>
+
+    <g transform="translate(0,78)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Non-Scalable Growth</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Offline networking, referrals, and sales outreach make</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">expansion slow and costly.</text>
+    </g>
+    <g transform="translate(0,222)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Visibility Gap</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Smaller providers stay out of the market despite being</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">capable — they simply lack exposure.</text>
+    </g>
+    <g transform="translate(0,366)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Opaque Bidding</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Processes differ per organisation, with little visibility</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">into who else is competing.</text>
+    </g>
+    <g transform="translate(0,510)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Siloed Performance Data</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Track records stay locked inside individual companies,</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">never compounding across the ecosystem.</text>
+    </g>
+  </g>
+
+  <!-- corporate column -->
+  <g transform="translate(820,84)">
+    <rect width="740" height="58" rx="14" fill="#01F5D1" fill-opacity="0.12" stroke="#01F5D1" stroke-opacity="0.7"/>
+    <text x="30" y="37" font-size="19" font-weight="700" fill="#F5F3FF" letter-spacing="1">CORPORATE CHALLENGES</text>
+
+    <g transform="translate(0,78)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Manual Discovery</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">No central place to explore, compare, or evaluate ETS</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">providers — a significant time investment.</text>
+    </g>
+    <g transform="translate(0,222)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Closed Network Effect</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Peer recommendations breed homogeneity — the same</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">vendors selected again and again across companies.</text>
+    </g>
+    <g transform="translate(0,366)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Price, Not Quality, Focus</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Procurement optimises price within a fixed pool rather</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">than discovering better-fitting vendors.</text>
+    </g>
+    <g transform="translate(0,510)">
+      <rect width="740" height="128" rx="14" fill="#1A1030" stroke="#4C3A7C"/>
+      <text x="30" y="42" font-size="20" font-weight="700" fill="#F5F3FF">Technology Misalignment</text>
+      <text x="30" y="76" font-size="18" fill="#B0A4CE">Tech runs operations (routing, tracking) but never</text>
+      <text x="30" y="100" font-size="18" fill="#B0A4CE">touches contract discovery or acquisition.</text>
+    </g>
+  </g>
+
+  <text x="800" y="768" text-anchor="middle" font-size="19" fill="#01F5D1" font-weight="600">Both sides want the same connection. Nothing in the system exists to make it.</text>
+</svg>

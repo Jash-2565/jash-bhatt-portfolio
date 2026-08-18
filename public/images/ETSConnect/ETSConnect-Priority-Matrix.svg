@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">FEATURE PRIORITY MATRIX — BUSINESS VALUE VS USER / CUSTOMER VALUE</text>
+
+  <!-- axes -->
+  <line x1="150" y1="110" x2="150" y2="800" stroke="#3A3054" stroke-width="2"/>
+  <line x1="150" y1="800" x2="1560" y2="800" stroke="#3A3054" stroke-width="2"/>
+  <line x1="855" y1="110" x2="855" y2="800" stroke="#2A2140" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <line x1="150" y1="470" x2="1560" y2="470" stroke="#2A2140" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <text x="72" y="200" font-size="17" fill="#8B82A8" text-anchor="middle">High</text>
+  <text x="72" y="440" font-size="17" fill="#8B82A8" text-anchor="middle">Med</text>
+  <text x="72" y="620" font-size="17" fill="#8B82A8" text-anchor="middle">Low</text>
+  <text x="855" y="838" font-size="17" fill="#8B82A8" text-anchor="middle">Medium</text>
+  <text x="1300" y="838" font-size="17" fill="#8B82A8" text-anchor="middle">High</text>
+  <text x="855" y="878" font-size="16" font-weight="700" fill="#6E6690" letter-spacing="1.4" text-anchor="middle">BUSINESS VALUE (SUSTAINABLE) →</text>
+
+  <!-- customer satisfiers (top-left) -->
+  <g transform="translate(180,130)">
+    <rect width="640" height="310" rx="16" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="30" y="46" font-size="22" font-weight="700" fill="#E8E2F8">Customer Satisfiers</text>
+    <g font-size="18" fill="#B0A4CE">
+      <text x="30" y="90">Sustainable mobility leader positioning</text>
+      <text x="30" y="122">Personal commute profile (music, AC, route)</text>
+      <text x="30" y="154">Monthly commute insights</text>
+      <text x="30" y="186">Cross-company ride splitting</text>
+      <text x="30" y="218">Predictable schedule as a recruitment pitch</text>
+      <text x="30" y="250">Passenger preference memory card</text>
+    </g>
+  </g>
+
+  <!-- big wins (top-right) — where ETSConnect lands -->
+  <g transform="translate(890,130)">
+    <rect width="640" height="310" rx="16" fill="#8B5CF6" fill-opacity="0.18" stroke="#8B5CF6" stroke-width="2"/>
+    <text x="30" y="46" font-size="22" font-weight="700" fill="#F5F3FF">Big Wins</text>
+    <g font-size="18" fill="#E8E2F8">
+      <text x="30" y="90">EV fleet as a corporate ESG offering</text>
+      <text x="30" y="122">Client referral discount network</text>
+      <text x="30" y="154">Client-facing booking portal (HR self-serve)</text>
+      <text x="30" y="186">Event transport as recurring revenue</text>
+      <text x="30" y="218">Sales conversion website</text>
+      <text x="30" y="250">Hospital &amp; pharma sector contracts</text>
+    </g>
+    <g transform="translate(370,264)">
+      <rect width="248" height="34" rx="17" fill="#01F5D1"/>
+      <text x="124" y="23" text-anchor="middle" font-size="16" font-weight="700" fill="#06231F" letter-spacing="1">ETSCONNECT LANDS HERE</text>
+    </g>
+  </g>
+
+  <!-- incremental (bottom-left) -->
+  <g transform="translate(180,500)">
+    <rect width="640" height="270" rx="16" fill="#141225" stroke="#33304A"/>
+    <text x="30" y="44" font-size="20" font-weight="700" fill="#8B82A8">Incremental Improvement</text>
+    <g font-size="17" fill="#6E6690">
+      <text x="30" y="86">Tiered service packages · AI route optimisation</text>
+      <text x="30" y="116">Risk prediction &amp; mitigation system</text>
+      <text x="30" y="146">ITI &amp; driving school pipeline</text>
+      <text x="30" y="176">Event &amp; conference mobility</text>
+      <text x="30" y="206">Employee ride upgrade · EV subsidy leverage</text>
+      <text x="30" y="236">Pre-trip vehicle freshness reset</text>
+    </g>
+  </g>
+
+  <!-- business improvements (bottom-right) -->
+  <g transform="translate(890,500)">
+    <rect width="640" height="270" rx="16" fill="#141225" stroke="#33304A"/>
+    <text x="30" y="44" font-size="20" font-weight="700" fill="#8B82A8">Business Improvements</text>
+    <g font-size="17" fill="#6E6690">
+      <text x="30" y="86">Expansion into hospitality transport</text>
+      <text x="30" y="116">Idle fleet circulation across time slots</text>
+      <text x="30" y="146">Corporate park real-estate partnerships</text>
+      <text x="30" y="176">Airport transfer as a premium product</text>
+      <text x="30" y="206">Green Mobility Package · service templates</text>
+      <text x="30" y="236">Target GCCs for multi-city expansion</text>
+    </g>
+  </g>
+</svg>

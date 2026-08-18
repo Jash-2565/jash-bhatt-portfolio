@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 640" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">INDIA — MARKET SIZE AND GROWTH TRAJECTORY</text>
+
+  <!-- ETS: the core market -->
+  <g transform="translate(40,84)">
+    <rect width="750" height="230" rx="18" fill="#8B5CF6" fill-opacity="0.14" stroke="#8B5CF6"/>
+    <text x="40" y="46" font-size="15" font-weight="700" fill="#C4B5FD" letter-spacing="1.4">EMPLOYEE TRANSPORTATION SERVICES</text>
+    <text x="40" y="120" font-size="62" font-weight="700" fill="#F5F3FF">$10B</text>
+    <text x="196" y="120" font-size="22" fill="#B8A9E8">(2024)</text>
+    <text x="40" y="172" font-size="30" font-weight="700" fill="#01F5D1">8.2%</text>
+    <text x="140" y="166" font-size="17" fill="#D5CCF0">CAGR to 2030</text>
+    <text x="140" y="190" font-size="17" fill="#9F92C4">Projected ~$16B by 2030</text>
+  </g>
+
+  <g transform="translate(810,84)">
+    <rect width="750" height="230" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="46" font-size="15" font-weight="700" fill="#C4B5FD" letter-spacing="1.4">CORPORATE CAR RENTAL</text>
+    <text x="40" y="120" font-size="62" font-weight="700" fill="#F5F3FF">$3.14B</text>
+    <text x="238" y="120" font-size="22" fill="#B8A9E8">(2025)</text>
+    <text x="40" y="172" font-size="30" font-weight="700" fill="#01F5D1">7.4%</text>
+    <text x="140" y="166" font-size="17" fill="#D5CCF0">CAGR to 2030</text>
+    <text x="140" y="190" font-size="17" fill="#9F92C4">Projected ~$4.5B by 2030</text>
+  </g>
+
+  <g transform="translate(40,338)">
+    <rect width="750" height="200" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="46" font-size="15" font-weight="700" fill="#C4B5FD" letter-spacing="1.4">TAXI / RIDE-HAILING</text>
+    <text x="40" y="114" font-size="52" font-weight="700" fill="#F5F3FF">$21.1B</text>
+    <text x="212" y="114" font-size="20" fill="#B8A9E8">(2025)</text>
+    <text x="40" y="162" font-size="26" font-weight="700" fill="#01F5D1">7.8%</text>
+    <text x="128" y="158" font-size="17" fill="#D5CCF0">CAGR to 2031 · ~$34.9B</text>
+  </g>
+
+  <g transform="translate(810,338)">
+    <rect width="750" height="200" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="46" font-size="15" font-weight="700" fill="#C4B5FD" letter-spacing="1.4">SHARED MOBILITY — TOTAL</text>
+    <text x="40" y="114" font-size="52" font-weight="700" fill="#F5F3FF">$1.68B</text>
+    <text x="212" y="114" font-size="20" fill="#B8A9E8">(2023)</text>
+    <text x="40" y="162" font-size="26" font-weight="700" fill="#01F5D1">65.3%</text>
+    <text x="150" y="158" font-size="17" fill="#D5CCF0">CAGR to 2030 · ~$56.4B</text>
+  </g>
+
+  <text x="40" y="590" font-size="17" fill="#6E6690">Sources: Dalwadi &amp; Gupta (2023), The Management Accountant, ICAI · GK Tours (2025) · Mordor Intelligence (2026) · P&amp;S Intelligence (2024)</text>
+</svg>

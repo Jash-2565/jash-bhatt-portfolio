@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">STAKEHOLDER MAP — VAGABOND TRANSLINK ECOSYSTEM LAYERS</text>
+
+  <!-- ================= concentric ring diagram ================= -->
+  <g transform="translate(440,470)">
+    <circle r="370" fill="#8B5CF6" fill-opacity="0.05" stroke="#4C3A7C" stroke-width="1.5"/>
+    <circle r="265" fill="#8B5CF6" fill-opacity="0.08" stroke="#6D53B8" stroke-width="1.5"/>
+    <circle r="170" fill="#8B5CF6" fill-opacity="0.18" stroke="#8B5CF6" stroke-width="2.5"/>
+
+    <!-- tier labels sit on the top arc of their own band, 36px clear of the edge -->
+    <text y="-334" text-anchor="middle" font-size="16" font-weight="700" fill="#8B82A8" letter-spacing="1.4">TERTIARY</text>
+    <text y="-229" text-anchor="middle" font-size="16" font-weight="700" fill="#A794D8" letter-spacing="1.4">SECONDARY</text>
+    <text y="-136" text-anchor="middle" font-size="16" font-weight="700" fill="#01F5D1" letter-spacing="1.4">PRIMARY</text>
+
+    <!-- primary members live in the core, the only band wide enough for text -->
+    <g text-anchor="middle" font-size="17" font-weight="700" fill="#F5F3FF">
+      <text y="-58">Corporate Clients</text>
+      <text y="-22">Drivers</text>
+      <text y="14">Fleet Vendors / Vehicle Owners</text>
+      <text y="50">Internal Operations Team</text>
+    </g>
+  </g>
+
+  <!-- ================= legend ================= -->
+  <!-- secondary -->
+  <g transform="translate(900,150)">
+    <circle cx="10" cy="-6" r="10" fill="#8B5CF6" fill-opacity="0.4" stroke="#6D53B8" stroke-width="1.5"/>
+    <text x="36" y="0" font-size="16" font-weight="700" fill="#A794D8" letter-spacing="1.4">SECONDARY STAKEHOLDERS</text>
+    <text x="36" y="30" font-size="15" fill="#6E6690">Shape the deal but do not deliver the service</text>
+    <g font-size="18" fill="#C4B5FD">
+      <circle cx="12" cy="70" r="3.5" fill="#8B5CF6"/>
+      <text x="36" y="76">Procurement Teams (corporate side)</text>
+      <circle cx="12" cy="112" r="3.5" fill="#8B5CF6"/>
+      <text x="36" y="118">Corporate Employees (end users)</text>
+      <circle cx="12" cy="154" r="3.5" fill="#8B5CF6"/>
+      <text x="36" y="160">Competitors (Uber, Ola)</text>
+      <circle cx="12" cy="196" r="3.5" fill="#8B5CF6"/>
+      <text x="36" y="202">Financial Partners</text>
+    </g>
+  </g>
+
+  <!-- tertiary -->
+  <g transform="translate(900,460)">
+    <circle cx="10" cy="-6" r="10" fill="#8B5CF6" fill-opacity="0.14" stroke="#4C3A7C" stroke-width="1.5"/>
+    <text x="36" y="0" font-size="16" font-weight="700" fill="#8B82A8" letter-spacing="1.4">TERTIARY STAKEHOLDERS</text>
+    <text x="36" y="30" font-size="15" fill="#6E6690">Set the conditions the market operates inside</text>
+    <g font-size="18" fill="#9F92C4">
+      <circle cx="12" cy="70" r="3.5" fill="#6E6690"/>
+      <text x="36" y="76">Government &amp; Regulatory Bodies</text>
+      <circle cx="12" cy="112" r="3.5" fill="#6E6690"/>
+      <text x="36" y="118">Corporate Parks / Infrastructure Providers</text>
+      <circle cx="12" cy="154" r="3.5" fill="#6E6690"/>
+      <text x="36" y="160">Driver Supply Ecosystem</text>
+      <circle cx="12" cy="196" r="3.5" fill="#6E6690"/>
+      <text x="36" y="202">Social &amp; Environmental Stakeholders</text>
+    </g>
+  </g>
+
+  <line x1="900" y1="736" x2="1560" y2="736" stroke="#2A2140" stroke-width="1"/>
+  <text x="900" y="778" font-size="17" fill="#8B82A8">Vagabond contracts with corporate clients, but the</text>
+  <text x="900" y="804" font-size="17" fill="#8B82A8">vehicles belong to vendors and the service depends on</text>
+  <text x="900" y="830" font-size="17" fill="#8B82A8">drivers it does not employ.</text>
+</svg>
