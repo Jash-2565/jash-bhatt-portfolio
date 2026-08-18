@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 620" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">MARKET PENETRATION — EMPLOYEES PER CORPORATE MOBILITY VEHICLE</text>
+  <text x="40" y="76" font-size="18" fill="#8B82A8">A taller bar means fewer vehicles serving more people — that is, lower penetration and more headroom.</text>
+
+  <!-- baseline -->
+  <line x1="40" y1="470" x2="1560" y2="470" stroke="#3A3054" stroke-width="2"/>
+
+  <!-- India 546 -> 350px -->
+  <g transform="translate(120,0)">
+    <rect x="0" y="120" width="240" height="350" rx="12" fill="#8B5CF6" fill-opacity="0.22" stroke="#8B5CF6" stroke-width="2"/>
+    <text x="120" y="196" text-anchor="middle" font-size="72" font-weight="700" fill="#F5F3FF">546</text>
+    <text x="120" y="234" text-anchor="middle" font-size="19" fill="#D5CCF0">employees / vehicle</text>
+    <text x="120" y="512" text-anchor="middle" font-size="22" font-weight="700" fill="#01F5D1">INDIA</text>
+  </g>
+
+  <!-- China 372 -> 238px -->
+  <g transform="translate(480,0)">
+    <rect x="0" y="232" width="240" height="238" rx="12" fill="#1A1030" stroke="#4C3A7C" stroke-width="2"/>
+    <text x="120" y="308" text-anchor="middle" font-size="60" font-weight="700" fill="#E8E2F8">372</text>
+    <text x="120" y="342" text-anchor="middle" font-size="18" fill="#9F92C4">employees / vehicle</text>
+    <text x="120" y="512" text-anchor="middle" font-size="22" font-weight="700" fill="#B0A4CE">CHINA</text>
+  </g>
+
+  <!-- USA 36 -> 40px (min height for legibility) -->
+  <g transform="translate(840,0)">
+    <rect x="0" y="430" width="240" height="40" rx="10" fill="#1A1030" stroke="#4C3A7C" stroke-width="2"/>
+    <text x="120" y="404" text-anchor="middle" font-size="46" font-weight="700" fill="#E8E2F8">36</text>
+    <text x="120" y="512" text-anchor="middle" font-size="22" font-weight="700" fill="#B0A4CE">USA</text>
+  </g>
+
+  <!-- Europe 10 -> 20px -->
+  <g transform="translate(1200,0)">
+    <rect x="0" y="450" width="240" height="20" rx="8" fill="#1A1030" stroke="#4C3A7C" stroke-width="2"/>
+    <text x="120" y="424" text-anchor="middle" font-size="46" font-weight="700" fill="#E8E2F8">10</text>
+    <text x="120" y="512" text-anchor="middle" font-size="22" font-weight="700" fill="#B0A4CE">EUROPE</text>
+  </g>
+
+  <text x="40" y="574" font-size="19" fill="#8B82A8">India is dramatically underpenetrated against developed markets — the structural headroom the concept is built on.</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">PRIMARY RESEARCH — MULTI-METHOD INVESTIGATION</text>
+
+  <g transform="translate(40,84)">
+    <rect width="490" height="210" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="88" font-size="66" font-weight="700" fill="#F5F3FF">2</text>
+    <text x="40" y="132" font-size="20" font-weight="700" fill="#C4B5FD" letter-spacing="1">FIELD VISITS</text>
+    <text x="40" y="168" font-size="18" fill="#B0A4CE">On-site with the CEO and CTO</text>
+  </g>
+
+  <g transform="translate(555,84)">
+    <rect width="490" height="210" rx="18" fill="#8B5CF6" fill-opacity="0.14" stroke="#8B5CF6"/>
+    <text x="40" y="88" font-size="66" font-weight="700" fill="#F5F3FF">7</text>
+    <text x="40" y="132" font-size="20" font-weight="700" fill="#01F5D1" letter-spacing="1">CONVERSATIONS</text>
+    <text x="40" y="168" font-size="18" fill="#D5CCF0">Corporate stakeholders across the chain</text>
+  </g>
+
+  <g transform="translate(1070,84)">
+    <rect width="490" height="210" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="88" font-size="66" font-weight="700" fill="#F5F3FF">1</text>
+    <text x="40" y="132" font-size="20" font-weight="700" fill="#C4B5FD" letter-spacing="1">SURVEY</text>
+    <text x="40" y="168" font-size="18" fill="#B0A4CE">Quantitative validation of the findings</text>
+  </g>
+
+  <text x="800" y="356" text-anchor="middle" font-size="16" font-weight="700" fill="#6E6690" letter-spacing="1.4">METHODS USED</text>
+  <g font-size="18" fill="#B0A4CE" text-anchor="middle">
+    <text x="290" y="410">Observation</text>
+    <text x="630" y="410">Stakeholder Interviews</text>
+    <text x="980" y="410">Process Mapping</text>
+    <text x="1310" y="410">Validation Loops</text>
+  </g>
+  <g fill="#01F5D1">
+    <circle cx="290" cy="440" r="4"/><circle cx="630" cy="440" r="4"/>
+    <circle cx="980" cy="440" r="4"/><circle cx="1310" cy="440" r="4"/>
+  </g>
+</svg>

@@ -10,6 +10,9 @@ export const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   // Playable in-browser demos — surfaced above the remaining case studies so
   // the interactive work is found rather than buried at the end.
   'python-codes': 5,
+  // Business design work — ranked so it sits directly above SolarLink, which is
+  // unranked and therefore sorts last among the featured case studies.
+  etsconnect: 6,
 };
 
 // Earlier coursework kept on the site but demoted out of the main case-study
@@ -24,6 +27,12 @@ export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
 };
 
 export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
+  etsconnect: {
+    heroBgClass: 'bg-transparent',
+    heroTextClass: 'text-[#8B5CF6]',
+    heroMutedTextClass: 'text-[#CFC2FF]',
+    heroBodyTextClass: 'text-[#EAE3FF]',
+  },
   'hr-genie': {
     heroBgClass: 'bg-transparent',
     heroTextClass: 'text-[#3B82F6]',

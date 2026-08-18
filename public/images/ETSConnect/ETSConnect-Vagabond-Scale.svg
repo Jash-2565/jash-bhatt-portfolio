@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 440" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">VAGABOND TRANSLINK — OPERATIONS AND SCALE</text>
+
+  <g transform="translate(40,84)">
+    <rect width="490" height="200" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="90" font-size="60" font-weight="700" fill="#F5F3FF">1000+</text>
+    <text x="40" y="130" font-size="22" font-weight="600" fill="#C4B5FD">Vehicles</text>
+    <text x="40" y="164" font-size="18" fill="#B0A4CE">Vendor-based fleet model — asset-light</text>
+  </g>
+
+  <g transform="translate(555,84)">
+    <rect width="490" height="200" rx="18" fill="#8B5CF6" fill-opacity="0.14" stroke="#8B5CF6"/>
+    <text x="40" y="90" font-size="60" font-weight="700" fill="#F5F3FF">24×7</text>
+    <text x="40" y="130" font-size="22" font-weight="600" fill="#01F5D1">Operations</text>
+    <text x="40" y="164" font-size="18" fill="#D5CCF0">Shift-based transport coverage</text>
+  </g>
+
+  <g transform="translate(1070,84)">
+    <rect width="490" height="200" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="40" y="90" font-size="60" font-weight="700" fill="#F5F3FF">100+</text>
+    <text x="40" y="130" font-size="22" font-weight="600" fill="#C4B5FD">Corporate Clients</text>
+    <text x="40" y="164" font-size="18" fill="#B0A4CE">Long-term contracts, IT &amp; service sectors</text>
+  </g>
+
+  <line x1="40" y1="330" x2="1560" y2="330" stroke="#2A2140" stroke-width="1"/>
+  <text x="40" y="372" font-size="19" fill="#8B82A8">Employee transportation · corporate car rentals · integrated facility services including security and manpower</text>
+  <text x="40" y="404" font-size="19" fill="#8B82A8">Structured driver coordination and routing, with performance tracking and monitoring infrastructure.</text>
+</svg>

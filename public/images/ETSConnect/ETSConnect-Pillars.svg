@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">ETSCONNECT — THE FOUR PILLARS OF THE PROCUREMENT LIFECYCLE</text>
+
+  <g transform="translate(40,84)">
+    <rect width="740" height="290" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="34" y="52" font-size="16" font-weight="700" fill="#8B5CF6" letter-spacing="1.4">01</text>
+    <text x="76" y="53" font-size="26" font-weight="700" fill="#F5F3FF">Vendor Discovery</text>
+    <g font-size="18" fill="#B0A4CE">
+      <text x="34" y="100">Corporates post transport requirements — routes, shift</text>
+      <text x="34" y="126">timings, headcount. Verified providers on the network</text>
+      <text x="34" y="152">respond with competitive bids, replacing informal email</text>
+      <text x="34" y="178">and call negotiations with a structured, auditable process.</text>
+    </g>
+    <g transform="translate(34,206)" font-size="15" font-weight="600" fill="#C4B5FD">
+      <rect width="230" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="115" y="21" text-anchor="middle">Route &amp; headcount posting</text>
+      <rect x="244" width="238" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="363" y="21" text-anchor="middle">Proximity-matched providers</text>
+      <rect x="0" y="42" width="196" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="98" y="63" text-anchor="middle">Structured RFQ flow</text>
+    </g>
+  </g>
+
+  <g transform="translate(820,84)">
+    <rect width="740" height="290" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="34" y="52" font-size="16" font-weight="700" fill="#8B5CF6" letter-spacing="1.4">02</text>
+    <text x="76" y="53" font-size="26" font-weight="700" fill="#F5F3FF">Bid Comparison</text>
+    <g font-size="18" fill="#B0A4CE">
+      <text x="34" y="100">A structured dashboard lets procurement and admin teams</text>
+      <text x="34" y="126">evaluate providers side by side on price per km, route</text>
+      <text x="34" y="152">coverage, fleet type, and service history — faster,</text>
+      <text x="34" y="178">data-backed decisions without back-and-forth negotiation.</text>
+    </g>
+    <g transform="translate(34,206)" font-size="15" font-weight="600" fill="#C4B5FD">
+      <rect width="196" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="98" y="21" text-anchor="middle">Price/km comparison</text>
+      <rect x="210" width="212" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="316" y="21" text-anchor="middle">Fleet &amp; route coverage</text>
+      <rect x="0" y="42" width="200" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="100" y="63" text-anchor="middle">Service history rating</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,394)">
+    <rect width="740" height="290" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="34" y="52" font-size="16" font-weight="700" fill="#8B5CF6" letter-spacing="1.4">03</text>
+    <text x="76" y="53" font-size="26" font-weight="700" fill="#F5F3FF">Compliance Management</text>
+    <g font-size="18" fill="#B0A4CE">
+      <text x="34" y="100">Automated tracking of every critical vendor document:</text>
+      <text x="34" y="126">driver licences, vehicle fitness certificates, insurance,</text>
+      <text x="34" y="152">permits, PAN, GST registration, and five years of turnover</text>
+      <text x="34" y="178">records — so corporates are never exposed to unverified operators.</text>
+    </g>
+    <g transform="translate(34,206)" font-size="15" font-weight="600" fill="#C4B5FD">
+      <rect width="204" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="102" y="21" text-anchor="middle">Auto-tracked documents</text>
+      <rect x="218" width="140" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="288" y="21" text-anchor="middle">Expiry alerts</text>
+      <rect x="372" width="120" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="432" y="21" text-anchor="middle">Audit trail</text>
+    </g>
+  </g>
+
+  <g transform="translate(820,394)">
+    <rect width="740" height="290" rx="18" fill="#1A1030" stroke="#4C3A7C"/>
+    <text x="34" y="52" font-size="16" font-weight="700" fill="#8B5CF6" letter-spacing="1.4">04</text>
+    <text x="76" y="53" font-size="26" font-weight="700" fill="#F5F3FF">Contract Finalisation</text>
+    <g font-size="18" fill="#B0A4CE">
+      <text x="34" y="100">ETSConnect facilitates contract finalisation between verified</text>
+      <text x="34" y="126">vendors and corporations, and provides legal consultancy</text>
+      <text x="34" y="152">through the contracting process — covering disputes,</text>
+      <text x="34" y="178">amendments, and compliance issues across the lifecycle.</text>
+    </g>
+    <g transform="translate(34,206)" font-size="15" font-weight="600" fill="#C4B5FD">
+      <rect width="248" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="124" y="21" text-anchor="middle">Structured contract templates</text>
+      <rect x="262" width="168" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="346" y="21" text-anchor="middle">Legal consultancy</text>
+      <rect x="0" y="42" width="248" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.16"/>
+      <text x="124" y="63" text-anchor="middle">Contract lifecycle management</text>
+    </g>
+  </g>
+
+  <text x="800" y="762" text-anchor="middle" font-size="19" fill="#8B82A8">Discover → bid → verify compliance → finalise. Procurement completes in days, not months.</text>
+</svg>

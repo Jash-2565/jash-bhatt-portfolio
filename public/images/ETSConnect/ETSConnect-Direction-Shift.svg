@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 660" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="shiftArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#01F5D1"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">DIRECTION SHIFT — FROM INTERNAL OPTIMISATION TO ECOSYSTEM ENABLEMENT</text>
+
+  <!-- what the research forced -->
+  <g transform="translate(40,80)">
+    <rect width="1520" height="176" rx="18" fill="#8B5CF6" fill-opacity="0.14" stroke="#8B5CF6"/>
+    <g font-size="19" fill="#E8E2F8">
+      <circle cx="34" cy="46" r="4" fill="#01F5D1"/>
+      <text x="56" y="52">Contract acquisition is slow, fragmented, and dependent on offline interactions — a non-scalable growth bottleneck.</text>
+      <circle cx="34" cy="90" r="4" fill="#01F5D1"/>
+      <text x="56" y="96">The ecosystem favours continuity over exploration, reducing any incentive to discover alternatives.</text>
+      <circle cx="34" cy="134" r="4" fill="#01F5D1"/>
+      <text x="56" y="140">Trust is built informally before entry, then enforced formally after selection — a split system.</text>
+    </g>
+  </g>
+
+  <!-- rejected -->
+  <g transform="translate(40,300)">
+    <text x="0" y="0" font-size="16" font-weight="700" fill="#6E6690" letter-spacing="1.4">REJECTED</text>
+    <rect y="24" width="620" height="250" rx="18" fill="#141225" stroke="#33304A" stroke-dasharray="7 6"/>
+    <text x="40" y="90" font-size="34" font-weight="700" fill="#8B82A8">Company-Level</text>
+    <g font-size="19" fill="#6E6690">
+      <text x="40" y="140">Optimising Vagabond's internal ETS operations</text>
+      <text x="40" y="176">Operations were already standardised</text>
+      <text x="40" y="212">Procurement systems are rigid and closed</text>
+      <text x="40" y="248">Limited ceiling on impact</text>
+    </g>
+  </g>
+
+  <line x1="700" y1="440" x2="820" y2="440" stroke="#01F5D1" stroke-width="3" marker-end="url(#shiftArrow)"/>
+
+  <!-- selected -->
+  <g transform="translate(900,300)">
+    <text x="0" y="0" font-size="16" font-weight="700" fill="#01F5D1" letter-spacing="1.4">SELECTED</text>
+    <rect y="24" width="660" height="250" rx="18" fill="#1A1030" stroke="#8B5CF6" stroke-width="2"/>
+    <text x="40" y="90" font-size="34" font-weight="700" fill="#F5F3FF">Ecosystem-Level</text>
+    <g font-size="19" fill="#D5CCF0">
+      <text x="40" y="140">Industry-level marketplace enablement</text>
+      <text x="40" y="176">Enable vendor visibility and discovery</text>
+      <text x="40" y="212">Reduce reliance on personal networks</text>
+      <text x="40" y="248">Accelerate corporate–vendor connections</text>
+    </g>
+  </g>
+
+  <text x="800" y="626" text-anchor="middle" font-size="18" font-weight="600" fill="#01F5D1">The client asked how to run the fleet better. The answer was to change how the market finds each other.</text>
+</svg>
