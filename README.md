@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+# jashbhatt.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio for Jash Bhatt — product designer and design engineer. A
+single-page React app with case studies, a creative-explorations gallery, and
+three playable in-browser demos (an Arkanoid clone, a YOLOv8 object detector
+running on-device via ONNX Runtime, and a movie recommender).
 
-Currently, two official plugins are available:
+Built with Vite, React 19, TypeScript and Tailwind CSS 3.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting started
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The dev server listens on `http://127.0.0.1:5177`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Vite dev server with HMR |
+| `npm run build` | Typecheck (`tsc -b`) then build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint over the whole repo |
+| `npm run optimize:images` | Cap oversized images, emit srcset variants, rewrite the image manifest |
+| `npm run optimize:videos` | Re-encode the autoplaying clips to VP9/H.264 plus poster frames |
+
+## Layout
+
 ```
+src/
+  App.tsx           Home, Work, About, Contact — one scroll at lg+, paged below it
+  components/       UI components; the three demos are lazy-loaded
+  config/           Curation and ordering of projects, shared Tailwind class strings
+  data/             Case-study content, generated image manifest, demo source listings
+  hooks/            useInView, useIsMobile, usePointerFine
+  types/            Shared content and project types
+  utils/            Base-URL prefix, srcset lookup, small formatters
+public/
+  images/           Case-study media, plus generated -480/-960/-1440 variants
+  models/           YOLOv8 weights and the movie dataset
+  onnxruntime/      WASM runtime served directly (not bundled — see vite.config.ts)
+scripts/
+  optimize-images.mjs   Image cap + srcset pass (writes src/data/imageManifest.json)
+  optimize-videos.mjs   Video re-encode pass
+  gif-to-video.sh       One-shot GIF → mp4/webm/poster conversion
+  og-card.html          Source layout for public/og-image.png
+```
+
+## Media pipeline
+
+Case-study media never ships as it was exported.
+
+- **Images.** `npm run optimize:images` caps any source longer than 2400px on its
+  long edge, emits 480/960/1440px WebP siblings, and records intrinsic sizes in
+  `src/data/imageManifest.json`. `ResponsiveImage` reads that manifest to build a
+  `srcset` and to set `width`/`height` so images don't shift the layout as they
+  load. Re-run it after adding images.
+- **Video.** Animated GIFs are converted to muted, looping `<video>` elements.
+  Project data still references the original `.gif` path; `AutoVideo` swaps in
+  the `.webm`/`.mp4`/`.poster.jpg` siblings and plays only while in view.
+
+## Deployment
+
+`main` deploys automatically to <https://jashbhatt.com>. Push only when a change
+is ready to be live.

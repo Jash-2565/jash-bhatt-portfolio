@@ -28,6 +28,11 @@ const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'about', 'contact'];
 const isMobilePage = (value: string): value is MobilePage =>
   (MOBILE_PAGES as string[]).includes(value);
 
+// A case study opened from a card scrolls back to that card. Centring it is
+// right on a wide screen; on a phone the card is nearly the full viewport, so
+// centring buries its title under the fixed nav — start-align it instead.
+const getProjectScrollAlignment = () => (window.innerWidth < 768 ? 'start' : 'center');
+
 const marqueeItems = [
   'Product Design', 'UI/UX', 'Circuit Design', 'Interaction Design', 'Figma',
   'React', 'Arduino', 'Generative AI', 'Prototyping', 'Motion Design', 'Photography',
@@ -210,8 +215,6 @@ const App = () => {
     // `gallery` has no anchor of its own here; it resolves to Work.
     const anchorId = sectionForAnchor(sectionId);
     const targetProjectId = selectedProject?.id ?? null;
-    const getProjectScrollAlignment = () =>
-      window.innerWidth < 768 ? 'start' : 'center';
 
     if (currentView !== 'home') {
       setIsTransitioning(true);
@@ -300,8 +303,6 @@ const App = () => {
     }
 
     const targetProjectId = sectionId === 'work' ? (selectedProject?.id ?? null) : null;
-    const getProjectScrollAlignment = () =>
-      window.innerWidth < 768 ? 'start' : 'center';
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentView('home');
@@ -701,7 +702,6 @@ const App = () => {
               alt="Full size view"
               className={`max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : ''}`}
               loading="eager"
-              deferGifOnConstrainedNetwork={false}
               onClick={(e) => e.stopPropagation()}
             />
           </div>

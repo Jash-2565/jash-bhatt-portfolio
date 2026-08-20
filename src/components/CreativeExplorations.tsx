@@ -51,7 +51,6 @@ function Thumb({
             alt={item.alt}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
             sizes={sizes}
-            deferGifOnConstrainedNetwork
           />
           {showCaption && (
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">

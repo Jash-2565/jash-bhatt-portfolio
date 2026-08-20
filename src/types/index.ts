@@ -58,6 +58,4 @@ export interface ProjectHeroTheme {
   heroBodyTextClass: string;
 }
 
-export interface ResponsiveImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  deferGifOnConstrainedNetwork?: boolean;
-}
+export type ResponsiveImageProps = ImgHTMLAttributes<HTMLImageElement>;

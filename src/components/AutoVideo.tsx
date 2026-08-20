@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface AutoVideoProps {
   /** The original .gif path from projects data — the encoded siblings
-   *  (.webm/.mp4/.poster.jpg produced by scripts-gif-to-video.sh) are derived automatically. */
+   *  (.webm/.mp4/.poster.jpg produced by scripts/gif-to-video.sh) are derived automatically. */
   src: string;
   alt?: string;
   className?: string;

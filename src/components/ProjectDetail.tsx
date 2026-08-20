@@ -213,7 +213,6 @@ const ProjectDetail = ({
                         alt={img.caption}
                         className="w-full h-full object-cover object-center"
                         loading="lazy"
-                        deferGifOnConstrainedNetwork
                       />
                     )}
                   </div>
@@ -255,7 +254,6 @@ const ProjectDetail = ({
                   alt={img.caption}
                   className="w-full h-full object-cover object-center"
                   loading="lazy"
-                  deferGifOnConstrainedNetwork
                 />
               )}
             </div>
@@ -305,7 +303,6 @@ const ProjectDetail = ({
                           alt={img.caption}
                           className={`w-full h-auto md:w-auto ${section.imageHeight || 'md:h-80'}`}
                           loading="lazy"
-                          deferGifOnConstrainedNetwork
                         />
                       )}
                     </div>
@@ -332,7 +329,6 @@ const ProjectDetail = ({
                     alt={img.caption}
                     className="w-full h-auto"
                     loading="lazy"
-                    deferGifOnConstrainedNetwork
                   />
                 )}
               </div>
@@ -373,7 +369,6 @@ const ProjectDetail = ({
                             : 'w-full h-full object-contain'
                       }
                       loading="lazy"
-                      deferGifOnConstrainedNetwork
                     />
                   )}
                 </div>
@@ -417,7 +412,6 @@ const ProjectDetail = ({
                             : 'w-full h-auto'
                       }
                       loading="lazy"
-                      deferGifOnConstrainedNetwork
                     />
                     {/* Several case-study diagrams are authored 1600px wide, so
                         their labels are unreadable inline on a phone. Advertise
@@ -669,7 +663,6 @@ const ProjectDetail = ({
                       alt={nextProject.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
-                      deferGifOnConstrainedNetwork
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">

@@ -18,10 +18,9 @@ const ResponsiveImage = ({
   loading = 'lazy',
   className,
   sizes,
-  deferGifOnConstrainedNetwork: _deferGifOnConstrainedNetwork,
   ...imgProps
 }: ResponsiveImageProps) => {
-  // GIFs are shipped as encoded video (see scripts-gif-to-video.sh) — render an
+  // GIFs are shipped as encoded video (see scripts/gif-to-video.sh) — render an
   // autoplaying looping <video> instead of the multi-MB animated GIF.
   if (typeof src === 'string' && /\.gif$/i.test(src)) {
     return <AutoVideo src={src} alt={alt} className={className} />;
