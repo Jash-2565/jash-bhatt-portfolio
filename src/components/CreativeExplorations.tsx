@@ -4,6 +4,7 @@ import ImageWithFallback from './ImageWithFallback';
 import Reveal from './Reveal';
 import { ui, galleryItems, aiItems, gallerySnippetItems } from '../config/ui';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
+import type { GalleryItem } from '../types';
 
 type Props = {
   onImageClick: (src: string) => void;
@@ -13,9 +14,61 @@ type Props = {
 };
 
 /**
- * The "Beyond case studies" galleries — Photoshop, brand animation, AI
- * generations, photography. Extracted so the same markup can render inside the
- * Work section at `lg` and as a standalone mobile page below it.
+ * One gallery tile. The same markup was repeated four times with only the
+ * sizing changed, so the shape lives here and callers pass the frame.
+ */
+function Thumb({
+  item,
+  onImageClick,
+  className = '',
+  sizes,
+  showCaption = true,
+}: {
+  item: GalleryItem;
+  onImageClick: (src: string) => void;
+  className?: string;
+  sizes: string;
+  showCaption?: boolean;
+}) {
+  const isVideo = item.type === 'video' && item.src;
+
+  return (
+    <div
+      className={`relative overflow-hidden rounded-xl bg-white/5 border border-white/10 transition-all group ${
+        isVideo ? 'hover:border-white/25' : 'cursor-pointer hover:border-[#01F5D1]'
+      } hover:-translate-y-1 ${className}`}
+      onClick={() => !isVideo && item.src && onImageClick(item.src)}
+    >
+      {isVideo ? (
+        <video className="w-full h-full object-cover" controls playsInline preload="metadata" aria-label={item.alt}>
+          <source src={item.src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : item.src ? (
+        <>
+          <ImageWithFallback
+            src={item.src}
+            alt={item.alt}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            sizes={sizes}
+            deferGifOnConstrainedNetwork
+          />
+          {showCaption && (
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+              {item.alt}
+            </div>
+          )}
+        </>
+      ) : (
+        <PhotoIcon className="text-slate-300 w-full h-full p-4" />
+      )}
+    </div>
+  );
+}
+
+/**
+ * The "Beyond case studies" galleries. Rendered as the body of the Explorations
+ * page, which is its own view at every width.
  */
 export default function CreativeExplorations({ onImageClick, showDivider = true }: Props) {
   return (
@@ -32,56 +85,43 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
       )}
 
       <div className="grid grid-cols-1 gap-8 sm:gap-10 md:gap-12">
-        {/* Photoshop Section */}
+        {/* Photography — the longest-running of these, so it leads. */}
         <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ResponsiveImage
-                src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
-                alt="Photoshop icon"
-                className="w-full h-full object-cover rounded-lg"
+                src={`${PUBLIC_URL}/images/Photography/camera.png`}
+                alt="Camera icon"
+                className="w-full h-full object-contain rounded-lg"
                 loading="lazy"
               />
             </div>
-            <h3 className="text-xl font-bold text-slate-100">Photoshop &amp; Animation</h3>
+            <h3 className="text-xl font-bold text-slate-100">Photography Gallery</h3>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
-          <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-            {galleryItems.map((item, i) => (
-              <div
-                key={i}
-                className={`relative w-full rounded-xl overflow-hidden bg-white/5 border border-white/10 transition-all group aspect-square hover:-translate-y-1 ${item.type === 'video' ? 'hover:border-white/25 hover:shadow-md' : 'cursor-pointer hover:border-[#01F5D1] hover:shadow-md'}`}
-                onClick={() => item.type === 'image' && item.src && onImageClick(item.src)}
-              >
-                {item.type === 'video' && item.src ? (
-                  <video
-                    className="w-full h-full object-cover"
-                    controls
-                    playsInline
-                    preload="metadata"
-                    aria-label={item.alt}
-                  >
-                    <source src={item.src} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : item.src ? (
-                  <>
-                    <ImageWithFallback
-                      src={item.src}
-                      alt={item.alt}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      sizes="(min-width: 1024px) 340px, 45vw"
-                      deferGifOnConstrainedNetwork
-                    />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                      {item.alt}
-                    </div>
-                  </>
-                ) : (
-                  <PhotoIcon className="text-slate-300 w-full h-full p-4" />
-                )}
-              </div>
-            ))}
+          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
+            {gallerySnippetItems.map((item, i) => {
+              const positionClass = i === 0
+                ? 'md:col-start-1 md:row-start-1'
+                : i === 1
+                  ? 'md:col-start-1 md:row-start-2'
+                  : i === 2
+                    ? 'md:col-start-2 md:row-span-2 md:h-full'
+                    : 'md:col-start-3 md:row-span-2 md:h-full';
+              const shapeClass = i < 2
+                ? 'w-full aspect-square md:aspect-[4/3]'
+                : 'w-full aspect-square md:aspect-auto md:h-full';
+
+              return (
+                <Thumb
+                  key={`gallery-snippet-${i}`}
+                  item={item}
+                  onImageClick={onImageClick}
+                  className={`${shapeClass} ${positionClass}`}
+                  sizes="(min-width: 768px) 340px, 60vw"
+                />
+              );
+            })}
           </div>
         </Reveal>
 
@@ -114,8 +154,35 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           </div>
         </Reveal>
 
-        {/* AI Generations Section */}
+        {/* Photoshop Section */}
         <Reveal delay={180} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+              <ResponsiveImage
+                src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
+                alt="Photoshop icon"
+                className="w-full h-full object-cover rounded-lg"
+                loading="lazy"
+              />
+            </div>
+            <h3 className="text-xl font-bold text-slate-100">Photoshop &amp; Animation</h3>
+          </div>
+          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
+          <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            {galleryItems.map((item, i) => (
+              <Thumb
+                key={`photoshop-${i}`}
+                item={item}
+                onImageClick={onImageClick}
+                className="w-full aspect-square"
+                sizes="(min-width: 1024px) 340px, 45vw"
+              />
+            ))}
+          </div>
+        </Reveal>
+
+        {/* AI Generations Section */}
+        <Reveal delay={240} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ResponsiveImage
@@ -130,86 +197,17 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
           <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {aiItems.map((item, i) => (
-              <div
-                key={i}
-                className="relative w-full rounded-xl overflow-hidden bg-white/5 cursor-pointer border border-white/10 hover:border-[#01F5D1] hover:shadow-md transition-all group aspect-square hover:-translate-y-1"
-                onClick={() => item.src && onImageClick(item.src)}
-              >
-                {item.src ? (
-                  <>
-                    <ImageWithFallback
-                      src={item.src}
-                      alt={item.alt}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      sizes="(min-width: 1024px) 340px, 45vw"
-                      deferGifOnConstrainedNetwork
-                    />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                      {item.alt}
-                    </div>
-                  </>
-                ) : (
-                  <PhotoIcon className="text-slate-300 w-full h-full p-4" />
-                )}
-              </div>
+              <Thumb
+                key={`ai-${i}`}
+                item={item}
+                onImageClick={onImageClick}
+                className="w-full aspect-square"
+                sizes="(min-width: 1024px) 340px, 45vw"
+              />
             ))}
           </div>
         </Reveal>
 
-        {/* Gallery Snippet Section */}
-        <Reveal delay={240} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-              <ResponsiveImage
-                src={`${PUBLIC_URL}/images/Photography/camera.png`}
-                alt="Camera icon"
-                className="w-full h-full object-contain rounded-lg"
-                loading="lazy"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-slate-100">Photography Gallery</h3>
-          </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
-            {gallerySnippetItems.map((item, i) => {
-              const positionClass = i === 0
-                ? 'md:col-start-1 md:row-start-1'
-                : i === 1
-                  ? 'md:col-start-1 md:row-start-2'
-                  : i === 2
-                    ? 'md:col-start-2 md:row-span-2 md:h-full'
-                    : 'md:col-start-3 md:row-span-2 md:h-full';
-              const shapeClass = i < 2
-                ? 'w-full aspect-square md:aspect-[4/3]'
-                : 'w-full aspect-square md:aspect-auto md:h-full';
-
-              return (
-                <div
-                  key={`gallery-snippet-${i}`}
-                  className={`relative ${shapeClass} rounded-xl overflow-hidden bg-white/5 cursor-pointer border border-white/10 hover:border-white/30 hover:shadow-md transition-all group ${positionClass} hover:-translate-y-1`}
-                  onClick={() => item.src && onImageClick(item.src)}
-                >
-                  {item.src ? (
-                    <>
-                      <ImageWithFallback
-                        src={item.src}
-                        alt={item.alt}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        sizes="(min-width: 768px) 340px, 60vw"
-                        deferGifOnConstrainedNetwork
-                      />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-                        {item.alt}
-                      </div>
-                    </>
-                  ) : (
-                    <PhotoIcon className="text-slate-300 w-full h-full p-4" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </Reveal>
       </div>
     </>
   );

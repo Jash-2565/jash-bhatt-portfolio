@@ -15,7 +15,7 @@ export const projects: Project[] = [
     title: "ETSConnect",
     category: "Business Design / B2B Platform",
     timeline: "Business Design Course, 2026",
-    description: "Vagabond Translink asked how to run its fleet better. The research said the real bottleneck was winning contracts at all — so we designed ETSConnect, a B2B procurement marketplace that formalises how corporates and employee-transport providers find each other.",
+    description: "A corporate mobility operator asked how to run its fleet better. The research said the real bottleneck was winning contracts at all — so we designed ETSConnect, a B2B procurement marketplace that formalises how corporates and employee-transport providers find each other.",
     tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modelling"],
     color: "bg-[#F3EFFF]",
     accentColor: "text-[#8B5CF6]",
@@ -29,13 +29,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "Vagabond Translink is a Pune-based B2B mobility and facility-services company. It moves employees for enterprise clients — mostly IT and service-sector firms running shift-based operations — and layers on corporate car rentals, security, and manpower services around that core.\n\nWe were brought in to look at how the business could grow. What we found over two field visits was a company that had already solved the hard operational problems and was stuck on a completely different one.",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Vagabond-Scale.svg`,
-              caption: "Vagabond runs an asset-light, vendor-based fleet at 24×7 shift coverage — operations were never the weak link."
-            }
-          ]
+          content: "India's employee transport sector moves millions of people to work every day, and almost none of that work is won through anything resembling a system. Corporates find providers by asking peers. Providers find work by already knowing someone.\n\nWe came into it through a Pune-based corporate mobility operator, Vagabond Translink, who asked us how to grow. Two field visits in, it was clear the company had already solved its operational problems and was stuck on a market-structure one — so that is what the project became about."
         },
         {
           title: "The Market",
@@ -53,7 +47,7 @@ export const projects: Project[] = [
         },
         {
           title: "How We Researched It",
-          content: "The research was deliberately multi-method, because the gap we suspected was between what people say happens in procurement and what actually happens. Two on-site field visits with Vagabond's CEO and CTO gave us the operator's view; seven conversations across the corporate side — procurement, admin, transport management — gave us the buyer's; a survey let us check whether what we were hearing generalised.",
+          content: "The research was deliberately multi-method, because the gap we suspected was between what people say happens in procurement and what actually happens. Two on-site field visits with the operator's CEO and CTO gave us the supply-side view; seven conversations across the corporate side — procurement, admin, transport management — gave us the buyer's; a survey let us check whether what we were hearing generalised.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Research.svg`,
@@ -63,11 +57,11 @@ export const projects: Project[] = [
         },
         {
           title: "The Ecosystem",
-          content: "Mapping the stakeholders made the shape of the problem visible. Vagabond sits at the centre of a chain it only partly controls: it contracts with corporate clients, but the vehicles belong to fleet vendors and the service quality depends on drivers it doesn't employ. Around that sit procurement teams, the employees who actually ride, competitors, financiers, and a regulatory layer.\n\nEvery pain point we found later traces back to a relationship in this map that has no formal channel running through it.",
+          content: "Mapping the stakeholders made the shape of the problem visible. An ETS operator sits at the centre of a chain it only partly controls: it contracts with corporate clients, but the vehicles belong to fleet vendors and the service quality depends on drivers it doesn't employ. Around that sit procurement teams, the employees who actually ride, competitors, financiers, and a regulatory layer.\n\nEvery pain point we found later traces back to a relationship in this map that has no formal channel running through it.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Stakeholders.svg`,
-              caption: "Primary, secondary, and tertiary layers of the Vagabond Translink ecosystem."
+              caption: "Primary, secondary, and tertiary layers of the corporate mobility ecosystem."
             }
           ]
         },
@@ -96,7 +90,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Real Challenge",
-          content: "Stated plainly, Vagabond's problem was not operations. It was contracts — acquiring and securing more of them, through a channel that doesn't scale.\n\nWhat made this worth designing for is that the pain is symmetrical. Vendors can't be found; corporates can't find anyone new. Both sides described the same missing thing from opposite ends, and neither could build it alone.",
+          content: "Stated plainly, the client's problem was not operations. It was contracts — acquiring and securing more of them, through a channel that doesn't scale.\n\nWhat made this worth designing for is that the pain is symmetrical. Vendors can't be found; corporates can't find anyone new. Both sides described the same missing thing from opposite ends, and neither could build it alone.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-System-Inefficiency.svg`,
@@ -106,7 +100,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Direction Shift",
-          content: "This was the decision the project turned on.\n\nThe obvious move was to stay inside the brief and optimise Vagabond — tighten coordination, improve driver management, sharpen the feedback loops. We rejected it. Operations were already standardised, procurement systems on the client side were rigid and closed to us, and the realistic ceiling on that work was incremental.\n\nSo we moved up a level, from company to ecosystem. If the bottleneck is that qualified vendors and willing corporates cannot see each other, then the intervention isn't a better fleet process — it's the missing marketplace. That reframing also changed who the client is: solving it for the industry solves it for Vagabond, but not only for Vagabond.",
+          content: "This was the decision the project turned on.\n\nThe obvious move was to stay inside the brief and optimise a single operator — tighten coordination, improve driver management, sharpen the feedback loops. We rejected it. Operations were already standardised, procurement systems on the client side were rigid and closed to us, and the realistic ceiling on that work was incremental.\n\nSo we moved up a level, from company to ecosystem. If the bottleneck is that qualified vendors and willing corporates cannot see each other, then the intervention isn't a better fleet process — it's the missing marketplace. That reframing also changed who the client is: solving it for the industry solves it for the client, but not only for the client.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Direction-Shift.svg`,
@@ -176,7 +170,7 @@ export const projects: Project[] = [
         },
         {
           title: "Reflection",
-          content: "The most useful thing I did on this project was argue for not answering the question we were asked. Vagabond wanted help running its fleet better, and we could have delivered a competent set of operational improvements that changed very little. Sitting with the research long enough to see that the bottleneck was structural — that the market itself had no way for supply and demand to find each other — was uncomfortable, because it meant telling a client their brief was aimed at the wrong level.\n\nIt also taught me that business design has a research burden that visual work doesn't. Every claim here had to survive a conversation with someone who does this for a living, and the validation session was where the concept actually earned its shape."
+          content: "The most useful thing I did on this project was argue for not answering the question we were asked. The client wanted help running its fleet better, and we could have delivered a competent set of operational improvements that changed very little. Sitting with the research long enough to see that the bottleneck was structural — that the market itself had no way for supply and demand to find each other — was uncomfortable, because it meant telling a client their brief was aimed at the wrong level.\n\nIt also taught me that business design has a research burden that visual work doesn't. Every claim here had to survive a conversation with someone who does this for a living, and the validation session was where the concept actually earned its shape."
         }
       ]
     }

@@ -14,7 +14,7 @@ type Props = {
  * In a 20px box with 2px bars, 9px is the centre line.
  */
 export default function MenuIcon({ open }: Props) {
-  const bar = 'menu-glyph-bar absolute left-0 h-[2px] rounded-full transition-all duration-300 ease-out';
+  const bar = 'menu-glyph-bar absolute right-0 h-[2px] rounded-full transition-all duration-300 ease-out';
 
   return (
     <span className="relative block h-5 w-6" aria-hidden="true">
@@ -26,7 +26,7 @@ export default function MenuIcon({ open }: Props) {
       <span
         className={`${bar} top-[9px] bg-slate-300 ${open ? 'w-6 opacity-0' : 'w-[15px] opacity-100'}`}
       />
-      {/* Bottom — mid length, giving the ragged right edge. */}
+      {/* Bottom — mid length, giving the ragged left edge. */}
       <span
         className={`${bar} bg-slate-300 ${open ? 'top-[9px] w-6 -rotate-45' : 'top-[15px] w-[20px] rotate-0'}`}
       />

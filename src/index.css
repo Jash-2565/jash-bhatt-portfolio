@@ -302,22 +302,6 @@ label {
   100% { transform: scale(26); opacity: 0; }
 }
 
-/* Blinking caret for the hero typewriter line. */
-.typewriter-caret {
-  display: inline-block;
-  width: 2px;
-  height: 1.05em;
-  margin-left: 3px;
-  background: #01f5d1;
-  vertical-align: text-bottom;
-  animation: caret-blink 1s steps(2) infinite;
-}
-
-@keyframes caret-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
 /* Pulsing availability dot. */
 .pulse-dot {
   position: relative;
@@ -785,7 +769,6 @@ label {
   .animate-nudge,
   .accent-shimmer,
   .sheen-layer::before,
-  .typewriter-caret,
   .pulse-dot::after,
   .marquee-track,
   .copy-ripple {

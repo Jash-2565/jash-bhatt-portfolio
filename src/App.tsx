@@ -6,7 +6,8 @@ import {
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 import ResponsiveImage from './components/ResponsiveImage';
 import Reveal from './components/Reveal';
-import Typewriter from './components/Typewriter';
+import RotatingText from './components/RotatingText';
+import PipeList from './components/PipeList';
 import TiltCard from './components/TiltCard';
 import Marquee from './components/Marquee';
 import BackToTop from './components/BackToTop';
@@ -18,12 +19,12 @@ import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
 import { projects } from './data/projects';
-import { orderedProjects, featuredProjects, archivedProjects } from './config/projects';
-import { ui, personalitySignals, currentlyExploring, operatorStats } from './config/ui';
+import { orderedProjects, featuredProjects, secondaryProjects } from './config/projects';
+import { ui, personalitySignals, operatorStats } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
-import type { Project, MobilePage } from './types';
+import type { Project, MobilePage, View } from './types';
 
-const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'gallery', 'about', 'contact'];
+const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'about', 'contact'];
 const isMobilePage = (value: string): value is MobilePage =>
   (MOBILE_PAGES as string[]).includes(value);
 
@@ -41,14 +42,13 @@ const App = () => {
   // Below `lg` the four sections are separate pages instead of one scroll, so
   // this — not scroll position — decides what renders. Ignored at `lg` and up.
   const [mobilePage, setMobilePage] = useState<MobilePage>('home');
-  const [currentView, setCurrentView] = useState<'home' | 'project'>('home');
+  const [currentView, setCurrentView] = useState<View>('home');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   // Mobile-only accordion for the About "signal" cards. On desktop (md+) all
   // three are always shown, so this state is a no-op there.
-  const [openFeature, setOpenFeature] = useState<number | null>(null);
   const isMobile = useIsMobile();
 
   const isManualScroll = useRef(false);
@@ -118,7 +118,7 @@ const App = () => {
   };
 
   const updateHistory = (
-    state: { view: 'home' | 'project'; section?: string; projectId?: number },
+    state: { view: View; section?: string; projectId?: number },
     hash: string,
     replace = false
   ) => {
@@ -145,6 +145,12 @@ const App = () => {
       return { view: 'project' as const, projectId: projectIdBySlug.get(hash)! };
     }
 
+    // `gallery` is the legacy hash for this page — still honoured so old links
+    // and bookmarks keep working.
+    if (hash === 'explorations' || hash === 'gallery') {
+      return { view: 'explorations' as const };
+    }
+
     if (isMobilePage(hash)) {
       return { view: 'home' as const, section: hash };
     }
@@ -152,11 +158,27 @@ const App = () => {
     return { view: 'home' as const, section: 'home' };
   };
 
+  /** Explorations is its own view, so Work stays the marked nav item while there. */
+  const sectionForAnchor = (section: string) => (section === 'explorations' ? 'work' : section);
+
   /**
-   * The gallery has no section of its own at `lg` — it lives inside Work — so
-   * `#gallery` resolves to the work anchor when the page is scroll-based.
+   * Explorations replaces the home page at every width — same transition the
+   * case studies use, so the two full-page views behave identically.
    */
-  const sectionForAnchor = (section: string) => (section === 'gallery' ? 'work' : section);
+  const openExplorations = (options?: { updateHistory?: boolean }) => {
+    setIsMenuOpen(false);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setSelectedProject(null);
+      setCurrentView('explorations');
+      setActiveSection('work');
+      window.scrollTo(0, 0);
+      setTimeout(() => { setIsTransitioning(false); }, 50);
+    }, 180);
+    if (options?.updateHistory !== false) {
+      updateHistory({ view: 'explorations' }, 'explorations');
+    }
+  };
 
   const scrollToSection = (
     sectionId: string,
@@ -307,6 +329,9 @@ const App = () => {
    */
   const showsPage = (page: MobilePage) => !isMobile || mobilePage === page;
 
+  /** Explorations is a sub-page of Work, so the nav keeps Work marked there. */
+  const isHomeNavContext = currentView === 'home' || currentView === 'explorations';
+
   const handleNextProject = () => {
     if (selectedProject) {
       const currentIndex = orderedProjects.findIndex(p => p.id === selectedProject.id);
@@ -318,6 +343,11 @@ const App = () => {
   // Initial load: honor URL hash without pushing history
   useEffect(() => {
     const initialState = parseHash();
+    if (initialState.view === 'explorations') {
+      openExplorations({ updateHistory: false });
+      updateHistory({ view: 'explorations' }, 'explorations', true);
+      return;
+    }
     if (initialState.view === 'project') {
       const project = projects.find(p => p.id === initialState.projectId);
       if (project) {
@@ -344,6 +374,10 @@ const App = () => {
   useEffect(() => {
     const handlePopState = () => {
       const nextState = parseHash();
+      if (nextState.view === 'explorations') {
+        openExplorations({ updateHistory: false });
+        return;
+      }
       if (nextState.view === 'project') {
         const project = projects.find(p => p.id === nextState.projectId);
         if (project) {
@@ -380,6 +414,13 @@ const App = () => {
       setMeta('meta[name="description"]', selectedProject.description);
       setMeta('meta[property="og:title"]', title);
       setMeta('meta[property="og:description"]', selectedProject.description);
+      return;
+    }
+
+    if (currentView === 'explorations') {
+      const title = 'Explorations | Jash Bhatt';
+      document.title = title;
+      setMeta('meta[property="og:title"]', title);
       return;
     }
 
@@ -504,7 +545,7 @@ const App = () => {
   // Active-nav underline — recalc when active section, view, or resize changes
   useEffect(() => {
     const recalc = () => {
-      if (currentView !== 'home' || !navItemsRef.current) {
+      if (!isHomeNavContext || !navItemsRef.current) {
         setUnderline((prev) => ({ ...prev, visible: false }));
         return;
       }
@@ -524,7 +565,7 @@ const App = () => {
     recalc();
     window.addEventListener('resize', recalc);
     return () => window.removeEventListener('resize', recalc);
-  }, [activeSection, currentView]);
+  }, [activeSection, currentView, isHomeNavContext]);
 
   // Close mobile menu on outside click or Escape
   useEffect(() => {
@@ -693,7 +734,8 @@ const App = () => {
                     ref={(el) => { navButtonRefs.current[item.toLowerCase()] = el; }}
                     onClick={() => scrollToSection(item.toLowerCase())}
                     className={`flex items-center min-h-11 text-base font-medium transition-colors duration-200 ${
-                      activeSection === item.toLowerCase() && currentView === 'home'
+                      // Explorations sits under Work, so Work stays marked there.
+                      activeSection === item.toLowerCase() && isHomeNavContext
                         ? 'text-[#01F5D1]'
                         : 'text-slate-300 hover:text-[#9EF7EA]'
                     }`}
@@ -761,8 +803,10 @@ const App = () => {
             <div className="px-3 pt-3 pb-2 space-y-1">
               {['Home', 'Work', 'About', 'Contact'].map((item) => {
                 const page = item.toLowerCase();
-                // Gallery is a sub-page of Work, so Work stays marked while on it.
-                const isCurrent = currentView === 'home' && sectionForAnchor(mobilePage) === page;
+                // Explorations is reached from Work, so Work stays marked there.
+                const isCurrent = currentView === 'explorations'
+                  ? page === 'work'
+                  : currentView === 'home' && sectionForAnchor(mobilePage) === page;
                 return (
                   <button
                     key={item}
@@ -852,12 +896,20 @@ const App = () => {
                     I design and build <span className="accent-shimmer font-semibold">tech products</span> that blend hardware, software, and human behavior.
                   </h1>
                   <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-4 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
-                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span> — product designer and design engineer at FLAME University.
+                    {/* Two different good breaks at two widths, so the rules differ.
+                        Everywhere: "agentic AI" and "FLAME University." never split.
+                        At md+ the line fits in two, so the trailing clause is held
+                        whole and the break lands on the comma; below md it needs
+                        three lines, where locking the clause left a short ragged
+                        middle line, so it wraps freely there instead. */}
+                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span> — product designer and agentic&nbsp;AI developer,{' '}
+                    <span className="md:whitespace-nowrap">studying at FLAME&nbsp;University.</span>
                   </p>
 
-                  <div className="flex items-baseline gap-2.5 mb-5 lg:hidden min-h-[32px] font-mono animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                    <span className="text-[#01F5D1] text-lg" aria-hidden="true">{'>'}</span>
-                    <Typewriter
+                  {/* The accent rule replaces the old `>` prompt: it keeps the
+                      line anchored to the left margin without the console idiom. */}
+                  <div className="flex items-center mb-5 lg:hidden min-h-[32px] border-l-2 border-[#01F5D1] pl-3 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                    <RotatingText
                       phrases={personalitySignals}
                       className="text-base font-semibold text-[#9EF7EA]"
                     />
@@ -868,9 +920,8 @@ const App = () => {
                       buttons repeating persistent navigation cost 142px for
                       nothing. Desktop keeps its CTAs — it has no tab bar. */}
 
-                  <div className="hidden lg:flex items-baseline gap-2.5 mb-8 min-h-[36px] font-mono whitespace-nowrap animate-fade-in-up" style={{ animationDelay: '260ms' }}>
-                    <span className="text-[#01F5D1] text-xl" aria-hidden="true">{'>'}</span>
-                    <Typewriter
+                  <div className="hidden lg:flex items-center mb-8 min-h-[36px] whitespace-nowrap border-l-2 border-[#01F5D1] pl-3.5 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                    <RotatingText
                       phrases={personalitySignals}
                       className="text-lg font-semibold text-[#9EF7EA]"
                     />
@@ -918,13 +969,6 @@ const App = () => {
                       />
                     </div>
                     <p className="text-xs uppercase tracking-[0.1em] text-slate-400 mt-4 px-1">Design Student · FLAME University</p>
-                    {/* 10.5px keeps the longest row clear of the fixed 324px
-                        card; 11px left only 4px of slack. */}
-                    <div className="glass !bg-slate-950/75 mt-4 rounded-xl text-[#01F5D1] p-4 font-mono text-[10.5px]">
-                      <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_remote_work</span></p>
-                      <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
-                      <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -984,13 +1028,6 @@ const App = () => {
                     keep growing with the viewport. 11px holds the caption
                     on one line (12px needed 276px of a 270px box). */}
                 <p className="text-[clamp(0.625rem,3.2vw,0.6875rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
-                {/* 10px likewise: the focus row is the longest and sat at
-                    exactly 236px of 236px once the card stopped growing. */}
-                <div className="glass !bg-slate-950/75 mt-3 rounded-xl text-[#01F5D1] p-4 font-mono text-[clamp(0.5rem,2.75vw,0.625rem)]">
-                  <p><span className="text-slate-500">{'>'}</span> status: <span className="text-[#9EF7EA]">available_for_remote_work</span></p>
-                  <p><span className="text-slate-500">{'>'}</span> focus: <span className="text-[#9EF7EA]">agentic ai · ui/ux · circuits</span></p>
-                  <p><span className="text-slate-500">{'>'}</span> stack: <span className="text-[#9EF7EA]">figma + react + arduino</span></p>
-                </div>
               </Reveal>
 
               {/* Read-only facts, so no chip/pill styling — that would read as
@@ -1226,64 +1263,76 @@ const App = () => {
               })}
             </div>
 
-            {/* Coursework & Experiments — earlier work, kept but demoted */}
-            {archivedProjects.length > 0 && (
-              <div className="mt-16 sm:mt-20 md:mt-32">
-                <Reveal className="mb-8">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Earlier work</p>
-                  <h2 className="text-2xl font-display text-slate-300">Coursework &amp; Experiments</h2>
+          </section>
+          )}
+
+          {/* Everything outside the five flagship case studies — demos, older
+              app work, and coursework — in a section of its own so Work reads
+              as the strongest projects and nothing else. Mounts on the Work
+              page below `lg`. */}
+          {showsPage('work') && secondaryProjects.length > 0 && (
+            <section id="archive" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
+              <Reveal className="mb-8">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Also worth a look</p>
+                <h2 className={`${ui.h2} font-display text-slate-100`}>More work</h2>
+                <Reveal variant="grow-width" delay={180} duration={700}>
+                  <div className="mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-[#01F5D1] to-[#00A19B]"></div>
                 </Reveal>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {archivedProjects.map((project, index) => {
-                    const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
-                    return (
-                      <Reveal key={project.id} delay={index * 80}>
-                        <button
-                          type="button"
-                          id={`project-${project.id}`}
-                          onClick={() => handleProjectClick(project)}
-                          aria-label={`Open case study for ${project.title}`}
-                          className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
-                        >
-                          <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-white/5">
-                            {!thumbnail.includes('placeholder') ? (
-                              <ResponsiveImage
-                                src={thumbnail}
-                                alt={project.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                loading="lazy"
-                                sizes="80px"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center">
-                                <PhotoIcon size={20} className="text-slate-600" />
-                              </div>
-                            )}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
-                            <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-[#01F5D1] transition-colors">{project.title}</h3>
-                          </div>
-                          <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-[#01F5D1] group-hover:translate-x-1 transition-all duration-300" />
-                        </button>
-                      </Reveal>
-                    );
-                  })}
-                </div>
+              </Reveal>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {secondaryProjects.map((project, index) => {
+                  const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
+                  return (
+                    <Reveal key={project.id} delay={index * 80}>
+                      <button
+                        type="button"
+                        id={`project-${project.id}`}
+                        onClick={() => handleProjectClick(project)}
+                        aria-label={`Open case study for ${project.title}`}
+                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
+                      >
+                        <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                          {!thumbnail.includes('placeholder') ? (
+                            <ResponsiveImage
+                              src={thumbnail}
+                              alt={project.title}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              loading="lazy"
+                              sizes="80px"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <PhotoIcon size={20} className="text-slate-600" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
+                          <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-[#01F5D1] transition-colors">{project.title}</h3>
+                        </div>
+                        {project.content.sections.some((section) => section.demoId) && (
+                          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-full border border-[#01F5D1]/45 bg-[#01F5D1]/10 text-[#9EF7EA] text-[0.6rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                            <span className="pulse-dot" aria-hidden="true" />
+                            Try it live
+                          </span>
+                        )}
+                        <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-[#01F5D1] group-hover:translate-x-1 transition-all duration-300" />
+                      </button>
+                    </Reveal>
+                  );
+                })}
               </div>
-            )}
+            </section>
+          )}
 
-            {/* Creative Explorations sits inside Work at `lg`. Below that
-                breakpoint these galleries are their own page — see the
-                gallery section below. */}
-            {!isMobile && <CreativeExplorations onImageClick={setSelectedImage} />}
-
-            {/* Entry point to that page on mobile, standing in for the 1,947px
-                of galleries that used to sit inline here. */}
-            {isMobile && (
-              <Reveal className="mt-14 sm:mt-16">
+          {/* Entry point to the Explorations page. Shown at every width now
+              that the galleries are a view of their own rather than part of
+              this scroll. */}
+          {showsPage('work') && (
+            <section className={`${ui.shell} pb-14 sm:pb-20`}>
+              <Reveal>
                 <button
-                  onClick={() => scrollToSection('gallery')}
+                  onClick={() => openExplorations()}
                   className={`${ui.cardBase} ${ui.cardHover} group flex w-full items-center gap-4 p-5 text-left`}
                 >
                   <div className="min-w-0 flex-1">
@@ -1294,27 +1343,6 @@ const App = () => {
                   <ArrowRight size={20} className="shrink-0 text-[#01F5D1]" />
                 </button>
               </Reveal>
-            )}
-          </section>
-          )}
-
-          {/* Creative Explorations — a page of its own below `lg` only. */}
-          {isMobile && mobilePage === 'gallery' && (
-            <section id="gallery" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
-              <Reveal className="mb-10 sm:mb-14">
-                <button
-                  onClick={() => scrollToSection('work')}
-                  className="inline-flex items-center gap-1.5 -ml-1 min-h-11 pr-3 pl-1 text-sm font-medium text-slate-400 active:text-[#01F5D1]"
-                >
-                  <ArrowLeft size={16} /> Work
-                </button>
-                <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Beyond case studies</p>
-                <h2 className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h2>
-                <Reveal variant="grow-width" delay={180} duration={700}>
-                  <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#01F5D1] to-[#00A19B]"></div>
-                </Reveal>
-              </Reveal>
-              <CreativeExplorations onImageClick={setSelectedImage} showDivider={false} />
             </section>
           )}
 
@@ -1327,92 +1355,27 @@ const App = () => {
                   <h2 className={`${ui.h2} font-display text-slate-100 mb-5 md:mb-8`}>About Me</h2>
                   <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-300 leading-relaxed">
                     <p>
-                      I love technology in all forms. I prefer direct communication, clear expectations, and products that behave exactly as intended.
+                      I design products that span software and hardware — conversational AI agents inside Bajaj Finance's Agentic AI unit, design-system components at RAHI, and interfaces running on circuits I soldered myself.
                     </p>
                     <p>
-                      I work across UI, hardware, and interaction design, with a strong focus on circuit design and electronics. My goal is simple: build phygital products that are refined, useful, and technically solid.
+                      What ties it together is a preference for building the thing rather than describing it. I'd rather test a rough prototype than argue about a mockup, and I care most that a product behaves exactly the way someone expects it to.
                     </p>
-                  </div>
-
-                  <div className="mt-6 md:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {[
-                      {
-                        label: 'Design × Engineering',
-                        body: 'I bridge UI, hardware, and behavior in one product view.',
-                        card: '!border-[#00A19B]/60 !bg-[#00A19B]/20 hover:!border-[#01F5D1] hover:shadow-[0_14px_36px_-18px_rgba(1,245,209,0.45)]',
-                        label_color: 'text-[#01F5D1]',
-                      },
-                      {
-                        label: 'Research-First',
-                        body: 'Every design decision is grounded in user insight before it ships.',
-                        card: '!border-[#C8CCCE]/40 !bg-[#C8CCCE]/10 hover:!border-[#C8CCCE] hover:shadow-[0_14px_36px_-18px_rgba(200,204,206,0.35)]',
-                        label_color: 'text-[#C8CCCE]',
-                      },
-                      {
-                        label: 'End-to-End',
-                        body: 'I own execution from Figma through code to physical prototype.',
-                        card: '!border-emerald-500/40 !bg-emerald-500/10 hover:!border-emerald-400 hover:shadow-[0_14px_36px_-18px_rgba(52,211,153,0.4)]',
-                        label_color: 'text-emerald-300',
-                      },
-                    ].map((feature, i) => {
-                      const isOpen = openFeature === i;
-                      return (
-                        <div
-                          key={feature.label}
-                          className={`glass rounded-2xl ${feature.card} transition-all duration-300 hover:-translate-y-0.5`}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => setOpenFeature(isOpen ? null : i)}
-                            aria-expanded={isOpen}
-                            className="w-full flex items-center justify-between gap-3 min-h-12 px-4 pt-4 pb-2.5 text-left md:min-h-0 md:cursor-default"
-                          >
-                            <span className={`text-xs uppercase tracking-[0.18em] ${feature.label_color}`}>{feature.label}</span>
-                            <ChevronDown
-                              size={16}
-                              aria-hidden="true"
-                              className={`shrink-0 md:hidden ${feature.label_color} transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-                            />
-                          </button>
-                          <p className={`px-4 pb-4 text-sm text-slate-200 font-medium ${isOpen ? 'block' : 'hidden'} md:block`}>{feature.body}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="glass mt-6 md:mt-8 rounded-2xl p-5 transition-colors duration-300 hover:border-[#01F5D1]/50">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300 mb-3">Design Principles</p>
-                    <ul className="space-y-2 text-sm text-slate-300">
-                      <li className="flex items-start gap-2"><span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-slate-300"></span><span className="[text-wrap:pretty]">Technology shifts fast — I keep my process tool-agnostic and outcome-focused.</span></li>
-                      <li className="flex items-start gap-2"><span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-slate-300"></span><span className="[text-wrap:pretty]">Clarity over cleverness: if an interaction needs explaining, it needs redesigning.</span></li>
-                      <li className="flex items-start gap-2"><span className="mt-[7px] h-1.5 w-1.5 rounded-full bg-slate-300"></span><span className="[text-wrap:pretty]">I iterate on working prototypes, not just screens — real constraints shape better design.</span></li>
-                    </ul>
                   </div>
                 </Reveal>
 
                 <Reveal delay={140}>
                   <h3 className={`${ui.h2} font-display font-semibold tracking-tight text-slate-100 mb-5 md:mb-9`}>Expertise</h3>
-                  <div className="mb-6 md:mb-8">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 mb-3">Currently exploring</p>
-                    <div className="flex flex-wrap gap-2">
-                      {currentlyExploring.map((item) => (
-                        <span key={item} className="glass-chip px-3 py-1.5 text-sm font-medium rounded-full text-slate-200">
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
                         <Briefcase size={20} className="text-[#01F5D1]" />
                         <h4 className="text-xl font-semibold tracking-tight text-slate-100">Design</h4>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        {['Product Design', 'UI/UX Design', 'Industrial Design', 'Design Systems', 'Generative AI in Design', 'Agentic AI Workflows', 'Circuit Design'].map((skill) => (
-                          <span key={skill} className={ui.chipAccent}>{skill}</span>
-                        ))}
-                      </div>
+                      <PipeList
+                        items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design Systems', 'Industrial Design']}
+                        flow="column"
+                        className="text-sm font-medium text-[#9EF7EA]"
+                      />
                     </div>
 
                     <div>
@@ -1420,35 +1383,54 @@ const App = () => {
                         <Award size={20} className="text-emerald-300" />
                         <h4 className="text-xl font-semibold tracking-tight text-emerald-300">Tools & Tech</h4>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        {['Figma', 'Python', 'React.js', 'Arduino IDE', 'n8n', 'Adobe Suite', 'Fusion 360'].map((tool) => (
-                          <span key={tool} className="glass-chip px-3 py-1.5 text-sm font-medium text-emerald-300 !border-emerald-400/35 rounded-full">
-                            {tool}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 md:mt-12">
-                    <div className="border-l-2 border-[#00A19B] pl-4">
-                      <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</div>
-                      <div className="space-y-4 md:space-y-6">
-                        <div>
-                          <h4 className="text-lg font-bold text-slate-100">Bachelor of Design (B.Des)</h4>
-                          <p className="text-slate-300 font-medium">FLAME University</p>
-                          <p className="text-sm text-[#00A19B] font-medium mt-1">2023 – 2027</p>
-                        </div>
-                        <div className="opacity-80">
-                          <h4 className="text-base font-medium text-slate-300">Cambridge International Education</h4>
-                          <p className="text-sm text-slate-500">VIBGYOR High School, NIBM, Pune</p>
-                          <p className="text-xs text-slate-400 mt-0.5">2018 – 2023</p>
-                        </div>
-                      </div>
+                      <PipeList
+                        items={['Figma', 'Python', 'React.js', 'n8n', 'Microsoft Copilot Studio', 'Arduino IDE', 'Fusion 360', 'Adobe Suite']}
+                        className="text-sm font-medium text-emerald-300"
+                      />
                     </div>
                   </div>
                 </Reveal>
               </div>
+
+              {/* Experience and Education are a matched pair, so they get their
+                  own full-width row below the two-column grid rather than being
+                  split across it — that way they start on the same baseline and
+                  their rules line up. They stack in this order on a phone. */}
+              <Reveal delay={200}>
+                <div className="mt-10 md:mt-16 grid md:grid-cols-2 gap-8 md:gap-16">
+                  <div className="border-l-2 border-[#00A19B] pl-4">
+                    <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Experience</div>
+                    <div className="space-y-4 md:space-y-6">
+                      <div>
+                        <h4 className="text-lg font-bold text-slate-100">Design &amp; Development Intern</h4>
+                        <p className="text-slate-300 font-medium">Bajaj Finance · Agentic AI Unit</p>
+                        <p className="text-sm text-[#00A19B] font-medium mt-1">Summer 2026</p>
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-slate-100">UI Design Intern</h4>
+                        <p className="text-slate-300 font-medium">RAHI Platform Technologies</p>
+                        <p className="text-sm text-[#00A19B] font-medium mt-1">Summer 2025</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-l-2 border-[#00A19B] pl-4">
+                    <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</div>
+                    <div className="space-y-4 md:space-y-6">
+                      <div>
+                        <h4 className="text-lg font-bold text-slate-100">Bachelor of Design (B.Des)</h4>
+                        <p className="text-slate-300 font-medium">FLAME University</p>
+                        <p className="text-sm text-[#00A19B] font-medium mt-1">2023 – 2027</p>
+                      </div>
+                      <div className="opacity-80">
+                        <h4 className="text-base font-medium text-slate-300">Cambridge International Education</h4>
+                        <p className="text-sm text-slate-500">VIBGYOR High School, NIBM, Pune</p>
+                        <p className="text-xs text-slate-400 mt-0.5">2018 – 2023</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
             </div>
           </section>
           )}
@@ -1514,6 +1496,36 @@ const App = () => {
             </div>
           </section>
           )}
+        </div>
+      ) : currentView === 'explorations' ? (
+        /* EXPLORATIONS VIEW — a full page at every width, like a case study. */
+        <div
+          className={`relative z-10 transition-all duration-300 ease-in-out transform ${
+            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+          }`}
+        >
+          <section
+            id="explorations"
+            className={`${ui.section} pt-[calc(var(--nav-h)+1.5rem)] ${ui.shell}`}
+          >
+            <Reveal className="mb-10 sm:mb-14">
+              <button
+                onClick={() => scrollToSection('work')}
+                className="inline-flex items-center gap-1.5 -ml-1 mb-2 min-h-11 pr-3 pl-1 text-sm font-medium text-slate-400 hover:text-[#01F5D1] active:text-[#01F5D1] transition-colors"
+              >
+                <ArrowLeft size={16} /> Work
+              </button>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Beyond case studies</p>
+              <h1 className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h1>
+              <p className="text-slate-300 max-w-2xl">
+                Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
+              </p>
+              <Reveal variant="grow-width" delay={180} duration={700}>
+                <div className="mt-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#01F5D1] to-[#00A19B]"></div>
+              </Reveal>
+            </Reveal>
+            <CreativeExplorations onImageClick={setSelectedImage} showDivider={false} />
+          </section>
         </div>
       ) : (
         /* PROJECT DETAIL VIEW */

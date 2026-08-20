@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" font-family="'Helvetica Neue', Arial, sans-serif">
-  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">STAKEHOLDER MAP — VAGABOND TRANSLINK ECOSYSTEM LAYERS</text>
+  <text x="40" y="46" font-size="17" font-weight="700" fill="#94A3B8" letter-spacing="1">STAKEHOLDER MAP — CORPORATE MOBILITY ECOSYSTEM LAYERS</text>
 
   <!-- ================= concentric ring diagram ================= -->
   <g transform="translate(440,470)">
@@ -57,7 +57,7 @@
   </g>
 
   <line x1="900" y1="736" x2="1560" y2="736" stroke="#2A2140" stroke-width="1"/>
-  <text x="900" y="778" font-size="17" fill="#8B82A8">Vagabond contracts with corporate clients, but the</text>
+  <text x="900" y="778" font-size="17" fill="#8B82A8">The operator contracts with corporate clients, but the</text>
   <text x="900" y="804" font-size="17" fill="#8B82A8">vehicles belong to vendors and the service depends on</text>
   <text x="900" y="830" font-size="17" fill="#8B82A8">drivers it does not employ.</text>
 </svg>
