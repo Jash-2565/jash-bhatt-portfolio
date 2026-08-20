@@ -38,11 +38,12 @@ export interface Project {
   content: ProjectContent;
 }
 
-/**
- * Views the paged mobile layout can show. `gallery` is a sub-page of Work
- * reached from the Creative Explorations card, not a tab of its own.
- */
-export type MobilePage = 'home' | 'work' | 'gallery' | 'about' | 'contact';
+/** Views the paged mobile layout can show. */
+export type MobilePage = 'home' | 'work' | 'about' | 'contact';
+
+/** Top-level views. Explorations and case studies replace the home page
+    entirely rather than sitting inside its scroll. */
+export type View = 'home' | 'project' | 'explorations';
 
 export interface GalleryItem {
   type: 'image' | 'video' | 'placeholder';

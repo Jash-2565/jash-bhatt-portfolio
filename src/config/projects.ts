@@ -1,23 +1,30 @@
 import type { ProjectHeroTheme } from '../types';
 import { projects } from '../data/projects';
 
+// The homepage leads with five case studies, not everything that exists. This
+// set is the curation; anything absent falls through to "More work" below it.
+export const FEATURED_PROJECT_SLUGS = new Set([
+  'hr-genie',
+  'classflow',
+  'revela',
+  'etsconnect',
+  'rahi-design-system-v2',
+]);
+
 export const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   'hr-genie': 0,
-  revela: 1,
-  classflow: 2,
-  'rahi-design-system-v2': 3,
-  wepick: 4,
-  // Playable in-browser demos — surfaced above the remaining case studies so
-  // the interactive work is found rather than buried at the end.
+  classflow: 1,
+  revela: 2,
+  etsconnect: 3,
+  'rahi-design-system-v2': 4,
+  // Secondary list. Playable in-browser demos lead it so the interactive work
+  // is still found, and the earliest coursework trails it.
   'python-codes': 5,
-  // Business design work — ranked so it sits directly above SolarLink, which is
-  // unranked and therefore sorts last among the featured case studies.
-  etsconnect: 6,
+  wepick: 6,
+  solarlink: 7,
+  'dino-spread': 8,
+  tinkering: 9,
 };
-
-// Earlier coursework kept on the site but demoted out of the main case-study
-// list, so the flagship work sets the perceived level of the portfolio.
-export const ARCHIVED_PROJECT_SLUGS = new Set(['dino-spread', 'tinkering']);
 
 export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
   heroBgClass: 'bg-transparent',
@@ -89,25 +96,26 @@ export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
   },
 };
 
-// Archived work always sorts after everything else, so next-project navigation
-// runs through the flagship case studies before reaching the coursework.
-const archiveRank = (slug: string) => (ARCHIVED_PROJECT_SLUGS.has(slug) ? 1 : 0);
+// A single ordering for the whole catalogue: featured work first, then the
+// secondary list. Case-study "next project" navigation walks this array, so it
+// runs through the flagship work before reaching the coursework.
+const featuredRank = (slug: string) => (FEATURED_PROJECT_SLUGS.has(slug) ? 0 : 1);
 
 export const orderedProjects = [...projects].sort((a, b) => {
-  const archiveDelta = archiveRank(a.slug) - archiveRank(b.slug);
-  if (archiveDelta !== 0) return archiveDelta;
+  const tierDelta = featuredRank(a.slug) - featuredRank(b.slug);
+  if (tierDelta !== 0) return tierDelta;
   const rankA = PROJECT_ORDER_PRIORITY[a.slug] ?? Number.MAX_SAFE_INTEGER;
   const rankB = PROJECT_ORDER_PRIORITY[b.slug] ?? Number.MAX_SAFE_INTEGER;
   if (rankA !== rankB) return rankA - rankB;
   return a.id - b.id;
 });
 
-/** Flagship case studies — the main "Selected Projects" list. */
-export const featuredProjects = orderedProjects.filter(
-  (project) => !ARCHIVED_PROJECT_SLUGS.has(project.slug)
+/** The five case studies that lead the homepage. */
+export const featuredProjects = orderedProjects.filter((project) =>
+  FEATURED_PROJECT_SLUGS.has(project.slug)
 );
 
-/** Earlier coursework, shown compactly below the flagship work. */
-export const archivedProjects = orderedProjects.filter((project) =>
-  ARCHIVED_PROJECT_SLUGS.has(project.slug)
+/** Everything else — demos and earlier coursework, shown compactly below. */
+export const secondaryProjects = orderedProjects.filter(
+  (project) => !FEATURED_PROJECT_SLUGS.has(project.slug)
 );

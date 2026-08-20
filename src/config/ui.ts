@@ -26,16 +26,14 @@ export const ui = {
 } as const;
 
 export const personalitySignals = [
-  'Phygital Product Designer',
+  // The two role titles lead; the skill areas follow. 'Agentic AI Developer'
+  // sits apart from 'AI-Assisted Design' so the two AI lines never land
+  // back to back in the cycle.
+  'Product Designer',
+  'Agentic AI Developer',
   'UI/UX & Interaction Design',
   'Circuit & Hardware',
   'AI-Assisted Design',
-];
-
-export const currentlyExploring = [
-  'Robust phygital products',
-  'AI-assisted design workflows',
-  'Embedded interaction systems',
 ];
 
 export const operatorStats = [
