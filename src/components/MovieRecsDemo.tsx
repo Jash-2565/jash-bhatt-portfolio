@@ -197,7 +197,7 @@ const MovieRecsDemo = () => {
           setStatus('ready');
           setMessage(`Loaded ${parsed.length} movies. Try "Avatar" or "Inception".`);
         }
-      } catch (err) {
+      } catch {
         if (!cancelled) {
           setStatus('error');
           setMessage('Failed to load the dataset.');

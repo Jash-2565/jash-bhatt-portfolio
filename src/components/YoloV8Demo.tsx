@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as ort from 'onnxruntime-web';
+import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 const INPUT_SIZE = 640;
 const CONF_THRESHOLD = 0.2;
@@ -34,29 +35,8 @@ type PostprocessResult = {
   info: string;
 };
 
-const getBaseUrl = () => {
-  try {
-    // @ts-ignore: Vite environment
-    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
-      // @ts-ignore
-      return import.meta.env.BASE_URL;
-    }
-  } catch (e) {
-    // Ignore
-  }
-
-  // @ts-ignore
-  if (typeof process !== 'undefined' && process.env && process.env.PUBLIC_URL) {
-    // @ts-ignore
-    return process.env.PUBLIC_URL;
-  }
-
-  return '/';
-};
-
-const baseUrl = getBaseUrl().replace(/\/$/, '');
-const modelUrl = `${baseUrl}/models/yolov8s-int8.onnx`;
-const wasmBaseUrl = new URL(`${baseUrl}/onnxruntime/`, window.location.origin).toString();
+const modelUrl = `${PUBLIC_URL}/models/yolov8s-int8.onnx`;
+const wasmBaseUrl = new URL(`${PUBLIC_URL}/onnxruntime/`, window.location.origin).toString();
 
 const preprocess = (data: Uint8ClampedArray) => {
   const size = INPUT_SIZE * INPUT_SIZE;
@@ -235,7 +215,7 @@ const YoloV8Demo = () => {
     ort.env.wasm.numThreads = 1;
     ort.env.wasm.wasmPaths = wasmBaseUrl;
     // Hint WebGL for faster inference when available.
-    // @ts-ignore: onnxruntime-web webgl options
+    // @ts-expect-error onnxruntime-web does not type the webgl env options
     ort.env.webgl = { powerPreference: 'high-performance' };
 
     let session: ort.InferenceSession;
@@ -245,7 +225,7 @@ const YoloV8Demo = () => {
         executionProviders: ['webgl', 'wasm']
       });
       providerLabel = 'webgl';
-    } catch (err) {
+    } catch {
       session = await ort.InferenceSession.create(modelUrl, {
         executionProviders: ['wasm']
       });
@@ -390,7 +370,7 @@ const YoloV8Demo = () => {
         ctx.fillText(label, x1 + 4, labelY - 3);
       });
 
-    } catch (err) {
+    } catch {
       setStatus('Inference error');
       setDebug('Inference failed');
       setIsRunning(false);
@@ -409,7 +389,7 @@ const YoloV8Demo = () => {
       setIsRunning(true);
       setStatus('Running');
       renderLoop();
-    } catch (err) {
+    } catch {
       setStatus('Camera or model error');
       setIsRunning(false);
       isRunningRef.current = false;

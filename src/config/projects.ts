@@ -3,7 +3,7 @@ import { projects } from '../data/projects';
 
 // The homepage leads with five case studies, not everything that exists. This
 // set is the curation; anything absent falls through to "More work" below it.
-export const FEATURED_PROJECT_SLUGS = new Set([
+const FEATURED_PROJECT_SLUGS = new Set([
   'hr-genie',
   'classflow',
   'revela',
@@ -11,7 +11,7 @@ export const FEATURED_PROJECT_SLUGS = new Set([
   'rahi-design-system-v2',
 ]);
 
-export const PROJECT_ORDER_PRIORITY: Record<string, number> = {
+const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   'hr-genie': 0,
   classflow: 1,
   revela: 2,

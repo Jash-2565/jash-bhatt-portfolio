@@ -7,17 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies & build output
 node_modules
 dist
 dist-ssr
 *.local
+
+# Python virtualenvs (asset tooling)
 .venv
 .venv*/
 venv
 venv*/
-backend/.venv*
 
-# Editor directories and files
+# Editor & OS
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -27,9 +29,7 @@ backend/.venv*
 *.njsproj
 *.sln
 *.sw?
-node_modules
-dist
-.DS_Store
 
 # Claude Code working files
 scratchpad/
+.claude/settings.local.json

@@ -1,5 +1,4 @@
-import { cloneElement, isValidElement } from 'react';
-import type { CSSProperties, ReactElement, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useInView } from '../hooks/useInView';
 
 type RevealVariant = 'fade-up' | 'fade' | 'slide-left' | 'slide-right' | 'grow-width';
@@ -13,7 +12,6 @@ type RevealProps = {
   className?: string;
   style?: CSSProperties;
   threshold?: number;
-  asChild?: boolean; // apply styles to the single child element (no wrapper div)
 };
 
 const hiddenTransform: Record<RevealVariant, string> = {
@@ -35,7 +33,6 @@ export default function Reveal({
   className = '',
   style,
   threshold,
-  asChild = false,
 }: RevealProps) {
   const { ref, inView } = useInView<HTMLElement>({ threshold });
 
@@ -50,16 +47,6 @@ export default function Reveal({
     willChange: inView ? 'auto' : 'opacity, transform',
     ...style,
   };
-
-  if (asChild && isValidElement(children)) {
-    const child = children as ReactElement<{ className?: string; style?: CSSProperties; ref?: unknown }>;
-    const mergedClassName = [child.props.className, className].filter(Boolean).join(' ');
-    return cloneElement(child, {
-      ref,
-      className: mergedClassName,
-      style: { ...revealStyle, ...(child.props.style ?? {}) },
-    });
-  }
 
   const Tag = as as 'div';
   return (

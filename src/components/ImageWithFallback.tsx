@@ -9,12 +9,11 @@ const ImageWithFallback = ({
   alt = '',
   className,
   sizes,
-  deferGifOnConstrainedNetwork: _deferGifOnConstrainedNetwork,
   ...imgProps
 }: ResponsiveImageProps) => {
   const [hasError, setHasError] = useState(false);
 
-  // GIFs are shipped as encoded video (see scripts-gif-to-video.sh).
+  // GIFs are shipped as encoded video (see scripts/gif-to-video.sh).
   if (typeof src === 'string' && /\.gif$/i.test(src)) {
     return <AutoVideo src={src} alt={alt} className={className} />;
   }
