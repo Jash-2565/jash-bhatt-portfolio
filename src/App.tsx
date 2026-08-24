@@ -13,6 +13,7 @@ import Marquee from './components/Marquee';
 import BackToTop from './components/BackToTop';
 import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
+import LewisPet from './components/LewisPet';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
 import MenuIcon from './components/MenuIcon';
@@ -666,6 +667,9 @@ const App = () => {
       {/* Desktop only: on mobile it collided with the compacted footer, and the
           tab bar already scrolls the current page back to the top. */}
       {!isMobile && <BackToTop />}
+      {/* The desktop pet, on the desktop layout only — he needs room to walk,
+          and the mobile tab bar owns the bottom of the screen. */}
+      {!isMobile && <LewisPet />}
       <div className="grain-overlay" aria-hidden="true" />
       <a
         href="#home"
