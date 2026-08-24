@@ -2,9 +2,22 @@ import { Image as PhotoIcon } from 'lucide-react';
 import ResponsiveImage from './ResponsiveImage';
 import ImageWithFallback from './ImageWithFallback';
 import Reveal from './Reveal';
+import LewisSprite from './LewisSprite';
+import { SUMMON_EVENT, type AnimationName } from '../config/lewis';
 import { ui, galleryItems, aiItems, gallerySnippetItems } from '../config/ui';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 import type { GalleryItem } from '../types';
+
+/** The rows worth showing off, in the order they read best: the two you see
+    most, then the reactions, then the two that only fire while he's working. */
+const LEWIS_STRIP: { animation: AnimationName; label: string }[] = [
+  { animation: 'idle', label: 'Idle' },
+  { animation: 'runningRight', label: 'Running' },
+  { animation: 'waving', label: 'Waving' },
+  { animation: 'jumping', label: 'Jumping' },
+  { animation: 'waiting', label: 'Waiting' },
+  { animation: 'review', label: 'Review' },
+];
 
 type Props = {
   onImageClick: (src: string) => void;
@@ -84,6 +97,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
       )}
 
       <div className="grid grid-cols-1 gap-8 sm:gap-10 md:gap-12">
+
         {/* Photography — the longest-running of these, so it leads. */}
         <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
@@ -204,6 +218,75 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 sizes="(min-width: 1024px) 340px, 45vw"
               />
             ))}
+          </div>
+        </Reveal>
+
+        {/* Lewis. The sprites here are driven off the same atlas as the pet
+            walking along the page, so the strip is the artwork running, not
+            screenshots of it. */}
+        <Reveal delay={300} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+              <LewisSprite animation="waving" scale={0.19} />
+            </div>
+            <h3 className="text-xl font-bold text-slate-100">Lewis — a desktop pet</h3>
+          </div>
+          <p className="text-slate-300 text-sm md:text-base mb-1.5">
+            A chibi pixel-art pet for macOS, inspired by Sir Lewis Hamilton in a black
+            Mercedes-AMG fire suit. He lives on the edge of the screen in a transparent
+            Cocoa window — idling, running between errands, waving when you catch him.
+            Written in Swift, with nine hand-directed animation rows packed into a single
+            1536×1872 atlas.
+          </p>
+          <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">
+            Swift · AppKit · generated and hand-QA'd sprite pipeline
+          </p>
+
+          <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-5 mb-5 md:mb-6">
+            <div className="flex flex-wrap items-end justify-center gap-x-6 gap-y-4 sm:gap-x-10">
+              {LEWIS_STRIP.map(({ animation, label }) => (
+                <div key={animation} className="flex flex-col items-center gap-2">
+                  <LewisSprite animation={animation} scale={0.42} label={`Lewis ${label}`} />
+                  <span className="text-[11px] uppercase tracking-[0.14em] text-slate-500">
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-[auto_1fr] md:items-center">
+            {/* The atlas is portrait and narrow; an auto column keeps the panel
+                hugging it instead of stranding it in a wide empty frame. */}
+            <div
+              className="relative flex justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5 p-3 cursor-pointer transition-all hover:border-[#01F5D1] hover:-translate-y-1 group"
+              onClick={() => onImageClick(`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`)}
+            >
+              <ImageWithFallback
+                src={`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`}
+                alt="The packed Lewis atlas — nine rows of animation frames on one 1536×1872 sheet"
+                className="h-auto max-h-72 w-auto max-w-full object-contain rounded-md group-hover:scale-[1.02] transition-transform duration-300"
+                sizes="(min-width: 768px) 260px, 70vw"
+              />
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm mb-4">
+                The packed result: 72 cells, nine rows, one sheet. Every frame was reviewed
+                on a contact sheet before it got here — silhouette, frame count, and the walk
+                cycle's contact poses all had to hold up at 40% scale, which is the only size
+                anyone ever sees him at.
+              </p>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent(SUMMON_EVENT))}
+                className={`${ui.btnBase} ${ui.btnSecondary} !min-h-11 !px-5 !py-2.5 text-sm`}
+              >
+                Wake Lewis
+              </button>
+              <p className="text-slate-600 text-xs mt-2">
+                He walks along the bottom of this page on a mouse-driven screen.
+              </p>
+            </div>
           </div>
         </Reveal>
 
