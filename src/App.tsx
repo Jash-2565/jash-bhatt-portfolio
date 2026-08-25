@@ -1449,7 +1449,7 @@ const App = () => {
                 <Reveal>
                   <h2 className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
                   <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
-                    I am actively looking for internship opportunities in UI/UX, product design, and phygital interaction — where I can contribute from research through to implementation.
+                    I am actively looking for internship opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
                   </p>
                   <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
                     <span className="pulse-dot" aria-hidden="true" />
