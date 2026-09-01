@@ -150,6 +150,15 @@
       480
     ]
   },
+  "/images/Lewis Pet/lewis-atlas.webp": {
+    "w": 1536,
+    "h": 1872,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
   "/images/Photography/camera.png": {
     "w": 512,
     "h": 512
@@ -454,6 +463,85 @@
     "v": [
       480,
       960
+    ]
+  },
+  "/images/Spotify/Soundtrack-Artist-Arcs.webp": {
+    "w": 2400,
+    "h": 1463,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Artists.webp": {
+    "w": 2400,
+    "h": 1725,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Calendar.webp": {
+    "w": 2400,
+    "h": 1740,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Hero.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Records.webp": {
+    "w": 2400,
+    "h": 1305,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Songs.webp": {
+    "w": 2400,
+    "h": 1613,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Surprises.webp": {
+    "w": 2400,
+    "h": 1493,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/Spotify/Soundtrack-Thumbnail.webp": {
+    "w": 900,
+    "h": 900,
+    "v": [
+      480
+    ]
+  },
+  "/images/Spotify/Soundtrack-Week.webp": {
+    "w": 2400,
+    "h": 1275,
+    "v": [
+      480,
+      960,
+      1440
     ]
   },
   "/images/Tinkering/Circuit-Design.webp": {

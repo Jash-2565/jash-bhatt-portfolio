@@ -17,13 +17,14 @@ const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   revela: 2,
   etsconnect: 3,
   'rahi-design-system-v2': 4,
-  // Secondary list. Playable in-browser demos lead it so the interactive work
-  // is still found, and the earliest coursework trails it.
-  'python-codes': 5,
-  wepick: 6,
-  solarlink: 7,
-  'dino-spread': 8,
-  tinkering: 9,
+  // Secondary list. The self-directed builds lead it so the interactive work is
+  // still found, and the earliest coursework trails it.
+  'soundtrack-seven-years': 5,
+  'python-codes': 6,
+  wepick: 7,
+  solarlink: 8,
+  'dino-spread': 9,
+  tinkering: 10,
 };
 
 export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
@@ -81,6 +82,12 @@ export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
     heroTextClass: 'text-[#E3FC03]',
     heroMutedTextClass: 'text-[#C9DE8D]',
     heroBodyTextClass: 'text-[#EAF7C6]',
+  },
+  'soundtrack-seven-years': {
+    heroBgClass: 'bg-transparent',
+    heroTextClass: 'text-[#3EC873]',
+    heroMutedTextClass: 'text-[#A6E0BC]',
+    heroBodyTextClass: 'text-[#DCF4E5]',
   },
   'python-codes': {
     heroBgClass: 'bg-transparent',

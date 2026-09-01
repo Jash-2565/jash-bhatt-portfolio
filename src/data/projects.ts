@@ -1111,6 +1111,138 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 10,
+    slug: "soundtrack-seven-years",
+    title: "The Soundtrack of Seven Years",
+    category: "Data Visualisation / Design Engineering",
+    timeline: "Personal project, 2026",
+    description: "Spotify hands you a ZIP of raw JSON and a Wrapped that lasts a week. I took seven years of my own streaming history — 98,111 plays — and built the version I actually wanted to read: an eight-chapter scrollytelling piece that ships as one self-contained HTML file.",
+    tags: ["Data Visualisation", "Design Engineering", "Python", "SVG", "Editorial Design"],
+    color: "bg-[#0A0C0B]",
+    accentColor: "text-[#3EC873]",
+    hoverColor: "group-hover:text-[#3EC873]",
+    badge: "bg-[#3ec873]/25 text-[#0d5c33]",
+    content: {
+      heroImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
+      thumbnailImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Thumbnail.webp`,
+      role: "Design & Build",
+      sections: [
+        {
+          title: "Overview",
+          content: "Spotify will email you your Extended Streaming History if you ask for it. Mine arrived as twelve JSON files going back to August 2019 — every song, every timestamp, seven years of it.\n\nThere are two things you can normally do with that. Wrapped does one: five slides, once a year, gone by January. The raw export is the other: 120,547 rows nobody is ever going to read.\n\nI wanted the thing in between — something that takes as long to read as a magazine feature and leaves you knowing something at the end of it. It came out as eight chapters, and it ships as a single HTML file with no server behind it.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
+              caption: "The opening screen. Every number on the page is computed from the export at build time — nothing is typed in by hand."
+            }
+          ],
+          // The piece is a static file in public/, not a route. Named
+          // explicitly rather than as `/spotify-wrapped/`: a static host
+          // resolves the directory to index.html, but Vite's dev server
+          // answers it with the SPA shell instead.
+          cta: {
+            text: "Read the whole thing",
+            url: `${PUBLIC_URL}/spotify-wrapped/index.html`
+          }
+        },
+        {
+          title: "The Question a Ranking Can't Answer",
+          content: "The first thing I computed was the obvious thing: who did I play most? Post Malone — 369 hours, 7,005 plays. True, and almost worthless. It is the answer Wrapped already gives you, and it describes a chart rather than a person.\n\nEverything worth reading turned out to sit in the shape of the data instead of its totals: when I listened, how long the silences were, how much of the library I actually use, which songs I never managed to put down. None of that survives being sorted into a top ten.\n\nSo the piece moves through the rankings early and then spends most of its length on what a ranking cannot see. By the halfway mark it has stopped telling you what I played and started telling you when, how often, and for how long."
+        },
+        {
+          title: "Getting the Numbers Honest First",
+          content: "Most of the work happened before anything was drawn. Spotify re-chunks your entire history on every export, so the twelve files overlapped heavily — 915 rows were literal repeats and had to go before any count meant anything. Timestamps arrive in UTC; the account is almost entirely Indian, so everything is shifted to IST before a single question about time of day gets asked.\n\nThe one that changed the results most: the export credits only the album artist. Every \"(feat. X)\" play is invisible to X — 16,253 streams, one in six. I parse the guests out of track titles and offer it as a second view rather than silently merging it, because those totals deliberately overlap and a reader deserves to know which of the two they are looking at.",
+          listItems: [
+            "12 export files deduplicated down to 120,547 distinct plays",
+            "98,111 counted streams, using Spotify's own 30-second threshold",
+            "UTC → IST before any local-time analysis",
+            "Featured artists parsed from track titles — an alternate view, never a silent merge"
+          ]
+        },
+        {
+          title: "Checking It Before Publishing It",
+          content: "A page like this is only worth making if the numbers are right, and a data pipeline will happily agree with its own bugs. So there is a second script that recomputes every published figure straight from the raw export and diffs it against the payload — and it deliberately shares no code with the builder, right down to walking the folder a different way. A helper with a mistake in it would pass a test that imported the same helper.\n\nIt is the least visible part of the project and the part I would keep if I had to throw the rest away."
+        },
+        {
+          title: "What the Data Knew That I Didn't",
+          content: "Those questions needed facts the ranking pipeline had no reason to compute, so a second script goes back to the same export under the same dedupe rules and pulls out the shapes instead of the totals.\n\nWhat came back is the part of the piece I would keep over everything else. I heard Khalid four times in 2019, then not once for 663 days — and have played him 1,584 times since. I have played R. City 212 times and only ever heard one song by them. 13.3% of my Arctic Monkeys plays land between midnight and five in the morning, against a 5.6% baseline for everything else. And of the 5,676 songs in the library, 226 of them — four per cent — account for a third of everything.\n\nNone of that is a ranking. All of it is a fact about a person — and that is the whole argument for the chapter. The numbers had noticed things about me that I hadn't.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Surprises.webp`,
+              caption: "Eight findings that no top-ten list would have surfaced. The clock plot compares one artist's hours against everything else played."
+            }
+          ]
+        },
+        {
+          title: "Composing It, Not Laying It Out",
+          content: "Twenty charts in a row is a report, and nobody reads a report to the end. So the page is paced rather than stacked.\n\nThe eight chapters are announced rather than run together — a number, a sentence, and a lot of air, doing the job a chapter break does in a book. Between them the sections are deliberately different weights: four full-height beats that carry a single counting number each, two one-line sections that say one thing and then get out of the way, eight compact panels for the surprises, and a finale that runs to the edge of the screen. You should be able to feel where you are in the piece without checking the progress rail.\n\nIt is the closest thing to editing I have done inside a design file. Most of the decisions were about what earned a whole screen and what earned a line.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Artists.webp`,
+              caption: "A chapter opening: the name at full size, four numbers, one paragraph, and only then the ranked list behind it."
+            }
+          ]
+        },
+        {
+          title: "One System, Eight Colour Worlds",
+          content: "Eight chapters could easily read as eight separate pieces. What keeps it one system is being strict about where colour is allowed to change and where it is not.\n\nThe surface, the type scale, and the categorical slots are fixed for the whole page. What each chapter re-binds is a single accent and a nine-step sequential ramp, declared as custom properties on its own section. Every chart inside inherits its chapter's colour without any chart having to know which chapter it is in. Every accent clears 4.5:1 on the background, and every ramp is monotonic in lightness, so nothing depends on colour vision to be read.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Records.webp`,
+              caption: "Chapter V runs gold. Album art is pulled in and each record's grooves are drawn per track, brighter where it was played more."
+            }
+          ]
+        },
+        {
+          title: "Picking the Chart for the Question",
+          content: "Every chart answers a question the previous one raised, and the form follows from the question rather than from what was easy to draw.\n\n\"How much of the last seven years had music in it?\" is a question about density across a long span, so it became eight concentric rings — one per year, one sliver per day, dark where nothing played. 2,469 lit days and 67 silent ones, legible at a glance in a way a 2,536-bar chart never would be.\n\n\"Do songs get retired, or do you just play them less?\" is a question about a lifetime, so the ten most-played songs became one row each across seven years, sized by plays per year. The answer turned out to be visible in the shape: all ten are still in rotation.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Calendar.webp`,
+              caption: "2,469 days with music, wound into eight rings. 2019 is the innermost, 2026 the outermost."
+            },
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Songs.webp`,
+              caption: "Ten songs, seven years, one row each — the dot grows with that year's play count."
+            }
+          ]
+        },
+        {
+          title: "Letting the Data Write the Headlines",
+          content: "The headlines are generated, not written. The template asks the payload who the top artist is, which hour is loudest, which song got worn out — and the copy assembles around whatever comes back. Re-run the pipeline against a fresh export next year and the sentences change with it.\n\nThat constraint is what made the piece interesting to write. \"Friday at 19:00 is the loudest hour of your week\" is a finding, not a caption I chose; the job was to build a sentence that would still be true and still land whichever hour happened to win.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Week.webp`,
+              caption: "168 cells, one per hour of the week. The headline above it names whichever cell came out hottest."
+            },
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Artist-Arcs.webp`,
+              caption: "Eight artists on one shared scale, so the comparison between them is real rather than per-panel."
+            }
+          ]
+        },
+        {
+          title: "Knowing Where to Stop",
+          content: "The obvious next move was to keep it current. Spotify has a recently-played endpoint, so I wrote a poller that appends new tracks every half hour, and the page could have been live.\n\nThen I read what that endpoint actually returns. The track and the time, and nothing else — no play duration, no shuffle flag, no skip, no platform, no country. Half the piece is built on exactly those fields. Folding that data in would have quietly corrupted every statistic that depends on them, and nobody reading the page would have been able to tell.\n\nSo the poller tags its rows as estimated and the build keeps them out of every statistic that needs the real thing. The page stays a snapshot with a date on it, and the fix for a stale one is to request a fresh export — not to paper over the gap with data that cannot support the claim.\n\nThe ending is the same decision made twice. The last chapter is called \"The last song, so far.\""
+        },
+        {
+          title: "Shipping It as One File",
+          content: "The finished page is a single HTML file. The data payload, the extras, and every piece of album artwork are inlined — the artwork fetched through Spotify's public oEmbed endpoint, downscaled locally, and written in as base64. Nothing about the listener is sent anywhere, and the page opens from a disk with the network switched off.\n\nThe motion is built the same way: one IntersectionObserver drives every reveal and every count-up on the page, and a reduced-motion preference short-circuits it to the final state rather than to a broken one.",
+          listItems: [
+            "One file, no server, no build step at read time",
+            "Artwork inlined as base64 — no third-party requests once the page is open",
+            "A single observer for every reveal and counter on the page",
+            "Reduced motion lands on the finished numbers, not on zeroes"
+          ],
+          cta: {
+            text: "Open the live piece",
+            url: `${PUBLIC_URL}/spotify-wrapped/index.html`
+          }
+        }
+      ]
+    }
+  },
+  {
     id: 5,
     slug: "python-codes",
     title: "Live Demos",
