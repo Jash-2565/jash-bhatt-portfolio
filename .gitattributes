@@ -1,0 +1,5 @@
+# Keep GitHub's language stats representative of the app itself.
+# The Spotify Wrapped page is a single self-contained export (~448KB of HTML),
+# and the ONNX Runtime build is vendored upstream — together they outweigh src/.
+public/spotify-wrapped/** linguist-vendored
+public/onnxruntime/**     linguist-vendored
