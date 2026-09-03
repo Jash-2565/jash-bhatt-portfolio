@@ -1137,7 +1137,14 @@ const App = () => {
                 const projectThumbnail =
                   project.content.thumbnailImage ?? project.content.heroImage;
                 const isPlaceholder = projectThumbnail.includes('placeholder');
-                const fitsInside = project.slug === 'python-codes';
+                // Square artwork that a 4:3 cover crop would cut into: shown
+                // whole against the tile's own backdrop instead. python-codes is
+                // a logo that needs breathing room; the Spotify chart bleeds to
+                // its own edges, and its background matches the backdrop, so it
+                // sits flush.
+                const fitsInside =
+                  project.slug === 'python-codes' || project.slug === 'soundtrack-seven-years';
+                const insidePadding = project.slug === 'python-codes' ? 'p-6' : '';
                 // project.color is a letterbox backdrop, only ever meant to show
                 // where the artwork does not fill the tile. Behind a cover image
                 // it is invisible except at the rounded corners, where the
@@ -1186,11 +1193,11 @@ const App = () => {
                           onMouseLeave={handleCardMouseLeave}
                         >
                           {!projectThumbnail.includes('placeholder') ? (
-                            project.slug === 'python-codes' ? (
+                            fitsInside ? (
                               <ResponsiveImage
                                 src={projectThumbnail}
                                 alt={project.title}
-                                className="block w-full h-full object-contain p-6"
+                                className={`block w-full h-full object-contain ${insidePadding}`}
                                 loading="lazy"
                               />
                             ) : (

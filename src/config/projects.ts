@@ -8,7 +8,7 @@ const FEATURED_PROJECT_SLUGS = new Set([
   'classflow',
   'revela',
   'etsconnect',
-  'rahi-design-system-v2',
+  'soundtrack-seven-years',
 ]);
 
 const PROJECT_ORDER_PRIORITY: Record<string, number> = {
@@ -16,10 +16,10 @@ const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   classflow: 1,
   revela: 2,
   etsconnect: 3,
-  'rahi-design-system-v2': 4,
-  // Secondary list. The self-directed builds lead it so the interactive work is
-  // still found, and the earliest coursework trails it.
-  'soundtrack-seven-years': 5,
+  'soundtrack-seven-years': 4,
+  // Secondary list. The Rahi system leads it as the strongest of the remaining
+  // work, then the self-directed builds, with the earliest coursework trailing.
+  'rahi-design-system-v2': 5,
   'python-codes': 6,
   wepick: 7,
   solarlink: 8,
