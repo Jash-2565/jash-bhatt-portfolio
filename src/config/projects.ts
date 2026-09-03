@@ -103,6 +103,18 @@ export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
   },
 };
 
+/**
+ * Thumbnails that are logo lockups rather than artwork. The square tiles cover-
+ * crop by default, which slices the wordmark off either side of a wide logo, so
+ * these are contained instead. The value is the backdrop the tile paints behind
+ * the letterbox — pick one that continues the image's own ground so the tile
+ * still reads as a single solid chip.
+ */
+export const CONTAINED_THUMBNAIL_BACKDROPS: Record<string, string> = {
+  // A 16:9 lockup on white; the white bars above and below it are invisible.
+  'rahi-design-system-v2': 'bg-white',
+};
+
 // A single ordering for the whole catalogue: featured work first, then the
 // secondary list. Case-study "next project" navigation walks this array, so it
 // runs through the flagship work before reaching the coursework.

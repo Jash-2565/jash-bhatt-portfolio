@@ -550,7 +550,10 @@ export const projects: Project[] = [
     badge: "bg-[#D4F0EC] text-[#0D6B64]",
     content: {
       heroImage: `${PUBLIC_URL}/images/RAHI/RAHI Logo.webp`,
-      thumbnailImage: `${PUBLIC_URL}/images/RAHI/RAHI Logo.webp`,
+      // The full logo export carries a wide white margin, which leaves the mark
+      // tiny once a square tile contains it. This is the same lockup trimmed to
+      // its own edges so it fills the tile.
+      thumbnailImage: `${PUBLIC_URL}/images/RAHI/RAHI-Thumbnail.webp`,
       role: "UI Design Intern",
       sections: [
         {
