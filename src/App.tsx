@@ -20,7 +20,7 @@ import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
 import { projects } from './data/projects';
-import { orderedProjects, featuredProjects, secondaryProjects } from './config/projects';
+import { orderedProjects, featuredProjects, secondaryProjects, CONTAINED_THUMBNAIL_BACKDROPS } from './config/projects';
 import { ui, personalitySignals, operatorStats } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import type { Project, MobilePage, View } from './types';
@@ -1076,6 +1076,7 @@ const App = () => {
               <div className="grid grid-cols-1 gap-4">
                 {featuredProjects.slice(0, 3).map((project, index) => {
                   const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
+                  const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
                     <Reveal key={`preview-${project.id}`} delay={index * 80}>
                       <button
@@ -1084,12 +1085,12 @@ const App = () => {
                         aria-label={`Open case study for ${project.title}`}
                         className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
                       >
-                        <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 ${containedBackdrop ?? 'bg-white/5'}`}>
                           {!thumbnail.includes('placeholder') ? (
                             <ResponsiveImage
                               src={thumbnail}
                               alt={project.title}
-                              className="w-full h-full object-cover"
+                              className={`w-full h-full ${containedBackdrop ? 'object-contain' : 'object-cover'}`}
                               loading="lazy"
                               sizes="80px"
                             />
@@ -1293,6 +1294,7 @@ const App = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {secondaryProjects.map((project, index) => {
                   const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
+                  const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
                     <Reveal key={project.id} delay={index * 80}>
                       <button
@@ -1302,12 +1304,12 @@ const App = () => {
                         aria-label={`Open case study for ${project.title}`}
                         className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
                       >
-                        <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 ${containedBackdrop ?? 'bg-white/5'}`}>
                           {!thumbnail.includes('placeholder') ? (
                             <ResponsiveImage
                               src={thumbnail}
                               alt={project.title}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              className={`w-full h-full transition-transform duration-500 group-hover:scale-110 ${containedBackdrop ? 'object-contain' : 'object-cover'}`}
                               loading="lazy"
                               sizes="80px"
                             />

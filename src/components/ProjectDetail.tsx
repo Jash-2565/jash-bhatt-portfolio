@@ -6,7 +6,7 @@ const MovieRecsDemo = lazy(() => import('./MovieRecsDemo'));
 import ResponsiveImage from './ResponsiveImage';
 import Reveal from './Reveal';
 import type { Project, Section } from '../types';
-import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME } from '../config/projects';
+import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME, CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
 import { ui } from '../config/ui';
 import { formatNameList } from '../utils/formatNameList';
 import { usePointerFine } from '../hooks/usePointerFine';
@@ -127,6 +127,9 @@ const ProjectDetail = ({
   const projectHeroTheme = PROJECT_HERO_THEMES[project.slug] ?? DEFAULT_PROJECT_HERO_THEME;
   const isPythonCodes = project.slug === 'python-codes';
   const isCountdownMotorControl = project.slug === 'tinkering';
+  const nextThumbnailBackdrop = nextProject
+    ? CONTAINED_THUMBNAIL_BACKDROPS[nextProject.slug]
+    : undefined;
   const { heroBgClass, heroTextClass, heroMutedTextClass, heroBodyTextClass } = projectHeroTheme;
 
   const renderDemoBlock = (section: Section) => {
@@ -656,12 +659,12 @@ const ProjectDetail = ({
               aria-label={`Open next project: ${nextProject.title}`}
             >
               <div className="flex items-center gap-4 sm:gap-6">
-                <div className="block shrink-0 w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                <div className={`block shrink-0 w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-white/10 ${nextThumbnailBackdrop ?? 'bg-white/5'}`}>
                   {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
                     <ResponsiveImage
                       src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}
                       alt={nextProject.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className={`w-full h-full transition-transform duration-500 group-hover:scale-110 ${nextThumbnailBackdrop ? 'object-contain' : 'object-cover'}`}
                       loading="lazy"
                     />
                   ) : (
