@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { usePointerFine } from '../hooks/usePointerFine';
 
-type Node = { x: number; y: number; vx: number; vy: number };
+// `bvx`/`bvy` are the node's own permanent drift. `vx`/`vy` are what it is
+// doing right now — base drift plus whatever the cursor has nudged into it.
+type Node = { x: number; y: number; vx: number; vy: number; bvx: number; bvy: number };
 
-// Canvas "circuit network" for the hero backdrop: slow-drifting nodes linked by
-// lines when they're near each other, plus links to the cursor. Palette-locked to
-// the site's cyan/teal. Pointer-transparent, pauses off-screen, and renders a
-// single static frame under prefers-reduced-motion.
+// Canvas "circuit network" for the hero backdrop: continuously drifting nodes,
+// linked by lines when they are near each other, plus links to the cursor.
+// Palette-locked to the site's cyan/teal. Pointer-transparent, pauses
+// off-screen, and renders a single static frame under prefers-reduced-motion.
 //
 // Skipped entirely on touch devices: the cursor links are the whole point of the
 // effect and a phone has no cursor, so all that remains is an O(n²) scan over up
@@ -32,16 +34,27 @@ export default function HeroParticles() {
     const mouse = { x: -9999, y: -9999 };
     const LINK_DIST = 132;
     const MOUSE_DIST = 168;
+    // Ambient drift speed, in px per frame. Slow enough to read as a living
+    // backdrop rather than motion competing with the headline.
+    const BASE_SPEED_MIN = 0.1;
+    const BASE_SPEED_MAX = 0.26;
+    // How quickly a cursor-nudged node eases back to its own base drift.
+    // ~0.8s to settle at 60fps.
+    const RETURN_RATE = 0.02;
 
     const seedNodes = () => {
       // Density scales with area but is capped for performance.
       const count = Math.min(64, Math.max(22, Math.round((width * height) / 26000)));
-      nodes = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.28,
-        vy: (Math.random() - 0.5) * 0.28,
-      }));
+      nodes = Array.from({ length: count }, () => {
+        // Pick a direction and a speed rather than two independent components:
+        // independent components can both land near zero, which left some nodes
+        // essentially parked from the moment they were seeded.
+        const angle = Math.random() * Math.PI * 2;
+        const speed = BASE_SPEED_MIN + Math.random() * (BASE_SPEED_MAX - BASE_SPEED_MIN);
+        const bvx = Math.cos(angle) * speed;
+        const bvy = Math.sin(angle) * speed;
+        return { x: Math.random() * width, y: Math.random() * height, vx: bvx, vy: bvy, bvx, bvy };
+      });
     };
 
     const resize = () => {
@@ -113,11 +126,26 @@ export default function HeroParticles() {
       for (const n of nodes) {
         n.x += n.vx;
         n.y += n.vy;
-        // Damp toward the base speed so cursor nudges don't accumulate.
-        n.vx *= 0.99;
-        n.vy *= 0.99;
-        if (n.x < 0 || n.x > width) n.vx *= -1;
-        if (n.y < 0 || n.y > height) n.vy *= -1;
+
+        // Ease back toward this node's OWN base drift, so a cursor nudge decays
+        // but the ambient motion never does. This used to be `n.vx *= 0.99`,
+        // which damps toward zero, not toward a base speed: every node kept 5%
+        // of its speed after 5 seconds and was fully parked within ~15, so once
+        // the page had been open a moment the cursor was the only thing that
+        // could move anything.
+        n.vx += (n.bvx - n.vx) * RETURN_RATE;
+        n.vy += (n.bvy - n.vy) * RETURN_RATE;
+
+        // Reflect the base drift too — otherwise a bounced node would be pulled
+        // straight back into the wall it just hit and stick there.
+        if (n.x < 0 || n.x > width) {
+          n.vx *= -1;
+          n.bvx *= -1;
+        }
+        if (n.y < 0 || n.y > height) {
+          n.vy *= -1;
+          n.bvy *= -1;
+        }
         n.x = Math.max(0, Math.min(width, n.x));
         n.y = Math.max(0, Math.min(height, n.y));
       }
