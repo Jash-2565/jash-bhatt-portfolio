@@ -8,12 +8,10 @@ import { usePointerFine } from '../hooks/usePointerFine';
  */
 const RING_HALF_LIFE_MS = 15;
 
-// A soft cyan glow that trails the cursor across the page, a precise dot pinned
-// to the exact pointer position, and a ring that eases behind the dot and grows
-// over interactive elements. Disabled on touch devices and under reduced-motion.
-// Rendered above content but pointer-transparent.
+// A precise dot pinned to the exact pointer position, plus a ring that eases
+// behind the dot and grows over interactive elements. Disabled on touch devices
+// and under reduced-motion. Rendered above content but pointer-transparent.
 export default function CursorGlow() {
-  const glowRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const enabled = usePointerFine();
@@ -45,15 +43,13 @@ export default function CursorGlow() {
       if (visible === on) return;
       visible = on;
       const v = on ? '1' : '0';
-      if (glowRef.current) glowRef.current.style.opacity = v;
       if (dotRef.current) dotRef.current.style.opacity = v;
       if (ringRef.current) ringRef.current.style.opacity = v;
     };
 
     // Record the pointer and get out. Every DOM write happens in `tick` below:
-    // mousemove can fire several times between two paints, and moving the 460px
-    // glow repaints a large area, so doing that work per event was burning the
-    // frame budget the ring animation depends on.
+    // mousemove can fire several times between two paints, so doing that work
+    // per event was burning the frame budget the ring animation depends on.
     const onMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
@@ -89,15 +85,14 @@ export default function CursorGlow() {
         ringY += (targetY - ringY) * ease;
       }
 
-      // The dot and glow stay pinned to the exact pointer position — writing
-      // them here rather than in the event handler costs nothing visually,
-      // since the browser only paints on a frame anyway.
+      // The dot stays pinned to the exact pointer position — writing it here
+      // rather than in the event handler costs nothing visually, since the
+      // browser only paints on a frame anyway.
       if (targetX !== drawnPointerX || targetY !== drawnPointerY) {
         drawnPointerX = targetX;
         drawnPointerY = targetY;
         const at = `translate(${targetX}px, ${targetY}px)`;
         if (dotRef.current) dotRef.current.style.transform = at;
-        if (glowRef.current) glowRef.current.style.transform = at;
       }
 
       if (ringX !== drawnRingX || ringY !== drawnRingY) {
@@ -141,7 +136,6 @@ export default function CursorGlow() {
 
   return (
     <>
-      <div ref={glowRef} className="cursor-glow" aria-hidden="true" />
       <div ref={ringRef} className="cursor-ring" data-hover="false" aria-hidden="true" />
       <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
     </>
