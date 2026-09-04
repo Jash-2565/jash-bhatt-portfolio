@@ -64,26 +64,15 @@ const App = () => {
   const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const menuPanelRef = useRef<HTMLDivElement | null>(null);
-  const heroSpotlightRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState<{ left: number; width: number; visible: boolean }>({ left: 0, width: 0, visible: false });
 
-  // Mouse-tracking spotlight in the hero — written directly to the DOM to avoid re-renders.
-  const handleHeroMouseMove = (event: React.MouseEvent<HTMLElement>) => {
-    const el = heroSpotlightRef.current;
-    if (!el) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    el.style.background = `radial-gradient(640px circle at ${event.clientX - rect.left}px ${event.clientY - rect.top}px, rgba(1, 245, 209, 0.08), transparent 45%)`;
-  };
-
-  // Per-card cursor spotlight + inner-image parallax on the work cards. CSS reads
-  // the custom properties; written straight to the DOM to avoid re-renders.
+  // Per-card inner-image parallax on the work cards. CSS reads the custom
+  // properties; written straight to the DOM to avoid re-renders.
   const handleCardMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const el = event.currentTarget;
     const rect = el.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    el.style.setProperty('--sx', `${x}px`);
-    el.style.setProperty('--sy', `${y}px`);
     el.style.setProperty('--mx', `${(x / rect.width - 0.5) * -14}px`);
     el.style.setProperty('--my', `${(y / rect.height - 0.5) * -14}px`);
   };
@@ -864,7 +853,6 @@ const App = () => {
           {showsPage('home') && (
           <section
             id="home"
-            onMouseMove={handleHeroMouseMove}
             // No min-height below `lg`. Once the redundant CTAs came out, forcing
             // a full screen left ~290px of void above the fold; letting the hero
             // hug its content instead brings the portrait card up into view,
@@ -884,7 +872,6 @@ const App = () => {
                 <div className="absolute -top-24 -right-8 w-64 h-64 rounded-full bg-[#01F5D1]/25 blur-3xl animate-drift"></div>
                 <div className="absolute top-20 -left-12 w-52 h-52 rounded-full bg-[#00A19B]/30 blur-3xl animate-drift"></div>
                 <HeroParticles />
-                <div ref={heroSpotlightRef} className="absolute inset-0 pointer-events-none" aria-hidden="true"></div>
               </>
             )}
             <div className={`${ui.shell} relative`}>
@@ -1219,12 +1206,6 @@ const App = () => {
                               </div>
                             </div>
                           )}
-
-                          {/* Cursor spotlight */}
-                          <div className="card-spotlight" aria-hidden="true"></div>
-
-                          {/* Sheen sweep on hover */}
-                          <div className="sheen-layer"></div>
 
                         </div>
                         </TiltCard>
