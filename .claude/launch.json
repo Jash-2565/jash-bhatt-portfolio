@@ -3,20 +3,20 @@
   "configurations": [
     {
       "name": "dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": ["-lc", "npm run dev"],
       "port": 5177
     },
     {
       "name": "dev-alt",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5188", "--strictPort"],
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": ["-lc", "npm run dev -- --port 5188 --strictPort"],
       "port": 5188
     },
     {
       "name": "preview",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "preview"],
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": ["-lc", "npm run preview"],
       "port": 4173
     }
   ]
