@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import {
   X, Linkedin, ArrowRight, ArrowUpRight, ArrowLeft,
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
@@ -23,6 +24,7 @@ import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, secondaryProjects, CONTAINED_THUMBNAIL_BACKDROPS } from './config/projects';
 import { ui, personalitySignals, operatorStats } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
+import { analyticsLocation } from './utils/analyticsRoute';
 import type { Project, MobilePage, View } from './types';
 
 const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'about', 'contact'];
@@ -53,6 +55,10 @@ const App = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  // Analytics page views. Seeded from the hash rather than left undefined:
+  // <Analytics> reads `route` on its first render to decide whether to disable
+  // its own pushState tracking, and a late value would leave both running.
+  const [analyticsHash, setAnalyticsHash] = useState(() => window.location.hash);
   // Mobile-only accordion for the About "signal" cards. On desktop (md+) all
   // three are always shown, so this state is a no-op there.
   const isMobile = useIsMobile();
@@ -119,6 +125,10 @@ const App = () => {
   ) => {
     const baseUrl = window.location.pathname + window.location.search;
     const url = hash ? `${baseUrl}#${hash}` : baseUrl;
+    // pushState/replaceState fire no event, and the pathname never changes here,
+    // so Vercel's own tracker sees every section as the same page. This is the
+    // one funnel all navigation passes through — report the view from it.
+    setAnalyticsHash(hash);
     if (replace) {
       window.history.replaceState(state, '', url);
       return;
@@ -364,6 +374,9 @@ const App = () => {
   // Handle browser back/forward
   useEffect(() => {
     const handlePopState = () => {
+      // These branches all navigate with `updateHistory: false`, so they skip
+      // the funnel that normally reports the view.
+      setAnalyticsHash(window.location.hash);
       const nextState = parseHash();
       if (nextState.view === 'explorations') {
         openExplorations({ updateHistory: false });
@@ -645,6 +658,7 @@ const App = () => {
        with a band of dead background beneath it. Every other child here is
        fixed-position, so only the content wrapper and the footer are in flow. */
     <div className="min-h-[100svh] flex flex-col bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 transition-colors duration-300">
+      <Analytics {...analyticsLocation(analyticsHash)} />
       {/* Ambient colour field the glass panes refract. Sits behind everything;
           all page content is lifted above it with `relative z-10`. */}
       <div className="ambient-field" aria-hidden="true">

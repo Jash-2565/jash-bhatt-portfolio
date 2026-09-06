@@ -12,6 +12,7 @@
     "optimize:videos": "node scripts/optimize-videos.mjs"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "lucide-react": "^0.562.0",
     "onnxruntime-web": "^1.18.0",
     "react": "^19.2.0",
