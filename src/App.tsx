@@ -17,6 +17,7 @@ import CursorGlow from './components/CursorGlow';
 import LewisPet from './components/LewisPet';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
+import AmbientField from './components/AmbientField';
 import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
@@ -659,13 +660,10 @@ const App = () => {
        fixed-position, so only the content wrapper and the footer are in flow. */
     <div className="min-h-[100svh] flex flex-col bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 transition-colors duration-300">
       <Analytics {...analyticsLocation(analyticsHash)} />
-      {/* Ambient colour field the glass panes refract. Sits behind everything;
-          all page content is lifted above it with `relative z-10`. */}
-      <div className="ambient-field" aria-hidden="true">
-        <span className="ambient-orb ambient-orb--cyan" />
-        <span className="ambient-orb ambient-orb--teal" />
-        <span className="ambient-orb ambient-orb--deep" />
-      </div>
+      {/* Ambient field the glass panes refract: a drifting colour wash with a
+          blueprint grid ruled over it, the grid tracking scroll. Sits behind
+          everything; all page content is lifted above it with `relative z-10`. */}
+      <AmbientField />
       <CursorGlow />
       {/* Desktop only: on mobile it collided with the compacted footer, and the
           tab bar already scrolls the current page back to the top. */}
@@ -764,9 +762,14 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                className="group ml-2 inline-flex items-center min-h-11 px-4 rounded-full border border-[#01F5D1] text-[#01F5D1] text-sm font-medium hover:bg-[#01F5D1] hover:text-slate-950 hover:shadow-[0_0_20px_-4px_rgba(1,245,209,0.6)] transition-all duration-300 whitespace-nowrap"
+                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-full border border-[#01F5D1] text-[#01F5D1] text-sm font-medium hover:bg-[#01F5D1] hover:text-slate-950 hover:shadow-[0_0_20px_-4px_rgba(1,245,209,0.6)] transition-all duration-300 whitespace-nowrap"
               >
-                Resume <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                {/* Spaced with `gap`, not a literal space: the arrow glyph has
+                    almost no left side bearing, so a single space reads tight.
+                    The text sits on its own line so JSX drops the whitespace
+                    and the gap is the only thing separating them. */}
+                Resume
+                <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
               </a>
             </div>
 
@@ -875,19 +878,13 @@ const App = () => {
             // same line via their section's own `py-14`, so the offsets are
             // written differently but resolve identically — see the page
             // container below.
-            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden ${
-              !isTransitioning && activeSection === 'home'
-                ? 'bg-gradient-to-b from-[#031018]/90 via-[#062126]/70 to-transparent'
-                : 'bg-transparent'
-            }`}
+            // Transparent on purpose: the backdrop is the page-wide ambient
+            // field, which is fixed and therefore identical at every scroll
+            // position. A section-scoped backdrop here would put a visible
+            // colour edge in the page at the point the hero ends.
+            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden bg-transparent`}
           >
-            {!isTransitioning && activeSection === 'home' && (
-              <>
-                <div className="absolute -top-24 -right-8 w-64 h-64 rounded-full bg-[#01F5D1]/25 blur-3xl animate-drift"></div>
-                <div className="absolute top-20 -left-12 w-52 h-52 rounded-full bg-[#00A19B]/30 blur-3xl animate-drift"></div>
-                <HeroParticles />
-              </>
-            )}
+            {!isTransitioning && activeSection === 'home' && <HeroParticles />}
             <div className={`${ui.shell} relative`}>
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">

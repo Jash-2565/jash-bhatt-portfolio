@@ -10,7 +10,8 @@
   --accent-blue: #00a19b;
   --accent-cyan: #01f5d1;
   --accent-lime: #01f5d1;
-  --surface: #000000;
+  /* Matches the app root's bg-[#02060f] so the pre-mount ground is seamless. */
+  --surface: #02060f;
   /* Single source of truth for the fixed nav's height — the nav, the mobile
      menu's top offset, and the hero's min-height all read this, so they can't
      drift apart. */
@@ -36,11 +37,12 @@ body {
   font-family: 'Sora', sans-serif;
   color: var(--ink-900);
   overflow-x: clip;
-  background:
-    radial-gradient(circle at 14% -12%, rgba(1, 245, 209, 0.16), transparent 34%),
-    radial-gradient(circle at 90% -6%, rgba(0, 161, 155, 0.18), transparent 30%),
-    linear-gradient(180deg, #0a0c0d 0%, #000000 100%),
-    var(--surface);
+  /* Ground colour only. The app root paints an opaque #02060f over the body,
+     so any colour layered here is invisible — which is why the washes that
+     used to live on this rule never actually rendered. The colour field is
+     now .ambient-field, which sits *inside* that root. This just has to match
+     it, so the page never flashes a lighter ground before React mounts. */
+  background: var(--surface);
 }
 
 /* Touch tuning: kill the grey flash Android paints over tapped elements (we
@@ -69,19 +71,6 @@ label {
 .font-display {
   font-family: 'Oxanium', sans-serif;
   letter-spacing: 0.01em;
-}
-
-@keyframes drift {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
-}
-
-.animate-drift {
-  animation: drift 8s ease-in-out infinite;
 }
 
 @keyframes shimmer {
@@ -261,7 +250,14 @@ label {
 }
 
 /* Discipline marquee between hero and work. */
+/* The band is opaque so the circuit traces do not read through the keywords.
+   Background and rules live on the wrapper, the end-fade mask on the child:
+   masking the element that carries the background would fade that background
+   out at both ends too, letting the traces back through exactly at the edges. */
 .marquee-wrap {
+  background: #060d15;
+}
+.marquee-mask {
   overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
@@ -365,56 +361,86 @@ label {
     overflow: hidden;
     pointer-events: none;
   }
-  .ambient-orb {
+
+  /* The colour wash — ambient light, under the grid. Every gradient is
+     anchored past an edge, so it reads as light spilling in rather than as a
+     shape sitting on the page. Oversized and slowly drifting: the inset gives
+     the transform room to move without ever pulling an edge into frame. */
+  .ambient-field::before {
+    content: '';
     position: absolute;
-    display: block;
-    border-radius: 9999px;
-    filter: blur(90px);
+    inset: -14%;
+    /* No green here at all. This carried four teal radials — a glow at the top
+       corner and a horizon along the foot — and they dominated the top and
+       bottom of every page. The teal now comes only from the circuit traces
+       above and the accent colour in the UI itself, which is enough to tint
+       the glass panes. What is left is the cool indigo base: blue, not green,
+       and the thing that stops the field reading as flat black. */
+    background: linear-gradient(175deg, rgba(7, 34, 61, 0.30) 0%, transparent 48%);
+    animation: wash-drift 96s ease-in-out infinite;
     will-change: transform;
   }
-  .ambient-orb--cyan {
-    top: -14vh;
-    left: -8vw;
-    width: 58vw;
-    height: 58vw;
-    max-width: 780px;
-    max-height: 780px;
-    background: radial-gradient(circle, rgba(1, 245, 209, 0.20), transparent 68%);
-    animation: orb-drift-a 32s ease-in-out infinite;
+
+  /* Circuit traces, lit by the wash below them. A 512px SVG tile: every trace
+     that leaves an edge re-enters at the same coordinate on the opposite one,
+     so the routing stays continuous across tiles with no seam. Inline rather
+     than a file so it costs no extra request and cannot 404.
+
+     The grid itself never moves. Animating 1px rules puts them on fractional
+     pixels, which shimmers and throws moire; drifting the wash underneath
+     gives the same sense of motion while the lines stay pin-sharp. */
+  /* Masked wrapper. The fade is viewport-anchored and must NOT move — only
+     the rules inside it travel with the scroll. */
+  .ambient-grid {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    /* Strongest at the top-left corner, gone before the right edge, so the
+       grid never competes with body copy in the middle of a section. */
+    -webkit-mask-image: radial-gradient(118% 96% at 6% -8%, #000 0%, rgba(0, 0, 0, 0.52) 40%, transparent 88%);
+    mask-image: radial-gradient(118% 96% at 6% -8%, #000 0%, rgba(0, 0, 0, 0.52) 40%, transparent 88%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
   }
-  .ambient-orb--teal {
-    top: 34vh;
-    right: -14vw;
-    width: 52vw;
-    height: 52vw;
-    max-width: 700px;
-    max-height: 700px;
-    background: radial-gradient(circle, rgba(0, 161, 155, 0.22), transparent 66%);
-    animation: orb-drift-b 41s ease-in-out infinite;
+
+  /* The rules themselves. --grid-shift is written from scroll position, so the
+     background travels with the page rather than sitting pinned behind it; it
+     is always under one 512px tile, which is why the pattern can scroll for
+     ever without the transform growing. Overhangs the wrapper by a full tile so
+     the shift never drags an edge into frame. */
+  .ambient-grid__rules {
+    position: absolute;
+    inset: -512px;
+    display: block;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'512'%20height%3D'512'%20viewBox%3D'0%200%20512%20512'%3E%3Cg%20fill%3D'none'%20stroke%3D'%2301f5d1'%20stroke-opacity%3D'0.085'%20stroke-width%3D'1.15'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M0%2096%20H72%20L104%2064%20H168%20L200%2096%20H312%20L344%20128%20H400%20L432%2096%20H512'%2F%3E%3Cpath%20d%3D'M0%20288%20H56%20L88%20256%20H176%20L208%20288%20H288%20L320%20320%20H392%20L424%20288%20H512'%2F%3E%3Cpath%20d%3D'M0%20424%20H120%20L152%20456%20H240%20L272%20424%20H512'%2F%3E%3Cpath%20d%3D'M64%200%20V40%20L96%2072%20V160%20L64%20192%20V296%20L96%20328%20V400%20L64%20432%20V512'%2F%3E%3Cpath%20d%3D'M288%200%20V48%20L256%2080%20V152%20L288%20184%20V240%20L256%20272%20V344%20L288%20376%20V512'%2F%3E%3Cpath%20d%3D'M416%200%20V72%20L448%20104%20V200%20L416%20232%20V512'%2F%3E%3Cpath%20d%3D'M352%20176%20H424'%2F%3E%3Cpath%20d%3D'M120%20216%20V264'%2F%3E%3Cpath%20d%3D'M216%20480%20H296'%2F%3E%3Cpath%20d%3D'M180%2032%20V80'%2F%3E%3Cpath%20d%3D'M456%20344%20H512'%2F%3E%3Cpath%20d%3D'M0%20344%20H40'%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D'104'%20cy%3D'64'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'200'%20cy%3D'96'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'344'%20cy%3D'128'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'88'%20cy%3D'256'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'320'%20cy%3D'320'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'152'%20cy%3D'456'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'424'%20cy%3D'176'%20r%3D'3.2'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'120'%20cy%3D'264'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'456'%20cy%3D'344'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'296'%20cy%3D'480'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'96'%20cy%3D'72'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'448'%20cy%3D'104'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'272'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'180'%20cy%3D'32'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'216'%20cy%3D'480'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3C%2Fsvg%3E");
+    background-size: 512px 512px;
+    background-repeat: repeat;
+    transform: translate3d(0, var(--grid-shift, 0px), 0);
+    will-change: transform;
   }
-  .ambient-orb--deep {
-    bottom: -18vh;
-    left: 22vw;
-    width: 62vw;
-    height: 62vw;
-    max-width: 860px;
-    max-height: 860px;
-    background: radial-gradient(circle, rgba(4, 96, 120, 0.20), transparent 70%);
-    animation: orb-drift-c 37s ease-in-out infinite;
+
+  /* Vignette. Pseudo-elements paint in DOM order against the grid span, so
+     ::after lands *above* it — the corners stay deep and the rules fade out
+     into them instead of running to a hard edge. */
+  .ambient-field::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      124% 92% at 50% 44%,
+      transparent 36%,
+      rgba(2, 6, 15, 0.58) 100%
+    );
   }
 }
 
-@keyframes orb-drift-a {
+/* A long, shallow drift — the light moves, the grid does not. */
+@keyframes wash-drift {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(6vw, 7vh, 0) scale(1.12); }
-}
-@keyframes orb-drift-b {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1.06); }
-  50% { transform: translate3d(-7vw, -6vh, 0) scale(0.94); }
-}
-@keyframes orb-drift-c {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(0.96); }
-  50% { transform: translate3d(4vw, -8vh, 0) scale(1.1); }
+  50% { transform: translate3d(2.5%, -2%, 0) scale(1.04); }
 }
 
 /* Base pane. Compose with .glass-hover for the interactive lensing. */
@@ -475,26 +501,44 @@ label {
   }
 
   /* Navigation bar — thinner, wider-blur glass so page content reads through it. */
-  .glass-nav {
-    background: linear-gradient(180deg, rgba(9, 16, 21, 0.62), rgba(4, 9, 13, 0.44));
-    backdrop-filter: blur(22px) saturate(180%);
-    -webkit-backdrop-filter: blur(22px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.07),
-      0 14px 36px -28px rgba(0, 0, 0, 0.95);
-    transition: background 320ms ease, backdrop-filter 320ms ease,
-      border-color 320ms ease, box-shadow 320ms ease;
+  /* The nav's material lives on a pseudo-element, not on the <nav> itself, so
+     it can be masked away to nothing at the bottom without taking the logo and
+     links with it. Three separate things drew that hard line: a border-bottom,
+     a background that stopped dead at the element's edge (the backdrop blur
+     cutting off with it), and a drop shadow underneath. All three are gone —
+     the pane overhangs the bar and dissolves, because a fade needs somewhere
+     to happen. */
+  /* Frosted glass that takes its colour from whatever is behind it.
+
+     The darkening is done by brightness() inside the backdrop-filter, not by
+     an opaque fill. A fill *replaces* the backdrop — 80% of flat near-black
+     leaves a neutral grey bar whatever is underneath — whereas brightness()
+     scales the backdrop multiplicatively, so hue survives and only the level
+     drops. Over the Revela card the bar goes warm; over the purple one it goes
+     violet. The fill is then only a slight cool settling tint.
+
+     saturate() rather than brightness() carries the colour: raising brightness
+     to get more colour also raises the level behind the links, and that is the
+     one thing there is no headroom for. Measured against a white card — the
+     worst case, since blur cuts variance but not mean luminance — this lands
+     the nav text at ~6:1. brightness .58 looked richer but fell to ~4.75:1,
+     which only just clears AA, so the chroma comes from saturation instead. */
+  .glass-nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: rgba(2, 6, 15, 0.16);
+    backdrop-filter: blur(20px) saturate(260%) brightness(0.46);
+    -webkit-backdrop-filter: blur(20px) saturate(260%) brightness(0.46);
+    /* Not painted at all at the top of the page: nothing is behind the bar
+       there, so the nav sits straight on the field. */
+    opacity: 0;
+    transition: opacity 260ms ease;
   }
-  /* Condensed state once the page scrolls under it — denser glass, brighter rim. */
-  .glass-nav[data-scrolled='true'] {
-    background: linear-gradient(180deg, rgba(7, 13, 18, 0.82), rgba(3, 7, 11, 0.68));
-    backdrop-filter: blur(30px) saturate(200%);
-    -webkit-backdrop-filter: blur(30px) saturate(200%);
-    border-bottom-color: rgba(1, 245, 209, 0.16);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      0 20px 46px -30px rgba(0, 0, 0, 1);
+  .glass-nav[data-scrolled='true']::before {
+    opacity: 1;
   }
 
   /* Small controls: chips, pills, icon buttons. Lighter blur, tighter rim. */
@@ -598,19 +642,17 @@ label {
    Mobile effect budget.
    The glass system is built from blurs, and blur is the single most
    expensive thing a mobile GPU composites. Below md we keep the look
-   but cut the radii roughly in half, drop two of the three ambient
-   orbs, and stop their drift animations. Desktop is untouched.
+   but cut the radii roughly in half, thin the grid to its major rules,
+   and park the wash drift. Desktop is untouched.
    ------------------------------------------------------------------ */
 @media (max-width: 767px) {
-  .ambient-orb--teal,
-  .ambient-orb--deep {
-    display: none;
+  /* The full board is too fine to read on a phone; scaling the tile up keeps
+     the same routing at a legible size and costs nothing extra to paint. */
+  .ambient-grid__rules {
+    background-size: 640px 640px;
   }
-  .ambient-orb--cyan {
-    filter: blur(60px);
+  .ambient-field::before {
     animation: none;
-    width: 90vw;
-    height: 90vw;
   }
   .glass {
     backdrop-filter: blur(10px) saturate(150%);
@@ -620,12 +662,17 @@ label {
     backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
   }
-  .glass-nav,
-  .glass-nav[data-scrolled='true'],
   .glass-menu,
   .glass-scrim {
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
+  /* backdrop-filter is one property, so a shorter blur here would drop the
+     brightness() with it and leave the links sitting on an undarkened bar.
+     Only the blur radius is cut. */
+  .glass-nav::before {
+    backdrop-filter: blur(14px) saturate(260%) brightness(0.46);
+    -webkit-backdrop-filter: blur(14px) saturate(260%) brightness(0.46);
   }
 }
 
@@ -634,12 +681,12 @@ label {
   .glass-chip {
     background: rgba(12, 19, 25, 0.94);
   }
-  .glass-nav,
-  .glass-nav[data-scrolled='true'] {
-    background: rgba(4, 9, 14, 0.97);
-  }
   .glass-scrim {
     background: rgba(2, 6, 12, 0.97);
+  }
+  /* No blur to hide what is behind it, so the tint carries the legibility. */
+  .glass-nav::before {
+    background: rgba(2, 6, 15, 0.94);
   }
 }
 
@@ -654,8 +701,14 @@ label {
   .glass::after {
     display: none;
   }
-  .glass-nav,
-  .glass-nav[data-scrolled='true'],
+  /* Opaque and always on here: this mode asked for no transparency. */
+  .glass-nav::before {
+    background: #04090e;
+    inset: 0;
+    opacity: 1;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
   .glass-menu {
     background: #04090e;
     backdrop-filter: none;
@@ -677,7 +730,7 @@ label {
 
 /* Respect the user's motion preference — collapse every custom motion to a short fade. */
 @media (prefers-reduced-motion: reduce) {
-  .ambient-orb {
+  .ambient-field::before {
     animation: none !important;
   }
   .glass-hover,
@@ -692,7 +745,6 @@ label {
   .menu-glyph-bar {
     transition: none !important;
   }
-  .animate-drift,
   .animate-nudge,
   .accent-shimmer,
   .pulse-dot::after,

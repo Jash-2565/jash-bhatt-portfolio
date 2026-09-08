@@ -13,7 +13,7 @@ type Node = { x: number; y: number; vx: number; vy: number; bvx: number; bvy: nu
 // Skipped entirely on touch devices: the cursor links are the whole point of the
 // effect and a phone has no cursor, so all that remains is an O(n²) scan over up
 // to 64 nodes every frame — pure battery cost for no visual payoff. The hero
-// keeps its gradient and ambient orbs there.
+// keeps the page-wide ambient field behind it there.
 export default function HeroParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const enabled = usePointerFine();
