@@ -1061,6 +1061,10 @@ const ArkanoidDemo = () => {
         rafRef.current = null;
       }
     };
+  // `step` is redefined every render; listing it here would cancel and
+  // restart the animation frame loop on each one. The loop is started and
+  // stopped by isRunning alone, which is the actual lifecycle here.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRunning]);
 
   return (

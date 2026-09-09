@@ -13,14 +13,14 @@ export function useInView<T extends HTMLElement = HTMLDivElement>(
 ) {
   const { rootMargin = '0px 0px -10% 0px', threshold = 0.12, once = true } = options;
   const ref = useRef<T | null>(null);
-  const [inView, setInView] = useState(false);
+  // Without IntersectionObserver there is nothing to wait for, so start
+  // revealed. Deciding this in the initialiser rather than in the effect keeps
+  // the effect from calling setState during mount, which cascades renders.
+  const [inView, setInView] = useState(() => typeof IntersectionObserver === 'undefined');
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || typeof IntersectionObserver === 'undefined') {
-      setInView(true);
-      return;
-    }
+    if (!node || typeof IntersectionObserver === 'undefined') return;
 
     const observer = new IntersectionObserver(
       (entries) => {
