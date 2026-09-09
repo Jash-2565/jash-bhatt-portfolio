@@ -12,9 +12,9 @@ import { formatNameList } from '../utils/formatNameList';
 import { usePointerFine } from '../hooks/usePointerFine';
 
 const DemoLoader = () => (
-  <div className="glass !bg-slate-950/75 h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
+  <div className="surface surface-marks !bg-[var(--ground)] h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
     <div className="flex flex-col items-center gap-3 text-slate-500">
-      <div className="w-7 h-7 border-2 border-slate-700 border-t-[#01F5D1] rounded-full animate-spin" />
+      <div className="w-7 h-7 border-2 border-slate-700 border-t-accent rounded-full animate-spin" />
       <span className="text-[10px] tracking-widest uppercase">Loading Demo</span>
     </div>
   </div>
@@ -32,7 +32,7 @@ const CopyButton = ({ text }: { text: string }) => {
     <button
       onClick={copy}
       aria-label={copied ? 'Code copied' : 'Copy code snippet'}
-      className="flex items-center justify-center gap-1.5 min-h-11 min-w-11 -my-2 px-2 text-xs text-slate-400 hover:text-[#01F5D1] active:text-[#01F5D1] transition-colors"
+      className="flex items-center justify-center gap-1.5 min-h-11 min-w-11 -my-2 px-2 text-xs text-slate-400 hover:text-accent active:text-accent transition-colors"
     >
       {copied ? <Check size={13} /> : <Copy size={13} />}
       {copied ? 'copied' : 'copy'}
@@ -147,7 +147,7 @@ const ProjectDetail = ({
       : null;
 
     const snippetContainerClass =
-      'glass !bg-slate-950/75 h-[280px] sm:h-[440px] lg:h-[620px] rounded-2xl text-slate-100 flex flex-col';
+      'surface surface-marks !bg-[var(--ground)] h-[280px] sm:h-[440px] lg:h-[620px] rounded-2xl text-slate-100 flex flex-col';
     // `overscroll-contain` stops a sideways swipe inside the snippet from
     // chaining out to the page once it hits the end of the code.
     const snippetPreClass =
@@ -202,7 +202,7 @@ const ProjectDetail = ({
               return (
                 <div key={`story-${i}`} className="min-w-0 lg:min-w-[14rem] flex flex-col gap-3">
                   <div
-                    className={`rounded-xl overflow-hidden border border-white/10 bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
+                    className={`rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
                     onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
                   >
                     {isPlaceholder ? (
@@ -243,7 +243,7 @@ const ProjectDetail = ({
         return (
           <div key={key} className="flex flex-col gap-3">
             <div
-              className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
+              className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
               onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
             >
               {isPlaceholder ? (
@@ -292,7 +292,7 @@ const ProjectDetail = ({
                 return (
                   <div key={`row-${i}`} className="flex flex-col gap-3 items-center">
                     <div
-                      className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : 'cursor-zoom-in w-fit'}`}
+                      className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : 'cursor-zoom-in w-fit'}`}
                       onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
                     >
                       {isPlaceholder ? (
@@ -318,7 +318,7 @@ const ProjectDetail = ({
           {fullWidthImages.map((img, i) => (
             <div key={`full-${i}`} className={`flex flex-col gap-3 ${img.containerClass || 'w-full'}`}>
               <div
-                className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : 'cursor-zoom-in'}`}
+                className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : 'cursor-zoom-in'}`}
                 onClick={() => { if (img.src && !img.src.includes('placeholder')) onImageClick(img.src); }}
               >
                 {!img.src || img.src.includes('placeholder') ? (
@@ -352,7 +352,7 @@ const ProjectDetail = ({
             return (
               <div key={i} className="flex flex-col gap-3">
                 <div
-                  className={`rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
+                  className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
                   onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
                 >
                   {isPlaceholder ? (
@@ -394,7 +394,7 @@ const ProjectDetail = ({
               className={`flex flex-col gap-3 ${section.imageLayout === 'row' ? 'w-full md:w-auto md:flex-shrink-0' : ''} ${section.imageCrop ? 'w-fit items-center' : ''}`}
             >
               <div
-                className={`relative rounded-lg overflow-hidden ${img.borderless ? 'border-0 bg-transparent shadow-none' : `border border-white/10 ${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : 'cursor-zoom-in'}`}
+                className={`relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : 'cursor-zoom-in'}`}
                 onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
               >
                 {isPlaceholder ? (
@@ -419,7 +419,7 @@ const ProjectDetail = ({
                     {/* Several case-study diagrams are authored 1600px wide, so
                         their labels are unreadable inline on a phone. Advertise
                         that tapping opens the zoomable lightbox. */}
-                    <span className="md:hidden absolute bottom-2 right-2 glass-chip flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium text-slate-200 pointer-events-none">
+                    <span className="md:hidden absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-slate-200 pointer-events-none">
                       <ZoomIn size={11} /> Tap to zoom
                     </span>
                   </>
@@ -441,7 +441,7 @@ const ProjectDetail = ({
         <div className={ui.shell}>
           <button
             onClick={onBack}
-            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-full mb-6 md:mb-12 transition-colors text-sm font-medium text-slate-300 hover:text-[#01F5D1] active:bg-white/10"
+            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-slate-300 hover:text-accent active:bg-white/10"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             Back to Projects
@@ -465,13 +465,13 @@ const ProjectDetail = ({
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-12 gap-6 md:gap-8 mb-12 pb-8 md:mb-20 md:pb-12 border-b border-white/10">
           <div className="md:col-span-3">
             <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-              <Briefcase size={13} className="text-[#01F5D1]" /> Role
+              <Briefcase size={13} className="text-accent" /> Role
             </h3>
             <p className="font-medium text-slate-100 text-sm leading-6">{project.content.role}</p>
           </div>
           <div className="md:col-span-3">
             <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-              <Clock size={13} className="text-[#01F5D1]" /> Timeline
+              <Clock size={13} className="text-accent" /> Timeline
             </h3>
             <p className="font-medium text-slate-100 text-sm leading-6">{project.timeline}</p>
           </div>
@@ -488,7 +488,7 @@ const ProjectDetail = ({
           {project.content.team && project.content.team.length > 0 && (
             <div className="xs:col-span-2 md:col-span-12">
               <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                <Users size={13} className="text-[#01F5D1]" /> Team
+                <Users size={13} className="text-accent" /> Team
               </h3>
               <p className="font-medium text-slate-100 text-sm leading-6">
                 Built alongside {formatNameList(project.content.team)}
@@ -499,7 +499,7 @@ const ProjectDetail = ({
 
         {/* Hero Image */}
         {!isPythonCodes && (
-          <div className={`w-full bg-white/5 rounded-lg mb-12 md:mb-24 border border-white/10 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
+          <div className={`w-full bg-white/5 rounded-lg mb-12 md:mb-24 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
             {!project.content.heroImage.includes('placeholder') ? (
               <div ref={heroParallaxRef} className="w-full h-full will-change-transform">
                 <ResponsiveImage
@@ -524,7 +524,7 @@ const ProjectDetail = ({
         {isPythonCodes ? (
           <div className="space-y-10 md:space-y-16">
             {project.content.sections.map((section, idx) => (
-              <div key={idx} className="glass rounded-3xl !border-emerald-400/30 p-5 sm:p-8 md:p-10">
+              <div key={idx} className="surface surface-marks rounded-3xl border-l-2 border-emerald-400/50 p-5 sm:p-8 md:p-10">
                 <div className="mb-6">
                   <div className="text-xs uppercase tracking-[0.35em] text-emerald-600/70 mb-3">Python Project</div>
                   <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-100 mb-3">{section.title}</h2>
@@ -553,7 +553,7 @@ const ProjectDetail = ({
 
                 {/* Left Column: Heading */}
                 <div className="md:col-span-4 md:sticky md:top-24">
-                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-[#01F5D1]' : 'text-slate-500'}`}>
+                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-slate-500'}`}>
                     {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
                   </span>
                   <div className={`h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
@@ -561,7 +561,7 @@ const ProjectDetail = ({
                 </div>
 
                 {/* Right Column: Content */}
-                <Reveal variant="fade-up" className="md:col-span-8" threshold={0.08}>
+                <Reveal variant="wipe-right" className="md:col-span-8" threshold={0.08}>
                   <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal">{section.content}</p>
 
                   {section.listItems && (
@@ -592,7 +592,7 @@ const ProjectDetail = ({
                         rel="noopener noreferrer"
                         className={`md:hidden mt-8 ${ui.cardBase} ${ui.cardHover} flex items-center gap-4 p-5 w-full`}
                       >
-                        <span className="shrink-0 p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full">
+                        <span className="shrink-0 p-3 bg-accent-deep/25 text-accent-br rounded-sm">
                           <ExternalLink size={20} />
                         </span>
                         <span className="min-w-0 text-left">
@@ -605,7 +605,7 @@ const ProjectDetail = ({
                         </span>
                       </a>
                       {section.embedWide ? (
-                        <div className="hidden md:block mt-10 w-full rounded-2xl overflow-hidden border border-white/10 shadow-lg" style={{ aspectRatio: '16/9' }}>
+                        <div className="hidden md:block mt-10 w-full rounded-2xl overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
                           <iframe
                             src={section.embedUrl}
                             className="w-full h-full"
@@ -637,7 +637,7 @@ const ProjectDetail = ({
                         href={section.cta.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${ui.btnBase} glass glass-hover gap-3 text-white`}
+                        className={`${ui.btnBase} surface surface-hover gap-3 text-white`}
                       >
                         {section.cta.text} <ExternalLink size={20} className="opacity-80" />
                       </a>
@@ -655,11 +655,11 @@ const ProjectDetail = ({
           <div className="mt-16 md:mt-32">
             <button
               onClick={onNext}
-              className="glass glass-hover group relative w-full overflow-hidden rounded-3xl p-4 sm:p-6 md:p-8 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]"
+              className="surface surface-marks surface-hover group relative w-full overflow-hidden rounded-3xl p-4 sm:p-6 md:p-8 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label={`Open next project: ${nextProject.title}`}
             >
               <div className="flex items-center gap-4 sm:gap-6">
-                <div className={`block shrink-0 w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border border-white/10 ${nextThumbnailBackdrop ?? 'bg-white/5'}`}>
+                <div className={`block shrink-0 w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden ${nextThumbnailBackdrop ?? 'bg-white/5'}`}>
                   {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
                     <ResponsiveImage
                       src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}
@@ -674,15 +674,15 @@ const ProjectDetail = ({
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#01F5D1]/90">Next Project →</span>
-                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-slate-100 truncate group-hover:text-[#01F5D1] transition-colors">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent/90">Next Project →</span>
+                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-slate-100 truncate group-hover:text-accent transition-colors">
                     {nextProject.title}
                   </h3>
                   <p className="mt-1 text-sm text-slate-400 truncate">{nextProject.category}</p>
                 </div>
                 <ArrowRight
                   size={28}
-                  className="hidden md:block shrink-0 text-slate-500 group-hover:text-[#01F5D1] group-hover:translate-x-2 transition-all duration-300"
+                  className="hidden md:block shrink-0 text-slate-500 group-hover:text-accent group-hover:translate-x-2 transition-all duration-300"
                 />
               </div>
             </button>
@@ -693,15 +693,15 @@ const ProjectDetail = ({
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap justify-between items-center gap-4">
           <button
             onClick={onBack}
-            className="group -ml-3 min-h-11 px-3 rounded-full text-base font-medium text-slate-300 hover:text-[#01F5D1] active:bg-white/10 transition-colors flex items-center gap-2"
+            className="group -ml-3 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors flex items-center gap-2"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>
           <span className="hidden md:flex items-center gap-2 text-xs text-slate-600">
-            <kbd className="glass-chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">Esc</kbd>
+            <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">Esc</kbd>
             back
             <span className="mx-1 text-slate-700">·</span>
-            <kbd className="glass-chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
+            <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
             next
           </span>
         </div>

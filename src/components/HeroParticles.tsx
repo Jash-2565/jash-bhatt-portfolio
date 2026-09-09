@@ -71,6 +71,12 @@ export default function HeroParticles() {
       seedNodes();
     };
 
+    // Canvas cannot use a Tailwind class, so the accent is read once from the
+    // same :root custom properties everything else resolves through.
+    const rootStyle = getComputedStyle(document.documentElement);
+    const accent = rootStyle.getPropertyValue('--accent-rgb').trim() || '1 245 209';
+    const accentDeep = rootStyle.getPropertyValue('--accent-deep-rgb').trim() || '0 161 155';
+
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
@@ -78,7 +84,7 @@ export default function HeroParticles() {
         // Node dot.
         ctx.beginPath();
         ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(1, 245, 209, 0.55)';
+        ctx.fillStyle = `rgb(${accent} / 0.55)`;
         ctx.fill();
       }
 
@@ -95,7 +101,7 @@ export default function HeroParticles() {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(0, 161, 155, ${alpha})`;
+            ctx.strokeStyle = `rgb(${accentDeep} / ${alpha})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -112,7 +118,7 @@ export default function HeroParticles() {
           ctx.beginPath();
           ctx.moveTo(n.x, n.y);
           ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(1, 245, 209, ${alpha})`;
+          ctx.strokeStyle = `rgb(${accent} / ${alpha})`;
           ctx.lineWidth = 1;
           ctx.stroke();
           // Gentle drift toward the cursor.

@@ -263,38 +263,38 @@ const MovieRecsDemo = () => {
   );
 
   return (
-    <div className="rounded-2xl border border-slate-700 bg-slate-900 shadow-sm p-4 lg:p-6">
+    <div className="rounded-2xl bg-[var(--surface-1)] shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <h4 className="text-lg font-semibold text-slate-100">Movie Recommendation Demo</h4>
           <p className="text-sm text-slate-400">Dataset: `public/models/movie_metadata.csv`</p>
         </div>
-        <span className="text-xs uppercase tracking-widest text-slate-300 bg-slate-800 px-3 py-1 rounded-full">
+        <span className="text-xs uppercase tracking-widest text-slate-300 bg-slate-800 px-3 py-1 rounded-sm">
           {status}
         </span>
       </div>
 
-      <div className="rounded-xl border border-slate-700 bg-slate-950 p-4">
+      <div className="rounded-xl bg-[var(--ground)] p-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Enter movie title"
-            className="w-full flex-1 min-w-0 min-h-11 rounded-lg border border-slate-500/80 bg-slate-950 px-3 py-2.5 text-base sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#01F5D1]/60 focus:ring-2 focus:ring-[#01F5D1]/30"
+            className="w-full flex-1 min-w-0 min-h-11 rounded-lg/80 bg-[var(--ground)] px-3 py-2.5 text-base sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/30"
           />
           <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:items-center lg:w-auto lg:flex-nowrap lg:gap-2">
             <button
               type="button"
               onClick={handleRecommend}
               disabled={!isReady}
-              className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white hover:bg-slate-950 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold bg-[var(--surface-1)] text-white hover:bg-[var(--ground)] disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               Recommend
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
+              className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:border-slate-400 transition"
             >
               Clear
             </button>
@@ -306,7 +306,7 @@ const MovieRecsDemo = () => {
               key={item}
               type="button"
               onClick={() => setQuery(item)}
-              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-full border border-slate-600 px-4 py-1.5 text-sm text-slate-300 hover:border-slate-400 active:border-[#01F5D1]"
+              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-sm px-4 py-1.5 text-sm text-slate-300 hover:border-slate-400 active:border-accent"
             >
               {item}
             </button>
@@ -319,7 +319,7 @@ const MovieRecsDemo = () => {
         {results.length > 0 && (
           <ul className="grid gap-2 md:grid-cols-2">
             {results.map((title) => (
-              <li key={title} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100">
+              <li key={title} className="rounded-lg bg-slate-800 px-3 py-2 text-sm text-slate-100">
                 {title}
               </li>
             ))}

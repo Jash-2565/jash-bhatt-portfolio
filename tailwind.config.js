@@ -14,6 +14,31 @@ export default {
       ...defaultTheme.screens,
     },
     extend: {
+      // The accent is defined once as RGB channels in index.css :root, so
+      // Tailwind can apply its own alpha (text-accent/40, border-accent/25)
+      // instead of every call site hardcoding an rgba() literal.
+      colors: {
+        accent: "rgb(var(--accent-rgb) / <alpha-value>)",
+        "accent-br": "rgb(var(--accent-bright-rgb) / <alpha-value>)",
+        "accent-deep": "rgb(var(--accent-deep-rgb) / <alpha-value>)",
+      },
+      // Labels and metadata carry the schematic read, so the mono is a real
+      // face rather than whatever ui-monospace resolves to per OS.
+      fontFamily: {
+        mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
+      },
+      // Collapse the whole radius scale to near-square. Overriding the named
+      // steps rather than editing ~50 call sites keeps rounded-full intact for
+      // the things that are genuinely circular (dots, avatars, the cursor).
+      borderRadius: {
+        DEFAULT: "2px",
+        sm: "2px",
+        md: "2px",
+        lg: "3px",
+        xl: "3px",
+        "2xl": "4px",
+        "3xl": "4px",
+      },
       keyframes: {
         fadeIn: {
           "0%": { opacity: 0 },

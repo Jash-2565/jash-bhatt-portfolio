@@ -1064,7 +1064,7 @@ const ArkanoidDemo = () => {
   }, [isRunning]);
 
   return (
-    <div className="border border-slate-700 rounded-2xl p-4 sm:p-6 bg-slate-900 shadow-sm lg:h-[680px] flex flex-col">
+    <div className="rounded-2xl p-4 sm:p-6 bg-[var(--surface-1)] shadow-sm lg:h-[680px] flex flex-col">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
           <p className="text-sm font-semibold text-slate-200">Play the demo</p>
@@ -1077,7 +1077,7 @@ const ArkanoidDemo = () => {
       </div>
       {/* Below lg the wrapper has no fixed height, so the canvas needs its own
           aspect-driven box — `flex-1` alone resolved against nothing. */}
-      <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-900 aspect-[10/9] lg:aspect-auto lg:flex-1">
+      <div className="overflow-hidden rounded-xl bg-[var(--surface-1)] aspect-[10/9] lg:aspect-auto lg:flex-1">
         <canvas
           ref={canvasRef}
           width={WIDTH}
@@ -1104,7 +1104,7 @@ const ArkanoidDemo = () => {
             setIsRunning((prev) => !prev);
             event.currentTarget.blur();
           }}
-          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold bg-slate-950 text-white hover:bg-slate-900 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold bg-[var(--ground)] text-white hover:bg-[var(--surface-1)] disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {isRunning ? 'Pause Demo' : 'Run Demo'}
         </button>
@@ -1115,7 +1115,7 @@ const ArkanoidDemo = () => {
             setIsRunning(false);
             renderOnce();
           }}
-          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:border-slate-400 transition"
         >
           Reset
         </button>
