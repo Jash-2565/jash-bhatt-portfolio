@@ -369,6 +369,9 @@ const App = () => {
       scrollToSection(section, { updateHistory: false });
     }
     updateHistory({ view: 'home', section }, section, true);
+  // Mount-only by design: this reads the entry URL once. Re-running it when
+  // the navigation helpers change would re-navigate mid-session.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle browser back/forward
@@ -402,6 +405,9 @@ const App = () => {
     return () => window.removeEventListener('popstate', handlePopState);
     // isMobile matters: both handlers below branch on it, so a stale value
     // would scroll the paged layout instead of switching pages.
+  // The handlers are stable for this purpose and re-subscribing on every
+  // render would tear down and rebuild the popstate listener constantly.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentView, selectedProject, isMobile]);
 
   // Per-view document title and description. Social scrapers read the static
@@ -534,6 +540,10 @@ const App = () => {
       timers.forEach(clearTimeout);
       events.forEach((event) => window.removeEventListener(event, stop));
     };
+  // Only isMobile belongs here. The effect reacts to a layout swap, and it
+  // reads activeSection/currentView/mobilePage as a snapshot at swap time —
+  // adding them would re-run it on every scroll and fight the reader.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
 
   // Nav surface condenses once content scrolls underneath it. Kept separate from
