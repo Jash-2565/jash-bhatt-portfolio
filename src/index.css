@@ -1,17 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Oxanium:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  /* Accent as space-separated RGB channels, so both Tailwind (via the `accent`
+     colour in tailwind.config.js) and plain CSS below can apply their own alpha
+     from one definition. Previously #01F5D1 was retyped at 75 call sites. */
+  --accent-rgb: 1 245 209;
+  --accent-bright-rgb: 158 247 234;
+  --accent-deep-rgb: 0 161 155;
+
   --ink-900: #e5e8ea;
-  --ink-700: #c8ccce;
-  --accent-blue: #00a19b;
-  --accent-cyan: #01f5d1;
-  --accent-lime: #01f5d1;
-  /* Matches the app root's bg-[#02060f] so the pre-mount ground is seamless. */
-  --surface: #02060f;
+  /* Surface scale. Everything is opaque: panes are told apart from the ground
+     by a hairline rule and their corner marks, not by a translucent material. */
+  --ground: #02060f;
+  /* Roughly even ~1.10:1 steps. Panes are told apart from the ground by tone,
+     not by an outline — which is the whole reason these can be subtle. */
+  --surface-1: #0d141c;
+  --surface-2: #161f28;
+  /* Only for dividers now: a single-edge rule is a line, not a box. */
+  --rule: rgb(255 255 255 / 0.10);
   /* Single source of truth for the fixed nav's height — the nav, the mobile
      menu's top offset, and the hero's min-height all read this, so they can't
      drift apart. */
@@ -39,10 +49,10 @@ body {
   overflow-x: clip;
   /* Ground colour only. The app root paints an opaque #02060f over the body,
      so any colour layered here is invisible — which is why the washes that
-     used to live on this rule never actually rendered. The colour field is
-     now .ambient-field, which sits *inside* that root. This just has to match
-     it, so the page never flashes a lighter ground before React mounts. */
-  background: var(--surface);
+     used to live on this rule never actually rendered. This just has to match
+     that root, so the page never flashes a lighter ground before React
+     mounts. */
+  background: var(--ground);
 }
 
 /* Touch tuning: kill the grey flash Android paints over tapped elements (we
@@ -82,11 +92,11 @@ label {
 .accent-shimmer {
   background-image: linear-gradient(
     90deg,
-    #01f5d1 0%,
-    #9ef7ea 35%,
-    #01f5d1 55%,
-    #00a19b 80%,
-    #01f5d1 100%
+    rgb(var(--accent-rgb)) 0%,
+    rgb(var(--accent-bright-rgb)) 35%,
+    rgb(var(--accent-rgb)) 55%,
+    rgb(var(--accent-deep-rgb)) 80%,
+    rgb(var(--accent-rgb)) 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -98,22 +108,25 @@ label {
 
 /* Cyan glow lift used on project cards and contact cards on hover. */
 .card-glow {
-  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 300ms ease;
+  transition: transform 180ms ease;
 }
 @media (hover: hover) and (pointer: fine) {
   .card-glow:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 22px 55px -20px rgba(1, 245, 209, 0.35),
-      0 0 0 1px rgba(1, 245, 209, 0.12);
+    transform: translateY(-2px);
+  }
+  .card-glow:hover::before,
+  .card-glow:hover::after {
+    border-color: rgb(var(--accent-rgb) / 0.85);
   }
 }
 /* Touch gets a press state instead of a hover state. */
 @media (hover: none) {
   .card-glow:active {
-    transform: scale(0.985);
-    box-shadow: 0 0 0 1px rgba(1, 245, 209, 0.25);
+    transform: scale(0.99);
+  }
+  .card-glow:active::before,
+  .card-glow:active::after {
+    border-color: rgb(var(--accent-rgb) / 0.85);
   }
 }
 
@@ -159,8 +172,8 @@ label {
   height: 6px;
   margin: -3px 0 0 -3px;
   border-radius: 9999px;
-  background: rgba(1, 245, 209, 0.95);
-  box-shadow: 0 0 8px rgba(1, 245, 209, 0.7);
+  background: rgb(var(--accent-rgb) / 0.95);
+  box-shadow: 0 0 8px rgb(var(--accent-rgb) / 0.7);
   pointer-events: none;
   /* Above every overlay (lightbox z-60, skip-link z-70) so the custom cursor
      stays visible when an image or video is opened full screen. */
@@ -176,7 +189,7 @@ label {
   width: 32px;
   height: 32px;
   margin: -16px 0 0 -16px;
-  border: 1.5px solid rgba(1, 245, 209, 0.55);
+  border: 1.5px solid rgb(var(--accent-rgb) / 0.55);
   border-radius: 9999px;
   pointer-events: none;
   z-index: 100;
@@ -189,8 +202,8 @@ label {
   width: 52px;
   height: 52px;
   margin: -26px 0 0 -26px;
-  background: rgba(1, 245, 209, 0.1);
-  border-color: rgba(1, 245, 209, 0.85);
+  background: rgb(var(--accent-rgb) / 0.1);
+  border-color: rgb(var(--accent-rgb) / 0.85);
 }
 
 /* Magnetic button — smooth spring back to rest via transition on transform. */
@@ -206,7 +219,7 @@ label {
   height: 12px;
   margin: -6px 0 0 -6px;
   border-radius: 9999px;
-  background: rgba(1, 245, 209, 0.4);
+  background: rgb(var(--accent-rgb) / 0.4);
   pointer-events: none;
   transform: scale(0);
   animation: copy-ripple 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -224,7 +237,7 @@ label {
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background: #01f5d1;
+  background: rgb(var(--accent-rgb));
   flex-shrink: 0;
 }
 .pulse-dot::after {
@@ -232,7 +245,7 @@ label {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: #01f5d1;
+  background: rgb(var(--accent-rgb));
   animation: pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -272,7 +285,7 @@ label {
     animation-play-state: paused;
   }
   .marquee-wrap:hover .marquee-item-text {
-    color: #9ef7ea;
+    color: rgb(var(--accent-bright-rgb));
   }
 }
 
@@ -288,13 +301,13 @@ label {
   font-size: 2.7rem;
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(1, 245, 209, 0.45);
+  -webkit-text-stroke: 1px rgb(var(--accent-rgb) / 0.45);
   transition: color 300ms ease, -webkit-text-stroke-color 300ms ease;
 }
 @media (hover: hover) and (pointer: fine) {
   .group:hover .ghost-number {
-    color: rgba(1, 245, 209, 0.18);
-    -webkit-text-stroke-color: rgba(1, 245, 209, 0.85);
+    color: rgb(var(--accent-rgb) / 0.18);
+    -webkit-text-stroke-color: rgb(var(--accent-rgb) / 0.85);
   }
 }
 @media (max-width: 767px) {
@@ -303,32 +316,12 @@ label {
   }
 }
 
-/* Subtle film-grain texture over the whole page. */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 45;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-}
-
-/* The grain is a full-viewport fixed layer composited above all content — its
-   texture is imperceptible at phone pixel densities but it still costs a paint
-   on every scroll frame. Touch devices go without. */
-@media (hover: none) {
-  .grain-overlay {
-    display: none;
-  }
-}
-
 /* Nav underline indicator — positioned absolutely inside the nav button row. */
 .nav-underline {
   position: absolute;
   bottom: -6px;
   height: 2px;
-  background: linear-gradient(90deg, #01f5d1 0%, #00a19b 100%);
+  background: linear-gradient(90deg, rgb(var(--accent-rgb)) 0%, rgb(var(--accent-deep-rgb)) 100%);
   border-radius: 2px;
   transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
     width 320ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -337,408 +330,180 @@ label {
 }
 
 /* ============================================================
-   LIQUID GLASS
+   SCHEMATIC SURFACES
    ------------------------------------------------------------
-   Every raised surface is a translucent pane that refracts the
-   ambient colour field painted behind the page. Each pane is
-   built from four ingredients:
-     1. backdrop-filter — blur + saturation lift (the "glass")
-     2. a translucent tinted fill (the material's own body)
-     3. a bright top rim + corner glint (specular highlight)
-     4. a soft drop shadow (the pane floating off the page)
-   Panes only read as glass if something interesting sits behind
-   them, so page sections stay transparent and the ambient field
-   below supplies the colour.
+   Raised surfaces are opaque and flat. What separates a pane
+   from the ground is not a material but a drawing convention:
+     1. a hairline rule at the edge
+     2. corner registration marks, as on a technical drawing
+     3. near-square corners (the radius scale tops out at 4px)
+   Nothing is translucent, so there is no backdrop-filter here,
+   and no fallback branch needed for browsers or users that
+   cannot have one.
    ============================================================ */
 
-/* Ambient colour field — fixed behind all content, drifting slowly.
-   This is what the glass panes blur and refract. */
 @layer components {
-  .ambient-field {
+  /* Static circuit-trace ground. The tile never moves and never animates —
+     it is structure, not atmosphere. Every trace that leaves an edge re-enters
+     at the same coordinate opposite, so the routing is continuous across tiles
+     with no seam. Inline rather than a file so it costs no request. */
+  .schematic-ground {
     position: fixed;
     inset: 0;
     z-index: 0;
-    overflow: hidden;
     pointer-events: none;
+    /* Colour comes from the token; the tile only supplies the shape. A data URI
+       cannot read a custom property, so the SVG is used as an alpha mask and
+       its own stroke-opacity becomes the mask's alpha. */
+    background-color: rgb(var(--accent-rgb) / 0.5);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'512'%20height%3D'512'%20viewBox%3D'0%200%20512%20512'%3E%3Cg%20fill%3D'none'%20stroke%3D'%23000'%20stroke-opacity%3D'0.085'%20stroke-width%3D'1.15'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M0%2096%20H72%20L104%2064%20H168%20L200%2096%20H312%20L344%20128%20H400%20L432%2096%20H512'%2F%3E%3Cpath%20d%3D'M0%20288%20H56%20L88%20256%20H176%20L208%20288%20H288%20L320%20320%20H392%20L424%20288%20H512'%2F%3E%3Cpath%20d%3D'M0%20424%20H120%20L152%20456%20H240%20L272%20424%20H512'%2F%3E%3Cpath%20d%3D'M64%200%20V40%20L96%2072%20V160%20L64%20192%20V296%20L96%20328%20V400%20L64%20432%20V512'%2F%3E%3Cpath%20d%3D'M288%200%20V48%20L256%2080%20V152%20L288%20184%20V240%20L256%20272%20V344%20L288%20376%20V512'%2F%3E%3Cpath%20d%3D'M416%200%20V72%20L448%20104%20V200%20L416%20232%20V512'%2F%3E%3Cpath%20d%3D'M352%20176%20H424'%2F%3E%3Cpath%20d%3D'M120%20216%20V264'%2F%3E%3Cpath%20d%3D'M216%20480%20H296'%2F%3E%3Cpath%20d%3D'M180%2032%20V80'%2F%3E%3Cpath%20d%3D'M456%20344%20H512'%2F%3E%3Cpath%20d%3D'M0%20344%20H40'%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D'104'%20cy%3D'64'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'200'%20cy%3D'96'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'344'%20cy%3D'128'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'88'%20cy%3D'256'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'320'%20cy%3D'320'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'152'%20cy%3D'456'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'424'%20cy%3D'176'%20r%3D'3.2'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'120'%20cy%3D'264'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'456'%20cy%3D'344'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'296'%20cy%3D'480'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'96'%20cy%3D'72'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'448'%20cy%3D'104'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'272'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'180'%20cy%3D'32'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'216'%20cy%3D'480'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3C%2Fsvg%3E"), radial-gradient(112% 88% at 4% -10%, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 82%);
+    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'512'%20height%3D'512'%20viewBox%3D'0%200%20512%20512'%3E%3Cg%20fill%3D'none'%20stroke%3D'%23000'%20stroke-opacity%3D'0.085'%20stroke-width%3D'1.15'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M0%2096%20H72%20L104%2064%20H168%20L200%2096%20H312%20L344%20128%20H400%20L432%2096%20H512'%2F%3E%3Cpath%20d%3D'M0%20288%20H56%20L88%20256%20H176%20L208%20288%20H288%20L320%20320%20H392%20L424%20288%20H512'%2F%3E%3Cpath%20d%3D'M0%20424%20H120%20L152%20456%20H240%20L272%20424%20H512'%2F%3E%3Cpath%20d%3D'M64%200%20V40%20L96%2072%20V160%20L64%20192%20V296%20L96%20328%20V400%20L64%20432%20V512'%2F%3E%3Cpath%20d%3D'M288%200%20V48%20L256%2080%20V152%20L288%20184%20V240%20L256%20272%20V344%20L288%20376%20V512'%2F%3E%3Cpath%20d%3D'M416%200%20V72%20L448%20104%20V200%20L416%20232%20V512'%2F%3E%3Cpath%20d%3D'M352%20176%20H424'%2F%3E%3Cpath%20d%3D'M120%20216%20V264'%2F%3E%3Cpath%20d%3D'M216%20480%20H296'%2F%3E%3Cpath%20d%3D'M180%2032%20V80'%2F%3E%3Cpath%20d%3D'M456%20344%20H512'%2F%3E%3Cpath%20d%3D'M0%20344%20H40'%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D'104'%20cy%3D'64'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'200'%20cy%3D'96'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'344'%20cy%3D'128'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'88'%20cy%3D'256'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'320'%20cy%3D'320'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'152'%20cy%3D'456'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'424'%20cy%3D'176'%20r%3D'3.2'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'120'%20cy%3D'264'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'456'%20cy%3D'344'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'296'%20cy%3D'480'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'96'%20cy%3D'72'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'448'%20cy%3D'104'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'272'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'180'%20cy%3D'32'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'216'%20cy%3D'480'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3C%2Fsvg%3E"), radial-gradient(112% 88% at 4% -10%, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 82%);
+    -webkit-mask-size: 512px 512px, 100% 100%;
+    mask-size: 512px 512px, 100% 100%;
+    -webkit-mask-repeat: repeat, no-repeat;
+    mask-repeat: repeat, no-repeat;
+    /* Two mask layers intersected: the tile supplies the routing, the radial
+       supplies the falloff. Anchored past the top-left corner and gone before
+       the right edge, so the traces never run under a column of body copy. */
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
-  /* The colour wash — ambient light, under the grid. Every gradient is
-     anchored past an edge, so it reads as light spilling in rather than as a
-     shape sitting on the page. Oversized and slowly drifting: the inset gives
-     the transform room to move without ever pulling an edge into frame. */
-  .ambient-field::before {
-    content: '';
-    position: absolute;
-    inset: -14%;
-    /* No green here at all. This carried four teal radials — a glow at the top
-       corner and a horizon along the foot — and they dominated the top and
-       bottom of every page. The teal now comes only from the circuit traces
-       above and the accent colour in the UI itself, which is enough to tint
-       the glass panes. What is left is the cool indigo base: blue, not green,
-       and the thing that stops the field reading as flat black. */
-    background: linear-gradient(175deg, rgba(7, 34, 61, 0.30) 0%, transparent 48%);
-    animation: wash-drift 96s ease-in-out infinite;
-    will-change: transform;
+  /* The tile is drawn at a fixed pixel size, so on a phone it reads as noise
+     rather than as routing. Scaling it up keeps the same drawing legible. */
+  @media (max-width: 767px) {
+    .schematic-ground {
+      -webkit-mask-size: 640px 640px, 100% 100%;
+      mask-size: 640px 640px, 100% 100%;
+      background-color: rgb(var(--accent-rgb) / 0.38);
+    }
   }
 
-  /* Circuit traces, lit by the wash below them. A 512px SVG tile: every trace
-     that leaves an edge re-enters at the same coordinate on the opposite one,
-     so the routing stays continuous across tiles with no seam. Inline rather
-     than a file so it costs no extra request and cannot 404.
-
-     The grid itself never moves. Animating 1px rules puts them on fractional
-     pixels, which shimmers and throws moire; drifting the wash underneath
-     gives the same sense of motion while the lines stay pin-sharp. */
-  /* Masked wrapper. The fade is viewport-anchored and must NOT move — only
-     the rules inside it travel with the scroll. */
-  .ambient-grid {
-    position: absolute;
-    inset: 0;
-    display: block;
-    overflow: hidden;
-    /* Strongest at the top-left corner, gone before the right edge, so the
-       grid never competes with body copy in the middle of a section. */
-    -webkit-mask-image: radial-gradient(118% 96% at 6% -8%, #000 0%, rgba(0, 0, 0, 0.52) 40%, transparent 88%);
-    mask-image: radial-gradient(118% 96% at 6% -8%, #000 0%, rgba(0, 0, 0, 0.52) 40%, transparent 88%);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-  }
-
-  /* The rules themselves. --grid-shift is written from scroll position, so the
-     background travels with the page rather than sitting pinned behind it; it
-     is always under one 512px tile, which is why the pattern can scroll for
-     ever without the transform growing. Overhangs the wrapper by a full tile so
-     the shift never drags an edge into frame. */
-  .ambient-grid__rules {
-    position: absolute;
-    inset: -512px;
-    display: block;
-    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'512'%20height%3D'512'%20viewBox%3D'0%200%20512%20512'%3E%3Cg%20fill%3D'none'%20stroke%3D'%2301f5d1'%20stroke-opacity%3D'0.085'%20stroke-width%3D'1.15'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M0%2096%20H72%20L104%2064%20H168%20L200%2096%20H312%20L344%20128%20H400%20L432%2096%20H512'%2F%3E%3Cpath%20d%3D'M0%20288%20H56%20L88%20256%20H176%20L208%20288%20H288%20L320%20320%20H392%20L424%20288%20H512'%2F%3E%3Cpath%20d%3D'M0%20424%20H120%20L152%20456%20H240%20L272%20424%20H512'%2F%3E%3Cpath%20d%3D'M64%200%20V40%20L96%2072%20V160%20L64%20192%20V296%20L96%20328%20V400%20L64%20432%20V512'%2F%3E%3Cpath%20d%3D'M288%200%20V48%20L256%2080%20V152%20L288%20184%20V240%20L256%20272%20V344%20L288%20376%20V512'%2F%3E%3Cpath%20d%3D'M416%200%20V72%20L448%20104%20V200%20L416%20232%20V512'%2F%3E%3Cpath%20d%3D'M352%20176%20H424'%2F%3E%3Cpath%20d%3D'M120%20216%20V264'%2F%3E%3Cpath%20d%3D'M216%20480%20H296'%2F%3E%3Cpath%20d%3D'M180%2032%20V80'%2F%3E%3Cpath%20d%3D'M456%20344%20H512'%2F%3E%3Cpath%20d%3D'M0%20344%20H40'%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D'104'%20cy%3D'64'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'200'%20cy%3D'96'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'344'%20cy%3D'128'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'88'%20cy%3D'256'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'320'%20cy%3D'320'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'152'%20cy%3D'456'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'424'%20cy%3D'176'%20r%3D'3.2'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'120'%20cy%3D'264'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'456'%20cy%3D'344'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'296'%20cy%3D'480'%20r%3D'3'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'96'%20cy%3D'72'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'448'%20cy%3D'104'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'272'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'180'%20cy%3D'32'%20r%3D'2.4'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'216'%20cy%3D'480'%20r%3D'2.6'%20fill%3D'%2301f5d1'%20fill-opacity%3D'0.3'%2F%3E%3C%2Fsvg%3E");
-    background-size: 512px 512px;
-    background-repeat: repeat;
-    transform: translate3d(0, var(--grid-shift, 0px), 0);
-    will-change: transform;
-  }
-
-  /* Vignette. Pseudo-elements paint in DOM order against the grid span, so
-     ::after lands *above* it — the corners stay deep and the rules fade out
-     into them instead of running to a hard edge. */
-  .ambient-field::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      124% 92% at 50% 44%,
-      transparent 36%,
-      rgba(2, 6, 15, 0.58) 100%
-    );
-  }
-}
-
-/* A long, shallow drift — the light moves, the grid does not. */
-@keyframes wash-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(2.5%, -2%, 0) scale(1.04); }
-}
-
-/* Base pane. Compose with .glass-hover for the interactive lensing. */
-@layer components {
-  .glass {
+  /* Base pane. Compose with .surface-hover for the interactive state. */
+  .surface {
     position: relative;
-    isolation: isolate;
-    background:
-      linear-gradient(
-        158deg,
-        rgba(255, 255, 255, 0.085) 0%,
-        rgba(255, 255, 255, 0.022) 44%,
-        rgba(1, 245, 209, 0.045) 100%
-      ),
-      rgba(9, 15, 20, 0.42);
-    backdrop-filter: blur(18px) saturate(165%);
-    -webkit-backdrop-filter: blur(18px) saturate(165%);
-    border: 1px solid rgba(255, 255, 255, 0.11);
-    box-shadow:
-      0 18px 44px -22px rgba(0, 0, 0, 0.85),
-      inset 0 1px 0 rgba(255, 255, 255, 0.16),
-      inset 0 -1px 0 rgba(1, 245, 209, 0.07);
+    background: var(--surface-1);
+    /* No border. The fill separates the pane from the ground and the corner
+       marks frame it; a closed rectangle here drew a second frame around the
+       first, and did it again for every pane nested inside this one. */
   }
 
-  /* Specular layer: a soft sheen off the top-left plus a cyan glint in the
-     top-right corner — the two highlights that sell a curved glass edge.
-     Sits above the pane's own fill but below its content. */
-  .glass::after {
+  /* Corner registration marks — two opposite L-brackets, the convention for a
+     measured drawing. Inset from the edge rather than sitting on it, so they
+     read as annotation on the pane instead of as a second border.
+
+     Opt-in rather than automatic: on a 44px-tall control the marks crowd the
+     label, so they go on panes with room to carry them. */
+  .surface-marks::before,
+  .surface-marks::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    /* Style and colour for all four sides at zero width, so the rules below
+       only have to switch on the two sides each mark needs. Setting the sides
+       with the `border-top: 1px solid` shorthand instead would silently reset
+       the colour to currentColor and paint the marks in the text colour. */
+    border: 0 solid rgb(var(--accent-rgb) / 0.30);
+    transition: border-color 180ms ease;
+  }
+  .surface-marks::before {
+    top: 5px;
+    left: 5px;
+    border-top-width: 1px;
+    border-left-width: 1px;
+  }
+  .surface-marks::after {
+    bottom: 5px;
+    right: 5px;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+  }
+
+  /* Interactive state: the rule and the marks light up, and the pane steps up
+     by 2px. A step rather than a glide — the motion vocabulary here is
+     mechanical, and nothing glows. */
+  /* Hover lifts the pane and lights its corner marks. The fill deliberately
+     does NOT change: repainting a whole card on hover is a lot of movement for
+     a pointer passing over it, and the marks already say "this is live". */
+  .surface-hover {
+    transition: transform 180ms ease;
+  }
+  .surface-hover:hover {
+    transform: translateY(-2px);
+  }
+  .surface-hover:hover::before,
+  .surface-hover:hover::after {
+    border-color: rgb(var(--accent-rgb) / 0.85);
+  }
+
+  /* Small controls: chips, pills, icon buttons. No corner marks — at this size
+     they would collide with the label. */
+  .chip {
+    position: relative;
+    background: var(--surface-2);
+    transition: color 180ms ease, background-color 180ms ease;
+  }
+  .chip:hover {
+    background: rgb(var(--accent-rgb) / 0.14);
+  }
+
+  /* Navigation bar. The material is on a pseudo-element so it can fade in on
+     scroll without taking the logo and links with it.
+
+     This used to be a backdrop blur tuned to keep nav text at ~6:1 over a light
+     project card. An opaque bar removes that problem outright: the contrast is
+     now fixed and does not depend on what happens to be scrolling underneath.
+     The hard bottom rule is deliberate — a drawn edge is the right convention
+     here, where a dissolving one suited the glass. */
+  .nav-bar::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    border-radius: inherit;
     pointer-events: none;
-    background:
-      radial-gradient(120% 82% at 10% -12%, rgba(255, 255, 255, 0.14), transparent 56%),
-      radial-gradient(88% 68% at 102% -4%, rgba(1, 245, 209, 0.12), transparent 60%);
-  }
-
-  /* Interactive lensing — the pane thickens, brightens and lifts on hover. */
-  .glass-hover {
-    transition:
-      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 320ms ease,
-      backdrop-filter 320ms ease;
-    will-change: transform;
-  }
-  .glass-hover:hover {
-    transform: translateY(-3px);
-    border-color: rgba(1, 245, 209, 0.34);
-    backdrop-filter: blur(24px) saturate(190%);
-    -webkit-backdrop-filter: blur(24px) saturate(190%);
-    box-shadow:
-      0 30px 66px -26px rgba(1, 245, 209, 0.42),
-      inset 0 1px 0 rgba(255, 255, 255, 0.26),
-      inset 0 0 26px rgba(1, 245, 209, 0.08);
-  }
-
-  /* Navigation bar — thinner, wider-blur glass so page content reads through it. */
-  /* The nav's material lives on a pseudo-element, not on the <nav> itself, so
-     it can be masked away to nothing at the bottom without taking the logo and
-     links with it. Three separate things drew that hard line: a border-bottom,
-     a background that stopped dead at the element's edge (the backdrop blur
-     cutting off with it), and a drop shadow underneath. All three are gone —
-     the pane overhangs the bar and dissolves, because a fade needs somewhere
-     to happen. */
-  /* Frosted glass that takes its colour from whatever is behind it.
-
-     The darkening is done by brightness() inside the backdrop-filter, not by
-     an opaque fill. A fill *replaces* the backdrop — 80% of flat near-black
-     leaves a neutral grey bar whatever is underneath — whereas brightness()
-     scales the backdrop multiplicatively, so hue survives and only the level
-     drops. Over the Revela card the bar goes warm; over the purple one it goes
-     violet. The fill is then only a slight cool settling tint.
-
-     saturate() rather than brightness() carries the colour: raising brightness
-     to get more colour also raises the level behind the links, and that is the
-     one thing there is no headroom for. Measured against a white card — the
-     worst case, since blur cuts variance but not mean luminance — this lands
-     the nav text at ~6:1. brightness .58 looked richer but fell to ~4.75:1,
-     which only just clears AA, so the chroma comes from saturation instead. */
-  .glass-nav::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background: rgba(2, 6, 15, 0.16);
-    backdrop-filter: blur(20px) saturate(260%) brightness(0.46);
-    -webkit-backdrop-filter: blur(20px) saturate(260%) brightness(0.46);
-    /* Not painted at all at the top of the page: nothing is behind the bar
-       there, so the nav sits straight on the field. */
+    background: var(--ground);
+    border-bottom: 1px solid var(--rule);
+    /* Not painted at the top of the page: the bar sits straight on the ground
+       there, with nothing behind it to separate from. */
     opacity: 0;
-    transition: opacity 260ms ease;
+    transition: opacity 220ms ease;
   }
-  .glass-nav[data-scrolled='true']::before {
+  .nav-bar[data-scrolled='true']::before {
     opacity: 1;
   }
 
-  /* Small controls: chips, pills, icon buttons. Lighter blur, tighter rim. */
-  .glass-chip {
-    position: relative;
-    background:
-      linear-gradient(150deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
-      rgba(10, 16, 21, 0.4);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
-    transition: border-color 220ms ease, color 220ms ease, box-shadow 220ms ease,
-      transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .glass-chip:hover {
-    transform: translateY(-1px);
-    border-color: rgba(1, 245, 209, 0.5);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.24),
-      0 8px 20px -12px rgba(1, 245, 209, 0.5);
+  /* Full-bleed panes: the lightbox scrim and the footer. */
+  .scrim {
+    background: var(--ground);
   }
 
-  /* Project cards are glass panes on mobile, where the card is the surface. On
-     desktop the media tile itself carries the treatment, so the shell drops out. */
-  @media (min-width: 768px) {
-    .glass-mobile-only {
-      background: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      border-color: transparent;
-      box-shadow: none;
-    }
-    .glass-mobile-only::after {
-      display: none;
-    }
+  /* Mobile nav dropdown. */
+  .panel-solid {
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--rule);
   }
 
-  /* The project card is tall and its thumbnail covers the top half, so the
-     stock .glass sweep only ever shows its dim tail below the image — which
-     read as no gradient at all. These stops are pitched so the visible lower
-     half carries the cyan, and the pane sits clearly above the near-black page.
-     Mobile only: at md+ the card has no pane at all. */
-  @media (max-width: 767.98px) {
-    .glass-project {
-      background:
-        linear-gradient(
-          158deg,
-          rgba(255, 255, 255, 0.1) 0%,
-          rgba(255, 255, 255, 0.045) 40%,
-          rgba(1, 245, 209, 0.115) 100%
-        ),
-        rgba(22, 32, 38, 0.78);
-      /* No white top inset and no light border. .glass puts a 1px 16%-white
-         highlight and an 11%-white border exactly where the thumbnail's top and
-         side edges land, so on a fractional-DPR screen they rasterise as a white
-         hairline framing the image. The drop shadow and cyan base inset stay —
-         neither touches the image edge. */
-      border-color: transparent;
-      box-shadow:
-        0 18px 44px -22px rgba(0, 0, 0, 0.85),
-        inset 0 -1px 0 rgba(1, 245, 209, 0.07);
-    }
-    /* Sheen along the top edge of the text block, where the image ends, plus a
-       cyan glint in the far corner — the two highlights .glass normally puts at
-       the top of the pane, moved to where they can actually be seen. */
-    .glass-project::after {
-      background:
-        radial-gradient(130% 46% at 14% 44%, rgba(255, 255, 255, 0.13), transparent 60%),
-        radial-gradient(85% 62% at 104% 104%, rgba(1, 245, 209, 0.13), transparent 64%);
-    }
-  }
-
-  /* Full-bleed panes that blur real page content: lightbox scrim, the mobile
-     nav dropdown, the footer. The dropdown is rendered as a sibling of <nav>
-     rather than a child — <nav> has its own backdrop-filter, which makes it a
-     backdrop root, and a nested pane would have nothing to sample. */
-  .glass-scrim {
-    background: rgba(2, 6, 12, 0.72);
-    backdrop-filter: blur(30px) saturate(150%);
-    -webkit-backdrop-filter: blur(30px) saturate(150%);
-  }
-
-  /* Mobile nav dropdown — same material as the scrim but a denser tint, since
-     menu labels have to stay the most legible thing on screen. */
-  .glass-menu {
-    background: linear-gradient(180deg, rgba(6, 12, 17, 0.93), rgba(3, 7, 11, 0.89));
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.07),
-      0 26px 50px -30px rgba(0, 0, 0, 1);
-  }
-
-
-  /* Browsers without backdrop-filter get an opaque equivalent, otherwise the
-     panes read as barely-there tint over the ambient field. */
-}
-
-/* ------------------------------------------------------------------
-   Mobile effect budget.
-   The glass system is built from blurs, and blur is the single most
-   expensive thing a mobile GPU composites. Below md we keep the look
-   but cut the radii roughly in half, thin the grid to its major rules,
-   and park the wash drift. Desktop is untouched.
-   ------------------------------------------------------------------ */
-@media (max-width: 767px) {
-  /* The full board is too fine to read on a phone; scaling the tile up keeps
-     the same routing at a legible size and costs nothing extra to paint. */
-  .ambient-grid__rules {
-    background-size: 640px 640px;
-  }
-  .ambient-field::before {
-    animation: none;
-  }
-  .glass {
-    backdrop-filter: blur(10px) saturate(150%);
-    -webkit-backdrop-filter: blur(10px) saturate(150%);
-  }
-  .glass-chip {
-    backdrop-filter: blur(8px) saturate(140%);
-    -webkit-backdrop-filter: blur(8px) saturate(140%);
-  }
-  .glass-menu,
-  .glass-scrim {
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-  }
-  /* backdrop-filter is one property, so a shorter blur here would drop the
-     brightness() with it and leave the links sitting on an undarkened bar.
-     Only the blur radius is cut. */
-  .glass-nav::before {
-    backdrop-filter: blur(14px) saturate(260%) brightness(0.46);
-    -webkit-backdrop-filter: blur(14px) saturate(260%) brightness(0.46);
-  }
-}
-
-@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
-  .glass,
-  .glass-chip {
-    background: rgba(12, 19, 25, 0.94);
-  }
-  .glass-scrim {
-    background: rgba(2, 6, 12, 0.97);
-  }
-  /* No blur to hide what is behind it, so the tint carries the legibility. */
-  .glass-nav::before {
-    background: rgba(2, 6, 15, 0.94);
-  }
-}
-
-/* Users who ask for reduced transparency get solid, high-contrast panes. */
-@media (prefers-reduced-transparency: reduce) {
-  .glass,
-  .glass-chip {
-    background: #0c1319;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .glass::after {
-    display: none;
-  }
-  /* Opaque and always on here: this mode asked for no transparency. */
-  .glass-nav::before {
-    background: #04090e;
-    inset: 0;
-    opacity: 1;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .glass-menu {
-    background: #04090e;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .glass-scrim {
-    background: rgba(2, 6, 12, 0.98);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .glass-hover:hover {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .ambient-field {
-    display: none;
+  /* Schematic metadata: section indices, categories, eyebrows, chip text.
+     Retyped inline as `font-mono uppercase tracking-[...]` at half a dozen
+     sites before this existed. */
+  .label {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 }
 
 /* Respect the user's motion preference — collapse every custom motion to a short fade. */
 @media (prefers-reduced-motion: reduce) {
-  .ambient-field::before {
-    animation: none !important;
+  .chip {
+    transition: background-color 200ms ease;
   }
-  .glass-hover,
-  .glass-chip {
-    transition: border-color 200ms ease, box-shadow 200ms ease;
-  }
-  .glass-hover:hover,
-  .glass-chip:hover {
+  .surface-hover:hover,
+  .chip:hover {
     transform: none;
   }
   /* The glyph still becomes an X — it just snaps instead of morphing. */
@@ -769,15 +534,14 @@ label {
   }
   .accent-shimmer {
     background: none;
-    -webkit-text-fill-color: #01f5d1;
-    color: #01f5d1;
+    -webkit-text-fill-color: rgb(var(--accent-rgb));
+    color: rgb(var(--accent-rgb));
   }
   .card-glow {
-    transition: opacity 200ms ease, border-color 200ms ease;
+    transition: none;
   }
   .card-glow:hover {
     transform: none;
-    box-shadow: none;
   }
   .nav-underline {
     transition: none;

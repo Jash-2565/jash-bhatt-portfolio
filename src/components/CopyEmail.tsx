@@ -55,7 +55,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
       aria-label={copied ? 'Email copied to clipboard' : `Copy email address ${email}`}
       // Tighter below `lg` so the contact page fits a phone screen without
       // scrolling; desktop keeps the roomier padding.
-      className="glass relative flex items-center gap-4 p-4 lg:p-5 w-full h-full text-left rounded-2xl card-glow group overflow-hidden"
+      className="surface surface-marks relative flex items-center gap-4 p-4 lg:p-5 w-full h-full text-left rounded-2xl card-glow group overflow-hidden"
     >
       {ripple && (
         <span
@@ -65,23 +65,24 @@ export default function CopyEmail({ email }: CopyEmailProps) {
           onAnimationEnd={() => setRipple(null)}
         />
       )}
-      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-      <div className="shrink-0 p-2.5 lg:p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+      <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-accent/50 to-transparent rounded-sm" />
+      <div className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
         <Mail size={22} />
       </div>
       <div className="text-left min-w-0">
-        <p className="text-sm text-slate-400 font-medium flex items-center gap-1.5">
-          Email Me
-          {copied ? (
-            <Check size={13} className="text-[#01F5D1]" />
-          ) : (
-            <Copy size={13} className="text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-          )}
-        </p>
-        <p className="text-slate-100 font-semibold text-sm break-all sm:break-normal group-hover:text-[#01F5D1] transition-colors">
+        <p className="text-sm text-slate-400 font-medium">Email Me</p>
+        <p className="text-slate-100 font-semibold text-sm whitespace-nowrap group-hover:text-accent transition-colors">
           {copied ? 'Copied to clipboard!' : email}
         </p>
       </div>
+      {/* Trailing affordance, matching the arrow on the LinkedIn and Resume
+          cards. The check stays visible once copied — it is a confirmation,
+          not a hover hint. */}
+      {copied ? (
+        <Check size={18} className="ml-auto shrink-0 text-accent transition-all duration-300" />
+      ) : (
+        <Copy size={18} className="ml-auto shrink-0 text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
+      )}
     </button>
   );
 }

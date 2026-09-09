@@ -47,8 +47,8 @@ function Thumb({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl bg-white/5 border border-white/10 transition-all group ${
-        isVideo ? 'hover:border-white/25' : 'cursor-pointer hover:border-[#01F5D1]'
+      className={`relative overflow-hidden rounded-xl bg-white/5 transition-all group ${
+        isVideo ? 'hover:border-white/25' : 'cursor-pointer hover:border-accent'
       } hover:-translate-y-1 ${className}`}
       onClick={() => !isVideo && item.src && onImageClick(item.src)}
     >
@@ -141,7 +141,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         {/* Brand Animation Section */}
         <Reveal delay={120} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <ResponsiveImage
                 src={`${PUBLIC_URL}/images/Photoshop and Animation/after-effects.png`}
                 alt="After Effects icon"
@@ -153,7 +153,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           </div>
           <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
           <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
-          <div className="rounded-xl overflow-hidden border border-white/10 bg-white/5">
+          <div className="rounded-xl overflow-hidden bg-white/5">
             <video
               className="w-full h-auto"
               controls
@@ -170,7 +170,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         {/* Photoshop Section */}
         <Reveal delay={180} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="glass-chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <ResponsiveImage
                 src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
                 alt="Photoshop icon"
@@ -242,7 +242,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             Swift · AppKit · generated and hand-QA'd sprite pipeline
           </p>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-5 mb-5 md:mb-6">
+          <div className="rounded-xl bg-white/5 px-4 py-5 mb-5 md:mb-6">
             <div className="flex flex-wrap items-end justify-center gap-x-6 gap-y-4 sm:gap-x-10">
               {LEWIS_STRIP.map(({ animation, label }) => (
                 <div key={animation} className="flex flex-col items-center gap-2">
@@ -259,7 +259,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             {/* The atlas is portrait and narrow; an auto column keeps the panel
                 hugging it instead of stranding it in a wide empty frame. */}
             <div
-              className="relative flex justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5 p-3 cursor-pointer transition-all hover:border-[#01F5D1] hover:-translate-y-1 group"
+              className="relative flex justify-center overflow-hidden rounded-xl bg-white/5 p-3 cursor-pointer transition-all hover:border-accent hover:-translate-y-1 group"
               onClick={() => onImageClick(`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`)}
             >
               <ImageWithFallback

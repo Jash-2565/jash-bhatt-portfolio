@@ -2,13 +2,17 @@ import type { GalleryItem } from '../types';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 export const ui = {
-  btnBase: 'inline-flex items-center justify-center gap-2 min-h-12 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full font-medium transition-all duration-300',
-  btnPrimary: 'bg-[#01F5D1] text-black hover:bg-[#00D8B8] hover:shadow-[0_0_32px_-4px_rgba(1,245,209,0.55)] hover:-translate-y-0.5',
-  btnSecondary: 'glass glass-hover text-slate-100 hover:text-[#9EF7EA]',
-  cardBase: 'glass rounded-2xl',
-  cardHover: 'glass-hover',
-  chipBase: 'glass-chip px-3 py-1.5 text-sm font-medium text-slate-200 rounded-full hover:text-[#9EF7EA]',
-  chipAccent: 'glass-chip px-3 py-1.5 text-sm font-medium text-[#9EF7EA] rounded-full !border-[#01F5D1]/40',
+  // Controls are square-cornered and mono-labelled: the radius scale in
+  // tailwind.config.js tops out at 4px, so `rounded` here is 2px, not a pill.
+  btnBase: 'inline-flex items-center justify-center gap-2 min-h-12 px-6 py-3.5 sm:px-8 sm:py-4 rounded font-mono text-sm uppercase tracking-[0.08em] transition-all duration-200',
+  btnPrimary: 'bg-accent text-black hover:bg-accent-br hover:-translate-y-0.5',
+  // Filled rather than outlined: with .surface unoutlined a control needs the
+  // raised tone to read as a control against a --surface-1 pane.
+  btnSecondary: 'surface surface-hover !bg-[var(--surface-2)] text-slate-100 hover:text-accent-br',
+  cardBase: 'surface surface-marks rounded-sm',
+  cardHover: 'surface-hover',
+  chipBase: 'chip label px-2.5 py-1.5 text-slate-200 rounded-sm hover:text-accent-br',
+  chipAccent: 'chip label px-2.5 py-1.5 text-accent-br rounded-sm !bg-accent/10',
 
   // --- Shared layout rhythm -------------------------------------------------
   // Defined once so mobile spacing stays consistent across the home page and
@@ -58,5 +62,5 @@ export const gallerySnippetItems: GalleryItem[] = [
   { type: 'image', src: `${PUBLIC_URL}/images/Photography/flowers.webp`, alt: 'White flowers close-up' },
   { type: 'image', src: `${PUBLIC_URL}/images/Photography/fire-sunset.webp`, alt: 'City skyline at sunset' },
   { type: 'image', src: `${PUBLIC_URL}/images/Photography/sunrise-bird.webp`, alt: 'Sunrise over valley with bird' },
-  { type: 'image', src: `${PUBLIC_URL}/images/Photography/sunroof-water.webp`, alt: 'Water texture on glass' },
+  { type: 'image', src: `${PUBLIC_URL}/images/Photography/sunroof-water.webp`, alt: 'Water texture on surface' },
 ];

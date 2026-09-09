@@ -14,13 +14,13 @@ type Props = {
  * In a 20px box with 2px bars, 9px is the centre line.
  */
 export default function MenuIcon({ open }: Props) {
-  const bar = 'menu-glyph-bar absolute right-0 h-[2px] rounded-full transition-all duration-300 ease-out';
+  const bar = 'menu-glyph-bar absolute right-0 h-[2px] rounded-sm transition-all duration-300 ease-out';
 
   return (
     <span className="relative block h-5 w-6" aria-hidden="true">
       {/* Top — full width, accent. Becomes one stroke of the X. */}
       <span
-        className={`${bar} w-6 bg-[#01F5D1] ${open ? 'top-[9px] rotate-45' : 'top-[3px] rotate-0'}`}
+        className={`${bar} w-6 bg-accent ${open ? 'top-[9px] rotate-45' : 'top-[3px] rotate-0'}`}
       />
       {/* Middle — shortest bar. Fades so the X reads as two clean strokes. */}
       <span

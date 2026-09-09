@@ -13,7 +13,7 @@ const COCO_CLASSES = [
   'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack',
   'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball',
   'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket',
-  'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
+  'bottle', 'wine surface', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
   'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair',
   'couch', 'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse',
   'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink',
@@ -410,14 +410,14 @@ const YoloV8Demo = () => {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-700 bg-slate-900 shadow-sm p-4 lg:p-6">
+    <div className="rounded-2xl bg-[var(--surface-1)] shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <h4 className="text-lg font-semibold text-slate-100">Live Webcam Detection</h4>
           <p className="text-sm text-slate-400">Model: `public/models/yolov8s-int8.onnx`</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs uppercase tracking-widest text-emerald-300 bg-emerald-900/30 px-3 py-1 rounded-full">
+          <span className="text-xs uppercase tracking-widest text-emerald-300 bg-emerald-900/30 px-3 py-1 rounded-sm">
             {status}
           </span>
         </div>
@@ -426,11 +426,11 @@ const YoloV8Demo = () => {
 
       {/* Before the stream attaches the <video> has no intrinsic size, so the
           box (and the overlay pinned to it) would collapse to zero height. */}
-      <div className="relative rounded-xl overflow-hidden border border-slate-700 bg-slate-950 aspect-[4/3] sm:aspect-video">
+      <div className="relative rounded-xl overflow-hidden bg-[var(--ground)] aspect-[4/3] sm:aspect-video">
         <video ref={videoRef} className="w-full h-full object-cover block" muted playsInline />
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
         {!isRunning && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-950/70 px-6 text-center text-slate-200 text-sm">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[var(--ground)]/70 px-6 text-center text-slate-200 text-sm">
             <span>Run the demo to enable your camera</span>
             <span className="text-xs text-slate-400">
               Downloads an ~11&nbsp;MB model on first run
@@ -443,14 +443,14 @@ const YoloV8Demo = () => {
         <button
           type="button"
           onClick={handleToggle}
-          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold bg-slate-950 text-white hover:bg-slate-900 border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold bg-[var(--ground)] text-white hover:bg-[var(--surface-1)] disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {isRunning ? 'Pause Demo' : 'Run Demo'}
         </button>
         <button
           type="button"
           onClick={handleStop}
-          className="min-h-11 px-4 py-2 rounded-full text-sm font-semibold border border-slate-600 text-slate-200 hover:border-slate-400 transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:border-slate-400 transition"
         >
           Reset
         </button>

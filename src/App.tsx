@@ -17,7 +17,6 @@ import CursorGlow from './components/CursorGlow';
 import LewisPet from './components/LewisPet';
 import CopyEmail from './components/CopyEmail';
 import HeroParticles from './components/HeroParticles';
-import AmbientField from './components/AmbientField';
 import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
@@ -537,7 +536,7 @@ const App = () => {
     };
   }, [isMobile]);
 
-  // Nav glass condenses once content scrolls underneath it. Kept separate from
+  // Nav surface condenses once content scrolls underneath it. Kept separate from
   // the section-spy handler above, which bails out on manual scroll and on the
   // project view — the nav should thicken in both cases.
   useEffect(() => {
@@ -658,12 +657,12 @@ const App = () => {
        the screen — Contact — the footer sits at the bottom instead of floating
        with a band of dead background beneath it. Every other child here is
        fixed-position, so only the content wrapper and the footer are in flow. */
-    <div className="min-h-[100svh] flex flex-col bg-[#02060f] text-slate-100 selection:bg-[#01F5D1] selection:text-slate-950 transition-colors duration-300">
+    <div className="min-h-[100svh] flex flex-col bg-[var(--ground)] text-slate-100 selection:bg-accent selection:text-slate-950 transition-colors duration-300">
       <Analytics {...analyticsLocation(analyticsHash)} />
-      {/* Ambient field the glass panes refract: a drifting colour wash with a
-          blueprint grid ruled over it, the grid tracking scroll. Sits behind
-          everything; all page content is lifted above it with `relative z-10`. */}
-      <AmbientField />
+      {/* Static circuit-trace substrate. No wash, no drift, no scroll tracking —
+          it is structure, not atmosphere. Sits behind everything; all page
+          content is lifted above it with `relative z-10`. */}
+      <div className="schematic-ground" aria-hidden="true" />
       <CursorGlow />
       {/* Desktop only: on mobile it collided with the compacted footer, and the
           tab bar already scrolls the current page back to the top. */}
@@ -671,10 +670,9 @@ const App = () => {
       {/* The desktop pet, on the desktop layout only — he needs room to walk,
           and the mobile tab bar owns the bottom of the screen. */}
       {!isMobile && <LewisPet />}
-      <div className="grain-overlay" aria-hidden="true" />
       <a
         href="#home"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-full focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-lg"
       >
         Skip to content
       </a>
@@ -684,14 +682,14 @@ const App = () => {
           authored at 1600px wide) can actually be inspected on a phone. */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center glass-scrim animate-fade-in"
+          className="fixed inset-0 z-[60] flex items-center justify-center scrim animate-fade-in"
           onClick={() => setSelectedImage(null)}
           role="dialog"
           aria-modal="true"
           aria-label="Image preview"
         >
           <button
-            className={`glass-chip absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-10 flex items-center justify-center text-white rounded-full shadow-lg ${ui.tapTarget}`}
+            className={`chip absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-10 flex items-center justify-center text-white rounded-sm shadow-lg ${ui.tapTarget}`}
             onClick={() => setSelectedImage(null)}
             ref={lightboxCloseRef}
             aria-label="Close image preview"
@@ -717,16 +715,16 @@ const App = () => {
       )}
 
       {/* Navigation */}
-      <nav ref={navRef} data-scrolled={isScrolled} className="glass-nav fixed w-full z-50">
+      <nav ref={navRef} data-scrolled={isScrolled} className="nav-bar fixed w-full z-50">
         <div className={ui.shell}>
           <div className="flex justify-between items-center h-[var(--nav-h)]">
             <button
               type="button"
               onClick={() => scrollToSection('home')}
               aria-label="Back to top of page"
-              className="flex-shrink-0 -ml-2 px-2 flex items-center justify-center min-h-11 min-w-11 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]"
+              className="flex-shrink-0 -ml-2 px-2 flex items-center justify-center min-h-11 min-w-11 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              <span className="text-[1.85rem] md:text-[2.1rem] font-display tracking-tight text-[#01F5D1]">JB</span>
+              <span className="text-[1.85rem] md:text-[2.1rem] font-display tracking-tight text-accent">JB</span>
             </button>
 
             {/* Desktop Menu — `lg`, matching where the paged mobile layout
@@ -741,8 +739,8 @@ const App = () => {
                     className={`flex items-center min-h-11 text-base font-medium transition-colors duration-200 ${
                       // Explorations sits under Work, so Work stays marked there.
                       activeSection === item.toLowerCase() && isHomeNavContext
-                        ? 'text-[#01F5D1]'
-                        : 'text-slate-300 hover:text-[#9EF7EA]'
+                        ? 'text-accent'
+                        : 'text-slate-300 hover:text-accent-br'
                     }`}
                   >
                     {item}
@@ -762,7 +760,7 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-full border border-[#01F5D1] text-[#01F5D1] text-sm font-medium hover:bg-[#01F5D1] hover:text-slate-950 hover:shadow-[0_0_20px_-4px_rgba(1,245,209,0.6)] transition-all duration-300 whitespace-nowrap"
+                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent text-sm font-medium hover:bg-accent hover:text-slate-950 transition-all duration-200 whitespace-nowrap"
               >
                 {/* Spaced with `gap`, not a literal space: the arrow glyph has
                     almost no left side bearing, so a single space reads tight.
@@ -806,7 +804,7 @@ const App = () => {
             id="mobile-menu"
             ref={menuPanelRef}
             onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
-            className={`lg:hidden glass-menu border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe ${
+            className={`lg:hidden panel-solid border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe ${
               isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
             }`}
           >
@@ -822,15 +820,15 @@ const App = () => {
                     key={item}
                     onClick={() => scrollToSection(page)}
                     aria-current={isCurrent ? 'page' : undefined}
-                    className={`flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl transition-colors ${
+                    className={`flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl border-l-2 transition-colors ${
                       isCurrent
-                        ? 'text-[#01F5D1] bg-[#01F5D1]/10 border border-[#01F5D1]/30'
-                        : 'text-slate-200 border border-transparent active:bg-white/10'
+                        ? 'text-accent border-accent bg-accent/10'
+                        : 'text-slate-200 border-transparent active:bg-white/10'
                     }`}
                   >
                     {item}
                     {isCurrent && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#01F5D1]" aria-hidden="true" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
                     )}
                   </button>
                 );
@@ -840,7 +838,7 @@ const App = () => {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex w-full items-center gap-2 min-h-12 px-4 mt-1 text-lg font-medium text-[#01F5D1] rounded-xl border border-[#01F5D1]/30 active:bg-[#01F5D1]/10"
+                className="flex w-full items-center gap-2 min-h-12 px-4 mt-2 pt-4 border-t border-white/10 text-lg font-medium text-accent rounded-xl active:bg-white/10"
               >
                 <Download size={18} /> Resume
               </a>
@@ -889,7 +887,7 @@ const App = () => {
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
                   <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-                    <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
+                    <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
                       Open to remote internships
                     </span>
@@ -910,10 +908,10 @@ const App = () => {
 
                   {/* The accent rule replaces the old `>` prompt: it keeps the
                       line anchored to the left margin without the console idiom. */}
-                  <div className="flex items-center mb-5 lg:hidden min-h-[32px] border-l-2 border-[#01F5D1] pl-3 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                  <div className="flex items-center mb-5 lg:hidden min-h-[32px] border-l-2 border-accent pl-3 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                     <RotatingText
                       phrases={personalitySignals}
-                      className="text-base font-semibold text-[#9EF7EA]"
+                      className="text-base font-semibold text-accent-br"
                     />
                   </div>
 
@@ -922,10 +920,10 @@ const App = () => {
                       buttons repeating persistent navigation cost 142px for
                       nothing. Desktop keeps its CTAs — it has no tab bar. */}
 
-                  <div className="hidden lg:flex items-center mb-8 min-h-[36px] whitespace-nowrap border-l-2 border-[#01F5D1] pl-3.5 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
+                  <div className="hidden lg:flex items-center mb-8 min-h-[36px] whitespace-nowrap border-l-2 border-accent pl-3.5 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
                     <RotatingText
                       phrases={personalitySignals}
-                      className="text-lg font-semibold text-[#9EF7EA]"
+                      className="text-lg font-semibold text-accent-br"
                     />
                   </div>
 
@@ -960,7 +958,7 @@ const App = () => {
                 </div>
 
                 <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
-                  <div className="glass glass-hover max-w-[324px] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
+                  <div className="surface surface-marks surface-hover max-w-[324px] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
                     <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
                       <ResponsiveImage
                         src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
@@ -978,7 +976,7 @@ const App = () => {
               <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
                 {operatorStats.map((stat, i) => (
                   <Reveal key={stat.label} delay={i * 90} duration={600} className="h-full">
-                    <div className="glass glass-hover rounded-2xl p-6 h-full">
+                    <div className="surface surface-marks surface-hover rounded-2xl p-6 h-full">
                       {/* These values are phrases, not numbers, and at 2.2rem all
                           three wrapped with a single orphaned word on line two.
                           Sized to hold one line instead. The tightest is
@@ -1012,7 +1010,7 @@ const App = () => {
               {/* 19rem wide with a 4:5 crop — the 3:4 card at full width ran
                   558px. object-top keeps the head anchored so the tighter box
                   crops from the bottom rather than the face. */}
-              <Reveal className="glass w-full max-w-[19rem] mx-auto rounded-3xl p-4 mb-6">
+              <Reveal className="surface surface-marks w-full max-w-[19rem] mx-auto rounded-3xl p-4 mb-6">
                 <div className="rounded-2xl overflow-hidden aspect-[4/5]">
                   <ResponsiveImage
                     src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
@@ -1065,7 +1063,7 @@ const App = () => {
                 </div>
                 <button
                   onClick={() => scrollToSection('work')}
-                  className="shrink-0 inline-flex items-center justify-end gap-1 min-h-11 min-w-11 px-2 -mr-2 text-sm font-medium text-[#01F5D1] active:text-[#9EF7EA]"
+                  className="shrink-0 inline-flex items-center justify-end gap-1 min-h-11 min-w-11 px-2 -mr-2 text-sm font-medium text-accent active:text-accent-br"
                 >
                   All <ArrowRight size={15} />
                 </button>
@@ -1081,9 +1079,9 @@ const App = () => {
                         type="button"
                         onClick={() => handleProjectClick(project)}
                         aria-label={`Open case study for ${project.title}`}
-                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
+                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
-                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 ${containedBackdrop ?? 'bg-white/5'}`}>
+                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-white/5'}`}>
                           {!thumbnail.includes('placeholder') ? (
                             <ResponsiveImage
                               src={thumbnail}
@@ -1100,7 +1098,7 @@ const App = () => {
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
-                          <h3 className="mt-1 text-base font-bold text-slate-100 group-active:text-[#01F5D1] transition-colors">{project.title}</h3>
+                          <h3 className="mt-1 text-base font-bold text-slate-100 group-active:text-accent transition-colors">{project.title}</h3>
                         </div>
                         <ArrowRight size={18} className="shrink-0 text-slate-600" />
                       </button>
@@ -1127,7 +1125,7 @@ const App = () => {
               <h2 className={`${ui.h2} font-display text-slate-100 mb-3 md:mb-4`}>Selected Projects</h2>
               <p className="text-slate-300 max-w-2xl mb-5 md:mb-6">From circuit-led builds to AI-enabled interfaces — each project reflects how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" delay={180} duration={700}>
-                <div className="h-1 w-24 bg-gradient-to-r from-[#01F5D1] to-[#00A19B] rounded-full"></div>
+                <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
             </Reveal>
 
@@ -1155,7 +1153,9 @@ const App = () => {
                 return (
                   <Reveal
                     key={project.id}
-                    variant={index % 2 === 1 ? 'slide-right' : 'slide-left'}
+                    // Alternating draw direction, so the grid reads as being
+                    // ruled in rather than as one uniform sweep.
+                    variant={index % 2 === 1 ? 'wipe-left' : 'wipe-right'}
                     delay={Math.min(index * 60, 240)}
                     duration={700}
                   >
@@ -1166,7 +1166,7 @@ const App = () => {
                     // transparent, so tapping made a green outline appear from
                     // nowhere. focus-visible stays — that ring is the keyboard
                     // indicator and does not fire on pointer clicks.
-                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1] focus-visible:ring-offset-4 rounded-2xl overflow-hidden glass glass-mobile-only glass-project md:overflow-visible md:rounded-none"
+                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
                     role="button"
                     tabIndex={0}
                     aria-label={`Open case study for ${project.title}`}
@@ -1184,10 +1184,11 @@ const App = () => {
                       <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                         <TiltCard>
                         <div
-                          // Top corners rounded on the tile itself rather than
-                          // relying on the card's overflow clip: 15px nests
-                          // inside the card's 16px radius over its 1px border.
-                          className={`card-media relative overflow-hidden rounded-t-[15px] md:rounded-2xl ${needsBackdrop ? project.color : ''} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
+                          // Radius lives on the tile rather than on the card's
+                          // overflow clip: WebKit does not clip a composited
+                          // descendant (the parallax layer) to an ancestor's
+                          // border-radius, so the tile has to round itself.
+                          className={`card-media relative overflow-hidden rounded-2xl ${needsBackdrop ? project.color : ''} aspect-[16/10] md:aspect-[4/3] shadow-sm card-glow`}
                           onMouseMove={handleCardMouseMove}
                           onMouseLeave={handleCardMouseLeave}
                         >
@@ -1228,10 +1229,10 @@ const App = () => {
                             long as "UI Design Internship / Design Systems". */}
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 md:gap-x-4 mb-3 md:mb-5">
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-                          <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-[#01F5D1]/50 to-transparent" />
+                          <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-accent/50 to-transparent" />
                           <span className="text-slate-400 text-[0.6rem] md:text-xs font-mono uppercase tracking-[0.08em] md:tracking-[0.2em]">{project.category}</span>
                           {project.content.sections.some((section) => section.demoId) && (
-                            <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-full border border-[#01F5D1]/45 bg-[#01F5D1]/10 text-[#9EF7EA] text-[0.6rem] md:text-[0.65rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6rem] md:text-[0.65rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
                               <span className="pulse-dot" aria-hidden="true" />
                               Try it live
                             </span>
@@ -1280,7 +1281,7 @@ const App = () => {
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Also worth a look</p>
                 <h2 className={`${ui.h2} font-display text-slate-100`}>More work</h2>
                 <Reveal variant="grow-width" delay={180} duration={700}>
-                  <div className="mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-[#01F5D1] to-[#00A19B]"></div>
+                  <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
                 </Reveal>
               </Reveal>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1294,9 +1295,9 @@ const App = () => {
                         id={`project-${project.id}`}
                         onClick={() => handleProjectClick(project)}
                         aria-label={`Open case study for ${project.title}`}
-                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#01F5D1]`}
+                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
-                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-white/10 ${containedBackdrop ?? 'bg-white/5'}`}>
+                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-white/5'}`}>
                           {!thumbnail.includes('placeholder') ? (
                             <ResponsiveImage
                               src={thumbnail}
@@ -1313,15 +1314,15 @@ const App = () => {
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
-                          <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-[#01F5D1] transition-colors">{project.title}</h3>
+                          <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-accent transition-colors">{project.title}</h3>
                         </div>
                         {project.content.sections.some((section) => section.demoId) && (
-                          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-full border border-[#01F5D1]/45 bg-[#01F5D1]/10 text-[#9EF7EA] text-[0.6rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
                             <span className="pulse-dot" aria-hidden="true" />
                             Try it live
                           </span>
                         )}
-                        <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-[#01F5D1] group-hover:translate-x-1 transition-all duration-300" />
+                        <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
                       </button>
                     </Reveal>
                   );
@@ -1342,10 +1343,10 @@ const App = () => {
                 >
                   <div className="min-w-0 flex-1">
                     <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Beyond case studies</p>
-                    <h3 className="mt-1.5 font-display text-xl text-slate-100 group-active:text-[#01F5D1]">Creative Explorations</h3>
+                    <h3 className="mt-1.5 font-display text-xl text-slate-100 group-active:text-accent">Creative Explorations</h3>
                     <p className="mt-1.5 text-sm text-slate-400">Photoshop, brand motion, AI generations, and photography.</p>
                   </div>
-                  <ArrowRight size={20} className="shrink-0 text-[#01F5D1]" />
+                  <ArrowRight size={20} className="shrink-0 text-accent" />
                 </button>
               </Reveal>
             </section>
@@ -1373,13 +1374,13 @@ const App = () => {
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
-                        <Briefcase size={20} className="text-[#01F5D1]" />
+                        <Briefcase size={20} className="text-accent" />
                         <h4 className="text-xl font-semibold tracking-tight text-slate-100">Design</h4>
                       </div>
                       <PipeList
                         items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design Systems', 'Industrial Design']}
                         flow="column"
-                        className="text-sm font-medium text-[#9EF7EA]"
+                        className="text-sm font-medium text-accent-br"
                       />
                     </div>
 
@@ -1403,29 +1404,29 @@ const App = () => {
                   their rules line up. They stack in this order on a phone. */}
               <Reveal delay={200}>
                 <div className="mt-10 md:mt-16 grid md:grid-cols-2 gap-8 md:gap-16">
-                  <div className="border-l-2 border-[#00A19B] pl-4">
+                  <div className="border-l-2 border-accent-deep pl-4">
                     <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Experience</div>
                     <div className="space-y-4 md:space-y-6">
                       <div>
                         <h4 className="text-lg font-bold text-slate-100">Design &amp; Development Intern</h4>
                         <p className="text-slate-300 font-medium">Bajaj Finance · Agentic AI Unit</p>
-                        <p className="text-sm text-[#00A19B] font-medium mt-1">Summer 2026</p>
+                        <p className="text-sm text-accent-deep font-medium mt-1">Summer 2026</p>
                       </div>
                       <div>
                         <h4 className="text-lg font-bold text-slate-100">UI Design Intern</h4>
                         <p className="text-slate-300 font-medium">RAHI Platform Technologies</p>
-                        <p className="text-sm text-[#00A19B] font-medium mt-1">Summer 2025</p>
+                        <p className="text-sm text-accent-deep font-medium mt-1">Summer 2025</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="border-l-2 border-[#00A19B] pl-4">
+                  <div className="border-l-2 border-accent-deep pl-4">
                     <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</div>
                     <div className="space-y-4 md:space-y-6">
                       <div>
                         <h4 className="text-lg font-bold text-slate-100">Bachelor of Design (B.Des)</h4>
                         <p className="text-slate-300 font-medium">FLAME University</p>
-                        <p className="text-sm text-[#00A19B] font-medium mt-1">2023 – 2027</p>
+                        <p className="text-sm text-accent-deep font-medium mt-1">2023 – 2027</p>
                       </div>
                       <div className="opacity-80">
                         <h4 className="text-base font-medium text-slate-300">Cambridge International Education</h4>
@@ -1452,13 +1453,13 @@ const App = () => {
                   <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
                     I am actively looking for internship opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
                   </p>
-                  <span className="glass-chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full !border-[#01F5D1]/40 !bg-[#01F5D1]/10 text-[#9EF7EA] text-sm font-medium">
+                  <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
                     <span className="pulse-dot" aria-hidden="true" />
                     Currently available — Remote
                   </span>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                <div className="grid grid-cols-1 gap-4 w-full max-w-[26rem]">
                   <Reveal delay={80} className="h-full">
                     <Magnetic className="h-full">
                       <CopyEmail email="jash.bhatt@flame.edu.in" />
@@ -1467,32 +1468,32 @@ const App = () => {
 
                   <Reveal delay={160} className="h-full">
                     <Magnetic className="h-full">
-                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
-                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                        <div className="shrink-0 p-2.5 lg:p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="surface surface-marks relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
+                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-accent/50 to-transparent rounded-sm" />
+                        <div className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                           <Linkedin size={22} />
                         </div>
                         <div className="text-left">
                           <p className="text-sm text-slate-400 font-medium">LinkedIn</p>
-                          <p className="text-slate-100 font-semibold text-sm group-hover:text-[#01F5D1] transition-colors">/in/jash-bhatt</p>
+                          <p className="text-slate-100 font-semibold text-sm group-hover:text-accent transition-colors">/in/jash-bhatt</p>
                         </div>
-                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#01F5D1] transition-all duration-300" />
+                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
                       </a>
                     </Magnetic>
                   </Reveal>
 
                   <Reveal delay={240} className="h-full">
                     <Magnetic className="h-full">
-                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="glass relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
-                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-[#01F5D1]/50 to-transparent rounded-full" />
-                        <div className="shrink-0 p-2.5 lg:p-3 bg-[#00A19B]/25 text-[#9EF7EA] rounded-full transition-all duration-300 group-hover:bg-[#01F5D1] group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="surface surface-marks relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
+                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-accent/50 to-transparent rounded-sm" />
+                        <div className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
                           <Download size={22} />
                         </div>
                         <div className="text-left">
                           <p className="text-sm text-slate-400 font-medium">Resume</p>
-                          <p className="text-slate-100 font-semibold text-sm group-hover:text-[#01F5D1] transition-colors">Download PDF</p>
+                          <p className="text-slate-100 font-semibold text-sm group-hover:text-accent transition-colors">Download PDF</p>
                         </div>
-                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#01F5D1] transition-all duration-300" />
+                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
                       </a>
                     </Magnetic>
                   </Reveal>
@@ -1516,7 +1517,7 @@ const App = () => {
             <Reveal className="mb-10 sm:mb-14">
               <button
                 onClick={() => scrollToSection('work')}
-                className="inline-flex items-center gap-1.5 -ml-1 mb-2 min-h-11 pr-3 pl-1 text-sm font-medium text-slate-400 hover:text-[#01F5D1] active:text-[#01F5D1] transition-colors"
+                className="inline-flex items-center gap-1.5 -ml-1 mb-2 min-h-11 pr-3 pl-1 text-sm font-medium text-slate-400 hover:text-accent active:text-accent transition-colors"
               >
                 <ArrowLeft size={16} /> Work
               </button>
@@ -1526,7 +1527,7 @@ const App = () => {
                 Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
               </p>
               <Reveal variant="grow-width" delay={180} duration={700}>
-                <div className="mt-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#01F5D1] to-[#00A19B]"></div>
+                <div className="mt-5 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
               </Reveal>
             </Reveal>
             <CreativeExplorations onImageClick={setSelectedImage} showDivider={false} />
@@ -1558,7 +1559,7 @@ const App = () => {
       {/* One compact footer at every width — no wordmark (the header already
           carries it) and a single line of type. It was 151px of chrome for one
           credit line on desktop. */}
-      <footer className="relative z-10 mt-auto glass-scrim border-t border-white/10 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
+      <footer className="relative z-10 mt-auto scrim border-t border-white/10 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
         <div className={ui.shell}>
           <p className="text-slate-500 text-xs">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
         </div>
