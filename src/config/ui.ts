@@ -42,7 +42,7 @@ export const personalitySignals = [
 
 export const operatorStats = [
   { label: 'Currently', value: 'B.Des · FLAME University' },
-  { label: 'Last Internship', value: 'Agentic AI · Bajaj Finance' },
+  { label: 'Last Role', value: 'Agentic AI · Bajaj Finance' },
   { label: 'Status', value: 'Available for work' },
 ];
 

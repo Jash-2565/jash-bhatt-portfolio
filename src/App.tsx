@@ -899,7 +899,7 @@ const App = () => {
                   <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                     <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
-                      Open to internships
+                      Open to Work
                     </span>
                   </div>
                   <h1 className={`${ui.h1} font-display text-slate-100 mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
@@ -1460,7 +1460,7 @@ const App = () => {
                 <Reveal>
                   <h2 className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
                   <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
-                    I am actively looking for internship opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
+                    I am actively looking for opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
                   </p>
                   <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
                     <span className="pulse-dot" aria-hidden="true" />
