@@ -1471,7 +1471,7 @@ const App = () => {
                 <div className="grid grid-cols-1 gap-4 w-full max-w-[26rem]">
                   <Reveal delay={80} className="h-full">
                     <Magnetic className="h-full">
-                      <CopyEmail email="jash.bhatt@flame.edu.in" />
+                      <CopyEmail email="jashbhatt.contact@gmail.com" />
                     </Magnetic>
                   </Reveal>
 
