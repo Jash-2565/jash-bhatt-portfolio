@@ -22,8 +22,13 @@ export const ui = {
   section: 'py-14 sm:py-20 lg:py-24',
   scrollMt: 'scroll-mt-20 md:scroll-mt-28',
   /** Mobile ceiling is lower than the type scale would suggest: the paged hero
-      has to fit one screen minus the header and the bottom tab bar. */
-  h1: 'text-[clamp(1.6rem,6.4vw,2.6rem)] md:text-[4.2rem] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
+      has to fit one screen minus the header and the bottom tab bar.
+      Above md the size is fluid rather than a flat 4.2rem. Fixed, it took no
+      account of how narrow the hero column gets between md and full desktop:
+      at 1024 the column is 605px, and the headline ran to seven lines there
+      while fitting in five on a 1440. The ceiling is still 4.2rem, so anything
+      from ~1344px up renders exactly as before. */
+  h1: 'text-[clamp(1.6rem,6.4vw,2.6rem)] md:text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
   h2: 'text-[1.75rem] sm:text-3xl md:text-4xl',
   /** 44px minimum touch target, per WCAG 2.2 target-size guidance. */
   tapTarget: 'min-h-11 min-w-11',
