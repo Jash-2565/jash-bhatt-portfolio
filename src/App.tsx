@@ -436,7 +436,7 @@ const App = () => {
 
     const defaultTitle = 'Jash Bhatt | Product Designer & Design Engineer';
     const defaultDescription =
-      'I design and build tech products that blend hardware, software, and human behavior.';
+      'I design and build intelligent products that combine AI, software, and human-centered interaction.';
     document.title = defaultTitle;
     setMeta('meta[name="description"]', defaultDescription);
     setMeta('meta[property="og:title"]', defaultTitle);
@@ -903,7 +903,7 @@ const App = () => {
                     </span>
                   </div>
                   <h1 className={`${ui.h1} font-display text-slate-100 mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
-                    I design and build <span className="accent-shimmer font-semibold">tech products</span> that blend hardware, software, and human behavior.
+                    I design and build <span className="accent-shimmer font-semibold">intelligent products</span> that combine AI, software, and human-centered interaction.
                   </h1>
                   <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-4 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
                     {/* Two different good breaks at two widths, so the rules differ.
