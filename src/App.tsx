@@ -899,7 +899,7 @@ const App = () => {
                   <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                     <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
-                      Open to remote internships
+                      Open to internships
                     </span>
                   </div>
                   <h1 className={`${ui.h1} font-display text-slate-100 mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
@@ -989,10 +989,9 @@ const App = () => {
                     <div className="surface surface-marks surface-hover rounded-2xl p-6 h-full">
                       {/* These values are phrases, not numbers, and at 2.2rem all
                           three wrapped with a single orphaned word on line two.
-                          Sized to hold one line instead. The tightest is
-                          "Available for remote work", which caps the ramp at
-                          1.75vw (it needs <=1.82vw in a 249px card at the `lg`
-                          boundary) and the ceiling at 1.6rem, since the 84rem
+                          Sized to hold one line instead. The binding value is
+                          "Agentic AI · Bajaj Finance", which caps the ramp at
+                          1.75vw and the ceiling at 1.6rem, since the 84rem
                           shell stops widening the card at 357px.
                           Re-measure if any operatorStats value gets longer. */}
                       <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-slate-100 [text-wrap:balance]">{stat.value}</div>
@@ -1465,7 +1464,7 @@ const App = () => {
                   </p>
                   <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
                     <span className="pulse-dot" aria-hidden="true" />
-                    Currently available — Remote
+                    Currently available
                   </span>
                 </Reveal>
 
