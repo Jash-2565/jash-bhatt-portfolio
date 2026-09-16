@@ -36,12 +36,15 @@
     <text x="42" y="25" font-size="15" font-weight="600" fill="#9ec8ff" letter-spacing="0.5">BAJAJ FINANCE · AGENTIC AI UNIT</text>
   </g>
 
-  <!-- headline -->
-  <text x="96" y="290" font-size="104" font-weight="700" fill="#F1F5F9" letter-spacing="-1">HR Genie</text>
-  <text x="98" y="340" font-size="26" font-weight="500" fill="#93A9C8">Designing Autonomous Agents for Enterprise HR</text>
+  <!-- headline. No "HR Genie" wordmark: the case study's H1 sits directly above
+       this image, so the cover leads with what the project does instead. -->
+  <text x="96" y="236" font-size="58" font-weight="700" fill="#F1F5F9" letter-spacing="-0.5">
+    <tspan x="96" dy="0">Designing autonomous agents</tspan>
+    <tspan x="96" dy="70">for enterprise HR</tspan>
+  </text>
 
   <text x="98" y="410" font-size="19" fill="#7C93B8" font-weight="400">
-    <tspan x="98" dy="0">Conversational agents that replace CHROMA's form-based HR</tspan>
+    <tspan x="98" dy="0">Conversational agents that replace form-based HR</tspan>
     <tspan x="98" dy="30">workflows for a workforce of thousands.</tspan>
   </text>
 
@@ -102,5 +105,5 @@
     <circle cx="200" cy="200" r="4" fill="#01F5D1"/>
   </g>
 
-  <text x="1478" y="856" text-anchor="end" font-size="14" fill="#3E5478" font-weight="500">Summer Internship (SIP-2) · 2026</text>
+  <text x="1478" y="856" text-anchor="end" font-size="14" fill="#3E5478" font-weight="500">Summer Internship · 2026</text>
 </svg>

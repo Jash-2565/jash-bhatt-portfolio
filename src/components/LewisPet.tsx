@@ -44,10 +44,30 @@ const IDLE_DELAY_MAX = 8;
 
 const STORAGE_KEY = 'lewis-pet-dismissed';
 
+/** Mirrors `ui.shell` (max-w-[84rem], lg:px-12): the right edge of the content
+    column, centred in the viewport. Past it is gutter he can walk in without
+    covering text. */
+const SHELL_MAX_W = 1344;
+const SHELL_PAD = 48;
+const contentRightEdge = () =>
+  (window.innerWidth + Math.min(window.innerWidth, SHELL_MAX_W)) / 2 - SHELL_PAD;
+
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min);
 
-export default function LewisPet() {
+type LewisPetProps = {
+  /** Keep to the gutter right of the content column. For reading pages, where
+      walking the full width would carry him across body copy. */
+  gutterOnly?: boolean;
+};
+
+export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
   const petRef = useRef<HTMLDivElement>(null);
+  // Read by the loop every frame, so switching pages re-bounds him in place
+  // instead of restarting the effect and snapping him back to the dock.
+  const gutterOnlyRef = useRef(gutterOnly);
+  useEffect(() => {
+    gutterOnlyRef.current = gutterOnly;
+  }, [gutterOnly]);
   const enabled = usePointerFine();
   const [dismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -94,6 +114,14 @@ export default function LewisPet() {
 
     const maxX = () =>
       Math.max(EDGE_MARGIN, window.innerWidth - PET_W - BACK_TO_TOP_KEEPOUT);
+    /** In gutter mode, the gutter's left edge — or maxX when the gutter is too
+        narrow to hold him, which parks him beside the back-to-top button. */
+    const minX = () => {
+      if (!gutterOnlyRef.current) return EDGE_MARGIN;
+      return Math.min(maxX(), contentRightEdge() + EDGE_MARGIN);
+    };
+    /** Too little room to take a step: he stays put and only emotes. */
+    const canWalk = () => maxX() - minX() >= PET_W;
 
     const play = (next: AnimationName) => {
       animation = next;
@@ -109,7 +137,7 @@ export default function LewisPet() {
     };
 
     const walkTo = (target: number) => {
-      const clamped = Math.max(EDGE_MARGIN, Math.min(maxX(), target));
+      const clamped = Math.max(minX(), Math.min(maxX(), target));
       walkTarget = clamped;
       play(clamped < x ? 'runningLeft' : 'runningRight');
     };
@@ -118,7 +146,10 @@ export default function LewisPet() {
         a pet that only ever emotes in place looks stuck. */
     const decide = () => {
       const roll = Math.random();
-      if (roll < 0.55) walkTo(randomBetween(EDGE_MARGIN, maxX()));
+      if (roll < 0.55) {
+        if (canWalk()) walkTo(randomBetween(minX(), maxX()));
+        else rest();
+      }
       else if (roll < 0.7) play('waving');
       else if (roll < 0.82) play('jumping');
       else if (roll < 0.93) play('waiting');
@@ -172,8 +203,11 @@ export default function LewisPet() {
 
       // Corrected here rather than on a resize listener: the window can narrow
       // mid-stride, and the next frame puts him back in bounds regardless.
+      // The same goes for entering gutter mode: he walks himself back out of
+      // the content column rather than jumping.
       const limit = maxX();
       if (x > limit) x = limit;
+      if (walkTarget === null && animation === 'idle' && x < minX()) walkTo(minX());
 
       if (x !== drawnX) {
         drawnX = x;
@@ -243,7 +277,7 @@ export default function LewisPet() {
           setDismissed(true);
         }}
         aria-label="Send Lewis away"
-        className={`absolute -top-1 -right-1 pointer-events-auto grid h-5 w-5 place-items-center rounded-full bg-black/70 text-[11px] leading-none text-slate-300 ring-1 ring-white/20 transition-opacity hover:text-white ${
+        className={`absolute -top-2 -right-2 pointer-events-auto grid h-7 w-7 place-items-center rounded-full bg-black/70 text-sm leading-none text-slate-300 ring-1 ring-white/20 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
           hovered ? 'opacity-100' : 'opacity-0'
         }`}
       >

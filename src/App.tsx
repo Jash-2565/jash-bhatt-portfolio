@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import {
-  X, Linkedin, ArrowRight, ArrowUpRight, ArrowLeft,
+  X, Linkedin, ArrowRight, ArrowLeft,
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
 } from 'lucide-react';
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
@@ -16,6 +16,7 @@ import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
 import LewisPet from './components/LewisPet';
 import CopyEmail from './components/CopyEmail';
+import ContactLinkCard from './components/ContactLinkCard';
 import HeroParticles from './components/HeroParticles';
 import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
@@ -280,6 +281,15 @@ const App = () => {
     openProject(project);
   };
 
+  /** Cards are real links so they can be opened in a new tab or copied. A plain
+      click still runs the in-page transition; a modified click is left to the
+      browser, which loads the hash and lands on the same view via parseHash. */
+  const onInPageLink = (event: React.MouseEvent<HTMLAnchorElement>, open: () => void) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    open();
+  };
+
   const handleBackToHome = (options?: { updateHistory?: boolean; sectionId?: string }) => {
     const sectionId = options?.sectionId ?? 'work';
 
@@ -434,7 +444,7 @@ const App = () => {
       return;
     }
 
-    const defaultTitle = 'Jash Bhatt | Product Designer & Design Engineer';
+    const defaultTitle = 'Jash Bhatt | Product Designer & Agentic AI Designer';
     const defaultDescription =
       'I design and build intelligent products that combine AI, software, and human-centered interaction.';
     document.title = defaultTitle;
@@ -674,12 +684,12 @@ const App = () => {
           content is lifted above it with `relative z-10`. */}
       <div className="schematic-ground" aria-hidden="true" />
       <CursorGlow />
-      {/* Desktop only: on mobile it collided with the compacted footer, and the
-          tab bar already scrolls the current page back to the top. */}
-      {!isMobile && <BackToTop />}
-      {/* The desktop pet, on the desktop layout only — he needs room to walk,
-          and the mobile tab bar owns the bottom of the screen. */}
-      {!isMobile && <LewisPet />}
+      {/* Every width: the mobile nav is a hamburger menu, so nothing else takes
+          a long page back to the top. */}
+      <BackToTop />
+      {/* The desktop pet, on the desktop layout only — he needs room to walk.
+          Off the home page he keeps to the gutter beside the content column. */}
+      {!isMobile && <LewisPet gutterOnly={currentView !== 'home'} />}
       <a
         href="#home"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-lg"
@@ -738,7 +748,7 @@ const App = () => {
             </button>
 
             {/* Desktop Menu — `lg`, matching where the paged mobile layout
-                ends. At `md` it would double up with the bottom tab bar. */}
+                ends; below it the hamburger menu takes over. */}
             <div className="hidden lg:flex items-center gap-4">
               <div ref={navItemsRef} className="relative flex flex-nowrap items-center gap-8 whitespace-nowrap">
                 {['Home', 'Work', 'About', 'Contact'].map((item) => (
@@ -770,7 +780,7 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent text-sm font-medium hover:bg-accent hover:text-slate-950 transition-all duration-200 whitespace-nowrap"
+                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent font-mono text-xs uppercase tracking-[0.08em] hover:bg-accent hover:text-slate-950 transition-all duration-200 whitespace-nowrap"
               >
                 {/* Spaced with `gap`, not a literal space: the arrow glyph has
                     almost no left side bearing, so a single space reads tight.
@@ -897,7 +907,7 @@ const App = () => {
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
                   <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-                    <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
+                    <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm text-slate-200 text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
                       Open to Work
                     </span>
@@ -912,7 +922,7 @@ const App = () => {
                         whole and the break lands on the comma; below md it needs
                         three lines, where locking the clause left a short ragged
                         middle line, so it wraps freely there instead. */}
-                    I'm <span className="accent-shimmer font-semibold">Jash Bhatt</span> — product designer and agentic&nbsp;AI developer,{' '}
+                    I'm <span className="font-semibold text-slate-100">Jash Bhatt</span> — product designer and agentic&nbsp;AI designer,{' '}
                     <span className="md:whitespace-nowrap">studying at FLAME&nbsp;University.</span>
                   </p>
 
@@ -921,19 +931,14 @@ const App = () => {
                   <div className="flex items-center mb-5 lg:hidden min-h-[32px] border-l-2 border-accent pl-3 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                     <RotatingText
                       phrases={personalitySignals}
-                      className="text-base font-semibold text-accent-br"
+                      className="text-base font-semibold text-slate-200"
                     />
                   </div>
-
-                  {/* No mobile CTAs: the tab bar already offers Work and Contact
-                      one tap away, and Resume is a pill in the header. Three
-                      buttons repeating persistent navigation cost 142px for
-                      nothing. Desktop keeps its CTAs — it has no tab bar. */}
 
                   <div className="hidden lg:flex items-center mb-8 min-h-[36px] whitespace-nowrap border-l-2 border-accent pl-3.5 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
                     <RotatingText
                       phrases={personalitySignals}
-                      className="text-lg font-semibold text-accent-br"
+                      className="text-lg font-semibold text-slate-200"
                     />
                   </div>
 
@@ -978,7 +983,6 @@ const App = () => {
                         fetchPriority="high"
                       />
                     </div>
-                    <p className="text-xs uppercase tracking-[0.1em] text-slate-400 mt-4 px-1">Design Student · FLAME University</p>
                   </div>
                 </div>
               </div>
@@ -994,8 +998,8 @@ const App = () => {
                           1.75vw and the ceiling at 1.6rem, since the 84rem
                           shell stops widening the card at 357px.
                           Re-measure if any operatorStats value gets longer. */}
+                      <div className="text-xs uppercase tracking-[0.16em] text-slate-400 mb-1.5">{stat.label}</div>
                       <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-slate-100 [text-wrap:balance]">{stat.value}</div>
-                      <div className="text-sm text-slate-300 mt-1">{stat.label}</div>
                     </div>
                   </Reveal>
                 ))}
@@ -1031,16 +1035,10 @@ const App = () => {
                     sizes="304px"
                   />
                 </div>
-                {/* Ceilings are lower than the old full-width card allowed:
-                    this card is a fixed 19rem above 344px, so the vw ramp
-                    must stop where the text still fits 304px rather than
-                    keep growing with the viewport. 11px holds the caption
-                    on one line (12px needed 276px of a 270px box). */}
-                <p className="text-[clamp(0.625rem,3.2vw,0.6875rem)] uppercase tracking-[0.1em] text-slate-400 mt-3 px-1">Design Student · FLAME University</p>
               </Reveal>
 
               {/* Read-only facts, so no chip/pill styling — that would read as
-                  tappable. Value-first hierarchy mirrors the desktop stat cards. */}
+                  tappable. Label above value, as on the desktop stat cards. */}
               <Reveal delay={80}>
                 <dl className="border-y border-white/10 divide-y divide-white/10">
                   {operatorStats.map((stat) => (
@@ -1059,23 +1057,12 @@ const App = () => {
 
           {/* Featured work preview — paged mobile Home only. Keeps Home from
               being a dead end that shows no work, without dragging the whole
-              6,300px Work section back onto it. The `pb` matches the
-              `py-14 sm:py-20` the other pages' sections carry, so Home, Work and
-              About all end on the same gap above the footer — without it,
-              "See all projects" sat flush against the footer border. */}
+              6,300px Work section back onto it. The contact strip below it
+              carries the `pb-14 sm:pb-20` that ends every page above the footer. */}
           {isMobile && mobilePage === 'home' && (
-            <section className={`${ui.shell} pt-14 sm:pt-16 pb-14 sm:pb-20`}>
-              <Reveal className="mb-6 flex items-end justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1.5">Selected work</p>
-                  <h2 className="text-2xl font-display text-slate-100">Recent Projects</h2>
-                </div>
-                <button
-                  onClick={() => scrollToSection('work')}
-                  className="shrink-0 inline-flex items-center justify-end gap-1 min-h-11 min-w-11 px-2 -mr-2 text-sm font-medium text-accent active:text-accent-br"
-                >
-                  All <ArrowRight size={15} />
-                </button>
+            <section className={`${ui.shell} pt-14 sm:pt-16 pb-12 sm:pb-16`}>
+              <Reveal className="mb-6">
+                <h2 className="text-2xl font-display text-slate-100">Selected Projects</h2>
               </Reveal>
 
               <div className="grid grid-cols-1 gap-4">
@@ -1084,9 +1071,9 @@ const App = () => {
                   const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
                     <Reveal key={`preview-${project.id}`} delay={index * 80}>
-                      <button
-                        type="button"
-                        onClick={() => handleProjectClick(project)}
+                      <a
+                        href={`#${project.slug}`}
+                        onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                         aria-label={`Open case study for ${project.title}`}
                         className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
@@ -1106,11 +1093,11 @@ const App = () => {
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
+                          <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-slate-400">{project.category}</p>
                           <h3 className="mt-1 text-base font-bold text-slate-100 group-active:text-accent transition-colors">{project.title}</h3>
                         </div>
                         <ArrowRight size={18} className="shrink-0 text-slate-600" />
-                      </button>
+                      </a>
                     </Reveal>
                   );
                 })}
@@ -1123,6 +1110,23 @@ const App = () => {
                 >
                   See all projects <ArrowRight size={16} />
                 </button>
+              </Reveal>
+            </section>
+          )}
+
+          {/* Contact strip — paged mobile Home only. Contact is its own page
+              here, so without this the bottom of Home was a dead end for anyone
+              who scrolled through looking for a way to get in touch. */}
+          {isMobile && mobilePage === 'home' && (
+            <section className={`${ui.shell} pb-14 sm:pb-20`} aria-labelledby="home-contact-heading">
+              <Reveal className="mb-5">
+                <h2 id="home-contact-heading" className="text-2xl font-display text-slate-100">Let's Build Something</h2>
+                <p className="mt-2 text-[0.95rem] text-slate-300">Open to roles in agentic&nbsp;AI, product design, and UI/UX.</p>
+              </Reveal>
+              <Reveal delay={80} className="grid grid-cols-1 gap-3">
+                <CopyEmail email="jashbhatt.contact@gmail.com" />
+                <ContactLinkCard href="https://linkedin.com/in/jash-bhatt" icon={<Linkedin size={22} />} label="LinkedIn" value="/in/jash-bhatt" />
+                <ContactLinkCard href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} icon={<Download size={22} />} label="Resume" value="Download PDF" />
               </Reveal>
             </section>
           )}
@@ -1168,24 +1172,17 @@ const App = () => {
                     delay={Math.min(index * 60, 240)}
                     duration={700}
                   >
-                  <div
+                  <a
+                    href={`#${project.slug}`}
                     id={`project-${project.id}`}
                     // No cyan press border: the tile's own scale-down is enough
                     // press feedback, and on desktop the border was otherwise
                     // transparent, so tapping made a green outline appear from
                     // nowhere. focus-visible stays — that ring is the keyboard
                     // indicator and does not fire on pointer clicks.
-                    className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
-                    role="button"
-                    tabIndex={0}
+                    className="group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
                     aria-label={`Open case study for ${project.title}`}
-                    onClick={() => handleProjectClick(project)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        handleProjectClick(project);
-                      }
-                    }}
+                    onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                   >
                     <div className="grid md:grid-cols-12 gap-0 md:gap-8 items-center">
 
@@ -1239,39 +1236,36 @@ const App = () => {
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 md:gap-x-4 mb-3 md:mb-5">
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                           <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-accent/50 to-transparent" />
-                          <span className="text-slate-400 text-[0.6rem] md:text-xs font-mono uppercase tracking-[0.08em] md:tracking-[0.2em]">{project.category}</span>
+                          <span className="text-slate-400 text-[0.6875rem] md:text-xs font-mono uppercase tracking-[0.08em] md:tracking-[0.2em]">{project.category}</span>
                           {project.content.sections.some((section) => section.demoId) && (
-                            <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6rem] md:text-[0.65rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
                               <span className="pulse-dot" aria-hidden="true" />
                               Try it live
                             </span>
                           )}
                         </div>
 
-                        <h3 className={`text-2xl md:text-4xl font-bold text-slate-100 mb-2 md:mb-4 transition-colors ${project.hoverColor}`}>
+                        <h3 className={`text-2xl md:text-4xl font-bold text-slate-100 mb-2 md:mb-4 transition-colors group-hover:text-accent`}>
                           {project.title}
                         </h3>
                         <p className="text-slate-300 text-[0.95rem] md:text-lg leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-none">
                           {project.description}
                         </p>
 
-                        {/* Plain text link at every width. On touch it stands in
-                            for the desktop hover overlay, so it keeps a 44px
-                            target even without the chip around it. */}
-                        <button
-                          type="button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            handleProjectClick(project);
-                          }}
-                          className={`inline-flex items-center gap-2 min-h-11 font-semibold text-sm md:text-base hover:gap-3 transition-all ${project.accentColor}`}
-                          aria-label={`Read full case study for ${project.title}`}
+                        {/* A span, not a control: the whole card is the link, and
+                            a button can't nest inside an anchor. It keeps the
+                            44px line box so it still reads as the tap target.
+                            Site accent rather than the project's brand colour —
+                            the thumbnail already carries the brand. */}
+                        <span
+                          aria-hidden="true"
+                          className="inline-flex items-center gap-2 min-h-11 font-semibold text-sm md:text-base text-accent group-hover:gap-3 transition-all"
                         >
                           Read Full Case Study <ArrowRight size={16} className="md:w-[18px] md:h-[18px] transition-transform duration-300 group-hover:translate-x-1" />
-                        </button>
+                        </span>
                       </div>
                     </div>
-                  </div>
+                  </a>
                   </Reveal>
                 );
               })}
@@ -1287,7 +1281,7 @@ const App = () => {
           {showsPage('work') && secondaryProjects.length > 0 && (
             <section id="archive" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
               <Reveal className="mb-8">
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Also worth a look</p>
+                <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
                 <h2 className={`${ui.h2} font-display text-slate-100`}>More work</h2>
                 <Reveal variant="grow-width" delay={180} duration={700}>
                   <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
@@ -1299,10 +1293,10 @@ const App = () => {
                   const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
                     <Reveal key={project.id} delay={index * 80}>
-                      <button
-                        type="button"
+                      <a
+                        href={`#${project.slug}`}
                         id={`project-${project.id}`}
-                        onClick={() => handleProjectClick(project)}
+                        onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                         aria-label={`Open case study for ${project.title}`}
                         className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
@@ -1322,17 +1316,17 @@ const App = () => {
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[0.6rem] font-mono uppercase tracking-[0.18em] text-slate-500">{project.category}</p>
+                          <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-slate-400">{project.category}</p>
                           <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-accent transition-colors">{project.title}</h3>
                         </div>
                         {project.content.sections.some((section) => section.demoId) && (
-                          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
                             <span className="pulse-dot" aria-hidden="true" />
                             Try it live
                           </span>
                         )}
                         <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
-                      </button>
+                      </a>
                     </Reveal>
                   );
                 })}
@@ -1346,17 +1340,18 @@ const App = () => {
           {showsPage('work') && (
             <section className={`${ui.shell} pb-14 sm:pb-20`}>
               <Reveal>
-                <button
-                  onClick={() => openExplorations()}
-                  className={`${ui.cardBase} ${ui.cardHover} group flex w-full items-center gap-4 p-5 text-left`}
+                <a
+                  href="#explorations"
+                  onClick={(event) => onInPageLink(event, () => openExplorations())}
+                  className={`${ui.cardBase} ${ui.cardHover} group flex w-full items-center gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Beyond case studies</p>
-                    <h3 className="mt-1.5 font-display text-xl text-slate-100 group-active:text-accent">Creative Explorations</h3>
+                    <p className={ui.eyebrow}>Beyond case studies</p>
+                    <h3 className="mt-1.5 text-lg font-bold text-slate-100 group-hover:text-accent group-active:text-accent transition-colors">Creative Explorations</h3>
                     <p className="mt-1.5 text-sm text-slate-400">Photoshop, brand motion, AI generations, and photography.</p>
                   </div>
                   <ArrowRight size={20} className="shrink-0 text-accent" />
-                </button>
+                </a>
               </Reveal>
             </section>
           )}
@@ -1379,7 +1374,7 @@ const App = () => {
                 </Reveal>
 
                 <Reveal delay={140}>
-                  <h3 className={`${ui.h2} font-display font-semibold tracking-tight text-slate-100 mb-5 md:mb-9`}>Expertise</h3>
+                  <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-slate-100 mb-5 md:mb-9`}>Expertise</h2>
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
@@ -1395,12 +1390,12 @@ const App = () => {
 
                     <div>
                       <div className="flex items-center gap-3 mb-4">
-                        <Award size={20} className="text-emerald-300" />
-                        <h4 className="text-xl font-semibold tracking-tight text-emerald-300">Tools & Tech</h4>
+                        <Award size={20} className="text-accent" />
+                        <h4 className="text-xl font-semibold tracking-tight text-slate-100">Tools & Tech</h4>
                       </div>
                       <PipeList
                         items={['Figma', 'Python', 'React.js', 'n8n', 'Microsoft Copilot Studio', 'Arduino IDE', 'Fusion 360', 'Adobe Suite']}
-                        className="text-sm font-medium text-emerald-300"
+                        className="text-sm font-medium text-accent-br"
                       />
                     </div>
                   </div>
@@ -1439,7 +1434,7 @@ const App = () => {
                       </div>
                       <div className="opacity-80">
                         <h4 className="text-base font-medium text-slate-300">Cambridge International Education</h4>
-                        <p className="text-sm text-slate-500">VIBGYOR High School, NIBM, Pune</p>
+                        <p className="text-sm text-slate-400">VIBGYOR High School, NIBM, Pune</p>
                         <p className="text-xs text-slate-400 mt-0.5">2018 – 2023</p>
                       </div>
                     </div>
@@ -1477,33 +1472,13 @@ const App = () => {
 
                   <Reveal delay={160} className="h-full">
                     <Magnetic className="h-full">
-                      <a href="https://linkedin.com/in/jash-bhatt" target="_blank" rel="noreferrer" className="surface surface-marks relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
-                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-accent/50 to-transparent rounded-sm" />
-                        <div className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
-                          <Linkedin size={22} />
-                        </div>
-                        <div className="text-left">
-                          <p className="text-sm text-slate-400 font-medium">LinkedIn</p>
-                          <p className="text-slate-100 font-semibold text-sm group-hover:text-accent transition-colors">/in/jash-bhatt</p>
-                        </div>
-                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
-                      </a>
+                      <ContactLinkCard href="https://linkedin.com/in/jash-bhatt" icon={<Linkedin size={22} />} label="LinkedIn" value="/in/jash-bhatt" />
                     </Magnetic>
                   </Reveal>
 
                   <Reveal delay={240} className="h-full">
                     <Magnetic className="h-full">
-                      <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="surface surface-marks relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden">
-                        <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-accent/50 to-transparent rounded-sm" />
-                        <div className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
-                          <Download size={22} />
-                        </div>
-                        <div className="text-left">
-                          <p className="text-sm text-slate-400 font-medium">Resume</p>
-                          <p className="text-slate-100 font-semibold text-sm group-hover:text-accent transition-colors">Download PDF</p>
-                        </div>
-                        <ArrowUpRight size={18} className="ml-auto text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
-                      </a>
+                      <ContactLinkCard href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} icon={<Download size={22} />} label="Resume" value="Download PDF" />
                     </Magnetic>
                   </Reveal>
                 </div>
@@ -1530,7 +1505,7 @@ const App = () => {
               >
                 <ArrowLeft size={16} /> Work
               </button>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Beyond case studies</p>
+              <p className={`${ui.eyebrow} mb-2`}>Beyond case studies</p>
               <h1 className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h1>
               <p className="text-slate-300 max-w-2xl">
                 Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
@@ -1570,7 +1545,7 @@ const App = () => {
           credit line on desktop. */}
       <footer className="relative z-10 mt-auto scrim border-t border-white/10 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
         <div className={ui.shell}>
-          <p className="text-slate-500 text-xs">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
+          <p className="text-slate-400 text-xs">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
         </div>
       </footer>
     </div>
