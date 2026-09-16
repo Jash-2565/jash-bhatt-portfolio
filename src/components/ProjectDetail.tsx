@@ -476,9 +476,9 @@ const ProjectDetail = ({
             <p className="font-medium text-slate-100 text-sm leading-6">{project.timeline}</p>
           </div>
           <div className="xs:col-span-2 md:col-span-6">
-            <div className="w-full md:w-fit md:max-w-full md:ml-auto">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 text-left md:text-right">Tech &amp; Tools</h3>
-              <div className="flex flex-wrap gap-2 md:justify-end">
+            <div className="w-full">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tech &amp; Tools</h3>
+              <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag, i) => (
                   <span key={i} className={ui.chipBase}>{tag}</span>
                 ))}
@@ -528,7 +528,7 @@ const ProjectDetail = ({
                 <div className="mb-6">
                   <div className="text-xs uppercase tracking-[0.35em] text-emerald-600/70 mb-3">Python Project</div>
                   <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-100 mb-3">{section.title}</h2>
-                  <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line">{section.content}</p>
+                  <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line max-w-[42rem]">{section.content}</p>
                 </div>
                 {section.listItems && (
                   <ul className="space-y-3 mb-4 pl-1">
@@ -562,7 +562,7 @@ const ProjectDetail = ({
 
                 {/* Right Column: Content */}
                 <Reveal variant="wipe-right" className="md:col-span-8" threshold={0.08}>
-                  <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal">{section.content}</p>
+                  <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal max-w-[42rem]">{section.content}</p>
 
                   {section.listItems && (
                     <ul className="space-y-3 mb-8 pl-1">

@@ -1,6 +1,6 @@
 # jashbhatt.com
 
-Personal portfolio for Jash Bhatt — product designer and design engineer. A
+Personal portfolio for Jash Bhatt — product designer and agentic AI designer. A
 single-page React app with case studies, a creative-explorations gallery, and
 three playable in-browser demos (an Arkanoid clone, a YOLOv8 object detector
 running on-device via ONNX Runtime, and a movie recommender).

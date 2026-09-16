@@ -14,7 +14,7 @@ export default function Marquee({ items }: MarqueeProps) {
           {row.map((item, i) => (
             <span
               key={i}
-              className="flex items-center shrink-0 font-mono text-xs md:text-sm uppercase tracking-[0.22em] text-slate-500"
+              className="flex items-center shrink-0 font-mono text-xs md:text-sm uppercase tracking-[0.22em] text-slate-400"
             >
               <span className="marquee-item-text transition-colors duration-300">{item}</span>
               {/* A drawn separator rather than a dot: the band reads as a

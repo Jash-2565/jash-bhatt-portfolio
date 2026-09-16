@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react';
 
 /**
  * Matches Tailwind's `lg` breakpoint. Below it the site is paged — Home, Work,
- * About and Contact are separate views reached from the bottom tab bar. At `lg`
+ * About and Contact are separate views reached from the hamburger menu. At `lg`
  * and above it stays the single scrolling page with anchor navigation.
  *
  * A media query rather than a resize handler: this fires only when the

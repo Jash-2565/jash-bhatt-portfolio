@@ -11,6 +11,9 @@ export const ui = {
   btnSecondary: 'surface surface-hover !bg-[var(--surface-2)] text-slate-100 hover:text-accent-br',
   cardBase: 'surface surface-marks rounded-sm',
   cardHover: 'surface-hover',
+  /** Small caps label above a heading. Mono, like the project category labels,
+      and slate-400 — slate-500 on the ground is 4.26:1, under AA for 12px. */
+  eyebrow: 'font-mono text-xs uppercase tracking-[0.2em] text-slate-400',
   chipBase: 'chip label px-2.5 py-1.5 text-slate-200 rounded-sm hover:text-accent-br',
   chipAccent: 'chip label px-2.5 py-1.5 text-accent-br rounded-sm !bg-accent/10',
 
@@ -35,11 +38,11 @@ export const ui = {
 } as const;
 
 export const personalitySignals = [
-  // The two role titles lead; the skill areas follow. 'Agentic AI Developer'
+  // The two role titles lead; the skill areas follow. 'Agentic AI Design'
   // sits apart from 'AI-Assisted Design' so the two AI lines never land
   // back to back in the cycle.
   'Product Designer',
-  'Agentic AI Developer',
+  'Agentic AI Design',
   'UI/UX & Interaction Design',
   'Circuit & Hardware',
   'AI-Assisted Design',

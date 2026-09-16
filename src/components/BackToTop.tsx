@@ -2,12 +2,19 @@ import { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 // Floating back-to-top button — fades in after the user scrolls past the hero.
-// Desktop only; below `lg` the tab bar returns you to the top of any page.
+// Shown at every width. It steps aside once the footer scrolls into view: on a
+// phone the centred footer line runs under the button's corner.
+const FOOTER_CLEARANCE = 80;
+
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 700);
+    const onScroll = () => {
+      const { scrollHeight } = document.documentElement;
+      const atFooter = window.innerHeight + window.scrollY > scrollHeight - FOOTER_CLEARANCE;
+      setVisible(window.scrollY > 700 && !atFooter);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
