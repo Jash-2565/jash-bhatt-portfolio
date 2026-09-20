@@ -328,6 +328,13 @@ const ArkanoidDemo = () => {
   const pointerXRef = useRef<number | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
+  /** The key handler below is mounted once with no deps, so it reads whether
+      the game is live through a ref rather than a stale captured `isRunning`. */
+  const isRunningRef = useRef(false);
+
+  useEffect(() => {
+    isRunningRef.current = isRunning;
+  }, [isRunning]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return;
@@ -365,9 +372,29 @@ const ArkanoidDemo = () => {
       return tag === 'INPUT' || tag === 'TEXTAREA' || target.isContentEditable;
     };
 
+    /** The controls the board answers to, and therefore takes off the page. */
+    const BOARD_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'Shift', ' ', 'Escape']);
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (isTypingTarget(event.target)) return;
       const state = stateRef.current;
+
+      // While a game is live — or the board itself has focus — these keys
+      // belong to the board and nothing else. The case study binds its own
+      // page shortcuts to two of them (ArrowRight → next project,
+      // Escape → back), so without claiming them here, sliding the paddle
+      // right jumped to the next case study mid-rally and Escape left the
+      // page instead of pausing. Claiming stops the page's listener from
+      // ever seeing the key; the preventDefault also keeps the arrows and
+      // Space from scrolling the case study out from under an active board.
+      const boardOwnsKeys = isRunningRef.current || document.activeElement === canvasRef.current;
+      if (boardOwnsKeys && BOARD_KEYS.has(event.key)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      // Space still suppresses page scroll even when the board is idle, as
+      // it always has — the board is the only thing on the page that uses it.
       if (event.code === 'Space') {
         event.preventDefault();
         event.stopPropagation();
@@ -381,7 +408,7 @@ const ArkanoidDemo = () => {
         launchBall();
       }
 
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && boardOwnsKeys) {
         if (!state.paused && !state.resuming && !state.gameOver) {
           state.paused = true;
         } else if (state.paused) {
@@ -410,11 +437,15 @@ const ArkanoidDemo = () => {
       if (event.key === 'Shift') keysRef.current.shift = false;
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    // `document`, not `window`: the case study's Escape → back shortcut is a
+    // bubble listener on `window`, and the bubble path reaches document first.
+    // stopPropagation below can only stop listeners on *later* nodes, so the
+    // board has to sit inside the page's listener to claim a key before it.
+    document.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
@@ -422,16 +453,6 @@ const ArkanoidDemo = () => {
   const resetGame = () => {
     stateRef.current = initState();
     particlesRef.current = [];
-  };
-
-  const renderOnce = () => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-    requestAnimationFrame(() => {
-      step();
-    });
   };
 
   const applyPowerup = (state: GameState, type: PowerupType) => {
@@ -1047,20 +1068,97 @@ const ArkanoidDemo = () => {
     }
   };
 
+  /**
+   * The board at rest. Nothing painted this canvas until Run Demo was pressed,
+   * so the demo sat in the page as an unexplained black panel — the frame was
+   * there, the game was not. This draws the real board (bricks, paddle, ball,
+   * HUD) behind a scrim, so the panel previews the thing it is offering and
+   * says how to start it.
+   */
+  const drawIdle = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const state = stateRef.current;
+
+    // Same ground as the live frame, so starting the game is a continuation
+    // rather than a cut.
+    const gradient = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+    gradient.addColorStop(0, 'rgb(12, 12, 20)');
+    gradient.addColorStop(1, 'rgb(30, 36, 60)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // No shake offset and no particles: this frame is static by definition.
+    drawPaddle(state, ctx, 0, 0);
+    state.balls.forEach((ball) => drawBall(ball, ctx, 0, 0));
+    state.bricks.forEach((brick) => drawBrick(brick, ctx, 0, 0));
+    drawHUD(state, ctx);
+
+    ctx.fillStyle = toRgb(BLACK, 0.62);
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // The canvas is a fixed 800×720 scaled by CSS to whatever the column
+    // allows — 523px on a desktop, 261px on a phone. Type set in canvas units
+    // would therefore shrink with the column: 20px here renders at 6.5 real
+    // pixels on a phone. Sizing against the displayed scale instead keeps the
+    // prompt at the same apparent size at every width.
+    const shownScale = canvas.getBoundingClientRect().width / WIDTH || 1;
+    const setFont = (text: string, weight: string, cssPx: number) => {
+      let size = Math.round(cssPx / shownScale);
+      ctx.font = `${weight}${size}px system-ui`;
+      // Narrow columns can still push a long string past the edge; give it
+      // back the width it needs rather than letting it run off.
+      const maxWidth = WIDTH * 0.82;
+      const width = ctx.measureText(text).width;
+      if (width > maxWidth) {
+        size = Math.floor(size * (maxWidth / width));
+        ctx.font = `${weight}${size}px system-ui`;
+      }
+    };
+
+    // The surrounding panel already lists the controls, so this only has to
+    // name the game and point at the button.
+    ctx.textAlign = 'center';
+    const title = 'ULTIMATE ARKANOID';
+    const prompt = 'Press Run Demo to play';
+
+    ctx.fillStyle = toRgb(WHITE);
+    setFont(title, '600 ', 21);
+    ctx.fillText(title, WIDTH / 2, HEIGHT / 2 - 10 / shownScale);
+
+    ctx.fillStyle = toRgb(CYAN);
+    setFont(prompt, '', 14);
+    ctx.fillText(prompt, WIDTH / 2, HEIGHT / 2 + 26 / shownScale);
+
+    // Every other draw here centres text by measuring, so hand the shared
+    // context back in the state they all expect.
+    ctx.textAlign = 'left';
+  };
+
   useEffect(() => {
     if (isRunning) {
       rafRef.current = requestAnimationFrame(step);
-    } else if (rafRef.current) {
+      return () => {
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+      };
+    }
+
+    if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
-
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
-    };
+    // On mount, and again every time the game stops.
+    drawIdle();
+    // The prompt is sized against the scale CSS is showing the canvas at, so
+    // it has to be redrawn whenever that scale can have changed.
+    window.addEventListener('resize', drawIdle);
+    return () => window.removeEventListener('resize', drawIdle);
   // `step` is redefined every render; listing it here would cancel and
   // restart the animation frame loop on each one. The loop is started and
   // stopped by isRunning alone, which is the actual lifecycle here.
@@ -1098,7 +1196,7 @@ const ArkanoidDemo = () => {
           onPointerMove={(event) => {
             if (event.pressure > 0 || event.buttons > 0) trackPointer(event);
           }}
-          className="w-full h-full block focus:outline-none touch-none"
+          className="w-full h-full block focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent touch-none"
         />
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-start">
@@ -1117,9 +1215,9 @@ const ArkanoidDemo = () => {
           onClick={() => {
             resetGame();
             setIsRunning(false);
-            renderOnce();
+            drawIdle();
           }}
-          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:border-slate-400 transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:bg-accent/10 hover:text-accent-br transition"
         >
           Reset
         </button>

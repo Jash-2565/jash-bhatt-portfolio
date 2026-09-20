@@ -654,6 +654,11 @@ const App = () => {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        // The lightbox is the topmost layer, so it consumes Escape outright.
+        // The case-study view keeps its own Escape → back shortcut on `window`;
+        // without this, one press closed the image *and* left the case study.
+        // Now Escape dismisses the topmost thing and a second press goes back.
+        event.stopPropagation();
         setSelectedImage(null);
         return;
       }
@@ -664,11 +669,14 @@ const App = () => {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    // Capture phase: the shortcuts underneath listen on `window`, which is last
+    // in the bubble path. Intercepting on the way down means this layer wins
+    // regardless of where those listeners are attached.
+    document.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [selectedImage]);
 
@@ -988,9 +996,8 @@ const App = () => {
               </div>
 
               <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
-                {operatorStats.map((stat, i) => (
-                  <Reveal key={stat.label} delay={i * 90} duration={600} className="h-full">
-                    <div className="surface surface-marks surface-hover rounded-2xl p-6 h-full">
+                {operatorStats.map((stat) => (
+                  <div key={stat.label} className="surface surface-marks surface-hover rounded-2xl p-6 h-full">
                       {/* These values are phrases, not numbers, and at 2.2rem all
                           three wrapped with a single orphaned word on line two.
                           Sized to hold one line instead. The binding value is
@@ -1000,8 +1007,7 @@ const App = () => {
                           Re-measure if any operatorStats value gets longer. */}
                       <div className="text-xs uppercase tracking-[0.16em] text-slate-400 mb-1.5">{stat.label}</div>
                       <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-slate-100 [text-wrap:balance]">{stat.value}</div>
-                    </div>
-                  </Reveal>
+                  </div>
                 ))}
               </div>
 
@@ -1061,7 +1067,7 @@ const App = () => {
               carries the `pb-14 sm:pb-20` that ends every page above the footer. */}
           {isMobile && mobilePage === 'home' && (
             <section className={`${ui.shell} pt-14 sm:pt-16 pb-12 sm:pb-16`}>
-              <Reveal className="mb-6">
+              <Reveal variant="rise-soft" className="mb-6">
                 <h2 className="text-2xl font-display text-slate-100">Selected Projects</h2>
               </Reveal>
 
@@ -1070,7 +1076,7 @@ const App = () => {
                   const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
                   const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
-                    <Reveal key={`preview-${project.id}`} delay={index * 80}>
+                    <Reveal variant="rise" key={`preview-${project.id}`} delay={index * 80}>
                       <a
                         href={`#${project.slug}`}
                         onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
@@ -1103,7 +1109,7 @@ const App = () => {
                 })}
               </div>
 
-              <Reveal delay={260}>
+              <Reveal variant="rise-soft" delay={260}>
                 <button
                   onClick={() => scrollToSection('work')}
                   className={`${ui.btnBase} ${ui.btnSecondary} mt-5 w-full text-[0.95rem]`}
@@ -1119,11 +1125,11 @@ const App = () => {
               who scrolled through looking for a way to get in touch. */}
           {isMobile && mobilePage === 'home' && (
             <section className={`${ui.shell} pb-14 sm:pb-20`} aria-labelledby="home-contact-heading">
-              <Reveal className="mb-5">
+              <Reveal variant="rise-soft" className="mb-5">
                 <h2 id="home-contact-heading" className="text-2xl font-display text-slate-100">Let's Build Something</h2>
                 <p className="mt-2 text-[0.95rem] text-slate-300">Open to roles in agentic&nbsp;AI, product design, and UI/UX.</p>
               </Reveal>
-              <Reveal delay={80} className="grid grid-cols-1 gap-3">
+              <Reveal variant="rise" delay={80} className="grid grid-cols-1 gap-3">
                 <CopyEmail email="jashbhatt.contact@gmail.com" />
                 <ContactLinkCard href="https://linkedin.com/in/jash-bhatt" icon={<Linkedin size={22} />} label="LinkedIn" value="/in/jash-bhatt" />
                 <ContactLinkCard href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} icon={<Download size={22} />} label="Resume" value="Download PDF" />
@@ -1137,7 +1143,7 @@ const App = () => {
             <Reveal className="mb-10 sm:mb-14 md:mb-16">
               <h2 className={`${ui.h2} font-display text-slate-100 mb-3 md:mb-4`}>Selected Projects</h2>
               <p className="text-slate-300 max-w-2xl mb-5 md:mb-6">From circuit-led builds to AI-enabled interfaces — each project reflects how I think through design, engineering, and behavior together.</p>
-              <Reveal variant="grow-width" delay={180} duration={700}>
+              <Reveal variant="grow-width" delay={180} duration={900}>
                 <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
             </Reveal>
@@ -1166,11 +1172,8 @@ const App = () => {
                 return (
                   <Reveal
                     key={project.id}
-                    // Alternating draw direction, so the grid reads as being
-                    // ruled in rather than as one uniform sweep.
-                    variant={index % 2 === 1 ? 'wipe-left' : 'wipe-right'}
+                    variant="rise"
                     delay={Math.min(index * 60, 240)}
-                    duration={700}
                   >
                   <a
                     href={`#${project.slug}`}
@@ -1180,7 +1183,7 @@ const App = () => {
                     // transparent, so tapping made a green outline appear from
                     // nowhere. focus-visible stays — that ring is the keyboard
                     // indicator and does not fire on pointer clicks.
-                    className="group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
+                    className="group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--ground)] rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
                     aria-label={`Open case study for ${project.title}`}
                     onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                   >
@@ -1280,10 +1283,10 @@ const App = () => {
               page below `lg`. */}
           {showsPage('work') && secondaryProjects.length > 0 && (
             <section id="archive" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
-              <Reveal className="mb-8">
+              <Reveal variant="rise-soft" className="mb-8">
                 <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
                 <h2 className={`${ui.h2} font-display text-slate-100`}>More work</h2>
-                <Reveal variant="grow-width" delay={180} duration={700}>
+                <Reveal variant="grow-width" delay={180} duration={900}>
                   <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
                 </Reveal>
               </Reveal>
@@ -1292,7 +1295,7 @@ const App = () => {
                   const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
                   const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
-                    <Reveal key={project.id} delay={index * 80}>
+                    <Reveal variant="rise" key={project.id} delay={index * 80}>
                       <a
                         href={`#${project.slug}`}
                         id={`project-${project.id}`}
@@ -1361,7 +1364,7 @@ const App = () => {
           <section id="about" className={`${ui.section} ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
-                <Reveal>
+                <Reveal variant="rise-soft">
                   <h2 className={`${ui.h2} font-display text-slate-100 mb-5 md:mb-8`}>About Me</h2>
                   <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-300 leading-relaxed">
                     <p>
@@ -1373,7 +1376,7 @@ const App = () => {
                   </div>
                 </Reveal>
 
-                <Reveal delay={140}>
+                <Reveal variant="rise-soft" delay={140}>
                   <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-slate-100 mb-5 md:mb-9`}>Expertise</h2>
                   <div className="space-y-6">
                     <div>
@@ -1406,7 +1409,7 @@ const App = () => {
                   own full-width row below the two-column grid rather than being
                   split across it — that way they start on the same baseline and
                   their rules line up. They stack in this order on a phone. */}
-              <Reveal delay={200}>
+              <Reveal variant="rise-soft" delay={200}>
                 <div className="mt-10 md:mt-16 grid md:grid-cols-2 gap-8 md:gap-16">
                   <div className="border-l-2 border-accent-deep pl-4">
                     <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Experience</div>
@@ -1452,7 +1455,7 @@ const App = () => {
           <section id="contact" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-16">
-                <Reveal>
+                <Reveal variant="rise-soft">
                   <h2 className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
                   <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
                     I am actively looking for opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
@@ -1464,19 +1467,19 @@ const App = () => {
                 </Reveal>
 
                 <div className="grid grid-cols-1 gap-4 w-full max-w-[26rem]">
-                  <Reveal delay={80} className="h-full">
+                  <Reveal variant="rise" delay={80} className="h-full">
                     <Magnetic className="h-full">
                       <CopyEmail email="jashbhatt.contact@gmail.com" />
                     </Magnetic>
                   </Reveal>
 
-                  <Reveal delay={160} className="h-full">
+                  <Reveal variant="rise" delay={160} className="h-full">
                     <Magnetic className="h-full">
                       <ContactLinkCard href="https://linkedin.com/in/jash-bhatt" icon={<Linkedin size={22} />} label="LinkedIn" value="/in/jash-bhatt" />
                     </Magnetic>
                   </Reveal>
 
-                  <Reveal delay={240} className="h-full">
+                  <Reveal variant="rise" delay={240} className="h-full">
                     <Magnetic className="h-full">
                       <ContactLinkCard href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} icon={<Download size={22} />} label="Resume" value="Download PDF" />
                     </Magnetic>
@@ -1510,7 +1513,7 @@ const App = () => {
               <p className="text-slate-300 max-w-2xl">
                 Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
               </p>
-              <Reveal variant="grow-width" delay={180} duration={700}>
+              <Reveal variant="grow-width" delay={180} duration={900}>
                 <div className="mt-5 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
               </Reveal>
             </Reveal>

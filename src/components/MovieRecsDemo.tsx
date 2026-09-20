@@ -280,7 +280,7 @@ const MovieRecsDemo = () => {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Enter movie title"
-            className="w-full flex-1 min-w-0 min-h-11 rounded-lg/80 bg-[var(--ground)] px-3 py-2.5 text-base sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/30"
+            className="w-full flex-1 min-w-0 min-h-11 rounded-sm bg-[var(--ground)] px-3 py-2.5 text-base sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:items-center lg:w-auto lg:flex-nowrap lg:gap-2">
             <button
@@ -294,7 +294,7 @@ const MovieRecsDemo = () => {
             <button
               type="button"
               onClick={handleClear}
-              className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:border-slate-400 transition"
+              className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:bg-accent/10 hover:text-accent-br transition"
             >
               Clear
             </button>
@@ -306,7 +306,7 @@ const MovieRecsDemo = () => {
               key={item}
               type="button"
               onClick={() => setQuery(item)}
-              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-sm px-4 py-1.5 text-sm text-slate-300 hover:border-slate-400 active:border-accent"
+              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap chip rounded-sm px-4 py-1.5 text-sm text-slate-300 hover:text-accent-br active:text-accent"
             >
               {item}
             </button>
