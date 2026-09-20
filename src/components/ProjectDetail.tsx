@@ -13,12 +13,44 @@ import { usePointerFine } from '../hooks/usePointerFine';
 
 const DemoLoader = () => (
   <div className="surface surface-marks !bg-[var(--ground)] h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
-    <div className="flex flex-col items-center gap-3 text-slate-500">
+    <div className="flex flex-col items-center gap-3 text-slate-400">
       <div className="w-7 h-7 border-2 border-slate-700 border-t-accent rounded-full animate-spin" />
       <span className="text-[10px] tracking-widest uppercase">Loading Demo</span>
     </div>
   </div>
 );
+
+/** Classes for a media wrapper that opens the lightbox. Pairs with zoomProps. */
+const ZOOMABLE = 'cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-accent';
+
+/**
+ * Keyboard-equivalent props for the zoomable media wrappers. These were plain
+ * `<div onClick>`: clickable with a mouse, invisible to the keyboard — no Tab
+ * stop, no Enter/Space. They stay divs rather than becoming buttons because
+ * each one carries grid/flex sizing a button would fight with, so the role and
+ * the key handling are supplied explicitly instead. Esc closes the lightbox
+ * (see the handler in App.tsx), so the loop is completable without a mouse.
+ */
+const zoomProps = (
+  src: string | undefined,
+  isPlaceholder: boolean,
+  caption: string | undefined,
+  onImageClick: (src: string) => void,
+) => {
+  if (isPlaceholder || !src) return {};
+  return {
+    role: 'button',
+    tabIndex: 0,
+    'aria-label': caption ? `Open ${caption} full screen` : 'Open image full screen',
+    onClick: () => onImageClick(src),
+    onKeyDown: (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        onImageClick(src);
+      }
+    },
+  };
+};
 
 const CopyButton = ({ text }: { text: string }) => {
   const [copied, setCopied] = useState(false);
@@ -160,7 +192,7 @@ const ProjectDetail = ({
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
               <span className="text-xs uppercase tracking-widest text-slate-400">
                 Python Snippet
-                <span className="md:hidden normal-case tracking-normal text-slate-500"> · swipe →</span>
+                <span className="md:hidden normal-case tracking-normal text-slate-400"> · swipe →</span>
               </span>
               <CopyButton text={section.codeBlock} />
             </div>
@@ -202,8 +234,8 @@ const ProjectDetail = ({
               return (
                 <div key={`story-${i}`} className="min-w-0 lg:min-w-[14rem] flex flex-col gap-3">
                   <div
-                    className={`rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
-                    onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
+                    className={`rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
+                    {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                   >
                     {isPlaceholder ? (
                       <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
@@ -243,8 +275,8 @@ const ProjectDetail = ({
         return (
           <div key={key} className="flex flex-col gap-3">
             <div
-              className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
-              onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
+              className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
+              {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
             >
               {isPlaceholder ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
@@ -292,8 +324,8 @@ const ProjectDetail = ({
                 return (
                   <div key={`row-${i}`} className="flex flex-col gap-3 items-center">
                     <div
-                      className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : 'cursor-zoom-in w-fit'}`}
-                      onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
+                      className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : `${ZOOMABLE} w-fit`}`}
+                      {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                     >
                       {isPlaceholder ? (
                         <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
@@ -318,8 +350,8 @@ const ProjectDetail = ({
           {fullWidthImages.map((img, i) => (
             <div key={`full-${i}`} className={`flex flex-col gap-3 ${img.containerClass || 'w-full'}`}>
               <div
-                className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : 'cursor-zoom-in'}`}
-                onClick={() => { if (img.src && !img.src.includes('placeholder')) onImageClick(img.src); }}
+                className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : ZOOMABLE}`}
+                {...zoomProps(img.src, !img.src || img.src.includes('placeholder'), img.caption, onImageClick)}
               >
                 {!img.src || img.src.includes('placeholder') ? (
                   <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
@@ -352,8 +384,8 @@ const ProjectDetail = ({
             return (
               <div key={i} className="flex flex-col gap-3">
                 <div
-                  className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : 'cursor-zoom-in'}`}
-                  onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
+                  className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
+                  {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                 >
                   {isPlaceholder ? (
                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
@@ -394,8 +426,8 @@ const ProjectDetail = ({
               className={`flex flex-col gap-3 ${section.imageLayout === 'row' ? 'w-full md:w-auto md:flex-shrink-0' : ''} ${section.imageCrop ? 'w-fit items-center' : ''}`}
             >
               <div
-                className={`relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : 'cursor-zoom-in'}`}
-                onClick={() => { if (!isPlaceholder && img.src) onImageClick(img.src); }}
+                className={`relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : ZOOMABLE}`}
+                {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
               >
                 {isPlaceholder ? (
                   <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
@@ -553,7 +585,7 @@ const ProjectDetail = ({
 
                 {/* Left Column: Heading */}
                 <div className="md:col-span-4 md:sticky md:top-24">
-                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-slate-500'}`}>
+                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-slate-400'}`}>
                     {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
                   </span>
                   <div className={`h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
@@ -697,10 +729,10 @@ const ProjectDetail = ({
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>
-          <span className="hidden md:flex items-center gap-2 text-xs text-slate-600">
+          <span className="hidden md:flex items-center gap-2 text-xs text-slate-400">
             <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">Esc</kbd>
             back
-            <span className="mx-1 text-slate-700">·</span>
+            <span className="mx-1 text-slate-500">·</span>
             <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
             next
           </span>

@@ -1253,7 +1253,7 @@ export const projects: Project[] = [
           demoId: "yolov8"
         },
         {
-          title: "Python Arcade: Arkanoid",
+          title: "Python Arcade: Ultimate Arkanoid",
           content: "A classic arcade build written in Python, mirrored here as a playable JavaScript demo that preserves the feel of the original logic and visuals.",
           listItems: ["Physics-based ball motion", "Power-ups and scoring system", "Live playable demo"],
           codeBlock: ARKANOID_SNIPPET,

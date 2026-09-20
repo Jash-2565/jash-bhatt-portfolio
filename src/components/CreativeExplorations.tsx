@@ -45,36 +45,53 @@ function Thumb({
 }) {
   const isVideo = item.type === 'video' && item.src;
 
-  return (
-    <div
-      className={`relative overflow-hidden rounded-xl bg-white/5 transition-all group ${
-        isVideo ? 'hover:border-white/25' : 'cursor-pointer hover:border-accent'
-      } hover:-translate-y-1 ${className}`}
-      onClick={() => !isVideo && item.src && onImageClick(item.src)}
-    >
-      {isVideo ? (
+  // The lift, the image scale and the caption fade are the hover affordance.
+  // There used to be a `hover:border-*` here too, left over from when panes
+  // carried borders — with no border-width it painted nothing.
+  const frame = `relative overflow-hidden rounded-xl bg-white/5 transition-all group hover:-translate-y-1 ${className}`;
+
+  if (isVideo) {
+    return (
+      <div className={frame}>
         <video className="w-full h-full object-cover" controls playsInline preload="metadata" aria-label={item.alt}>
           <source src={item.src} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-      ) : item.src ? (
-        <>
-          <ImageWithFallback
-            src={item.src}
-            alt={item.alt}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-            sizes={sizes}
-          />
-          {showCaption && (
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-              {item.alt}
-            </div>
-          )}
-        </>
-      ) : (
+      </div>
+    );
+  }
+
+  if (!item.src) {
+    return (
+      <div className={frame}>
         <PhotoIcon className="text-slate-300 w-full h-full p-4" />
+      </div>
+    );
+  }
+
+  // A real <button>, not a div with an onClick: only the image tile opens the
+  // lightbox, and as a div it had no Tab stop and no Enter/Space. The video
+  // tile above stays a div — its own controls are the interactive part.
+  const src = item.src;
+  return (
+    <button
+      type="button"
+      onClick={() => onImageClick(src)}
+      aria-label={item.alt ? `Open ${item.alt} full screen` : 'Open image full screen'}
+      className={`${frame} block w-full cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
+    >
+      <ImageWithFallback
+        src={src}
+        alt={item.alt}
+        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+        sizes={sizes}
+      />
+      {showCaption && (
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+          {item.alt}
+        </div>
       )}
-    </div>
+    </button>
   );
 }
 
@@ -86,10 +103,10 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
   return (
     <>
       {showDivider && (
-        <Reveal className="mt-16 sm:mt-20 md:mt-32 mb-10 sm:mb-14 md:mb-16 flex items-center gap-4 sm:gap-6">
+        <Reveal variant="rise-soft" className="mt-16 sm:mt-20 md:mt-32 mb-10 sm:mb-14 md:mb-16 flex items-center gap-4 sm:gap-6">
           <div className="h-px flex-1 bg-white/10"></div>
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">Beyond case studies</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 mb-1">Beyond case studies</p>
             <h2 className="text-2xl font-display text-slate-300">Creative Explorations</h2>
           </div>
           <div className="h-px flex-1 bg-white/10"></div>
@@ -99,7 +116,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
       <div className="grid grid-cols-1 gap-8 sm:gap-10 md:gap-12">
 
         {/* Photography — the longest-running of these, so it leads. */}
-        <Reveal delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+        <Reveal variant="rise" className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ResponsiveImage
@@ -139,7 +156,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         </Reveal>
 
         {/* Brand Animation Section */}
-        <Reveal delay={120} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+        <Reveal variant="rise" delay={60} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
             <div className="chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <ResponsiveImage
@@ -152,7 +169,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             <h3 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h3>
           </div>
           <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
-          <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
+          <p className="text-slate-400 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
           <div className="rounded-xl overflow-hidden bg-white/5">
             <video
               className="w-full h-auto"
@@ -168,7 +185,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         </Reveal>
 
         {/* Photoshop Section */}
-        <Reveal delay={180} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+        <Reveal variant="rise" delay={120} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
             <div className="chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <ResponsiveImage
@@ -195,7 +212,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         </Reveal>
 
         {/* AI Generations Section */}
-        <Reveal delay={240} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+        <Reveal variant="rise" delay={180} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ResponsiveImage
@@ -224,7 +241,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         {/* Lewis. The sprites here are driven off the same atlas as the pet
             walking along the page, so the strip is the artwork running, not
             screenshots of it. */}
-        <Reveal delay={300} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
+        <Reveal variant="rise" delay={240} className={`${ui.cardBase} ${ui.cardHover} p-5 md:p-8`}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <LewisSprite animation="waving" scale={0.19} />
@@ -238,7 +255,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             Written in Swift, with nine hand-directed animation rows packed into a single
             1536×1872 atlas.
           </p>
-          <p className="text-slate-500 text-xs md:text-sm mb-5 md:mb-6">
+          <p className="text-slate-400 text-xs md:text-sm mb-5 md:mb-6">
             Swift · AppKit · generated and hand-QA'd sprite pipeline
           </p>
 
@@ -247,7 +264,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               {LEWIS_STRIP.map(({ animation, label }) => (
                 <div key={animation} className="flex flex-col items-center gap-2">
                   <LewisSprite animation={animation} scale={0.42} label={`Lewis ${label}`} />
-                  <span className="text-[11px] uppercase tracking-[0.14em] text-slate-500">
+                  <span className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
                     {label}
                   </span>
                 </div>
@@ -258,8 +275,10 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           <div className="grid gap-5 md:grid-cols-[auto_1fr] md:items-center">
             {/* The atlas is portrait and narrow; an auto column keeps the panel
                 hugging it instead of stranding it in a wide empty frame. */}
-            <div
-              className="relative flex justify-center overflow-hidden rounded-xl bg-white/5 p-3 cursor-pointer transition-all hover:border-accent hover:-translate-y-1 group"
+            <button
+              type="button"
+              aria-label="Open the Lewis atlas full screen"
+              className="relative flex w-full justify-center overflow-hidden rounded-xl bg-white/5 p-3 cursor-pointer transition-all hover:-translate-y-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               onClick={() => onImageClick(`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`)}
             >
               <ImageWithFallback
@@ -268,7 +287,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 className="h-auto max-h-72 w-auto max-w-full object-contain rounded-md group-hover:scale-[1.02] transition-transform duration-300"
                 sizes="(min-width: 768px) 260px, 70vw"
               />
-            </div>
+            </button>
             <div>
               <p className="text-slate-400 text-sm mb-4">
                 The packed result: 72 cells, nine rows, one sheet. Every frame was reviewed
@@ -283,7 +302,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               >
                 Wake Lewis
               </button>
-              <p className="text-slate-600 text-xs mt-2">
+              <p className="text-slate-400 text-xs mt-2">
                 He walks along the bottom of this page on a mouse-driven screen.
               </p>
             </div>
