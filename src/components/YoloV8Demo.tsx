@@ -413,7 +413,7 @@ const YoloV8Demo = () => {
     <div className="rounded-2xl bg-[var(--surface-1)] shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
-          <h4 className="text-lg font-semibold text-slate-100">Live Webcam Detection</h4>
+          <h3 className="text-lg font-semibold text-slate-100">Live Webcam Detection</h3>
           <p className="text-sm text-slate-400">Model: `public/models/yolov8s-int8.onnx`</p>
         </div>
         <div className="flex items-center gap-3">

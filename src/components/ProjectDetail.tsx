@@ -5,7 +5,7 @@ const YoloV8Demo = lazy(() => import('./YoloV8Demo'));
 const MovieRecsDemo = lazy(() => import('./MovieRecsDemo'));
 import ResponsiveImage from './ResponsiveImage';
 import Reveal from './Reveal';
-import type { Project, Section } from '../types';
+import type { LightboxImage, Project, Section } from '../types';
 import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME, CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
 import { ui } from '../config/ui';
 import { formatNameList } from '../utils/formatNameList';
@@ -35,22 +35,40 @@ const zoomProps = (
   src: string | undefined,
   isPlaceholder: boolean,
   caption: string | undefined,
-  onImageClick: (src: string) => void,
+  onImageClick: (image: LightboxImage) => void,
 ) => {
   if (isPlaceholder || !src) return {};
+  const open = () => onImageClick({ src, alt: caption ?? '' });
   return {
     role: 'button',
     tabIndex: 0,
     'aria-label': caption ? `Open ${caption} full screen` : 'Open image full screen',
-    onClick: () => onImageClick(src),
+    onClick: open,
     onKeyDown: (event: React.KeyboardEvent) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        onImageClick(src);
+        open();
       }
     },
   };
 };
+
+/**
+ * The affordance that says a picture opens full screen.
+ *
+ * This used to exist only in the default/`row` image layout, so the `grid`,
+ * `mixed`, `storyboard` and `techSplit` sections — which is where the smallest
+ * and densest images live — advertised nothing at all. It is not `md:hidden`
+ * any more either: the CSS cursor that was carrying the hint on desktop is
+ * suppressed site-wide by the custom cursor.
+ */
+const ZoomHint = () => (
+  <span className="absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-slate-200 pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100">
+    <ZoomIn size={11} aria-hidden="true" />
+    <span className="md:hidden">Tap to zoom</span>
+    <span className="hidden md:inline">Click to zoom</span>
+  </span>
+);
 
 const CopyButton = ({ text }: { text: string }) => {
   const [copied, setCopied] = useState(false);
@@ -78,7 +96,7 @@ interface ProjectDetailProps {
   onBack: () => void;
   onNext: () => void;
   isTransitioning: boolean;
-  onImageClick: (src: string) => void;
+  onImageClick: (image: LightboxImage) => void;
 }
 
 const ProjectDetail = ({
@@ -95,13 +113,28 @@ const ProjectDetail = ({
   const pointerFine = usePointerFine();
   const slug = project?.slug;
 
-  // Keyboard shortcuts for the case study: Esc → back, → → next project.
+  /**
+   * Keyboard shortcuts for the case study: Esc → back, ⌘/Ctrl + → → next.
+   *
+   * The next-project shortcut used to be a bare ArrowRight. Arrow keys are how
+   * people scroll a long page, so reading a case study and pressing → threw you
+   * into a different project with the scroll reset — no warning, and Back as
+   * the only way out. Requiring a modifier keeps the shortcut for anyone who
+   * wants it and gives the arrow keys back to scrolling.
+   */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-      if (e.key === 'Escape') onBack();
-      if (e.key === 'ArrowRight') onNext();
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return;
+      if (e.key === 'Escape') {
+        onBack();
+        return;
+      }
+      if (e.key === 'ArrowRight' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        onNext();
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -158,11 +191,14 @@ const ProjectDetail = ({
 
   const projectHeroTheme = PROJECT_HERO_THEMES[project.slug] ?? DEFAULT_PROJECT_HERO_THEME;
   const isPythonCodes = project.slug === 'python-codes';
+  // The Live Demos hero is a logo, not a screenshot, so it is contained on its
+  // own plate the way the RAHI lockup is rather than bled edge to edge.
+  const heroBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
   const isCountdownMotorControl = project.slug === 'tinkering';
   const nextThumbnailBackdrop = nextProject
     ? CONTAINED_THUMBNAIL_BACKDROPS[nextProject.slug]
     : undefined;
-  const { heroBgClass, heroTextClass, heroMutedTextClass, heroBodyTextClass } = projectHeroTheme;
+  const { heroTextClass, heroMutedTextClass, heroBodyTextClass } = projectHeroTheme;
 
   const renderDemoBlock = (section: Section) => {
     const demoInner =
@@ -232,9 +268,9 @@ const ProjectDetail = ({
             {section.images.map((img, i) => {
               const isPlaceholder = !img.src || img.src.includes('placeholder');
               return (
-                <div key={`story-${i}`} className="min-w-0 lg:min-w-[14rem] flex flex-col gap-3">
+                <figure key={`story-${i}`} className="m-0 min-w-0 lg:min-w-[14rem] flex flex-col gap-3">
                   <div
-                    className={`rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
+                    className={`group/media relative rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
                     {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                   >
                     {isPlaceholder ? (
@@ -243,18 +279,21 @@ const ProjectDetail = ({
                         <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                       </div>
                     ) : (
-                      <ResponsiveImage
-                        src={img.src}
-                        alt={img.caption}
-                        className="w-full h-full object-cover object-center"
-                        loading="lazy"
-                      />
+                      <>
+                        <ResponsiveImage
+                          src={img.src}
+                          alt={img.caption}
+                          captioned
+                          className="w-full h-full object-cover object-center"
+                          loading="lazy"
+                          sizes="(min-width: 1280px) 400px, (min-width: 640px) 45vw, 90vw"
+                        />
+                        <ZoomHint />
+                      </>
                     )}
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-slate-300">{img.caption}</p>
-                  </div>
-                </div>
+                  <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+                </figure>
               );
             })}
           </div>
@@ -273,9 +312,9 @@ const ProjectDetail = ({
       ) => {
         const isPlaceholder = !img.src || img.src.includes('placeholder');
         return (
-          <div key={key} className="flex flex-col gap-3">
+          <figure key={key} className="m-0 flex flex-col gap-3">
             <div
-              className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
+              className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
               {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
             >
               {isPlaceholder ? (
@@ -284,27 +323,38 @@ const ProjectDetail = ({
                   <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                 </div>
               ) : (
-                <ResponsiveImage
-                  src={img.src}
-                  alt={img.caption}
-                  className="w-full h-full object-cover object-center"
-                  loading="lazy"
-                />
+                <>
+                  <ResponsiveImage
+                    src={img.src}
+                    alt={img.caption}
+                    captioned
+                    className="w-full h-full object-cover object-center"
+                    loading="lazy"
+                    sizes="(min-width: 1024px) 620px, 90vw"
+                  />
+                  <ZoomHint />
+                </>
               )}
             </div>
-            <p className="text-sm text-slate-400 text-center">{img.caption}</p>
-          </div>
+            <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+          </figure>
         );
       };
 
       return (
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+          {/* Every clip that lands in this layout is portrait (480×848), so a
+              landscape box cover-cropped roughly two thirds of each frame
+              away. The lead tile keeps the same 9:16 as the two beside it. */}
           <div className="lg:col-span-7">
-            {renderMediaCard(rectangleImage, 'h-56 sm:h-72 md:h-[33rem]', 'tech-rect')}
+            {renderMediaCard(rectangleImage, 'aspect-[9/16] max-h-[34rem] mx-auto', 'tech-rect')}
           </div>
-          <div className="lg:col-span-5 grid grid-cols-1 gap-4">
+          {/* `aspect-[9/16]` rather than a fixed landscape height: both of the
+              clips that land here are 480×848 portrait, and a cover crop into a
+              short box was throwing away about two thirds of every frame. */}
+          <div className="lg:col-span-5 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-1 gap-4">
             {squareImages.slice(0, 2).map((img, i) =>
-              renderMediaCard(img, 'h-56 sm:h-72 md:h-[15rem]', `tech-square-${i}`)
+              renderMediaCard(img, 'aspect-[9/16] max-h-[26rem] mx-auto', `tech-square-${i}`)
             )}
           </div>
         </div>
@@ -322,9 +372,9 @@ const ProjectDetail = ({
               {rowImages.map((img, i) => {
                 const isPlaceholder = !img.src || img.src.includes('placeholder');
                 return (
-                  <div key={`row-${i}`} className="flex flex-col gap-3 items-center">
+                  <figure key={`row-${i}`} className="m-0 flex flex-col gap-3 items-center max-w-full">
                     <div
-                      className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : `${ZOOMABLE} w-fit`}`}
+                      className={`group/media relative rounded-lg overflow-hidden max-w-full ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : `${ZOOMABLE} w-fit`}`}
                       {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                     >
                       {isPlaceholder ? (
@@ -333,24 +383,28 @@ const ProjectDetail = ({
                           <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                         </div>
                       ) : (
-                        <ResponsiveImage
-                          src={img.src}
-                          alt={img.caption}
-                          className={`w-full h-auto md:w-auto ${section.imageHeight || 'md:h-80'}`}
-                          loading="lazy"
-                        />
+                        <>
+                          <ResponsiveImage
+                            src={img.src}
+                            alt={img.caption}
+                            captioned
+                            className={`w-full h-auto max-w-full md:w-auto ${section.imageHeight || 'md:h-80'}`}
+                            loading="lazy"
+                          />
+                          <ZoomHint />
+                        </>
                       )}
                     </div>
-                    <p className="text-sm text-slate-400 text-center">{img.caption}</p>
-                  </div>
+                    <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+                  </figure>
                 );
               })}
             </div>
           )}
           {fullWidthImages.map((img, i) => (
-            <div key={`full-${i}`} className={`flex flex-col gap-3 ${img.containerClass || 'w-full'}`}>
+            <figure key={`full-${i}`} className={`m-0 flex flex-col gap-3 ${img.containerClass || 'w-full'}`}>
               <div
-                className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : ZOOMABLE}`}
+                className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : ZOOMABLE}`}
                 {...zoomProps(img.src, !img.src || img.src.includes('placeholder'), img.caption, onImageClick)}
               >
                 {!img.src || img.src.includes('placeholder') ? (
@@ -359,32 +413,44 @@ const ProjectDetail = ({
                     <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                   </div>
                 ) : (
-                  <ResponsiveImage
-                    src={img.src}
-                    alt={img.caption}
-                    className="w-full h-auto"
-                    loading="lazy"
-                  />
+                  <>
+                    <ResponsiveImage
+                      src={img.src}
+                      alt={img.caption}
+                      captioned
+                      className="w-full h-auto"
+                      loading="lazy"
+                    />
+                    <ZoomHint />
+                  </>
                 )}
               </div>
-              <p className="text-sm text-slate-400 text-center">{img.caption}</p>
-            </div>
+              <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+            </figure>
           ))}
         </div>
       );
     }
 
     if (section.imageLayout === 'grid') {
+      // `gridWide` gives a section one image per row instead of two. Dense UI
+      // screenshots — the ClassFlow month and week calendars especially — were
+      // capped at ~400px even on a 1920 screen, which made the very details
+      // their captions point at unreadable.
+      const columns = section.gridWide ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2';
+      const gridSizes = section.gridWide
+        ? '(min-width: 1360px) 830px, (min-width: 768px) calc(66vw - 4rem), 90vw'
+        : '(min-width: 1360px) 405px, (min-width: 640px) 33vw, 90vw';
       return (
-        <div className="mt-8 md:mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className={`mt-8 md:mt-10 grid ${columns} gap-4`}>
           {section.images.map((img, i) => {
             const isPlaceholder = !img.src || img.src.includes('placeholder');
             const useAutoHeight = section.imageHeight === 'auto';
             const gridHeightClass = useAutoHeight ? '' : (section.imageHeight || 'h-44 sm:h-56 md:h-64');
             return (
-              <div key={i} className="flex flex-col gap-3">
+              <figure key={i} className="m-0 flex flex-col gap-3">
                 <div
-                  className={`rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
+                  className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
                   {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                 >
                   {isPlaceholder ? (
@@ -393,22 +459,27 @@ const ProjectDetail = ({
                       <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                     </div>
                   ) : (
-                    <ResponsiveImage
-                      src={img.src}
-                      alt={img.caption}
-                      className={
-                        section.imageCrop
-                          ? 'w-full h-full object-cover object-center'
-                          : useAutoHeight
-                            ? 'w-full h-auto'
-                            : 'w-full h-full object-contain'
-                      }
-                      loading="lazy"
-                    />
+                    <>
+                      <ResponsiveImage
+                        src={img.src}
+                        alt={img.caption}
+                        captioned
+                        className={
+                          section.imageCrop
+                            ? 'w-full h-full object-cover object-center'
+                            : useAutoHeight
+                              ? 'w-full h-auto'
+                              : 'w-full h-full object-contain'
+                        }
+                        loading="lazy"
+                        sizes={gridSizes}
+                      />
+                      <ZoomHint />
+                    </>
                   )}
                 </div>
-                <p className="text-sm text-slate-400 text-center">{img.caption}</p>
-              </div>
+                <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+              </figure>
             );
           })}
         </div>
@@ -421,12 +492,18 @@ const ProjectDetail = ({
         {section.images.map((img, i) => {
           const isPlaceholder = !img.src || img.src.includes('placeholder');
           return (
-            <div
+            <figure
               key={i}
-              className={`flex flex-col gap-3 ${section.imageLayout === 'row' ? 'w-full md:w-auto md:flex-shrink-0' : ''} ${section.imageCrop ? 'w-fit items-center' : ''}`}
+              // `max-w-full` on both the column and the frame. Without it a
+              // cropped row image sizes itself from the image's own aspect at
+              // the requested height — the ClassFlow chatbot panel came out
+              // 633px wide inside a 491px column at 768px, and 142px of it ran
+              // off the right edge of the viewport where `overflow-x: clip`
+              // silently ate it.
+              className={`m-0 max-w-full flex flex-col gap-3 ${section.imageLayout === 'row' ? 'w-full md:w-auto md:flex-shrink-0 md:min-w-0' : ''} ${section.imageCrop ? 'items-center' : ''}`}
             >
               <div
-                className={`relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : ZOOMABLE}`}
+                className={`group/media relative rounded-lg overflow-hidden max-w-full ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : ZOOMABLE}`}
                 {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
               >
                 {isPlaceholder ? (
@@ -439,6 +516,7 @@ const ProjectDetail = ({
                     <ResponsiveImage
                       src={img.src}
                       alt={img.caption}
+                      captioned
                       className={
                         section.imageCrop
                           ? 'w-full h-full object-cover object-center'
@@ -448,17 +526,12 @@ const ProjectDetail = ({
                       }
                       loading="lazy"
                     />
-                    {/* Several case-study diagrams are authored 1600px wide, so
-                        their labels are unreadable inline on a phone. Advertise
-                        that tapping opens the zoomable lightbox. */}
-                    <span className="md:hidden absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-slate-200 pointer-events-none">
-                      <ZoomIn size={11} /> Tap to zoom
-                    </span>
+                    <ZoomHint />
                   </>
                 )}
               </div>
-              <p className="text-sm text-slate-400 text-center">{img.caption}</p>
-            </div>
+              <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+            </figure>
           );
         })}
       </div>
@@ -469,11 +542,12 @@ const ProjectDetail = ({
     <div className={`relative z-10 text-slate-100 min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
       {/* Project Hero */}
-      <div className={`w-full ${heroBgClass} pt-[calc(var(--nav-h)+2rem)] pb-12 md:pt-32 md:pb-24 border-b border-white/10`}>
+      <div className="w-full pt-[calc(var(--nav-h)+2rem)] pb-12 md:pt-32 md:pb-24 border-b border-white/10">
         <div className={ui.shell}>
           <button
-            onClick={onBack}
-            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-slate-300 hover:text-accent active:bg-white/10"
+            type="button"
+            onClick={() => onBack()}
+            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-slate-300 hover:text-accent active:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             Back to Projects
@@ -493,52 +567,75 @@ const ProjectDetail = ({
       {/* Main Content Area */}
       <div className={`${ui.shell} py-10 md:py-16`}>
 
-        {/* Project Meta */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-12 gap-6 md:gap-8 mb-12 pb-8 md:mb-20 md:pb-12 border-b border-white/10">
+        {/* Project Meta. A description list, not headings: as <h3>s these sat
+            between the <h1> and the first <h2> section, so every case study's
+            outline read h1 → h3 → h2 and a screen reader ranked "Role" above
+            "Overview". */}
+        <dl className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-12 gap-6 md:gap-8 mb-12 pb-8 md:mb-20 md:pb-12 border-b border-white/10">
           <div className="md:col-span-3">
-            <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-              <Briefcase size={13} className="text-accent" /> Role
-            </h3>
-            <p className="font-medium text-slate-100 text-sm leading-6">{project.content.role}</p>
+            <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+              <Briefcase size={13} className="text-accent" aria-hidden="true" /> Role
+            </dt>
+            <dd className="font-medium text-slate-100 text-sm leading-6">{project.content.role}</dd>
           </div>
           <div className="md:col-span-3">
-            <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-              <Clock size={13} className="text-accent" /> Timeline
-            </h3>
-            <p className="font-medium text-slate-100 text-sm leading-6">{project.timeline}</p>
+            <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+              <Clock size={13} className="text-accent" aria-hidden="true" /> Timeline
+            </dt>
+            <dd className="font-medium text-slate-100 text-sm leading-6">{project.timeline}</dd>
           </div>
           <div className="xs:col-span-2 md:col-span-6">
-            <div className="w-full">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tech &amp; Tools</h3>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag, i) => (
-                  <span key={i} className={ui.chipBase}>{tag}</span>
-                ))}
-              </div>
-            </div>
+            <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tech &amp; Tools</dt>
+            <dd className="flex flex-wrap gap-2">
+              {project.tags.map((tag, i) => (
+                <span key={i} className={ui.chipBase}>{tag}</span>
+              ))}
+            </dd>
           </div>
           {project.content.team && project.content.team.length > 0 && (
             <div className="xs:col-span-2 md:col-span-12">
-              <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                <Users size={13} className="text-accent" /> Team
-              </h3>
-              <p className="font-medium text-slate-100 text-sm leading-6">
+              <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                <Users size={13} className="text-accent" aria-hidden="true" /> Team
+              </dt>
+              <dd className="font-medium text-slate-100 text-sm leading-6">
                 Built alongside {formatNameList(project.content.team)}
-              </p>
+              </dd>
             </div>
           )}
-        </div>
+        </dl>
 
-        {/* Hero Image */}
-        {!isPythonCodes && (
-          <div className={`w-full bg-white/5 rounded-lg mb-12 md:mb-24 overflow-hidden shadow-sm ${isCountdownMotorControl ? 'bg-transparent aspect-square max-w-[420px] w-full mx-auto' : ''}`}>
+        {/* Hero Image. One background class, chosen up front — emitting
+            `bg-white/5` and `bg-transparent` together left the winner to
+            whichever one Tailwind happened to write last. */}
+        {(
+          <div className={`w-full rounded-lg mb-12 md:mb-24 overflow-hidden shadow-sm ${
+            isCountdownMotorControl
+              ? 'bg-transparent aspect-square max-w-[420px] mx-auto'
+              : isPythonCodes
+                ? `${heroBackdrop ?? 'bg-white/5'} aspect-square max-w-[280px] mx-auto p-10`
+                : 'bg-white/5'
+          }`}>
             {!project.content.heroImage.includes('placeholder') ? (
               <div ref={heroParallaxRef} className="w-full h-full will-change-transform">
                 <ResponsiveImage
                   src={project.content.heroImage}
-                  alt={`${project.title} Hero`}
-                  className={isCountdownMotorControl ? 'w-full h-full object-cover object-center' : 'w-full h-auto block'}
+                  alt={`${project.title} — project hero`}
+                  className={
+                    isCountdownMotorControl
+                      ? 'w-full h-full object-cover object-center'
+                      : isPythonCodes
+                        ? 'w-full h-full object-contain'
+                        : 'w-full h-auto block'
+                  }
                   loading="eager"
+                  fetchPriority="high"
+                  sizes={
+                    isCountdownMotorControl
+                      ? '(min-width: 480px) 420px, 90vw'
+                      : isPythonCodes
+                        ? '280px'
+                        : '(min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw'
+                  }
                 />
               </div>
             ) : (
@@ -556,9 +653,9 @@ const ProjectDetail = ({
         {isPythonCodes ? (
           <div className="space-y-10 md:space-y-16">
             {project.content.sections.map((section, idx) => (
-              <div key={idx} className="surface surface-marks rounded-3xl border-l-2 border-emerald-400/50 p-5 sm:p-8 md:p-10">
+              <div key={idx} className="surface surface-marks rounded-3xl border-l-2 border-accent/50 p-5 sm:p-8 md:p-10">
                 <div className="mb-6">
-                  <div className="text-xs uppercase tracking-[0.35em] text-emerald-600/70 mb-3">Python Project</div>
+                  <div className={`${ui.eyebrow} tracking-[0.35em] mb-3`}>Live demo</div>
                   <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-100 mb-3">{section.title}</h2>
                   <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line max-w-[42rem]">{section.content}</p>
                 </div>
@@ -566,7 +663,7 @@ const ProjectDetail = ({
                   <ul className="space-y-3 mb-4 pl-1">
                     {section.listItems.map((item, i) => (
                       <li key={i} className="flex items-start gap-3 text-slate-200">
-                        <span className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-emerald-400"></span>
+                        <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.sectionAccent}`}></span>
                         <span className="leading-relaxed">{item}</span>
                       </li>
                     ))}
@@ -607,7 +704,7 @@ const ProjectDetail = ({
                   <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-slate-400'}`}>
                     {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
                   </span>
-                  <div className={`h-1 ${project.badge.replace('text', 'bg').split(' ')[0]} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
+                  <div className={`h-1 ${project.sectionAccent} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
                   <h2 className={`text-xl font-bold tracking-tight leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-100'}`}>{section.title}</h2>
                 </div>
 
@@ -626,7 +723,7 @@ const ProjectDetail = ({
                     <ul className="space-y-3 mb-8 pl-1">
                       {section.listItems.map((item, i) => (
                         <li key={i} className="flex items-start gap-3 text-slate-200">
-                          <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.badge.replace('text', 'bg').split(' ')[0]}`}></span>
+                          <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.sectionAccent}`}></span>
                           <span className="leading-relaxed">{item}</span>
                         </li>
                       ))}
@@ -695,7 +792,7 @@ const ProjectDetail = ({
                         href={section.cta.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${ui.btnBase} surface surface-hover gap-3 text-white`}
+                        className={`${ui.btnBase} surface surface-hover text-white`}
                       >
                         {section.cta.text} <ExternalLink size={20} className="opacity-80" />
                       </a>
@@ -722,9 +819,12 @@ const ProjectDetail = ({
                   {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
                     <ResponsiveImage
                       src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}
-                      alt={nextProject.title}
+                      alt=""
                       className={`w-full h-full transition-transform duration-500 group-hover:scale-110 ${nextThumbnailBackdrop ? 'object-contain' : 'object-cover'}`}
                       loading="lazy"
+                      // 144px at its largest. Without this it inherited the
+                      // 1050px default and pulled a 2400px original.
+                      sizes="(min-width: 768px) 144px, 80px"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -734,10 +834,13 @@ const ProjectDetail = ({
                 </div>
                 <div className="min-w-0 flex-1">
                   <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent/90">Next Project →</span>
-                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-slate-100 truncate group-hover:text-accent transition-colors">
+                  {/* `line-clamp`, not `truncate`: a single-line ellipsis cut
+                      "Agentic AI / Enterpris…" at 320px and would have cut
+                      "The Soundtrack of Seven Years" too. */}
+                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-slate-100 line-clamp-2 group-hover:text-accent transition-colors [text-wrap:balance]">
                     {nextProject.title}
                   </h3>
-                  <p className="mt-1 text-sm text-slate-400 truncate">{nextProject.category}</p>
+                  <p className="mt-1 text-sm text-slate-400 line-clamp-2">{nextProject.category}</p>
                 </div>
                 <ArrowRight
                   size={28}
@@ -751,8 +854,9 @@ const ProjectDetail = ({
         {/* Footer Navigation */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap justify-between items-center gap-4">
           <button
-            onClick={onBack}
-            className="group -ml-3 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors flex items-center gap-2"
+            type="button"
+            onClick={() => onBack()}
+            className="group -ml-3 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>

@@ -18,6 +18,12 @@ type RotatingTextProps = {
  * A crossfade keeps the rotation without borrowing the terminal idiom.
  *
  * Falls back to a static first phrase under prefers-reduced-motion.
+ *
+ * Deliberately hidden from assistive tech. This was an `aria-live="polite"`
+ * region, which meant a screen reader announced a new phrase every 2.9 seconds
+ * for as long as the page stayed open, cutting across whatever was being read.
+ * Nothing here is new information either — the same five signals are in the
+ * hero paragraph and in the About "Expertise" lists.
  */
 export default function RotatingText({
   phrases,
@@ -50,7 +56,7 @@ export default function RotatingText({
   }, [index, phrases, holdMs, fadeMs, reduceMotion]);
 
   if (reduceMotion) {
-    return <span className={className}>{phrases[0]}</span>;
+    return <span className={className} aria-hidden="true">{phrases[0]}</span>;
   }
 
   return (
@@ -58,7 +64,7 @@ export default function RotatingText({
       className={`inline-block transition-all duration-300 ease-out ${
         shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
       } ${className}`}
-      aria-live="polite"
+      aria-hidden="true"
     >
       {phrases[index % phrases.length]}
     </span>

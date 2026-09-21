@@ -277,11 +277,23 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
           setDismissed(true);
         }}
         aria-label="Send Lewis away"
-        className={`absolute -top-2 -right-2 pointer-events-auto grid h-7 w-7 place-items-center rounded-full bg-black/70 text-sm leading-none text-slate-300 ring-1 ring-white/20 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+        // Out of the sequential tab order: the pet is decoration, and this
+        // button rendered early enough in the tree to be the second thing a
+        // keyboard user reached on every page — ahead of the skip link. Still
+        // reachable with a pointer, and still focusable programmatically.
+        tabIndex={-1}
+        // A 44x44 hit area around a 28px glyph, which is the target size this
+        // codebase sets as its own standard in `ui.tapTarget`.
+        className={`absolute -top-[0.55rem] -right-[0.55rem] pointer-events-auto grid h-11 w-11 place-items-center transition-opacity focus-visible:opacity-100 focus-visible:outline-none ${
           hovered ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        ×
+        <span
+          aria-hidden="true"
+          className="grid h-7 w-7 place-items-center rounded-full bg-black/70 text-sm leading-none text-slate-300 ring-1 ring-white/20 hover:text-white"
+        >
+          ×
+        </span>
       </button>
     </div>
   );

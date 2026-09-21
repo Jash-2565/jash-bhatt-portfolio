@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 type MovieRow = {
   movie_title: string;
@@ -13,7 +14,7 @@ type MovieRow = {
 
 type Vector = Map<string, number>;
 
-const DATA_URL = '/models/movie_metadata.csv';
+const DATA_URL = `${PUBLIC_URL}/models/movie_metadata.csv`;
 const RESULT_COUNT = 10;
 
 const normalize = (value: string) => value.toLowerCase().trim();
@@ -138,10 +139,16 @@ const MovieRecsDemo = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<string[]>([]);
   const [message, setMessage] = useState('Load the dataset to start.');
+  // The dataset is 1.4MB and gets tokenised into ~5,000 feature vectors on the
+  // main thread. That used to happen on mount — so simply opening the case
+  // study spent a megabyte and a long task on a demo the reader had not asked
+  // for, under a label that said "Load the dataset to start."
+  const [armed, setArmed] = useState(false);
 
   const isReady = status === 'ready';
 
   useEffect(() => {
+    if (!armed) return;
     let cancelled = false;
     const load = async () => {
       setStatus('loading');
@@ -209,7 +216,7 @@ const MovieRecsDemo = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [armed]);
 
   const handleRecommend = () => {
     if (!query.trim() || !isReady) {
@@ -266,14 +273,29 @@ const MovieRecsDemo = () => {
     <div className="rounded-2xl bg-[var(--surface-1)] shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
-          <h4 className="text-lg font-semibold text-slate-100">Movie Recommendation Demo</h4>
-          <p className="text-sm text-slate-400">Dataset: `public/models/movie_metadata.csv`</p>
+          <h3 className="text-lg font-semibold text-slate-100">Movie Recommendation Demo</h3>
+          <p className="text-sm text-slate-400">5,043 films · content-based, runs in this tab</p>
         </div>
         <span className="text-xs uppercase tracking-widest text-slate-300 bg-slate-800 px-3 py-1 rounded-sm">
-          {status}
+          {armed ? status : 'idle'}
         </span>
       </div>
 
+      {!armed ? (
+        <div className="rounded-xl bg-[var(--ground)] p-6 text-center">
+          <p className="text-sm text-slate-300">
+            The dataset is a 1.4&nbsp;MB CSV, parsed and vectorised in your browser.
+            It only downloads if you ask for it.
+          </p>
+          <button
+            type="button"
+            onClick={() => setArmed(true)}
+            className="mt-4 min-h-11 px-5 rounded-sm text-sm font-semibold bg-accent text-black hover:bg-accent-br transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ground)]"
+          >
+            Load dataset (1.4 MB)
+          </button>
+        </div>
+      ) : (
       <div className="rounded-xl bg-[var(--ground)] p-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <input
@@ -313,9 +335,10 @@ const MovieRecsDemo = () => {
           ))}
         </div>
       </div>
+      )}
 
       <div className="mt-5">
-        <p className="text-sm text-slate-300 mb-3">{message}</p>
+        <p className="text-sm text-slate-300 mb-3" role="status">{message}</p>
         {results.length > 0 && (
           <ul className="grid gap-2 md:grid-cols-2">
             {results.map((title) => (

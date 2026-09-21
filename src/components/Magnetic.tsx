@@ -11,6 +11,9 @@ type MagneticProps = {
   href?: string;
   target?: string;
   rel?: string;
+  /** Forwarded to the anchor so a PDF actually downloads rather than opening
+      inline under a button that says "Download". */
+  download?: string;
   ariaLabel?: string;
 };
 
@@ -26,6 +29,7 @@ export default function Magnetic({
   href,
   target,
   rel,
+  download,
   ariaLabel,
 }: MagneticProps) {
   const ref = useRef<HTMLElement>(null);
@@ -55,7 +59,7 @@ export default function Magnetic({
 
   if (as === 'a') {
     return (
-      <a {...shared} href={href} target={target} rel={rel} aria-label={ariaLabel}>
+      <a {...shared} href={href} target={target} rel={rel} download={download} aria-label={ariaLabel}>
         {children}
       </a>
     );

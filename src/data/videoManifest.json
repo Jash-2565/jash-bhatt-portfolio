@@ -1,0 +1,86 @@
+{
+  "/images/Lamborghini Jetski/jetski final": {
+    "w": 400,
+    "h": 224,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  },
+  "/images/Photoshop and Animation/Geometric-Design": {
+    "w": 360,
+    "h": 360,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  },
+  "/images/Photoshop and Animation/nothing-animation": {
+    "w": 1920,
+    "h": 1080,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  },
+  "/images/Revela/Low-Fidelity Prototype Testing": {
+    "w": 464,
+    "h": 832,
+    "mp4": true,
+    "webm": true,
+    "poster": true
+  },
+  "/images/Revela/distance-testing-2": {
+    "w": 480,
+    "h": 848,
+    "mp4": true,
+    "webm": true,
+    "poster": true
+  },
+  "/images/Revela/distance-testing": {
+    "w": 480,
+    "h": 848,
+    "mp4": true,
+    "webm": true,
+    "poster": true
+  },
+  "/images/Revela/esp32-soldering": {
+    "w": 480,
+    "h": 848,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  },
+  "/images/Revela/tag-printing": {
+    "w": 508,
+    "h": 288,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  },
+  "/images/Revela/wand-creation": {
+    "w": 288,
+    "h": 508,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  },
+  "/images/Tinkering/1-segment-countdown": {
+    "w": 540,
+    "h": 960,
+    "mp4": true,
+    "webm": true,
+    "poster": true
+  },
+  "/images/Tinkering/2-segment-countdown": {
+    "w": 540,
+    "h": 960,
+    "mp4": true,
+    "webm": true,
+    "poster": true
+  },
+  "/images/Tinkering/final-countdown": {
+    "w": 480,
+    "h": 848,
+    "mp4": true,
+    "webm": false,
+    "poster": true
+  }
+}

@@ -18,12 +18,13 @@ const ResponsiveImage = ({
   loading = 'lazy',
   className,
   sizes,
+  captioned = false,
   ...imgProps
 }: ResponsiveImageProps) => {
   // GIFs are shipped as encoded video (see scripts/gif-to-video.sh) — render an
   // autoplaying looping <video> instead of the multi-MB animated GIF.
   if (typeof src === 'string' && /\.gif$/i.test(src)) {
-    return <AutoVideo src={src} alt={alt} className={className} />;
+    return <AutoVideo src={src} alt={alt} captioned={captioned} className={className} />;
   }
 
   const sources = getImageSources(src);
@@ -31,7 +32,10 @@ const ResponsiveImage = ({
   return (
     <img
       src={src}
-      alt={alt}
+      // A caption underneath already says this; repeating it as alt made a
+      // screen reader announce every case-study image twice.
+      alt={captioned ? '' : alt}
+      {...(captioned ? { role: 'presentation' as const } : {})}
       loading={loading}
       decoding="async"
       className={className}

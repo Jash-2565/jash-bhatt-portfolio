@@ -28,11 +28,22 @@ import ffmpegPath from 'ffmpeg-static';
 const run = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-/** Long-edge cap. Two clips are 1080×1920; they render a few hundred px wide. */
-const MAX_EDGE = 1280;
+/**
+ * Long-edge cap. None of these render wider than ~420 CSS px — the techSplit
+ * tiles are ~330px and the Tinkering hero is capped at 420 — so 1280 was ~3x
+ * more than a 2x display can use. 960 still covers every slot at 2x.
+ */
+const MAX_EDGE = 960;
 /** Constant-quality targets. Higher = smaller. Tuned for short, muted, looping UI clips. */
-const H264_CRF = 28;
-const VP9_CRF = 36;
+const H264_CRF = 30;
+const VP9_CRF = 38;
+/**
+ * Frame rate cap. These are screen recordings and bench shots of slow physical
+ * processes; nothing in them needs more than 20fps, and two clips were carrying
+ * 30. distance-testing-2 alone was 2.0MB of mp4 for a tile a third of a
+ * viewport wide.
+ */
+const MAX_FPS = 20;
 
 /** The clips AutoVideo autoplays, keyed off the `.gif` paths in the project data. */
 const CLIPS = [
@@ -114,14 +125,14 @@ async function main() {
     let ok = false;
     try {
       await encode(srcCopy, mp4, [
-        '-an', '-vf', SCALE,
+        '-an', '-vf', SCALE, '-r', String(MAX_FPS),
         '-c:v', 'libx264', '-profile:v', 'main', '-pix_fmt', 'yuv420p',
         '-crf', String(H264_CRF), '-preset', 'slow',
         '-movflags', '+faststart',
       ], 'mp4 ', mp4Before);
 
       await encode(srcCopy, webm, [
-        '-an', '-vf', SCALE,
+        '-an', '-vf', SCALE, '-r', String(MAX_FPS),
         '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', String(VP9_CRF),
         '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2',
       ], 'webm', webmBefore);

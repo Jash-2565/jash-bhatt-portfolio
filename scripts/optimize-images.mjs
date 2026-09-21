@@ -23,7 +23,7 @@
  * Usage: npm run optimize:images  [-- --dry]
  */
 import sharp from 'sharp';
-import { readdir, stat, writeFile, rename, unlink } from 'node:fs/promises';
+import { readdir, stat, writeFile, rename, unlink, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -49,6 +49,43 @@ const MIN_WIDTH_FOR_VARIANTS = 700;
 const RECOMPRESS_BPP = 0.3;
 
 const RASTER = new Set(['.webp', '.png', '.jpg', '.jpeg']);
+/**
+ * SVGs get a manifest entry too — dimensions only, no variants.
+ *
+ * They are vectors, so there is nothing to resize, but without intrinsic
+ * dimensions the browser reserves no space for them and the page reflows as
+ * each one lands. The case-study diagrams are all SVG, so on HR Genie and
+ * ETSConnect that was six and nine shifts per page.
+ */
+const VECTOR = new Set(['.svg']);
+
+/** Intrinsic size of an SVG, from its width/height attrs or its viewBox. */
+async function svgDimensions(file) {
+  const head = (await readFile(file, 'utf8')).slice(0, 4000);
+  const tag = head.match(/<svg\b[^>]*>/i)?.[0];
+  if (!tag) return null;
+
+  const attr = (name) => tag.match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']+)["']`, 'i'))?.[1];
+  const num = (v) => {
+    if (!v) return null;
+    const n = Number.parseFloat(v);
+    // A percentage width tells us nothing about intrinsic size.
+    return Number.isFinite(n) && !v.includes('%') ? n : null;
+  };
+
+  const w = num(attr('width'));
+  const h = num(attr('height'));
+  if (w && h) return { width: Math.round(w), height: Math.round(h) };
+
+  const viewBox = attr('viewBox');
+  if (viewBox) {
+    const parts = viewBox.trim().split(/[\s,]+/).map(Number);
+    if (parts.length === 4 && parts.every(Number.isFinite) && parts[2] > 0 && parts[3] > 0) {
+      return { width: Math.round(parts[2]), height: Math.round(parts[3]) };
+    }
+  }
+  return null;
+}
 const DRY = process.argv.includes('--dry');
 
 // libvips caches decoded operations by file path. Because this script rewrites
@@ -75,10 +112,12 @@ async function walk(dir) {
 const mb = (n) => `${(n / 1048576).toFixed(2)}MB`;
 
 async function main() {
-  const files = (await walk(IMAGES_DIR)).filter((f) => {
+  const all = await walk(IMAGES_DIR);
+  const files = all.filter((f) => {
     const base = path.basename(f);
     return RASTER.has(path.extname(f).toLowerCase()) && !isGenerated(base) && !isPoster(base);
   });
+  const vectors = all.filter((f) => VECTOR.has(path.extname(f).toLowerCase()));
 
   const manifest = {};
   let beforeTotal = 0;
@@ -171,6 +210,20 @@ async function main() {
       ...(emitted.length ? { v: emitted } : {}),
     };
   }
+
+  // --- 3. SVG dimensions, so vector diagrams reserve their space too --------
+  let vectorsRecorded = 0;
+  for (const file of vectors.sort()) {
+    const rel = path.relative(path.join(ROOT, 'public'), file).split(path.sep).join('/');
+    const dims = await svgDimensions(file);
+    if (!dims) {
+      console.warn(`  ?? skipping (no width/height or viewBox): ${rel}`);
+      continue;
+    }
+    manifest[`/${rel}`] = { w: dims.width, h: dims.height };
+    vectorsRecorded += 1;
+  }
+  console.log(`  svg   ${vectorsRecorded} vector dimensions recorded`);
 
   if (!DRY) {
     await writeFile(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);

@@ -42,6 +42,17 @@
   }
 }
 
+/* One focus indicator, everywhere.
+   The nav buttons and the hero CTAs carried no focus style at all and fell
+   through to the UA default — Chrome's thin orange ring, which reads as a
+   different design language from the cyan ring the project cards use, and
+   which is far weaker on this near-black ground in Safari and Firefox. */
+:where(a, button, [role='button'], input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid rgb(var(--accent-rgb));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 html {
   /* `clip` rather than `hidden`: it still contains stray horizontal overflow,
      but does not turn the element into a scroll container — which is what was
@@ -167,6 +178,21 @@ label {
 .hide-native-cursor,
 .hide-native-cursor * {
   cursor: none !important;
+}
+
+/* …but not everywhere. `cursor: none` on `*` also removed the text I-beam over
+   body copy and killed the `cursor-zoom-in` on every zoomable case-study image
+   — which, on the grid and mixed layouts, was the only thing saying those
+   images open at all. The custom ring still covers the page; these three
+   reinstate the cursors that carry meaning. */
+.hide-native-cursor :is(p, li, h1, h2, h3, h4, h5, h6, figcaption, dd, blockquote, code, pre) {
+  cursor: text !important;
+}
+.hide-native-cursor :is([role='button'], .cursor-zoom-in) {
+  cursor: zoom-in !important;
+}
+.hide-native-cursor :is(input, textarea, select) {
+  cursor: auto !important;
 }
 
 /* Custom cursor (desktop pointer only): a precise dot pinned to the exact pointer position — the point to actually

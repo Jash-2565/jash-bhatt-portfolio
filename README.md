@@ -21,11 +21,37 @@ The dev server listens on `http://127.0.0.1:5177`.
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Vite dev server with HMR |
-| `npm run build` | Typecheck (`tsc -b`) then build to `dist/` |
+| `npm run build` | Typecheck, build to `dist/`, then prerender one HTML file per route |
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | ESLint over the whole repo |
 | `npm run optimize:images` | Cap oversized images, emit srcset variants, rewrite the image manifest |
 | `npm run optimize:videos` | Re-encode the autoplaying clips to VP9/H.264 plus poster frames |
+| `npm run manifest:videos` | Record which encodings each clip actually has, and their dimensions |
+| `npm run prerender` | The per-route `<head>` pass on its own (normally part of `build`) |
+
+## Routing
+
+Real paths, not hashes:
+
+| Path | View |
+| --- | --- |
+| `/` `/work` `/about` `/contact` | The home page — one scroll at `lg+`, four separate pages below it |
+| `/explorations` | Creative Explorations |
+| `/work/<slug>` | A case study |
+
+The routing is still entirely client-side; `src/utils/routes.ts` resolves the URL
+and `App.tsx` pushes to it. What the paths buy is a `<head>` a scraper can read.
+`scripts/prerender.mjs` runs after `vite build` and writes one HTML file per
+route with its own title, description, canonical and OG tags, so each case study
+gets its own link preview. Add a project and it appears there automatically — the
+script reads `src/data/projects.ts`.
+
+Every old `#hash` link still works. `legacyHashRoute` maps `#<slug>`,
+`#project-<id>`, `#gallery` and the four section anchors onto the new paths, and
+the app rewrites the address bar in place on arrival.
+
+`vercel.json` handles the rest: `cleanUrls`, a catch-all rewrite for paths that
+were never prerendered, and cache headers.
 
 ## Layout
 
@@ -37,7 +63,7 @@ src/
   data/             Case-study content, generated image manifest, demo source listings
   hooks/            useInView, useIsMobile, usePointerFine
   types/            Shared content and project types
-  utils/            Base-URL prefix, srcset lookup, small formatters
+  utils/            Base-URL prefix, route table, srcset lookup, small formatters
 public/
   images/           Case-study media, plus generated -480/-960/-1440 variants
   models/           YOLOv8 weights and the movie dataset
@@ -47,6 +73,8 @@ public/
 scripts/
   optimize-images.mjs   Image cap + srcset pass (writes src/data/imageManifest.json)
   optimize-videos.mjs   Video re-encode pass
+  video-manifest.mjs    Records available encodings + dimensions (src/data/videoManifest.json)
+  prerender.mjs         Per-route <head> + sitemap, run after vite build
   gif-to-video.sh       One-shot GIF → mp4/webm/poster conversion
   og-card.html          Source layout for public/og-image.png
 ```
@@ -63,6 +91,10 @@ Case-study media never ships as it was exported.
 - **Video.** Animated GIFs are converted to muted, looping `<video>` elements.
   Project data still references the original `.gif` path; `AutoVideo` swaps in
   the `.webm`/`.mp4`/`.poster.jpg` siblings and plays only while in view.
+  `optimize-videos.mjs` deletes a VP9 file whenever it lands heavier than its
+  H.264 sibling, so most clips are mp4-only — `video-manifest.mjs` records which
+  encodings exist and `AutoVideo` only emits a `<source>` for those. Re-run both
+  after adding or re-encoding a clip.
 
 ## The standalone Spotify piece
 
@@ -75,6 +107,12 @@ whole, and re-running that pipeline against a fresh export replaces the file.
 The case study links to it as `/spotify-wrapped/index.html`, naming the file
 rather than the directory: a static host resolves `/spotify-wrapped/` to the
 index, but Vite's dev server answers that path with the SPA shell instead.
+
+Two edits are maintained here by hand rather than by that pipeline, so they need
+re-applying if the file is regenerated: the `<html lang="en">` wrapper, and the
+`.site-back` link plus the byline under the hero (the piece speaks in the second
+person about Jash's own listening history, and without the byline that reads as
+a template nobody filled in).
 
 ## Deployment
 

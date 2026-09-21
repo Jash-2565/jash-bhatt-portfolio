@@ -23,6 +23,12 @@ export default function CursorGlow() {
     document.documentElement.classList.add('hide-native-cursor');
 
     let raf = 0;
+    // Whether a frame is currently scheduled. The loop used to re-arm itself
+    // unconditionally, so it woke the compositor 60–120 times a second for as
+    // long as the tab was open, writing nothing, whenever the pointer sat
+    // still. Now it stops once the ring has caught up and restarts on the next
+    // mousemove.
+    let running = false;
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight / 2;
     let ringX = targetX;
@@ -55,6 +61,7 @@ export default function CursorGlow() {
       targetY = e.clientY;
       hoverNode = e.target instanceof Element ? e.target : null;
       setVisible(true);
+      start();
     };
 
     // Hide the cursor when it leaves the window or the tab loses focus so a stale
@@ -113,6 +120,19 @@ export default function CursorGlow() {
         }
       }
 
+      // Settled and nothing left to catch up on — stop until the pointer moves.
+      if (ringX === targetX && ringY === targetY && hoverNode === lastHoverNode) {
+        running = false;
+        return;
+      }
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      last = performance.now();
       raf = requestAnimationFrame(tick);
     };
 
@@ -120,13 +140,13 @@ export default function CursorGlow() {
     document.addEventListener('mouseleave', onLeave);
     document.addEventListener('mouseenter', onEnter);
     window.addEventListener('blur', onLeave);
-    last = performance.now();
-    raf = requestAnimationFrame(tick);
+    start();
     return () => {
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
       document.removeEventListener('mouseenter', onEnter);
       window.removeEventListener('blur', onLeave);
+      running = false;
       cancelAnimationFrame(raf);
       document.documentElement.classList.remove('hide-native-cursor');
     };

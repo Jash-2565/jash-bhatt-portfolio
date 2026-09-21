@@ -9,13 +9,14 @@ const ImageWithFallback = ({
   alt = '',
   className,
   sizes,
+  captioned = false,
   ...imgProps
 }: ResponsiveImageProps) => {
   const [hasError, setHasError] = useState(false);
 
   // GIFs are shipped as encoded video (see scripts/gif-to-video.sh).
   if (typeof src === 'string' && /\.gif$/i.test(src)) {
-    return <AutoVideo src={src} alt={alt} className={className} />;
+    return <AutoVideo src={src} alt={alt} captioned={captioned} className={className} />;
   }
 
   if (hasError) {
@@ -31,7 +32,8 @@ const ImageWithFallback = ({
   return (
     <img
       src={src}
-      alt={alt}
+      alt={captioned ? '' : alt}
+      {...(captioned ? { role: 'presentation' as const } : {})}
       loading="lazy"
       decoding="async"
       className={className}
