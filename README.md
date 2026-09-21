@@ -50,8 +50,12 @@ Every old `#hash` link still works. `legacyHashRoute` maps `#<slug>`,
 `#project-<id>`, `#gallery` and the four section anchors onto the new paths, and
 the app rewrites the address bar in place on arrival.
 
-`vercel.json` handles the rest: `cleanUrls`, a catch-all rewrite for paths that
-were never prerendered, and cache headers.
+Anything that isn't one of those routes genuinely is a 404, so it gets one —
+`prerender.mjs` also writes `dist/404.html`, which Vercel serves for unmatched
+paths. Rewriting them to the home page instead would be a soft 404, which search
+engines treat as a defect, and which tells a visitor with a stale link nothing.
+
+`vercel.json` handles the rest: `cleanUrls`, `trailingSlash` and cache headers.
 
 ## Layout
 
