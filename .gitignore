@@ -21,6 +21,13 @@ venv
 venv*/
 
 # Editor & OS
+# iCloud/Dropbox conflict copies. A sync service drops a `foo 2.webp` beside
+# `foo.webp` whenever it sees a write it thinks is contended, and a bare
+# `git add -A` sweeps them straight into a commit. The one real asset with a
+# number in its name is negated below.
+* [0-9].*
+*\ [0-9].*
+!*Design System 2.webp
 .vscode/*
 !.vscode/extensions.json
 .idea
