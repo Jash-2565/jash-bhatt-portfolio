@@ -1,0 +1,5 @@
+# https://jashbhatt.com
+User-agent: *
+Allow: /
+
+Sitemap: https://jashbhatt.com/sitemap.xml

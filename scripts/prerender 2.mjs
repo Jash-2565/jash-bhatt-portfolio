@@ -158,64 +158,6 @@ async function main() {
     console.log(`  ${route.urlPath.padEnd(34)} → dist/${route.out}`);
   }
 
-  // A branded 404.
-  //
-  // Vercel serves `404.html` for anything that matches no file, which is the
-  // right behaviour: an unknown path gets a real 404 status rather than being
-  // rewritten to the home page, which is a soft 404 and which search engines
-  // treat as a defect. What it must not be is Vercel's bare `NOT_FOUND` text
-  // page — no branding, no name, no way back.
-  //
-  // Static on purpose. It carries no JS bundle, so it still renders if the app
-  // itself is what's broken.
-  const notFound = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="robots" content="noindex" />
-<meta name="theme-color" content="#010309" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-<title>Page not found | Jash Bhatt</title>
-<style>
-  :root { --ground:#010309; --accent:#01f5d1; }
-  *{box-sizing:border-box}
-  body{margin:0;min-height:100svh;display:flex;align-items:center;background:var(--ground);
-    color:#e5e8ea;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-    line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:34rem;margin:0 auto;padding:3rem 1.25rem}
-  .kicker{font:500 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.2em;
-    text-transform:uppercase;color:#94a3b8;margin:0 0 1rem}
-  h1{font-size:clamp(1.75rem,6vw,2.5rem);line-height:1.15;margin:0 0 .75rem;letter-spacing:-.01em}
-  p{margin:0 0 1.5rem;color:#cbd5e1}
-  .links{display:flex;flex-wrap:wrap;gap:.75rem}
-  a{display:inline-flex;align-items:center;min-height:44px;padding:0 1.25rem;border-radius:2px;
-    font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;
-    text-transform:uppercase;text-decoration:none;transition:background-color .2s,color .2s}
-  .primary{background:var(--accent);color:#020617}
-  .primary:hover{background:#9ef7ea}
-  .secondary{border:1px solid rgba(255,255,255,.15);color:#e5e8ea}
-  .secondary:hover{color:var(--accent);border-color:rgba(1,245,209,.4)}
-  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-</style>
-</head>
-<body>
-  <main class="wrap">
-    <p class="kicker">404</p>
-    <h1>That page isn't here.</h1>
-    <p>The link may be out of date, or the address may have a typo in it. The work is all one click away.</p>
-    <div class="links">
-      <a class="primary" href="/work">See the work</a>
-      <a class="secondary" href="/">Home</a>
-    </div>
-  </main>
-</body>
-</html>
-`;
-  await writeFile(path.join(DIST, '404.html'), notFound);
-  console.log('  404                                → dist/404.html');
-
   // Sitemap, from the same route table so the two can never disagree.
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = [
