@@ -15,7 +15,15 @@
   --ink-900: #e5e8ea;
   /* Surface scale. Everything is opaque: panes are told apart from the ground
      by a hairline rule and their corner marks, not by a translucent material. */
-  --ground: #02060f;
+  /* A blue-black, not a neutral one — blue runs ~9x red here, the same cool
+     cast as the two surfaces below. That shared cast is what makes a pane
+     read as the ground lifted rather than as a cool box sitting on a neutral
+     field, and it is what holds the schematic language (traces, corner marks,
+     mono labels) together.
+     Darkness is not what this value is for. Body text over it measures
+     16.8:1; over pure black it would be 17.1:1, a difference no one can see.
+     Anything darker than this is a decision about hue, not contrast. */
+  --ground: #010309;
   /* Roughly even ~1.10:1 steps. Panes are told apart from the ground by tone,
      not by an outline — which is the whole reason these can be subtle. */
   --surface-1: #0d141c;
@@ -47,7 +55,7 @@ body {
   font-family: 'Sora', sans-serif;
   color: var(--ink-900);
   overflow-x: clip;
-  /* Ground colour only. The app root paints an opaque #02060f over the body,
+  /* Ground colour only. The app root paints an opaque --ground over the body,
      so any colour layered here is invisible — which is why the washes that
      used to live on this rule never actually rendered. This just has to match
      that root, so the page never flashes a lighter ground before React

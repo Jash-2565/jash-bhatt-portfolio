@@ -49,7 +49,15 @@ export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {
   },
   classflow: {
     heroBgClass: 'bg-transparent',
-    heroTextClass: 'text-[#4239C4]',
+    // ClassFlow's indigo, lightened. The brand value is #4239C4 — hsl(244 55%
+    // 50%) — which measures 2.57:1 against the ground and so misses the 3:1
+    // floor that applies to large text (WCAG 2.1 AA, 1.4.3); the hero title
+    // is large, but large is not exempt. This holds the hue at 244 exactly
+    // and lifts saturation 55% -> 70% so the colour keeps its chroma as it
+    // gains lightness, rather than washing out to a pastel. It measures
+    // 4.66:1 here, and stays above 4:1 on every other surface the site has,
+    // so it survives another change of ground.
+    heroTextClass: 'text-[#7067E4]',
     heroMutedTextClass: 'text-[#D3D0FF]',
     heroBodyTextClass: 'text-[#ECEAFF]',
   },
