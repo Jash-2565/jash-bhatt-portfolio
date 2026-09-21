@@ -25,11 +25,17 @@ export default function BackToTop() {
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
+      // Out of the tab order while invisible. It renders before everything
+      // else in the tree, so left focusable it was the *first* thing a
+      // keyboard user reached on the page — an invisible button, ahead of the
+      // skip link.
+      tabIndex={visible ? 0 : -1}
+      aria-hidden={visible ? undefined : true}
       className={`surface surface-hover fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-sm text-accent transition-all duration-300 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
     >
-      <ArrowUp size={20} />
+      <ArrowUp size={20} aria-hidden="true" />
     </button>
   );
 }

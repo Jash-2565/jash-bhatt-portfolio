@@ -159,9 +159,22 @@
       1440
     ]
   },
+  "/images/Lewis Pet/lewis-spritesheet.webp": {
+    "w": 1536,
+    "h": 1872,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
   "/images/Photography/camera.png": {
     "w": 512,
     "h": 512
+  },
+  "/images/Photography/camera.webp": {
+    "w": 96,
+    "h": 96
   },
   "/images/Photography/fire-sunset.webp": {
     "w": 2400,
@@ -191,8 +204,8 @@
     ]
   },
   "/images/Photography/sunroof-water.webp": {
-    "w": 1800,
-    "h": 2400,
+    "w": 1600,
+    "h": 2133,
     "v": [
       480,
       960,
@@ -211,6 +224,10 @@
     "w": 512,
     "h": 512
   },
+  "/images/Photoshop and Animation/after-effects.webp": {
+    "w": 96,
+    "h": 96
+  },
   "/images/Photoshop and Animation/la la land.webp": {
     "w": 2000,
     "h": 2000,
@@ -223,6 +240,10 @@
   "/images/Photoshop and Animation/photoshop.png": {
     "w": 512,
     "h": 512
+  },
+  "/images/Photoshop and Animation/photoshop.webp": {
+    "w": 96,
+    "h": 96
   },
   "/images/RAHI/RAHI Logo.webp": {
     "w": 1600,
@@ -313,6 +334,14 @@
       480,
       960,
       1440
+    ]
+  },
+  "/images/Revela/Revela-Thumbnail.webp": {
+    "w": 1200,
+    "h": 1200,
+    "v": [
+      480,
+      960
     ]
   },
   "/images/Revela/wamd-creation-2.webp": {
@@ -414,6 +443,15 @@
     ]
   },
   "/images/SolarLink/SolarLink-Current-Journey.webp": {
+    "w": 2400,
+    "h": 1350,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/SolarLink/SolarLink-Hero.webp": {
     "w": 2400,
     "h": 1350,
     "v": [
@@ -667,7 +705,75 @@
     ]
   },
   "/images/python.webp": {
-    "w": 512,
-    "h": 512
+    "w": 288,
+    "h": 288
+  },
+  "/images/ETSConnect/ETSConnect-Direction-Shift.svg": {
+    "w": 1600,
+    "h": 660
+  },
+  "/images/ETSConnect/ETSConnect-Hero.svg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/images/ETSConnect/ETSConnect-Market.svg": {
+    "w": 1600,
+    "h": 640
+  },
+  "/images/ETSConnect/ETSConnect-Penetration.svg": {
+    "w": 1600,
+    "h": 620
+  },
+  "/images/ETSConnect/ETSConnect-Pillars.svg": {
+    "w": 1600,
+    "h": 800
+  },
+  "/images/ETSConnect/ETSConnect-Priority-Matrix.svg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/images/ETSConnect/ETSConnect-Research.svg": {
+    "w": 1600,
+    "h": 500
+  },
+  "/images/ETSConnect/ETSConnect-Stakeholders.svg": {
+    "w": 1600,
+    "h": 880
+  },
+  "/images/ETSConnect/ETSConnect-System-Inefficiency.svg": {
+    "w": 1600,
+    "h": 800
+  },
+  "/images/ETSConnect/ETSConnect-Thumbnail.svg": {
+    "w": 1200,
+    "h": 900
+  },
+  "/images/HR Genie/HR-Genie-Chat-Mockup.svg": {
+    "w": 900,
+    "h": 1360
+  },
+  "/images/HR Genie/HR-Genie-Conveyance-Architecture.svg": {
+    "w": 1600,
+    "h": 560
+  },
+  "/images/HR Genie/HR-Genie-Creche-Flow.svg": {
+    "w": 1600,
+    "h": 760
+  },
+  "/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg": {
+    "w": 1600,
+    "h": 980
+  },
+  "/images/HR Genie/HR-Genie-Hero.svg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/images/HR Genie/HR-Genie-Scale.svg": {
+    "w": 1600,
+    "h": 700
+  },
+  "/images/HR Genie/HR-Genie-Thumbnail.svg": {
+    "w": 1200,
+    "h": 900
   }
 }

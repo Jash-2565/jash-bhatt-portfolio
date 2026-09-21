@@ -35,7 +35,29 @@ export const ui = {
   h2: 'text-[1.75rem] sm:text-3xl md:text-4xl',
   /** 44px minimum touch target, per WCAG 2.2 target-size guidance. */
   tapTarget: 'min-h-11 min-w-11',
+  /** The site's focus indicator. index.css also sets a `:focus-visible`
+      fallback for anything that misses this, so the two can't diverge. */
+  focusRing: 'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ground)]',
 } as const;
+
+/**
+ * Contact details, in one place. They were previously typed out at each of the
+ * five call sites, which is how the mobile home strip and the contact section
+ * drifted apart.
+ */
+export const CONTACT_EMAIL = 'jashbhatt.contact@gmail.com';
+export const LINKEDIN_URL = 'https://www.linkedin.com/in/jash-bhatt';
+export const LINKEDIN_HANDLE = '/in/jash-bhatt';
+/**
+ * TODO(jash): set this to your GitHub profile and the links appear.
+ *
+ * Left null rather than guessed: a portfolio whose case studies ship React,
+ * Python, ONNX and Swift had no link to any of the code, which is the first
+ * thing an engineering-adjacent reviewer looks for. Everything that renders it
+ * is already wired up — footer, contact card, and the per-project repo links
+ * below — and all of it stays hidden until this is a real URL.
+ */
+export const GITHUB_URL: string | null = null;
 
 export const personalitySignals = [
   // The two role titles lead; the skill areas follow. 'Agentic AI Design'
@@ -51,7 +73,11 @@ export const personalitySignals = [
 export const operatorStats = [
   { label: 'Currently', value: 'B.Des · FLAME University' },
   { label: 'Last Role', value: 'Agentic AI · Bajaj Finance' },
-  { label: 'Status', value: 'Available for work' },
+  // Was "Status: Available for work" — the third of four places the page said
+  // the same thing, between the hero's "Open to Work" chip and two more in
+  // Contact. A stat card is a poor use of the fourth-most-read line on the
+  // page for a fact already established above it.
+  { label: 'Focus', value: 'Agentic AI · AI UX' },
 ];
 
 export const galleryItems: GalleryItem[] = [

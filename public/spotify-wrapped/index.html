@@ -1,3 +1,6 @@
+<!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Soundtrack of Seven Years</title>
@@ -362,7 +365,28 @@ details[open] summary::before{content:"▾ "}
 footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}
   .rise{opacity:1;transform:none}}
+
+/* Back to the portfolio. Fixed rather than inline so it survives the whole
+   22,000px scroll, and sized down out of the way of the chapter rail. */
+.site-back{position:fixed;top:14px;left:16px;z-index:60;font:500 12px/1 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.04em;color:#9aa0a6;text-decoration:none;padding:8px 12px;border-radius:999px;
+  background:rgba(10,12,11,.72);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.10);
+  transition:color .2s ease,border-color .2s ease}
+.site-back:hover,.site-back:focus-visible{color:#3EC873;border-color:rgba(62,200,115,.45)}
+@media (max-width:640px){.site-back{top:8px;left:8px;padding:7px 10px;font-size:11px}}
+
+/* The framing line under the hero lead. */
+.hero .byline{margin:22px 0 0;max-width:46ch;font:400 13px/1.7 ui-sans-serif,system-ui,sans-serif;
+  color:#7e858c;letter-spacing:.01em}
+.hero .byline a{color:#3EC873;text-decoration:none;border-bottom:1px solid rgba(62,200,115,.35)}
+.hero .byline a:hover{border-bottom-color:#3EC873}
 </style>
+</head>
+<body>
+
+<!-- F041: a way back. The piece is linked from the case study and shared on its
+     own, and had nothing pointing home from either direction. -->
+<a class="site-back" href="https://jashbhatt.com/work/soundtrack-seven-years">&larr;&nbsp;Jash Bhatt</a>
 
 <div id="bar"></div>
 <nav id="rail"></nav>
@@ -375,6 +399,12 @@ footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);fon
   <h1 id="headline"></h1>
   <p class="lead" id="lead"></p>
   <div class="dates" id="daterange"></div>
+  <!-- The piece addresses "you" throughout, borrowing Wrapped's own voice.
+       The history is mine, and without saying so the second person reads as a
+       template that was never filled in. -->
+  <p class="byline">The history is mine — seven years of my own Spotify export.
+    The second person is borrowed from Wrapped, which is the thing this is
+    arguing with. <a href="https://jashbhatt.com/work/soundtrack-seven-years">How it was built &rarr;</a></p>
   <div class="cue"><i></i>Scroll</div>
 </header>
 
@@ -1757,3 +1787,6 @@ $('#method').innerHTML=`Built from ${M.exportFiles} Spotify Extended Streaming H
 })();
 autoWatch();
 </script>
+
+</body>
+</html>

@@ -4,9 +4,10 @@ import ImageWithFallback from './ImageWithFallback';
 import Reveal from './Reveal';
 import LewisSprite from './LewisSprite';
 import { SUMMON_EVENT, type AnimationName } from '../config/lewis';
+import { usePointerFine } from '../hooks/usePointerFine';
 import { ui, galleryItems, aiItems, gallerySnippetItems } from '../config/ui';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
-import type { GalleryItem } from '../types';
+import type { GalleryItem, LightboxImage } from '../types';
 
 /** The rows worth showing off, in the order they read best: the two you see
     most, then the reactions, then the two that only fire while he's working. */
@@ -20,7 +21,7 @@ const LEWIS_STRIP: { animation: AnimationName; label: string }[] = [
 ];
 
 type Props = {
-  onImageClick: (src: string) => void;
+  onImageClick: (image: LightboxImage) => void;
   /** The heading is the page title on mobile, where this is its own page, and
       a divider inside Work at `lg`. */
   showDivider?: boolean;
@@ -38,7 +39,7 @@ function Thumb({
   showCaption = true,
 }: {
   item: GalleryItem;
-  onImageClick: (src: string) => void;
+  onImageClick: (image: LightboxImage) => void;
   className?: string;
   sizes: string;
   showCaption?: boolean;
@@ -76,7 +77,7 @@ function Thumb({
   return (
     <button
       type="button"
-      onClick={() => onImageClick(src)}
+      onClick={() => onImageClick({ src, alt: item.alt ?? '' })}
       aria-label={item.alt ? `Open ${item.alt} full screen` : 'Open image full screen'}
       className={`${frame} block w-full cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
     >
@@ -100,6 +101,10 @@ function Thumb({
  * page, which is its own view at every width.
  */
 export default function CreativeExplorations({ onImageClick, showDivider = true }: Props) {
+  // The pet needs a mouse and a screen wide enough to walk across, so on touch
+  // the summon button did nothing at all and said nothing about why.
+  const canSummonPet = usePointerFine();
+
   return (
     <>
       {showDivider && (
@@ -120,15 +125,16 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ResponsiveImage
-                src={`${PUBLIC_URL}/images/Photography/camera.png`}
-                alt="Camera icon"
+                src={`${PUBLIC_URL}/images/Photography/camera.webp`}
+                alt=""
                 className="w-full h-full object-contain rounded-lg"
                 loading="lazy"
+                sizes="40px"
               />
             </div>
-            <h3 className="text-xl font-bold text-slate-100">Photography Gallery</h3>
+            <h2 className="text-xl font-bold text-slate-100">Photography Gallery</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">For over 10 years, I've pursued nature photography as a personal hobby. I am skilled with both professional DSLRs and mobile cameras, using them to develop a higher appreciation for the natural world.</p>
+          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Nature photography has been the constant since school — DSLR when I'm carrying one, phone when I'm not. It is where I practise paying attention to light without a brief attached.</p>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
             {gallerySnippetItems.map((item, i) => {
               const positionClass = i === 0
@@ -160,13 +166,14 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           <div className="flex items-center gap-3 mb-4">
             <div className="chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <ResponsiveImage
-                src={`${PUBLIC_URL}/images/Photoshop and Animation/after-effects.png`}
-                alt="After Effects icon"
+                src={`${PUBLIC_URL}/images/Photoshop and Animation/after-effects.webp`}
+                alt=""
                 className="w-full h-full object-cover rounded-lg"
                 loading="lazy"
+                sizes="40px"
               />
             </div>
-            <h3 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h3>
+            <h2 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h2>
           </div>
           <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
           <p className="text-slate-400 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
@@ -176,7 +183,13 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               controls
               playsInline
               preload="metadata"
-              aria-label="Nothing brand animation video"
+              // Intrinsic size and a poster frame: with `h-auto` and neither,
+              // the element was 0px tall until metadata arrived and then
+              // snapped to a 666px-tall box, shoving the page down.
+              width={1920}
+              height={1080}
+              poster={`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.poster.jpg`}
+              aria-label="Nothing brand animation"
             >
               <source src={`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.mp4`} type="video/mp4" />
               Your browser does not support the video tag.
@@ -189,13 +202,14 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           <div className="flex items-center gap-3 mb-4">
             <div className="chip w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <ResponsiveImage
-                src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.png`}
-                alt="Photoshop icon"
+                src={`${PUBLIC_URL}/images/Photoshop and Animation/photoshop.webp`}
+                alt=""
                 className="w-full h-full object-cover rounded-lg"
                 loading="lazy"
+                sizes="40px"
               />
             </div>
-            <h3 className="text-xl font-bold text-slate-100">Photoshop &amp; Animation</h3>
+            <h2 className="text-xl font-bold text-slate-100">Photoshop &amp; Animation</h2>
           </div>
           <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
           <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
@@ -217,12 +231,15 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ResponsiveImage
                 src={`${PUBLIC_URL}/images/Lamborghini.webp`}
-                alt="Lamborghini logo"
+                alt=""
                 className="w-7 h-7 object-contain"
                 loading="lazy"
+                // 28px. Without this it inherited the 1050px default and
+                // pulled the full-size file for an icon.
+                sizes="28px"
               />
             </div>
-            <h3 className="text-xl font-bold text-slate-100">Lamborghini Jetski AI</h3>
+            <h2 className="text-xl font-bold text-slate-100">Lamborghini Jetski AI</h2>
           </div>
           <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
           <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
@@ -246,7 +263,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <LewisSprite animation="waving" scale={0.19} />
             </div>
-            <h3 className="text-xl font-bold text-slate-100">Lewis — a desktop pet</h3>
+            <h2 className="text-xl font-bold text-slate-100">Lewis — a desktop pet</h2>
           </div>
           <p className="text-slate-300 text-sm md:text-base mb-1.5">
             A chibi pixel-art pet for macOS, inspired by Sir Lewis Hamilton in a black
@@ -279,7 +296,12 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               type="button"
               aria-label="Open the Lewis atlas full screen"
               className="relative flex w-full justify-center overflow-hidden rounded-xl bg-white/5 p-3 cursor-pointer transition-all hover:-translate-y-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              onClick={() => onImageClick(`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`)}
+              onClick={() =>
+                onImageClick({
+                  src: `${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`,
+                  alt: 'The packed Lewis atlas — nine rows of animation frames on one 1536×1872 sheet',
+                })
+              }
             >
               <ImageWithFallback
                 src={`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`}
@@ -295,16 +317,24 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 cycle's contact poses all had to hold up at 40% scale, which is the only size
                 anyone ever sees him at.
               </p>
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent(SUMMON_EVENT))}
-                className={`${ui.btnBase} ${ui.btnSecondary} !min-h-11 !px-5 !py-2.5 text-sm`}
-              >
-                Wake Lewis
-              </button>
-              <p className="text-slate-400 text-xs mt-2">
-                He walks along the bottom of this page on a mouse-driven screen.
-              </p>
+              {canSummonPet ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent(SUMMON_EVENT))}
+                    className={`${ui.btnBase} ${ui.btnSecondary} ${ui.focusRing} !min-h-11 !px-5 !py-2.5 text-sm`}
+                  >
+                    Wake Lewis
+                  </button>
+                  <p className="text-slate-400 text-xs mt-2">
+                    He'll walk along the bottom of this page.
+                  </p>
+                </>
+              ) : (
+                <p className="text-slate-400 text-xs">
+                  He walks along the bottom of this page on a mouse-driven screen.
+                </p>
+              )}
             </div>
           </div>
         </Reveal>

@@ -14,17 +14,18 @@ export const projects: Project[] = [
     slug: "etsconnect",
     title: "ETSConnect",
     category: "Business Design / B2B Platform",
-    timeline: "Business Design Course, 2026",
+    timeline: "Business design course, 2026",
     description: "The bottleneck wasn't the fleet, it was winning contracts. So we built a B2B procurement marketplace.",
-    tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modelling"],
+    tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modeling"],
     color: "bg-[#F3EFFF]",
     accentColor: "text-[#8B5CF6]",
     hoverColor: "group-hover:text-[#7C3AED]",
     badge: "bg-[#EDE6FF] text-[#5B21B6]",
+    sectionAccent: "bg-[#EDE6FF]",
     content: {
       heroImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Hero.svg`,
       thumbnailImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Thumbnail.svg`,
-      role: "Business Designer",
+      role: "Research, market analysis, concept design",
       team: ["Sharvani", "Hrishika", "Vasuman"],
       sections: [
         {
@@ -47,7 +48,7 @@ export const projects: Project[] = [
         },
         {
           title: "How We Researched It",
-          content: "The research was deliberately multi-method, because the gap we suspected was between what people say happens in procurement and what actually happens. Two on-site field visits with the operator's CEO and CTO gave us the supply-side view; seven conversations across the corporate side — procurement, admin, transport management — gave us the buyer's; a survey let us check whether what we were hearing generalised.",
+          content: "The research was deliberately multi-method, because the gap we suspected was between what people say happens in procurement and what actually happens. Two on-site field visits with the operator's CEO and CTO gave us the supply-side view; seven conversations across the corporate side — procurement, admin, transport management — gave us the buyer's; a survey let us check whether what we were hearing generalized.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Research.svg`,
@@ -57,7 +58,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Ecosystem",
-          content: "Mapping the stakeholders made the shape of the problem visible. An ETS operator sits at the centre of a chain it only partly controls: it contracts with corporate clients, but the vehicles belong to fleet vendors and the service quality depends on drivers it doesn't employ. Around that sit procurement teams, the employees who actually ride, competitors, financiers, and a regulatory layer.\n\nEvery pain point we found later traces back to a relationship in this map that has no formal channel running through it.",
+          content: "Mapping the stakeholders made the shape of the problem visible. An ETS operator sits at the center of a chain it only partly controls: it contracts with corporate clients, but the vehicles belong to fleet vendors and the service quality depends on drivers it doesn't employ. Around that sit procurement teams, the employees who actually ride, competitors, financiers, and a regulatory layer.\n\nEvery pain point we found later traces back to a relationship in this map that has no formal channel running through it.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Stakeholders.svg`,
@@ -70,7 +71,7 @@ export const projects: Project[] = [
           content: "These are the constraints that showed up on the ground rather than in the brief — the things that quietly decide who wins work in this industry.",
           listItems: [
             "Financial barriers — corporates pay on 45-day cycles, so vendor selection quietly favours whoever can float payroll and fuel that long, regardless of capability.",
-            "Fragmented market — there is no standardised way to discover, compare, or onboard a provider anywhere in the industry.",
+            "Fragmented market — there is no standardized way to discover, compare, or onboard a provider anywhere in the industry.",
             "Mission-critical service — a delay or a safety incident hits the client's own operations, so the buying decision is really a risk decision.",
             "Limited tech application — technology runs routing and tracking well, and touches procurement or vendor discovery not at all.",
             "Unstable driver layer — long hours, fatigue, high churn, and inconsistent professionalism make service quality variable no matter how good the operator is."
@@ -78,13 +79,13 @@ export const projects: Project[] = [
         },
         {
           title: "Key Findings",
-          content: "Synthesising the interviews produced six findings. Each one is a place where the system behaves differently from how it describes itself.",
+          content: "Synthesizing the interviews produced six findings. Each one is a place where the system behaves differently from how it describes itself.",
           listItems: [
             "Reliability-driven decisions — 95–97% on-time SLAs and safety requirements shift the buying decision away from cost and towards risk mitigation.",
             "Informally gated access — the RFP process is genuinely structured, but only vendors already known to the buyer are invited into it.",
             "A split system — trust is built informally before entry, then enforced formally after selection.",
             "Visibility, not capability — competition is constrained by exposure; qualified vendors are excluded simply because nobody has heard of them.",
-            "Price, not discovery — procurement optimises price discovery (L1/L2) within a fixed pool, rather than searching for a better-fitting vendor.",
+            "Price, not discovery — procurement optimizes price discovery (L1/L2) within a fixed pool, rather than searching for a better-fitting vendor.",
             "Control, not connection — technology is deployed as a control layer over execution, never as a discovery layer between demand and supply."
           ]
         },
@@ -100,7 +101,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Direction Shift",
-          content: "This was the decision the project turned on.\n\nThe obvious move was to stay inside the brief and optimise a single operator — tighten coordination, improve driver management, sharpen the feedback loops. We rejected it. Operations were already standardised, procurement systems on the client side were rigid and closed to us, and the realistic ceiling on that work was incremental.\n\nSo we moved up a level, from company to ecosystem. If the bottleneck is that qualified vendors and willing corporates cannot see each other, then the intervention isn't a better fleet process — it's the missing marketplace. That reframing also changed who the client is: solving it for the industry solves it for the client, but not only for the client.",
+          content: "This was the decision the project turned on.\n\nThe obvious move was to stay inside the brief and optimize a single operator — tighten coordination, improve driver management, sharpen the feedback loops. We rejected it. Operations were already standardized, procurement systems on the client side were rigid and closed to us, and the realistic ceiling on that work was incremental.\n\nSo we moved up a level, from company to ecosystem. If the bottleneck is that qualified vendors and willing corporates cannot see each other, then the intervention isn't a better fleet process — it's the missing marketplace. That reframing also changed who the client is: solving it for the industry solves it for the client, but not only for the client.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Direction-Shift.svg`,
@@ -109,8 +110,8 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Prioritising the Opportunity",
-          content: "We generated a wide set of options — EV fleets as an ESG offering, commute personalisation, event transport, hospitality expansion, referral networks — and plotted them against business value and customer value. Most of the operational ideas clustered as incremental. A centralised procurement platform was the one intervention sitting high on both axes, and the only one that addressed the contract bottleneck directly.",
+          title: "Prioritizing the Opportunity",
+          content: "We generated a wide set of options — EV fleets as an ESG offering, commute personalization, event transport, hospitality expansion, referral networks — and plotted them against business value and customer value. Most of the operational ideas clustered as incremental. A centralized procurement platform was the one intervention sitting high on both axes, and the only one that addressed the contract bottleneck directly.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Priority-Matrix.svg`,
@@ -130,11 +131,11 @@ export const projects: Project[] = [
         },
         {
           title: "What the Platform Does",
-          content: "The product is organised around the four stages of the procurement lifecycle we mapped during research — the same four stages that are currently handled by phone calls, spreadsheets, and personal relationships.",
+          content: "The product is organized around the four stages of the procurement lifecycle we mapped during research — the same four stages that are currently handled by phone calls, spreadsheets, and personal relationships.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Pillars.svg`,
-              caption: "Vendor discovery, bid comparison, compliance management, and contract finalisation on one platform."
+              caption: "Vendor discovery, bid comparison, compliance management, and contract finalization on one platform."
             }
           ]
         },
@@ -152,7 +153,7 @@ export const projects: Project[] = [
           title: "Impact at Scale",
           content: "The reason this is worth building rather than just proposing is that its value compounds. Employee transport demand recurs daily, so every additional participant makes the network more useful to everyone already on it.",
           listItems: [
-            "Reduced operational risk — structured discovery, standardised bidding, and verified compliance remove corporates' exposure to unverified operators and informal arrangements.",
+            "Reduced operational risk — structured discovery, standardized bidding, and verified compliance remove corporates' exposure to unverified operators and informal arrangements.",
             "Expanded market access — providers receive qualified inbound demand beyond their existing networks, reducing dependence on referrals.",
             "Network defensibility — daily, consistent demand means the platform gets more valuable to both sides as it grows, and harder to replicate.",
             "Critical ecosystem infrastructure — at scale it becomes the operating layer for corporate mobility procurement in India, not merely a tool."
@@ -180,21 +181,22 @@ export const projects: Project[] = [
     slug: "hr-genie",
     title: "HR Genie",
     category: "Agentic AI / Enterprise UX",
-    timeline: "Summer Internship, 2026",
+    timeline: "Summer internship, 2026",
     description: "Conversational agents replacing Bajaj Finance's form-based HR workflows — part of a roadmap for 800+ agents.",
     tags: ["Microsoft Copilot Studio", "Power Fx", "Power Automate", "Adaptive Cards", "Azure"],
     color: "bg-[#EAF0FF]",
     accentColor: "text-[#4B74E7]",
     hoverColor: "group-hover:text-[#1D4ED8]",
     badge: "bg-[#DCE7FF] text-[#1E3A8A]",
+    sectionAccent: "bg-[#DCE7FF]",
     content: {
       heroImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Hero.svg`,
       thumbnailImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Thumbnail.svg`,
-      role: "Design & Development Intern, Agentic AI Unit — reporting through the VP, AI Unit, to the COO/CTO office",
+      role: "Conversational design, Power Fx & Copilot Studio build, architecture migration",
       sections: [
         {
           title: "Overview",
-          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows for a workforce of thousands. The unit's mandate is company-wide: an initiative internally called FINAI / Employee Blu, aiming to deploy 800+ autonomous agents across business functions. My job was to design and build the HR-facing agents inside that system — collectively branded HR Genie.",
+          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows for a workforce of thousands. The unit’s mandate is company-wide: an initiative internally called FINAI / Employee Blu, aiming to deploy 800+ autonomous agents across business functions. My job was to design and build the HR-facing agents inside that system — collectively branded HR Genie.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Scale.svg`,
@@ -293,10 +295,11 @@ export const projects: Project[] = [
     accentColor: "text-[#746DD5]",
     hoverColor: "group-hover:text-[#4239C4]",
     badge: "bg-[#E3E0FF] text-[#2F2895]",
+    sectionAccent: "bg-[#E3E0FF]",
     content: {
       heroImage: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Home.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Thumbnail.webp`,
-      role: "Creator & Lead Developer",
+      role: "Design & build, solo",
       sections: [
         {
           title: "Overview",
@@ -319,7 +322,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Import-Chatbot.webp`,
-              caption: "Import Data screen: AI chatbot (left), live Parsed Plan with schedule pattern and events (centre), Assignment tracker (right)"
+              caption: "Import Data screen: AI chatbot (left), live Parsed Plan with schedule pattern and events (center), Assignment tracker (right)"
             }
           ]
         },
@@ -330,7 +333,7 @@ export const projects: Project[] = [
             "Describe — the professor types their course details into the AI chatbot: topics by week, meeting days and times, semester start and end dates.",
             "Parse — Gemini 2.5 Flash extracts a recurring schedule pattern, maps topics to specific class sessions, and populates a live Parsed Plan panel in real time.",
             "Review — the professor switches to View Schedule and sees the full semester across three views: month grid, hourly week grid, or searchable event list.",
-            "Refine — events can be edited directly on the calendar, or adjusted via follow-up chat ('Move the midterm to March 20', 'Add office hours every Thursday at 2pm').",
+            "Refine — events can be edited directly on the calendar, or adjusted via follow-up chat (“Move the midterm to March 20”, “Add office hours every Thursday at 2pm”).",
             "Export — one-click push to Google Calendar via OAuth with a live progress bar, or download as a standards-compliant .ics file for Outlook, Apple Calendar, or any client.",
             "Persist — authenticated users have all courses and schedules auto-saved to Firestore across sessions."
           ]
@@ -339,11 +342,15 @@ export const projects: Project[] = [
           title: "Calendar Views",
           content: "Once a schedule is generated, professors can explore it in three different views — each designed for a different purpose.",
           imageLayout: "grid",
+          // One per row. At half column width these month and week grids came
+          // out ~400px even on a 1920 screen, which made the very cells the
+          // captions point at unreadable.
+          gridWide: true,
           imageHeight: "auto",
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Calendar-March.webp`,
-              caption: "Month grid — full semester at a glance. Assignment deadlines appear as colour-coded markers (DUE: Midterm Essay visible on March 1)."
+              caption: "Month grid — full semester at a glance. Assignment deadlines appear as color-coded markers (DUE: Midterm Essay visible on March 1)."
             },
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Week-View.webp`,
@@ -379,7 +386,7 @@ export const projects: Project[] = [
             "Returns a recurringConfig object (days[], startDate, endDate, startTime, endTime) that drives the schedule generation engine.",
             "Maintains a chatMemory object across turns — topics, times, recurring config — so professors never have to repeat context.",
             "Handles API overload with exponential backoff retry: 500ms → 1000ms → 1800ms before surfacing an error.",
-            "Pending updates shown in-chat as a 'Review & Apply' card with Apply, Discard, and Replace options before any state change."
+            "Pending updates shown in-chat as a “Review & Apply” card with Apply, Discard, and Replace options before any state change."
           ]
         },
         {
@@ -398,13 +405,13 @@ export const projects: Project[] = [
           content: "Every feature in ClassFlow was built around a real professor workflow — not what looks impressive in a demo.",
           listItems: [
             "AI chatbot as the only input method — no file uploads, no forms, just conversation.",
-            "Multi-course support — each course gets its own colour, isolated state, and appears in a shared calendar view.",
+            "Multi-course support — each course gets its own color, isolated state, and appears in a shared calendar view.",
             "Three calendar views: month grid, hourly week grid (7am–10pm), and searchable event list.",
             "Conflict detection — flags overlapping sessions across courses with a badge count and highlighted rows in list view.",
             "Undo stack — per-course snapshots (last 10 actions) for safe experimentation and mistake recovery.",
-            "Assignment tracker — professors add Given, Check-in, and Due dates per assignment; these inject as colour-coded marker events in the calendar.",
+            "Assignment tracker — professors add Given, Check-in, and Due dates per assignment; these inject as color-coded marker events in the calendar.",
             "Google Calendar export — OAuth 2.0 flow with batched API calls and a real-time progress bar showing export status.",
-            ".ics download — custom VEVENT serialisation, importable into any calendar client.",
+            ".ics download — custom VEVENT serialization, importable into any calendar client.",
             "Guest mode — full scheduling functionality without login; login with Firebase to save across sessions."
           ]
         },
@@ -417,7 +424,7 @@ export const projects: Project[] = [
             "Google Gemini 2.5 Flash — AI model handling both the chatbot responses and schedule parsing",
             "Firebase Auth + Firestore — Google sign-in and per-user cloud persistence",
             "Google Calendar API — OAuth 2.0 token flow with batched event creation requests",
-            "Custom ICS serialisation — VEVENT generation without any third-party calendar library"
+            "Custom ICS serialization — VEVENT generation without any third-party calendar library"
           ]
         },
         {
@@ -433,16 +440,17 @@ export const projects: Project[] = [
     title: "WePick",
     category: "UI/UX App Design",
     timeline: "UI/UX course, 2025",
-    description: "WePick is a social shopping app where friends can share products, vote, and shop together in real time. By turning feedback into collaboration, it cuts decision fatigue and makes online shopping more confident, interactive, and fun.",
+    description: "A social shopping app where friends share products, vote, and check out together — turning scattered group chats into one decision.",
     tags: ["UX Research", "Design System", "App Design"],
     color: "bg-sky-50",
     accentColor: "text-sky-600",
     hoverColor: "group-hover:text-sky-600",
     badge: "bg-sky-100 text-sky-700",
+    sectionAccent: "bg-sky-100",
     content: {
       heroImage: `${PUBLIC_URL}/images/WePick/WePick-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/WePick/wepick-thumbnail.webp`,
-      role: "UI/UX Designer",
+      role: "UX research, UI design, prototyping",
       team: ["Dhruv Tolani", "Yash Khanna"],
       sections: [
         {
@@ -452,7 +460,7 @@ export const projects: Project[] = [
         },
         {
           title: "The User Problem",
-          content: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants—making it hard to decide and move forward."
+          content: "When shopping online with a group, sharing product links across multiple apps quickly becomes exhausting. What feels easy when shopping alone turns chaotic in group chats, where opinions are scattered, responses get lost, and people are left unsure of what the group actually wants — making it hard to decide and move forward."
         },
         {
           title: "Research & Insights",
@@ -479,16 +487,19 @@ export const projects: Project[] = [
         },
         {
           title: "Collaborative Overview",
-          content: "Goal: Enable faster, clearer purchase decisions by bringing social feedback and product discovery into one shared shopping experience.\n\nWe designed distinct modes to cater to different social contexts:\n\n\u00A0\u00A0\u00A0\u00A0• WE Mode: Real-time group shopping with shared browsing and decisions.\n\u00A0\u00A0\u00A0\u00A0• ME Mode: Personalized recommendations for solo shopping.\n\u00A0\u00A0\u00A0\u00A0• THEM Mode: Guided shopping for gifting or needs-based purchasing.",
+          content: "Goal: enable faster, clearer purchase decisions by bringing social feedback and product discovery into one shared shopping experience. We designed three modes, one for each social context a purchase can sit in.",
           listItems: [
-            "Shared Cart: A single space to collect opinions and compare options, eliminating scattered chats.",
-            "AI Feedback Summary: Condenses group reactions into clear accept/reject insights.",
-            "Outcome: Less chaos. Clear consensus. Faster checkouts."
+            "WE Mode — real-time group shopping with shared browsing and shared decisions.",
+            "ME Mode — personalized recommendations for shopping alone.",
+            "THEM Mode — guided shopping for gifting or needs-based purchasing.",
+            "Shared Cart — a single space to collect opinions and compare options, instead of scattered chats.",
+            "AI Feedback Summary — condenses group reactions into a clear accept/reject read.",
+            "Outcome — less chaos, clearer consensus, faster checkouts."
           ]
         },
         {
           title: "User Task Flows",
-          content: "",
+          content: "Four flows carried the MVP, and each one had to survive the same test: could a group reach a decision without anybody leaving the app? Onboarding a friend group, adding an item to a shared cart, reacting to someone else's pick, and reading the group's verdict.",
           images: [
             {
               src: `${PUBLIC_URL}/images/WePick/Onboarding.webp`,
@@ -530,7 +541,7 @@ export const projects: Project[] = [
         },
         {
           title: "Final Output",
-          content: "The final deliverable included a polished app walkthrough demonstrating the 'WePick' flow. You can experience the interactive prototype directly below, inviting friends and voting in real-time.",
+          content: "The final deliverable included a polished app walkthrough demonstrating the “WePick” flow. You can experience the interactive prototype directly below, inviting friends and voting in real-time.",
           embedUrl: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FZSnz5vTUKNzYNRuOs1uxWt%2FWePick%3Fnode-id%3D0-1%26t%3DvsCOeZePPSny2dOa-1"
         }
       ]
@@ -541,20 +552,21 @@ export const projects: Project[] = [
     slug: "rahi-design-system-v2",
     title: "RAHI Design System v2",
     category: "UI Design Internship / Design Systems",
-    timeline: "Summer Internship, 2025",
+    timeline: "Summer internship, 2025",
     description: "Designed reusable desktop components for RAHI Platform Technologies design system v2, with a strong focus on keyboard-first interaction and state clarity.",
     tags: ["Figma", "Design Systems", "Desktop UX", "Component Variants", "Interaction Design"],
     color: "bg-[#E7F6F4]",
     accentColor: "text-[#16A197]",
     hoverColor: "group-hover:text-[#16A197]",
     badge: "bg-[#D4F0EC] text-[#0D6B64]",
+    sectionAccent: "bg-[#D4F0EC]",
     content: {
       heroImage: `${PUBLIC_URL}/images/RAHI/RAHI Logo.webp`,
       // The full logo export carries a wide white margin, which leaves the mark
       // tiny once a square tile contains it. This is the same lockup trimmed to
       // its own edges so it fills the tile.
       thumbnailImage: `${PUBLIC_URL}/images/RAHI/RAHI-Thumbnail.webp`,
-      role: "UI Design Intern",
+      role: "Component design, interaction specs",
       sections: [
         {
           title: "Internship Focus",
@@ -661,15 +673,18 @@ export const projects: Project[] = [
     accentColor: "text-[#E03E3E]",
     hoverColor: "group-hover:text-[#DC2626]",
     badge: "bg-[#FEE2E2] text-[#991B1B]",
+    sectionAccent: "bg-[#FEE2E2]",
     content: {
       heroImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.webp`,
-      thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela Hero Shot.webp`,
-      role: "Circuit Design · Hardware Prototyping · Physical Computing",
+      // A tighter crop of the same shot, so the card and the hero are not the
+      // identical image seen twice in a row.
+      thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela-Thumbnail.webp`,
+      role: "Circuit design, hardware prototyping, physical computing",
       team: ["Khushii Mehta", "Kaushal Gajipara", "Parinita Shiralige"],
       sections: [
         {
           title: "Overview",
-          content: "Revela teaches children aged 4–7 to find lost objects using light-based feedback. It works without screens and apps."
+          content: "Revela is a handheld wand that guides children aged 4–7 to their own misplaced things by getting warmer — literally, in color — as they get closer. There are no screens and no app, which was the constraint the whole project hangs off.\n\nThe brief was a tangible interface for a life skill. We picked losing things because it is the one children are told off for and given no tool to fix, and because the feedback a child needs there is continuous rather than binary: not “found / not found” but “warmer, warmer, here.” I owned the electronics end — the ESP32 builds, the LED feedback logic, the power system, and the enclosure that had to survive a seven-year-old."
         },
         {
           title: "How Might We",
@@ -760,7 +775,7 @@ export const projects: Project[] = [
         },
         {
           title: "Technical Testing & Validation",
-          content: "My teammate and I validated both electronics reliability and interaction behavior through iterative bench and in-context testing, including soldering quality checks and distance-response tuning across different ranges.",
+          content: "We validated both electronics reliability and interaction behavior through iterative bench and in-context testing, including soldering quality checks and distance-response tuning across different ranges.",
           imageLayout: "techSplit",
           images: [
             {
@@ -815,7 +830,7 @@ export const projects: Project[] = [
         },
         {
           title: "Design Validation (Systems + UX)",
-          content: "Revela applies core HCI principles: immediate feedback, clear mapping, strong affordance, and constrained interaction—creating a low-error, low-friction experience."
+          content: "Revela applies core HCI principles: immediate feedback, clear mapping, strong affordance, and constrained interaction — creating a low-error, low-friction experience."
         },
         {
           title: "Outcome & Reflection",
@@ -840,11 +855,18 @@ export const projects: Project[] = [
     accentColor: "text-[#E23167]",
     hoverColor: "group-hover:text-rose-900",
     badge: "bg-rose-100 text-rose-900",
+    sectionAccent: "bg-rose-100",
     content: {
       heroImage: `${PUBLIC_URL}/images/Dino Spread/dino-spread-hero.webp`,
-      role: "Industrial Designer",
+      role: "Industrial design, prototyping",
+      // TODO(jash): confirm the spelling — "Pereira" is the common form and
+      // this may be a transposition.
       team: ["Analise Periera"],
       sections: [
+        {
+          title: "Overview",
+          content: "Dino Spread is a pull-to-dispense jam and butter dispenser for school and college canteens, built for an industrial design course. The brief was open; the subject came from watching the same mess happen in our own canteen every morning.\n\nThe form is a dinosaur because the users are children and students, and because a dinosaur's head is a lever and its teeth are a nozzle — the theme and the mechanism are the same decision."
+        },
         {
           title: "The Problem",
           content: "We observed a recurring issue in the campus canteen setup. Knives were often left slipping into open jam and butter jars. This caused handle stickiness and hygiene concerns, leading to messy hands and cross-contamination.",
@@ -914,6 +936,15 @@ export const projects: Project[] = [
               caption: "Design Jury Presentation"
             }
           ]
+        },
+        {
+          title: "Outcome & Reflection",
+          content: "The jury's useful criticism was not about the form — it was that we had never tested the pump with real jam. Foam and Plaster of Paris let us prove the gesture and the proportions, and stopped exactly there: we could show that pulling the head feels right, and not that the teeth meter a viscous spread without clogging.\n\nThat gap is the thing I took forward. A prototype answers the question it is built to answer and no others, and deciding which question you are actually asking is most of the work. A second pass would be printed rather than carved, with a real pump body, so the next unknown — flow control — becomes testable.",
+          listItems: [
+            "What held up: the pull-to-dispense gesture read as obvious to every person who picked it up, with no instruction.",
+            "What didn't: the mechanism was represented, not working — no viscosity or clogging data.",
+            "Next: a printed body around an off-the-shelf pump, tested with actual jam and butter at canteen temperatures."
+          ]
         }
       ]
     }
@@ -930,9 +961,11 @@ export const projects: Project[] = [
     accentColor: "text-[#D8F36A]",
     hoverColor: "group-hover:text-[#E3FC03]",
     badge: "bg-[#CFEA3F]/25 text-[#E7F99A] border border-[#CFEA3F]/50",
+    sectionAccent: "bg-[#CFEA3F]",
     content: {
-      heroImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
-      role: "Service Design · Research · Insight Synthesis · Journey Mapping · Concept & Experience Design",
+      heroImage: `${PUBLIC_URL}/images/SolarLink/SolarLink-Hero.webp`,
+      thumbnailImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
+      role: "Research & synthesis, journey mapping, experience design",
       team: ["Khushii Mehta", "Kaushal Gajipara"],
       sections: [
         {
@@ -945,7 +978,7 @@ export const projects: Project[] = [
         },
         {
           title: "Problem Statement",
-          content: "Housing societies want solar, but struggle to move forward. Solar keeps becoming \"next year's agenda\".",
+          content: "Housing societies want solar, but struggle to move forward. Solar keeps becoming “next year’s agenda.”",
           listItems: [
             "Confusion and misinformation about how solar works",
             "Multiple stakeholders with conflicting opinions",
@@ -955,7 +988,7 @@ export const projects: Project[] = [
         },
         {
           title: "Research & Understanding",
-          content: "India has an estimated 124 GW of rooftop solar potential. Only ~11 GW has been installed — less than 10% utilised.\n\nKey observations from research:",
+          content: "India has an estimated 124 GW of rooftop solar potential. Only ~11 GW has been installed — less than 10% utilized.\n\nKey observations from research:",
           listItems: [
             "Residential societies contribute less than 20% of rooftop solar installations",
             "Decision-making in societies takes 2–3x longer than individual homes",
@@ -971,10 +1004,10 @@ export const projects: Project[] = [
         },
         {
           title: "Primary User: Rajesh Nair",
-          content: "Rajesh Nair is the Secretary of Sagar Heights CHS — a 15-floor, 50-flat cooperative society in Ghatkopar East, Mumbai. He manages energy, maintenance, and vendor contracts through a single managing committee, with monthly electricity bills described as \"excessively high.\"\n\nAs an informal decision-maker, Rajesh is practical and risk-averse. His biggest concern is not price — it is making the wrong call for the entire building.",
+          content: "Rajesh Nair is the Secretary of Sagar Heights CHS — a 15-floor, 50-flat cooperative society in Ghatkopar East, Mumbai. He manages energy, maintenance, and vendor contracts through a single managing committee, with monthly electricity bills described as “excessively high.”\n\nAs an informal decision-maker, Rajesh is practical and risk-averse. His biggest concern is not price — it is making the wrong call for the entire building.",
           listItems: [
-            "Goals: Reduce electricity costs, digitise maintenance, create a self-managed sustainable community",
-            "Pain points: High bills, no centralised tracking, difficulty managing vendor reliability and after-sales service",
+            "Goals: Reduce electricity costs, digitize maintenance, create a self-managed sustainable community",
+            "Pain points: High bills, no centralized tracking, difficulty managing vendor reliability and after-sales service",
             "Needs: Reliable data on feasibility and savings, a guided decision framework, and long-term vendor support"
           ],
           images: [
@@ -1052,11 +1085,16 @@ export const projects: Project[] = [
         },
         {
           title: "Core Intervention: Solar Sunday",
-          content: "Solar Sunday is a one-day, on-site experience designed to help housing societies explore solar without pressure.\n\nInstead of sales presentations, Solar Sunday turns the society terrace into a calm, interactive learning space where:\n\n• Questions are safe\n• Myths are surfaced\n• Understanding is shared\n\nSolar adoption begins with understanding. Solar Sunday is where that understanding is built."
+          content: "Solar Sunday is a one-day, on-site experience designed to help housing societies explore solar without pressure.\n\nInstead of a sales presentation, it turns the society terrace into a calm, interactive learning space. Solar adoption begins with understanding, and this is where that understanding gets built.",
+          listItems: [
+            "Questions are safe — nobody is being sold to, so nobody has to pretend they already know.",
+            "Myths are surfaced rather than argued with.",
+            "Understanding is shared, so the committee decides from the same picture."
+          ]
         },
         {
           title: "Key Experience Touchpoints",
-          content: "Solar Confession Booth: A private, judgment-free space where residents openly express doubts and myths. Most common confession: \"I don't really understand solar.\" Surfacing uncertainty early reduces resistance later.\n\nAR Energy Visualiser: Residents see projected costs, savings, and energy generation mapped onto their own building. Solar becomes tangible, not abstract.\n\nPledge Wall: Residents make small, non-binding commitments to show intent and interest. Small signals build collective ownership.\n\nNo selling. Just shared understanding.",
+          content: "Solar Confession Booth: A private, judgment-free space where residents openly express doubts and myths. Most common confession: “I don’t really understand solar.” Surfacing uncertainty early reduces resistance later.\n\nAR Energy Visualizer: Residents see projected costs, savings, and energy generation mapped onto their own building. Solar becomes tangible, not abstract.\n\nPledge Wall: Residents make small, non-binding commitments to show intent and interest. Small signals build collective ownership.\n\nNo selling. Just shared understanding.",
           imageLayout: "stack",
           images: [
             {
@@ -1073,7 +1111,13 @@ export const projects: Project[] = [
         },
         {
           title: "Redefined Journey",
-          content: "Before SolarLink:\n\n• Fragmented information\n• Vendor bias\n• Endless discussions\n• Decisions delayed\n\nWith SolarLink:\n\n• Structured learning\n• Neutral facilitation\n• Transparent comparisons\n• Confidence before approvals\n\nSolar does not move faster by pushing harder. It moves faster when people feel ready.",
+          content: "Solar does not move faster by pushing harder. It moves faster when people feel ready — which is what changes between these two journeys.",
+          listItems: [
+            "Fragmented information becomes structured learning.",
+            "Vendor bias becomes neutral facilitation.",
+            "Endless discussion becomes transparent comparison.",
+            "Delayed decisions become confidence before approvals."
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/SolarLink/SolarLink-Service-Blueprint.webp`,
@@ -1084,7 +1128,12 @@ export const projects: Project[] = [
         },
         {
           title: "Impact & SDG Alignment",
-          content: "SolarLink directly supports SDG 7: Affordable & Clean Energy by addressing the decision layer of adoption.\n\nBy enabling confident community decisions, SolarLink directly increases adoption of renewable energy at the society level.\n\nThe impact is not measured in panels installed, but in:\n\n• Reduced decision friction\n• Increased trust\n• Higher likelihood of adoption\n\nSolarLink doesn't install panels. We install confidence."
+          content: "SolarLink supports SDG 7: Affordable & Clean Energy by addressing the decision layer of adoption rather than the technology layer. The impact is not measured in panels installed.",
+          listItems: [
+            "Reduced decision friction — the committee has a process instead of a standing argument.",
+            "Increased trust — neutral facilitation removes the vendor's thumb from the scale.",
+            "Higher likelihood of adoption — readiness, not persuasion, is what converts."
+          ]
         },
         {
           title: "Explore the Design Board",
@@ -1117,22 +1166,23 @@ export const projects: Project[] = [
     id: 10,
     slug: "soundtrack-seven-years",
     title: "The Soundtrack of Seven Years",
-    category: "Data Visualisation / Design Engineering",
+    category: "Data Visualization / Design Engineering",
     timeline: "Personal project, 2026",
     description: "Seven years of my own Spotify history — 98,111 plays — read as an eight-chapter scrollytelling piece.",
-    tags: ["Data Visualisation", "Design Engineering", "Python", "SVG", "Editorial Design"],
+    tags: ["Data Visualization", "Design Engineering", "Python", "SVG", "Editorial Design"],
     color: "bg-[#0A0C0B]",
     accentColor: "text-[#3EC873]",
     hoverColor: "group-hover:text-[#3EC873]",
     badge: "bg-[#3ec873]/25 text-[#0d5c33]",
+    sectionAccent: "bg-[#3EC873]",
     content: {
       heroImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Thumbnail.webp`,
-      role: "Design & Build",
+      role: "Data pipeline, design, build",
       sections: [
         {
           title: "Overview",
-          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns that into five slides you forget by January; the raw export is 120,547 rows nobody reads.\n\nI wanted the thing in between — something that reads like a magazine feature and tells you what a top ten cannot. Eight chapters, every number computed from the export, shipped as one HTML file.",
+          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns that into five slides you forget by January; the raw export is 120,547 rows nobody reads.\n\nI wanted the thing in between — something that reads like a magazine feature and tells you what a top ten cannot. Eight chapters, every number computed from the export, shipped as one HTML file.\n\nIt keeps Wrapped’s second person on purpose. The history is mine, but the format it is arguing with talks to you, and dropping that voice would have lost the argument.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
@@ -1171,7 +1221,7 @@ export const projects: Project[] = [
         },
         {
           title: "Picking the Chart for the Question",
-          content: "Each chart follows from the question rather than from what was easy to draw.\n\n\"How much of the last seven years had music in it?\" is a question about density across a long span, so it became eight concentric rings — one per year, one sliver per day. 2,469 lit days, 67 silent ones.\n\n\"Do songs get retired, or just played less?\" is a question about a lifetime, so the ten most-played got a row each across seven years. All ten are still in rotation.",
+          content: "Each chart follows from the question rather than from what was easy to draw.\n\n“How much of the last seven years had music in it?” is a question about density across a long span, so it became eight concentric rings — one per year, one sliver per day. 2,469 lit days, 67 silent ones.\n\n“Do songs get retired, or just played less?” is a question about a lifetime, so the ten most-played got a row each across seven years. All ten are still in rotation.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Calendar.webp`,
@@ -1185,7 +1235,7 @@ export const projects: Project[] = [
         },
         {
           title: "Composing It, Not Laying It Out",
-          content: "Twenty charts in a row is a report, and nobody finishes a report. So the eight chapters are announced rather than stacked — a number, a sentence, a lot of air — and the sections carry deliberately different weights, from full-height beats down to one-line asides.\n\nColour holds it together. The surface and type scale are fixed for the whole page; each chapter re-binds only an accent and a nine-step ramp, and every chart inside inherits it. Every accent clears 4.5:1, every ramp is monotonic in lightness.",
+          content: "Twenty charts in a row is a report, and nobody finishes a report. So the eight chapters are announced rather than stacked — a number, a sentence, a lot of air — and the sections carry deliberately different weights, from full-height beats down to one-line asides.\n\nColor holds it together. The surface and type scale are fixed for the whole page; each chapter re-binds only an accent and a nine-step ramp, and every chart inside inherits it. Every accent clears 4.5:1, every ramp is monotonic in lightness.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Artists.webp`,
@@ -1227,19 +1277,23 @@ export const projects: Project[] = [
   {
     id: 5,
     slug: "python-codes",
-    title: "Live Demos",
-    category: "Computer Vision / Interactive",
+    title: "Three Browser Demos",
+    category: "Computer Vision / Creative Coding",
     timeline: "Personal projects, 2024 – 2025",
-    description: "Three builds you can run right here in the browser — starting with a YOLOv8 object detector that runs live on your webcam, on-device, with no server round-trip.",
+    description: "A YOLOv8 detector on your webcam, an arcade game, and a movie recommender — all three running on your own device, no server round-trip.",
     tags: ["Python", "YOLOv8", "Computer Vision", "WebAssembly", "ONNX"],
     color: "bg-[#0C111B]",
     accentColor: "text-[#FFD343]",
     hoverColor: "group-hover:text-[#FFD343]",
     badge: "bg-[#ffd343]/30 text-[#9a7400]",
+    sectionAccent: "bg-[#FFD343]",
     content: {
-      heroImage: "placeholder-python-hero.jpg",
+      // The three demos are the hero here — each one renders live further down
+      // the page — so this reuses the Python mark rather than shipping a
+      // screenshot that would be out of date the moment a demo changes.
+      heroImage: `${PUBLIC_URL}/images/python.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/python.webp`,
-      role: "Developer",
+      role: "Design & build",
       sections: [
         {
           title: "YOLOv8 Live Object Detection",
@@ -1265,6 +1319,15 @@ export const projects: Project[] = [
           listItems: ["CountVectorizer-style bag of words", "Cosine similarity ranking", "Fuzzy title matching"],
           codeBlock: MOVIE_RECS_SNIPPET,
           demoId: "movie-recs"
+        },
+        {
+          title: "Why These Run In The Browser",
+          content: "All three started as Python scripts on my own machine, and all three are here because a portfolio that asks you to take its word for it is worth less than one you can poke at.\n\nPorting them taught me where that line actually falls. The detector was worth the work — exporting YOLOv8 to ONNX and running it through WebAssembly means the video never leaves your device, which is a privacy property, not just a performance one. The recommender was worth it because cosine similarity over five thousand rows is genuinely fast in JavaScript. The arcade game was a straight rewrite, and the honest answer is that it is a port rather than the original Python.",
+          listItems: [
+            "On-device inference is a design decision as much as a technical one — nothing to upload means nothing to explain.",
+            "The model is int8-quantized to 11MB and only fetched when you press start; the page itself stays light.",
+            "The dataset behind the recommender loads on demand for the same reason."
+          ]
         }
       ]
     }
@@ -1281,9 +1344,13 @@ export const projects: Project[] = [
     accentColor: "text-[#E43158]",
     hoverColor: "group-hover:text-rose-600",
     badge: "bg-rose-100 text-rose-700",
+    sectionAccent: "bg-rose-100",
     content: {
       heroImage: `${PUBLIC_URL}/images/Tinkering/tinkering-hero-2.webp`,
-      role: "Maker",
+      role: "Circuit design, firmware, assembly",
+      // TODO(jash): replace with your teammate's actual name — the copy below
+      // says "my teammate and I", so the Team row has to name them.
+      team: ["Teammate"],
       sections: [
         {
           title: "Project Introduction",
@@ -1291,7 +1358,14 @@ export const projects: Project[] = [
         },
         {
           title: "Circuit Diagram",
-          content: "My teammate and I decided to create a double 7-segment display that would count down and trigger a motor to start spinning.\n\nThe project uses:\n• 36 LEDs\n• ESP32\n• Ultrasonic Sensor\n• Relay\n• Motor",
+          content: "My teammate and I decided to build a double 7-segment display that counts down and, at zero, closes a relay to start a motor spinning. Every segment is discrete LEDs rather than a display module, so the whole thing had to be wired and mapped by hand.",
+          listItems: [
+            "36 LEDs, wired as two hand-built 7-segment digits",
+            "ESP32 driving the segment mapping and countdown logic",
+            "Ultrasonic sensor to start the countdown on approach",
+            "Relay switching the motor circuit at zero",
+            "DC motor as the payoff"
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/Tinkering/Circuit-Design.webp`,
@@ -1342,6 +1416,15 @@ export const projects: Project[] = [
               src: `${PUBLIC_URL}/images/Tinkering/final-countdown.gif`,
               caption: "Final working prototype countdown"
             }
+          ]
+        },
+        {
+          title: "Outcome & Reflection",
+          content: "It counts down and the motor spins, which is the whole of what it was asked to do. What I actually learned sits underneath that.\n\nDriving 36 discrete LEDs from one ESP32 meant the segment map had to exist as a table before a single wire went in, and I built it the other way round the first time — wiring first, mapping after — which cost an evening of tracing. Segment mapping is a data-structure problem wearing a soldering iron. The relay taught the second lesson: an inductive load kicks back, and the first motor start reset the board until it was isolated properly.",
+          listItems: [
+            "Plan the mapping before the wiring — the table is the schematic, the wiring is just obedience to it.",
+            "Isolate inductive loads; a relay is not a switch as far as the rest of the circuit is concerned.",
+            "Discrete LEDs over a display module was the right call for learning and the wrong call for reliability — every failure in testing was a joint, not a line of code."
           ]
         }
       ]

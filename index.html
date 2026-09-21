@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Jash-portfolio-logo.svg" />
+    <!-- 872 bytes, drawn as paths. The old Jash-portfolio-logo.svg was 120KB —
+         two base64 rasters wrapped in an <svg> — fetched on every page load. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -14,13 +16,20 @@
     <link rel="canonical" href="https://jashbhatt.com/" />
     <title>Jash Bhatt | Product Designer &amp; Agentic AI Designer</title>
 
-    <!-- Open Graph — link previews on LinkedIn, Slack, Discord, iMessage, Facebook -->
+    <!-- The webfonts are on the critical path for the headline, so warm the
+         connection before the stylesheet asks for them. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Open Graph — link previews on LinkedIn, Slack, Discord, iMessage, Facebook.
+         scripts/prerender.mjs rewrites these per route at build time, so each
+         case study gets its own card instead of all eleven sharing this one. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Jash Bhatt" />
     <meta property="og:title" content="Jash Bhatt | Product Designer &amp; Agentic AI Designer" />
     <meta property="og:description" content="I design and build intelligent products that combine AI, software, and human-centered interaction." />
     <meta property="og:url" content="https://jashbhatt.com/" />
-    <meta property="og:image" content="https://jashbhatt.com/og-image.png" />
+    <meta property="og:image" content="https://jashbhatt.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Jash Bhatt — product designer and agentic AI designer. Product Design, UI/UX, Agentic AI, Circuits." />
@@ -30,10 +39,24 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Jash Bhatt | Product Designer &amp; Agentic AI Designer" />
     <meta name="twitter:description" content="I design and build intelligent products that combine AI, software, and human-centered interaction." />
-    <meta name="twitter:image" content="https://jashbhatt.com/og-image.png" />
+    <meta name="twitter:image" content="https://jashbhatt.com/og-image.jpg" />
   </head>
   <body>
     <div id="root"></div>
+    <!-- Without this the page is an empty <div> to anyone with JavaScript off
+         or blocked, and to any crawler that doesn't execute it. -->
+    <noscript>
+      <div style="max-width:40rem;margin:0 auto;padding:3rem 1.25rem;font-family:system-ui,sans-serif;color:#e5e8ea;background:#010309;line-height:1.6">
+        <h1 style="font-size:1.75rem;margin:0 0 .5rem">Jash Bhatt</h1>
+        <p style="margin:0 0 1.5rem;color:#cbd5e1">Product designer and agentic AI designer. I design and build intelligent products that combine AI, software, and human-centered interaction.</p>
+        <p style="margin:0 0 1.5rem;color:#94a3b8">This portfolio needs JavaScript to show the case studies. Everything below still works without it.</p>
+        <p style="margin:0">
+          <a href="mailto:jashbhatt.contact@gmail.com" style="color:#01f5d1">jashbhatt.contact@gmail.com</a><br />
+          <a href="https://www.linkedin.com/in/jash-bhatt" style="color:#01f5d1">linkedin.com/in/jash-bhatt</a><br />
+          <a href="/Jash_Bhatt_Resume.pdf" style="color:#01f5d1">Résumé (PDF)</a>
+        </p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

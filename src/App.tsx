@@ -5,6 +5,9 @@ import {
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
 } from 'lucide-react';
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
+// The desktop pet is ~0.5MB of sprite sheet for a flourish. Splitting it out
+// keeps that off the critical path; it mounts once the page is idle.
+const LewisPet = lazy(() => import('./components/LewisPet'));
 import ResponsiveImage from './components/ResponsiveImage';
 import Reveal from './components/Reveal';
 import RotatingText from './components/RotatingText';
@@ -14,7 +17,6 @@ import Marquee from './components/Marquee';
 import BackToTop from './components/BackToTop';
 import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
-import LewisPet from './components/LewisPet';
 import CopyEmail from './components/CopyEmail';
 import ContactLinkCard from './components/ContactLinkCard';
 import HeroParticles from './components/HeroParticles';
@@ -23,9 +25,14 @@ import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
 import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, secondaryProjects, CONTAINED_THUMBNAIL_BACKDROPS } from './config/projects';
-import { ui, personalitySignals, operatorStats } from './config/ui';
+import {
+  ui, personalitySignals, operatorStats,
+  CONTACT_EMAIL, LINKEDIN_URL, LINKEDIN_HANDLE, GITHUB_URL,
+} from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import { analyticsLocation } from './utils/analyticsRoute';
+import { parseLocation, routeToPath, hasLegacyHash, SITE_ORIGIN } from './utils/routes';
+import type { Route } from './utils/routes';
 import type { Project, MobilePage, View } from './types';
 
 const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'about', 'contact'];
@@ -37,29 +44,114 @@ const isMobilePage = (value: string): value is MobilePage =>
 // centring buries its title under the fixed nav — start-align it instead.
 const getProjectScrollAlignment = () => (window.innerWidth < 768 ? 'start' : 'center');
 
+/**
+ * Keys a covering layer has to swallow.
+ *
+ * The case-study view binds ArrowRight to "next project" on `window`, and
+ * `window` is last in the bubble path — so anything listening on `document` in
+ * the capture phase wins. These are the keys that would otherwise move the page
+ * underneath an open overlay.
+ */
+const NAVIGATION_KEYS = new Set([
+  'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown', ' ',
+]);
+
+/**
+ * Freeze the page behind an overlay, and give back a function that restores it.
+ *
+ * `body { overflow: hidden }` alone is the pattern that does not work on iOS
+ * Safari: the page keeps scrolling under the overlay on touch, and dismissing
+ * it leaves the reader somewhere else entirely. Pinning the body with
+ * `position: fixed` at a negative offset is what actually holds, and restoring
+ * the offset on release is what stops the page jumping to the top afterwards.
+ */
+const lockBodyScroll = () => {
+  const { body } = document;
+  const scrollY = window.scrollY;
+  const previous = {
+    overflow: body.style.overflow,
+    position: body.style.position,
+    top: body.style.top,
+    left: body.style.left,
+    right: body.style.right,
+    width: body.style.width,
+  };
+
+  body.style.overflow = 'hidden';
+  body.style.position = 'fixed';
+  body.style.top = `${-scrollY}px`;
+  body.style.left = '0';
+  body.style.right = '0';
+  body.style.width = '100%';
+
+  return () => {
+    body.style.overflow = previous.overflow;
+    body.style.position = previous.position;
+    body.style.top = previous.top;
+    body.style.left = previous.left;
+    body.style.right = previous.right;
+    body.style.width = previous.width;
+    // `position: fixed` detaches the document from its scroll offset, so it has
+    // to be put back by hand. 'instant' — a smooth scroll here would animate
+    // the page back into place after the overlay has already gone.
+    window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
+  };
+};
+
 const marqueeItems = [
   'Product Design', 'UI/UX', 'Circuit Design', 'Interaction Design', 'Figma',
   'React', 'Arduino', 'Generative AI', 'Prototyping', 'Motion Design', 'Photography',
 ];
+
+/**
+ * The entry URL, resolved once, before the first render.
+ *
+ * This used to happen in a mount effect, which meant the first paint was always
+ * the home page: opening a shared `/work/etsconnect` link rendered the whole
+ * hero at full opacity for ~150ms, blanked for ~70ms while the case-study chunk
+ * loaded, and only then showed the project. It also kicked off a download of
+ * every home-page thumbnail plus the portrait — ~700KB fetched and immediately
+ * thrown away. Reading the URL here instead means the correct view is the first
+ * thing that ever renders.
+ */
+const INITIAL_ROUTE: Route = parseLocation();
+const INITIAL_PROJECT: Project | null =
+  INITIAL_ROUTE.view === 'project'
+    ? projects.find((p) => p.slug === INITIAL_ROUTE.slug) ?? null
+    : null;
+const INITIAL_VIEW: View =
+  INITIAL_ROUTE.view === 'project' && !INITIAL_PROJECT ? 'home' : INITIAL_ROUTE.view;
+
+/** What the lightbox is showing. The alt travels with the src so the dialog can
+    announce the image rather than the words "Full size view". */
+type LightboxImage = { src: string; alt: string };
 
 // --- Main Component ---
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Keeps the panel mounted while its closing animation plays.
   const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState<string>(() =>
+    INITIAL_ROUTE.view === 'home' ? INITIAL_ROUTE.section : 'work'
+  );
   // Below `lg` the four sections are separate pages instead of one scroll, so
   // this — not scroll position — decides what renders. Ignored at `lg` and up.
-  const [mobilePage, setMobilePage] = useState<MobilePage>('home');
-  const [currentView, setCurrentView] = useState<View>('home');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [mobilePage, setMobilePage] = useState<MobilePage>(() =>
+    INITIAL_ROUTE.view === 'home' ? INITIAL_ROUTE.section : 'work'
+  );
+  const [currentView, setCurrentView] = useState<View>(INITIAL_VIEW);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(INITIAL_PROJECT);
+  const [selectedImage, setSelectedImage] = useState<LightboxImage | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  // Analytics page views. Seeded from the hash rather than left undefined:
-  // <Analytics> reads `route` on its first render to decide whether to disable
-  // its own pushState tracking, and a late value would leave both running.
-  const [analyticsHash, setAnalyticsHash] = useState(() => window.location.hash);
+  // The desktop pet is code-split; this gates its mount until the page is idle
+  // so its sprite sheet never competes with the hero for bandwidth.
+  const [showPet, setShowPet] = useState(false);
+  // Analytics page views. Seeded from the entry route rather than left
+  // undefined: <Analytics> reads `route` on its first render to decide whether
+  // to disable its own pushState tracking, and a late value would leave both
+  // running.
+  const [analyticsRoute, setAnalyticsRoute] = useState<Route>(INITIAL_ROUTE);
   // Mobile-only accordion for the About "signal" cards. On desktop (md+) all
   // three are always shown, so this state is a no-op there.
   const isMobile = useIsMobile();
@@ -88,7 +180,7 @@ const App = () => {
     event.currentTarget.style.setProperty('--mx', '0px');
     event.currentTarget.style.setProperty('--my', '0px');
   };
-  const isWhiteBgLightboxImage = selectedImage?.includes('Circuit-Design.webp');
+  const isWhiteBgLightboxImage = selectedImage?.src.includes('Circuit-Design.webp');
 
   // Mounting happens here rather than in an effect keyed on isMenuOpen: both
   // flags land in the same commit, so the panel exists on the first render that
@@ -119,50 +211,27 @@ const App = () => {
     window.scrollTo({ top: Math.max(0, top), behavior: options?.behavior ?? 'auto' });
   };
 
-  const updateHistory = (
-    state: { view: View; section?: string; projectId?: number },
-    hash: string,
-    replace = false
-  ) => {
-    const baseUrl = window.location.pathname + window.location.search;
-    const url = hash ? `${baseUrl}#${hash}` : baseUrl;
-    // pushState/replaceState fire no event, and the pathname never changes here,
-    // so Vercel's own tracker sees every section as the same page. This is the
-    // one funnel all navigation passes through — report the view from it.
-    setAnalyticsHash(hash);
+  /**
+   * Single funnel for every navigation. Writes a real path — `/work/hr-genie`,
+   * `/about` — rather than a hash, so each view has a URL a scraper can be
+   * served a prerendered <head> for. pushState/replaceState fire no event, so
+   * this is also where the analytics view is reported.
+   */
+  const updateHistory = (route: Route, replace = false) => {
+    const url = `${routeToPath(route)}${window.location.search}`;
+    setAnalyticsRoute(route);
     if (replace) {
-      window.history.replaceState(state, '', url);
+      window.history.replaceState(route, '', url);
       return;
     }
-    window.history.pushState(state, '', url);
+    window.history.pushState(route, '', url);
   };
 
-  const parseHash = () => {
-    const hash = window.location.hash.replace('#', '');
-    const projectIdBySlug = new Map(projects.map((project) => [project.slug, project.id]));
-    if (hash.startsWith('project-')) {
-      const projectId = Number(hash.replace('project-', ''));
-      if (!Number.isNaN(projectId)) {
-        return { view: 'project' as const, projectId };
-      }
-    }
-
-    if (projectIdBySlug.has(hash)) {
-      return { view: 'project' as const, projectId: projectIdBySlug.get(hash)! };
-    }
-
-    // `gallery` is the legacy hash for this page — still honoured so old links
-    // and bookmarks keep working.
-    if (hash === 'explorations' || hash === 'gallery') {
-      return { view: 'explorations' as const };
-    }
-
-    if (isMobilePage(hash)) {
-      return { view: 'home' as const, section: hash };
-    }
-
-    return { view: 'home' as const, section: 'home' };
-  };
+  /** Route for a section of the home page. */
+  const homeRoute = (section: string): Route => ({
+    view: 'home',
+    section: isMobilePage(section) ? section : 'home',
+  });
 
   /** Explorations is its own view, so Work stays the marked nav item while there. */
   const sectionForAnchor = (section: string) => (section === 'explorations' ? 'work' : section);
@@ -182,7 +251,7 @@ const App = () => {
       setTimeout(() => { setIsTransitioning(false); }, 50);
     }, 180);
     if (options?.updateHistory !== false) {
-      updateHistory({ view: 'explorations' }, 'explorations');
+      updateHistory({ view: 'explorations' });
     }
   };
 
@@ -207,7 +276,7 @@ const App = () => {
         setTimeout(() => { setIsTransitioning(false); }, 50);
       }, leavingProject ? 300 : 160);
       if (options?.updateHistory !== false) {
-        updateHistory({ view: 'home', section: page }, page);
+        updateHistory({ view: 'home', section: page });
       }
       return;
     }
@@ -255,7 +324,7 @@ const App = () => {
     setIsMenuOpen(false);
     setActiveSection(anchorId);
     if (options?.updateHistory !== false) {
-      updateHistory({ view: 'home', section: anchorId }, anchorId);
+      updateHistory(homeRoute(anchorId));
     }
   };
 
@@ -273,7 +342,7 @@ const App = () => {
       }, 50);
     }, 180);
     if (options?.updateHistory !== false) {
-      updateHistory({ view: 'project', projectId: project.id }, project.slug);
+      updateHistory({ view: 'project', slug: project.slug });
     }
   };
 
@@ -283,7 +352,8 @@ const App = () => {
 
   /** Cards are real links so they can be opened in a new tab or copied. A plain
       click still runs the in-page transition; a modified click is left to the
-      browser, which loads the hash and lands on the same view via parseHash. */
+      browser, which loads the path and lands on the same view via
+      parseLocation. */
   const onInPageLink = (event: React.MouseEvent<HTMLAnchorElement>, open: () => void) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     event.preventDefault();
@@ -307,7 +377,7 @@ const App = () => {
         setTimeout(() => { setIsTransitioning(false); }, 50);
       }, 300);
       if (options?.updateHistory !== false) {
-        updateHistory({ view: 'home', section: page }, page);
+        updateHistory({ view: 'home', section: page });
       }
       return;
     }
@@ -330,7 +400,7 @@ const App = () => {
       }, 50);
     }, 300);
     if (options?.updateHistory !== false) {
-      updateHistory({ view: 'home', section: sectionId }, sectionId);
+      updateHistory(homeRoute(sectionId));
     }
   };
 
@@ -351,52 +421,81 @@ const App = () => {
     }
   };
 
-  // Initial load: honor URL hash without pushing history
+  /**
+   * Initial load. The view itself is already correct — it came out of
+   * `parseLocation()` in the state initialisers above, so the first paint is
+   * the right page. All that is left is to normalise the URL (an old `#slug`
+   * link is rewritten to its path, in place, so Back doesn't bounce through it)
+   * and, on desktop, to scroll to the requested section.
+   */
   useEffect(() => {
-    const initialState = parseHash();
-    if (initialState.view === 'explorations') {
-      openExplorations({ updateHistory: false });
-      updateHistory({ view: 'explorations' }, 'explorations', true);
-      return;
+    const route: Route = INITIAL_ROUTE.view === 'project' && !INITIAL_PROJECT
+      ? { view: 'home', section: 'home' }
+      : INITIAL_ROUTE;
+
+    const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    const wantedPath = routeToPath(route) || '/';
+    if (hasLegacyHash() || currentPath !== wantedPath.replace(/\/+$/, '') ) {
+      updateHistory(route, true);
     }
-    if (initialState.view === 'project') {
-      const project = projects.find(p => p.id === initialState.projectId);
-      if (project) {
-        openProject(project, { updateHistory: false });
-        return;
-      }
-      updateHistory({ view: 'home', section: 'home' }, 'home', true);
-      return;
-    }
-    const section = initialState.section ?? 'home';
+
+    if (route.view !== 'home') return;
     if (isMobile) {
-      // Set the page directly rather than routing through scrollToSection —
-      // that would play the page-change fade on first paint.
-      const page: MobilePage = isMobilePage(section) ? section : 'home';
-      setMobilePage(page);
-      setActiveSection(sectionForAnchor(page));
-    } else {
-      scrollToSection(section, { updateHistory: false });
+      // The paged layout already mounts the right page; nothing to scroll to.
+      return;
     }
-    updateHistory({ view: 'home', section }, section, true);
+    if (route.section !== 'home') {
+      const element = document.getElementById(route.section);
+      if (element) scrollToElementWithOffset(element, 'start', { startOffsetAdjustment: -64 });
+    }
   // Mount-only by design: this reads the entry URL once. Re-running it when
   // the navigation helpers change would re-navigate mid-session.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Mount the desktop pet once the page has settled. `requestIdleCallback`
+   * rather than a timer so it never lands in the middle of the first paint.
+   */
+  useEffect(() => {
+    if (isMobile) return;
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    if (!w.requestIdleCallback) {
+      const t = window.setTimeout(() => setShowPet(true), 1200);
+      return () => clearTimeout(t);
+    }
+    const handle = w.requestIdleCallback(() => setShowPet(true), { timeout: 3000 });
+    return () => w.cancelIdleCallback?.(handle);
+  }, [isMobile]);
+
   // Handle browser back/forward
   useEffect(() => {
-    const handlePopState = () => {
+    const handleRouteChange = () => {
       // These branches all navigate with `updateHistory: false`, so they skip
       // the funnel that normally reports the view.
-      setAnalyticsHash(window.location.hash);
-      const nextState = parseHash();
-      if (nextState.view === 'explorations') {
+      const nextRoute = parseLocation();
+      setAnalyticsRoute(nextRoute);
+
+      // Someone followed an old `#slug` link — from outside the site, or from
+      // a stale bookmark. Resolve it, then quietly rewrite the address bar to
+      // the canonical path so the hash doesn't linger and Back doesn't have to
+      // walk through it.
+      if (hasLegacyHash()) {
+        window.history.replaceState(
+          nextRoute,
+          '',
+          `${routeToPath(nextRoute)}${window.location.search}`
+        );
+      }
+      if (nextRoute.view === 'explorations') {
         openExplorations({ updateHistory: false });
         return;
       }
-      if (nextState.view === 'project') {
-        const project = projects.find(p => p.id === nextState.projectId);
+      if (nextRoute.view === 'project') {
+        const project = projects.find(p => p.slug === nextRoute.slug);
         if (project) {
           openProject(project, { updateHistory: false });
         }
@@ -404,15 +503,23 @@ const App = () => {
       }
 
       if (currentView !== 'home') {
-        handleBackToHome({ updateHistory: false, sectionId: nextState.section ?? 'home' });
+        handleBackToHome({ updateHistory: false, sectionId: nextRoute.section });
         return;
       }
 
-      scrollToSection(nextState.section ?? 'home', { updateHistory: false });
+      scrollToSection(nextRoute.section, { updateHistory: false });
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handleRouteChange);
+    // A plain fragment navigation — someone editing the address bar, or an old
+    // `#slug` link followed from inside the site — fires hashchange and, in
+    // some browsers, no popstate at all. Listening to both means the view can
+    // never drift out of sync with the URL.
+    window.addEventListener('hashchange', handleRouteChange);
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+      window.removeEventListener('hashchange', handleRouteChange);
+    };
     // isMobile matters: both handlers below branch on it, so a stale value
     // would scroll the paged layout instead of switching pages.
   // The handlers are stable for this purpose and re-subscribing on every
@@ -420,38 +527,70 @@ const App = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentView, selectedProject, isMobile]);
 
-  // Per-view document title and description. Social scrapers read the static
-  // tags in index.html, but this keeps tab titles, browser history, and
-  // bookmarks meaningful when navigating between case studies.
+  /**
+   * Per-view document metadata.
+   *
+   * Scrapers are served a prerendered <head> per route (scripts/prerender.mjs),
+   * so this is not what produces link previews. It keeps the live document
+   * honest for tab titles, browser history, bookmarks, and anything reading the
+   * DOM after hydration — including the canonical and og:url, which used to
+   * point at the site root from every case study.
+   */
   useEffect(() => {
     const setMeta = (selector: string, value: string) => {
       document.head.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', value);
     };
+    const setLink = (selector: string, href: string) => {
+      document.head.querySelector<HTMLLinkElement>(selector)?.setAttribute('href', href);
+    };
+
+    const apply = (
+      title: string,
+      description: string,
+      path: string,
+      image = `${SITE_ORIGIN}/og-image.png`,
+      imageAlt = 'Jash Bhatt — product designer and agentic AI designer.'
+    ) => {
+      const url = `${SITE_ORIGIN}${path === '/' ? '/' : path}`;
+      document.title = title;
+      setMeta('meta[name="description"]', description);
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', description);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[property="og:image"]', image);
+      setMeta('meta[property="og:image:alt"]', imageAlt);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', description);
+      setMeta('meta[name="twitter:image"]', image);
+      setLink('link[rel="canonical"]', url);
+    };
 
     if (currentView === 'project' && selectedProject) {
-      const title = `${selectedProject.title} — ${selectedProject.category} | Jash Bhatt`;
-      document.title = title;
-      setMeta('meta[name="description"]', selectedProject.description);
-      setMeta('meta[property="og:title"]', title);
-      setMeta('meta[property="og:description"]', selectedProject.description);
+      apply(
+        `${selectedProject.title} — ${selectedProject.category} | Jash Bhatt`,
+        selectedProject.description,
+        `/work/${selectedProject.slug}`,
+        `${SITE_ORIGIN}/og/${selectedProject.slug}.png`,
+        `${selectedProject.title} — ${selectedProject.category}`
+      );
       return;
     }
 
     if (currentView === 'explorations') {
-      const title = 'Explorations | Jash Bhatt';
-      document.title = title;
-      setMeta('meta[property="og:title"]', title);
+      apply(
+        'Creative Explorations | Jash Bhatt',
+        'Photography, brand motion, generative experiments, and image-making alongside the case studies.',
+        '/explorations'
+      );
       return;
     }
 
-    const defaultTitle = 'Jash Bhatt | Product Designer & Agentic AI Designer';
-    const defaultDescription =
-      'I design and build intelligent products that combine AI, software, and human-centered interaction.';
-    document.title = defaultTitle;
-    setMeta('meta[name="description"]', defaultDescription);
-    setMeta('meta[property="og:title"]', defaultTitle);
-    setMeta('meta[property="og:description"]', defaultDescription);
-  }, [currentView, selectedProject]);
+    apply(
+      'Jash Bhatt | Product Designer & Agentic AI Designer',
+      'I design and build intelligent products that combine AI, software, and human-centered interaction.',
+      mobilePage === 'home' ? '/' : `/${mobilePage}`
+    );
+  }, [currentView, selectedProject, mobilePage]);
 
   // Scroll spy. Uses IntersectionObserver rather than a scroll handler: the old
   // version read offsetTop/offsetHeight for four sections on every scroll event
@@ -628,28 +767,61 @@ const App = () => {
   useEffect(() => {
     if (!isMenuOpen || !shouldRenderMenu) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const releaseScroll = lockBodyScroll();
     const opener = menuButtonRef.current;
     // Captured now rather than read in cleanup: the panel is mounted for this
     // effect's whole lifetime, and the ref may already be null by teardown.
     const panel = menuPanelRef.current;
     panel?.querySelector<HTMLElement>('button, a')?.focus();
 
+    // Focus trap. Without it, Tab past the last item walks straight out of an
+    // open modal menu and into the page it is covering.
+    const handleTab = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || !panel) return;
+      const focusables = panel.querySelectorAll<HTMLElement>('button, a[href]');
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', handleTab);
+
     return () => {
-      document.body.style.overflow = previousOverflow;
+      releaseScroll();
+      document.removeEventListener('keydown', handleTab);
       // Only pull focus back to the opener if it's still inside the panel —
       // otherwise this would steal focus from wherever the user has moved on.
       if (panel?.contains(document.activeElement)) opener?.focus();
     };
   }, [isMenuOpen, shouldRenderMenu]);
 
+  /**
+   * Belt-and-braces unmount for the menu panel.
+   *
+   * `shouldRenderMenu` is normally cleared by the panel's own `animationend`.
+   * That event is not guaranteed: a tab backgrounded mid-close stops advancing
+   * animation timelines, and a user stylesheet or extension setting
+   * `animation: none` removes it outright. Either way the panel — and its
+   * full-viewport scrim — would be stranded on screen, swallowing every tap on
+   * the page underneath. This clears it on a timer regardless.
+   */
+  useEffect(() => {
+    if (isMenuOpen || !shouldRenderMenu) return;
+    const timer = window.setTimeout(() => setShouldRenderMenu(false), 400);
+    return () => clearTimeout(timer);
+  }, [isMenuOpen, shouldRenderMenu]);
+
   // Lightbox escape, focus, and scroll lock
   useEffect(() => {
     if (!selectedImage) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const releaseScroll = lockBodyScroll();
     lightboxCloseRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -666,6 +838,16 @@ const App = () => {
       if (event.key === 'Tab') {
         event.preventDefault();
         lightboxCloseRef.current?.focus();
+        return;
+      }
+
+      // Everything else the layers underneath treat as navigation is swallowed
+      // here. The case-study view binds ArrowRight to "next project" on
+      // `window`; with the lightbox open that changed the page behind it while
+      // the dialog carried on showing an image from the project you had just
+      // left.
+      if (NAVIGATION_KEYS.has(event.key)) {
+        event.stopPropagation();
       }
     };
 
@@ -675,7 +857,7 @@ const App = () => {
     document.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      releaseScroll();
       document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [selectedImage]);
@@ -686,25 +868,44 @@ const App = () => {
        with a band of dead background beneath it. Every other child here is
        fixed-position, so only the content wrapper and the footer are in flow. */
     <div className="min-h-[100svh] flex flex-col bg-[var(--ground)] text-slate-100 selection:bg-accent selection:text-slate-950 transition-colors duration-300">
-      <Analytics {...analyticsLocation(analyticsHash)} />
+      <Analytics {...analyticsLocation(analyticsRoute)} />
       {/* Static circuit-trace substrate. No wash, no drift, no scroll tracking —
           it is structure, not atmosphere. Sits behind everything; all page
           content is lifted above it with `relative z-10`. */}
+      {/* First focusable thing in the document. It used to sit after the
+          back-to-top button and the pet's dismiss button, so the first two Tab
+          stops were an invisible control and a decoration — which is precisely
+          what a skip link exists to prevent. */}
+      <a
+        href={`${PUBLIC_URL}#main`}
+        onClick={(event) => {
+          // Move focus, not just the scroll position. Anchoring to a plain
+          // <section> scrolled the page and left focus in the nav, so the next
+          // Tab went straight back to where it started.
+          event.preventDefault();
+          const main = document.getElementById('main');
+          if (!main) return;
+          main.focus();
+          main.scrollIntoView({ block: 'start' });
+        }}
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-lg"
+      >
+        Skip to content
+      </a>
       <div className="schematic-ground" aria-hidden="true" />
       <CursorGlow />
       {/* Every width: the mobile nav is a hamburger menu, so nothing else takes
           a long page back to the top. */}
       <BackToTop />
       {/* The desktop pet, on the desktop layout only — he needs room to walk.
-          Off the home page he keeps to the gutter beside the content column. */}
-      {!isMobile && <LewisPet gutterOnly={currentView !== 'home'} />}
-      <a
-        href="#home"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-lg"
-      >
-        Skip to content
-      </a>
-
+          Off the home page he keeps to the gutter beside the content column.
+          Code-split and mounted on idle: his sprite sheet is ~0.5MB and used to
+          land in the middle of the first paint. */}
+      {!isMobile && showPet && (
+        <Suspense fallback={null}>
+          <LewisPet gutterOnly={currentView !== 'home'} />
+        </Suspense>
+      )}
       {/* Lightbox Modal. The image sits in its own scroll container with
           `touch-action: pinch-zoom` so dense diagrams (the HR Genie SVGs are
           authored at 1600px wide) can actually be inspected on a phone. */}
@@ -714,7 +915,7 @@ const App = () => {
           onClick={() => setSelectedImage(null)}
           role="dialog"
           aria-modal="true"
-          aria-label="Image preview"
+          aria-label={selectedImage.alt ? `Image preview: ${selectedImage.alt}` : 'Image preview'}
         >
           <button
             className={`chip absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-10 flex items-center justify-center text-white rounded-sm shadow-lg ${ui.tapTarget}`}
@@ -728,13 +929,24 @@ const App = () => {
             className="h-full w-full overflow-auto overscroll-contain flex items-center justify-center p-4 [touch-action:pinch-zoom]"
             onClick={() => setSelectedImage(null)}
           >
-            <ResponsiveImage
-              src={selectedImage}
-              alt="Full size view"
-              className={`max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : ''}`}
-              loading="eager"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <figure className="m-0 flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
+              <ResponsiveImage
+                src={selectedImage.src}
+                // The caption, not "Full size view". This is the site's primary
+                // image-viewing surface; announcing the same four words for
+                // every diagram in every case study told a screen-reader user
+                // nothing at all.
+                alt={selectedImage.alt}
+                className={`max-w-full max-h-[80vh] w-auto h-auto object-contain rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : ''}`}
+                loading="eager"
+                sizes="90vw"
+              />
+              {selectedImage.alt && (
+                <figcaption className="max-w-2xl px-4 text-center text-sm text-slate-300">
+                  {selectedImage.alt}
+                </figcaption>
+              )}
+            </figure>
           </div>
           <p className="md:hidden absolute bottom-[max(1rem,env(safe-area-inset-bottom))] inset-x-0 text-center text-xs text-slate-400 pointer-events-none">
             Pinch to zoom · tap outside to close
@@ -749,7 +961,9 @@ const App = () => {
             <button
               type="button"
               onClick={() => scrollToSection('home')}
-              aria-label="Back to top of page"
+              // Not "back to top": on a case study this leaves the page
+              // entirely and goes to the home view.
+              aria-label="Jash Bhatt — home"
               className="flex-shrink-0 -ml-2 px-2 flex items-center justify-center min-h-11 min-w-11 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <span className="text-[1.85rem] md:text-[2.1rem] font-display tracking-tight text-accent">JB</span>
@@ -764,7 +978,7 @@ const App = () => {
                     key={item}
                     ref={(el) => { navButtonRefs.current[item.toLowerCase()] = el; }}
                     onClick={() => scrollToSection(item.toLowerCase())}
-                    className={`flex items-center min-h-11 text-base font-medium transition-colors duration-200 ${
+                    className={`flex items-center min-h-11 px-1 rounded-sm text-base font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                       // Explorations sits under Work, so Work stays marked there.
                       activeSection === item.toLowerCase() && isHomeNavContext
                         ? 'text-accent'
@@ -788,14 +1002,15 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent font-mono text-xs uppercase tracking-[0.08em] hover:bg-accent hover:text-slate-950 transition-all duration-200 whitespace-nowrap"
+                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent font-mono text-xs uppercase tracking-[0.08em] hover:bg-accent hover:text-slate-950 transition-all duration-200 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 {/* Spaced with `gap`, not a literal space: the arrow glyph has
                     almost no left side bearing, so a single space reads tight.
                     The text sits on its own line so JSX drops the whitespace
                     and the gap is the only thing separating them. */}
-                Resume
-                <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                Résumé
+                <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                <span className="sr-only">(PDF, opens in a new tab)</span>
               </a>
             </div>
 
@@ -824,16 +1039,23 @@ const App = () => {
           <div
             aria-hidden="true"
             onClick={() => setIsMenuOpen(false)}
+            // `pointer-events-none` the moment the menu starts closing. Left
+            // interactive, an invisible full-viewport scrim sits over every
+            // card and link on the page for the length of the fade — and for
+            // good, if the animationend that unmounts it never arrives.
             className={`lg:hidden fixed inset-0 top-[var(--nav-h)] z-40 bg-black/50 transition-opacity duration-300 ${
-              isMenuOpen ? 'opacity-100' : 'opacity-0'
+              isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           />
           <div
             id="mobile-menu"
             ref={menuPanelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
             onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
             className={`lg:hidden panel-solid border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe ${
-              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close'
+              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close pointer-events-none'
             }`}
           >
             <div className="px-3 pt-3 pb-2 space-y-1">
@@ -865,17 +1087,21 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
+                download="Jash_Bhatt_Resume.pdf"
                 onClick={() => setIsMenuOpen(false)}
                 className="flex w-full items-center gap-2 min-h-12 px-4 mt-2 pt-4 border-t border-white/10 text-lg font-medium text-accent rounded-xl active:bg-white/10"
               >
-                <Download size={18} /> Resume
+                <Download size={18} aria-hidden="true" /> Résumé (PDF)
               </a>
             </div>
           </div>
         </>
       )}
 
-      {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW */}
+      {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW.
+          `tabIndex={-1}` so the skip link above can move focus here — the old
+          target was a plain <section>, which scrolls but cannot be focused. */}
+      <main id="main" tabIndex={-1} className="contents focus:outline-none">
       {currentView === 'home' ? (
         /* Every page but Home opens with its section flush against the top of
            the document, where the fixed nav overlays it — the section's own
@@ -896,6 +1122,7 @@ const App = () => {
           {showsPage('home') && (
           <section
             id="home"
+            aria-label="Introduction"
             // No min-height below `lg`. Once the redundant CTAs came out, forcing
             // a full screen left ~290px of void above the fold; letting the hero
             // hug its content instead brings the portrait card up into view,
@@ -955,7 +1182,7 @@ const App = () => {
                       as="button"
                       strength={28}
                       onClick={() => scrollToSection('work')}
-                      className={`group ${ui.btnBase} ${ui.btnPrimary}`}
+                      className={`group ${ui.btnBase} ${ui.btnPrimary} ${ui.focusRing}`}
                     >
                       View My Work <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                     </Magnetic>
@@ -963,7 +1190,7 @@ const App = () => {
                       as="button"
                       strength={28}
                       onClick={() => scrollToSection('contact')}
-                      className={`${ui.btnBase} ${ui.btnSecondary}`}
+                      className={`${ui.btnBase} ${ui.btnSecondary} ${ui.focusRing}`}
                     >
                       Get in Touch
                     </Magnetic>
@@ -973,26 +1200,36 @@ const App = () => {
                       href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                       target="_blank"
                       rel="noreferrer"
+                      download="Jash_Bhatt_Resume.pdf"
                       className={`${ui.btnBase} ${ui.btnSecondary}`}
                     >
-                      <Download size={18} /> Resume
+                      <Download size={18} aria-hidden="true" /> Résumé
                     </Magnetic>
                   </div>
                 </div>
 
-                <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
-                  <div className="surface surface-marks surface-hover max-w-[324px] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
-                    <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
-                      <ResponsiveImage
-                        src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
-                        alt="Portrait of Jash Bhatt"
-                        className="w-full h-full object-cover object-top"
-                        loading="eager"
-                        fetchPriority="high"
-                      />
+                {/* Desktop only — and mounted only there. It used to render at
+                    every width inside a `hidden lg:block` wrapper, so a phone
+                    parsed a second portrait it would never show and handed it
+                    `fetchPriority="high"`. */}
+                {!isMobile && (
+                  <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
+                    <div className="surface surface-marks surface-hover max-w-[324px] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
+                      <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
+                        <ResponsiveImage
+                          src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
+                          alt="Portrait of Jash Bhatt"
+                          className="w-full h-full object-cover object-top"
+                          loading="eager"
+                          fetchPriority="high"
+                          // The slot is 292px. Without this it inherited the
+                          // 1050px default and pulled the full-size original.
+                          sizes="292px"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
@@ -1066,9 +1303,9 @@ const App = () => {
               6,300px Work section back onto it. The contact strip below it
               carries the `pb-14 sm:pb-20` that ends every page above the footer. */}
           {isMobile && mobilePage === 'home' && (
-            <section className={`${ui.shell} pt-14 sm:pt-16 pb-12 sm:pb-16`}>
+            <section aria-labelledby="home-featured-heading" className={`${ui.shell} pt-14 sm:pt-16 pb-12 sm:pb-16`}>
               <Reveal variant="rise-soft" className="mb-6">
-                <h2 className="text-2xl font-display text-slate-100">Selected Projects</h2>
+                <h2 id="home-featured-heading" className="text-2xl font-display text-slate-100">Selected Projects</h2>
               </Reveal>
 
               <div className="grid grid-cols-1 gap-4">
@@ -1130,19 +1367,25 @@ const App = () => {
                 <p className="mt-2 text-[0.95rem] text-slate-300">Open to roles in agentic&nbsp;AI, product design, and UI/UX.</p>
               </Reveal>
               <Reveal variant="rise" delay={80} className="grid grid-cols-1 gap-3">
-                <CopyEmail email="jashbhatt.contact@gmail.com" />
-                <ContactLinkCard href="https://linkedin.com/in/jash-bhatt" icon={<Linkedin size={22} />} label="LinkedIn" value="/in/jash-bhatt" />
-                <ContactLinkCard href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} icon={<Download size={22} />} label="Resume" value="Download PDF" />
+                <CopyEmail email={CONTACT_EMAIL} />
+                <ContactLinkCard href={LINKEDIN_URL} icon={<Linkedin size={22} />} label="LinkedIn" value={LINKEDIN_HANDLE} />
+                <ContactLinkCard
+                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+                      icon={<Download size={22} />}
+                      label="Résumé"
+                      value="Download PDF"
+                      download="Jash_Bhatt_Resume.pdf"
+                    />
               </Reveal>
             </section>
           )}
 
           {/* Work Section */}
           {showsPage('work') && (
-          <section id="work" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
+          <section id="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
             <Reveal className="mb-10 sm:mb-14 md:mb-16">
-              <h2 className={`${ui.h2} font-display text-slate-100 mb-3 md:mb-4`}>Selected Projects</h2>
-              <p className="text-slate-300 max-w-2xl mb-5 md:mb-6">From circuit-led builds to AI-enabled interfaces — each project reflects how I think through design, engineering, and behavior together.</p>
+              <h2 id="work-heading" className={`${ui.h2} font-display text-slate-100 mb-3 md:mb-4`}>Selected Projects</h2>
+              <p className="text-slate-300 max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" delay={180} duration={900}>
                 <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
@@ -1282,10 +1525,10 @@ const App = () => {
               as the strongest projects and nothing else. Mounts on the Work
               page below `lg`. */}
           {showsPage('work') && secondaryProjects.length > 0 && (
-            <section id="archive" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
+            <section id="archive" aria-labelledby="archive-heading" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
               <Reveal variant="rise-soft" className="mb-8">
                 <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
-                <h2 className={`${ui.h2} font-display text-slate-100`}>More work</h2>
+                <h2 id="archive-heading" className={`${ui.h2} font-display text-slate-100`}>More work</h2>
                 <Reveal variant="grow-width" delay={180} duration={900}>
                   <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
                 </Reveal>
@@ -1341,7 +1584,7 @@ const App = () => {
               that the galleries are a view of their own rather than part of
               this scroll. */}
           {showsPage('work') && (
-            <section className={`${ui.shell} pb-14 sm:pb-20`}>
+            <section aria-label="Beyond case studies" className={`${ui.shell} pb-14 sm:pb-20`}>
               <Reveal>
                 <a
                   href="#explorations"
@@ -1361,11 +1604,11 @@ const App = () => {
 
           {/* About Section */}
           {showsPage('about') && (
-          <section id="about" className={`${ui.section} ${ui.scrollMt}`}>
+          <section id="about" aria-labelledby="about-heading" className={`${ui.section} ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal variant="rise-soft">
-                  <h2 className={`${ui.h2} font-display text-slate-100 mb-5 md:mb-8`}>About Me</h2>
+                  <h2 id="about-heading" className={`${ui.h2} font-display text-slate-100 mb-5 md:mb-8`}>About Me</h2>
                   <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-300 leading-relaxed">
                     <p>
                       I design products that span software and hardware — conversational AI agents inside Bajaj Finance's Agentic AI unit, design-system components at RAHI, and interfaces running on circuits I soldered myself.
@@ -1381,8 +1624,8 @@ const App = () => {
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
-                        <Briefcase size={20} className="text-accent" />
-                        <h4 className="text-xl font-semibold tracking-tight text-slate-100">Design</h4>
+                        <Briefcase size={20} className="text-accent" aria-hidden="true" />
+                        <h3 className="text-xl font-semibold tracking-tight text-slate-100">Design</h3>
                       </div>
                       <PipeList
                         items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design Systems', 'Industrial Design']}
@@ -1393,8 +1636,8 @@ const App = () => {
 
                     <div>
                       <div className="flex items-center gap-3 mb-4">
-                        <Award size={20} className="text-accent" />
-                        <h4 className="text-xl font-semibold tracking-tight text-slate-100">Tools & Tech</h4>
+                        <Award size={20} className="text-accent" aria-hidden="true" />
+                        <h3 className="text-xl font-semibold tracking-tight text-slate-100">Tools &amp; Tech</h3>
                       </div>
                       <PipeList
                         items={['Figma', 'Python', 'React.js', 'n8n', 'Microsoft Copilot Studio', 'Arduino IDE', 'Fusion 360', 'Adobe Suite']}
@@ -1412,7 +1655,7 @@ const App = () => {
               <Reveal variant="rise-soft" delay={200}>
                 <div className="mt-10 md:mt-16 grid md:grid-cols-2 gap-8 md:gap-16">
                   <div className="border-l-2 border-accent-deep pl-4">
-                    <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Experience</div>
+                    <h3 className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Experience</h3>
                     <div className="space-y-4 md:space-y-6">
                       <div>
                         <h4 className="text-lg font-bold text-slate-100">Design &amp; Development Intern</h4>
@@ -1428,7 +1671,7 @@ const App = () => {
                   </div>
 
                   <div className="border-l-2 border-accent-deep pl-4">
-                    <div className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</div>
+                    <h3 className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</h3>
                     <div className="space-y-4 md:space-y-6">
                       <div>
                         <h4 className="text-lg font-bold text-slate-100">Bachelor of Design (B.Des)</h4>
@@ -1452,11 +1695,11 @@ const App = () => {
               screen without scrolling, so its mobile spacing is tuned to keep it
               that way — desktop keeps the original rhythm via the `lg:` values. */}
           {showsPage('contact') && (
-          <section id="contact" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
+          <section id="contact" aria-labelledby="contact-heading" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-16">
                 <Reveal variant="rise-soft">
-                  <h2 className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
+                  <h2 id="contact-heading" className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
                   <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
                     I am actively looking for opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
                   </p>
@@ -1469,19 +1712,25 @@ const App = () => {
                 <div className="grid grid-cols-1 gap-4 w-full max-w-[26rem]">
                   <Reveal variant="rise" delay={80} className="h-full">
                     <Magnetic className="h-full">
-                      <CopyEmail email="jashbhatt.contact@gmail.com" />
+                      <CopyEmail email={CONTACT_EMAIL} />
                     </Magnetic>
                   </Reveal>
 
                   <Reveal variant="rise" delay={160} className="h-full">
                     <Magnetic className="h-full">
-                      <ContactLinkCard href="https://linkedin.com/in/jash-bhatt" icon={<Linkedin size={22} />} label="LinkedIn" value="/in/jash-bhatt" />
+                      <ContactLinkCard href={LINKEDIN_URL} icon={<Linkedin size={22} />} label="LinkedIn" value={LINKEDIN_HANDLE} />
                     </Magnetic>
                   </Reveal>
 
                   <Reveal variant="rise" delay={240} className="h-full">
                     <Magnetic className="h-full">
-                      <ContactLinkCard href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} icon={<Download size={22} />} label="Resume" value="Download PDF" />
+                      <ContactLinkCard
+                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+                      icon={<Download size={22} />}
+                      label="Résumé"
+                      value="Download PDF"
+                      download="Jash_Bhatt_Resume.pdf"
+                    />
                     </Magnetic>
                   </Reveal>
                 </div>
@@ -1499,6 +1748,7 @@ const App = () => {
         >
           <section
             id="explorations"
+            aria-labelledby="explorations-heading"
             className={`${ui.section} pt-[calc(var(--nav-h)+1.5rem)] ${ui.shell}`}
           >
             <Reveal className="mb-10 sm:mb-14">
@@ -1509,7 +1759,7 @@ const App = () => {
                 <ArrowLeft size={16} /> Work
               </button>
               <p className={`${ui.eyebrow} mb-2`}>Beyond case studies</p>
-              <h1 className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h1>
+              <h1 id="explorations-heading" className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h1>
               <p className="text-slate-300 max-w-2xl">
                 Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
               </p>
@@ -1518,6 +1768,27 @@ const App = () => {
               </Reveal>
             </Reveal>
             <CreativeExplorations onImageClick={setSelectedImage} showDivider={false} />
+
+            {/* An exit at the end. The only way back used to be the small
+                "← Work" button at the very top, four thousand pixels up. */}
+            <nav aria-label="Explorations" className="mt-14 pt-8 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => scrollToSection('work')}
+                className={`group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors ${ui.focusRing}`}
+              >
+                <ArrowLeft size={18} aria-hidden="true" className="group-hover:-translate-x-1 transition-transform" />
+                Back to Work
+              </button>
+              <button
+                type="button"
+                onClick={() => handleProjectClick(featuredProjects[0])}
+                className={`group flex items-center gap-2 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors ${ui.focusRing}`}
+              >
+                Read {featuredProjects[0].title}
+                <ArrowRight size={18} aria-hidden="true" className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </nav>
           </section>
         </div>
       ) : (
@@ -1550,15 +1821,38 @@ const App = () => {
           />
         </Suspense>
       )}
+      </main>
 
       {/* Footer. Mobile padding is deliberately much tighter than desktop:
           171px of chrome for 90px of content was a third of a short page. */}
       {/* One compact footer at every width — no wordmark (the header already
           carries it) and a single line of type. It was 151px of chrome for one
           credit line on desktop. */}
-      <footer className="relative z-10 mt-auto scrim border-t border-white/10 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
-        <div className={ui.shell}>
-          <p className="text-slate-400 text-xs">© 2026 Jash Bhatt — Designed &amp; built from scratch.</p>
+      <footer className="relative z-10 mt-auto scrim border-t border-white/10 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+        <div className={`${ui.shell} flex flex-col items-center gap-3 sm:flex-row sm:justify-between`}>
+          {/* This was one credit line. The footer is where someone who read to
+              the end looks for a way to get in touch, and there wasn't one. */}
+          <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs">
+            <a href={`mailto:${CONTACT_EMAIL}`} className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+              Email
+            </a>
+            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+              LinkedIn<span aria-hidden="true"> ↗</span>
+            </a>
+            {GITHUB_URL && (
+              <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+                GitHub<span aria-hidden="true"> ↗</span>
+              </a>
+            )}
+            <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+              Résumé<span aria-hidden="true"> ↗</span>
+            </a>
+          </nav>
+          {/* `text-balance` so the credit doesn't leave "scratch." alone on a
+              second line at 320px. */}
+          <p className="text-slate-400 text-xs text-center [text-wrap:balance]">
+            © 2026 Jash Bhatt — designed &amp; built from scratch.
+          </p>
         </div>
       </footer>
     </div>

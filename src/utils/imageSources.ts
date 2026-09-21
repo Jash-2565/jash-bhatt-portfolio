@@ -18,7 +18,8 @@ const entries = manifest as Record<string, ManifestEntry>;
  * on a phone. Components that render into a narrower slot (thumbnails, gallery
  * tiles) should pass their own.
  */
-export const DEFAULT_SIZES = '(min-width: 1024px) 1050px, 100vw';
+export const DEFAULT_SIZES =
+  '(min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw';
 
 /**
  * Look up the srcset/dimension data for a public image path.
@@ -27,6 +28,13 @@ export const DEFAULT_SIZES = '(min-width: 1024px) 1050px, 100vw';
  * (`/images/...`), so the deployment base is stripped before lookup. Anything
  * not in the manifest — SVGs, icons, remote URLs, images too small to be worth
  * splitting — returns null and the caller falls back to a plain <img>.
+ *
+ * Every candidate is percent-encoded. A srcset is parsed by splitting on
+ * whitespace, so a raw space in a path (`/images/Dino Spread/...`) makes the
+ * URL end at the space and the next word parse as a descriptor. The browser
+ * drops the candidate — and since every candidate for that image contains the
+ * same space, the whole srcset is discarded and the full-size original is
+ * served. `src` itself is fine unencoded; only the srcset needs this.
  */
 export function getImageSources(src: unknown): {
   srcSet?: string;
@@ -45,9 +53,11 @@ export function getImageSources(src: unknown): {
     return { width: entry.w, height: entry.h };
   }
 
-  const candidates = entry.v.map((w) => `${src.replace(/\.(webp|png|jpe?g)$/i, `-${w}.webp`)} ${w}w`);
+  const candidates = entry.v.map(
+    (w) => `${encodeURI(src.replace(/\.(webp|png|jpe?g)$/i, `-${w}.webp`))} ${w}w`
+  );
   // The original is the widest candidate, so it stays in play for large screens.
-  candidates.push(`${src} ${entry.w}w`);
+  candidates.push(`${encodeURI(src)} ${entry.w}w`);
 
   return { srcSet: candidates.join(', '), width: entry.w, height: entry.h };
 }
