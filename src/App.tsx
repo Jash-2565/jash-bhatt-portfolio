@@ -1523,7 +1523,17 @@ const App = () => {
       ) : (
         /* PROJECT DETAIL VIEW */
         <Suspense fallback={<div className="min-h-screen" />}>
+          {/* Keyed by project so moving between case studies mounts a fresh
+              tree. Without it React reuses the same nodes for the next
+              project's content — including every <Reveal>, which has already
+              run, unobserved itself and dropped its mask. The sections that
+              sat in those positions then arrive fully drawn, with no reveal
+              at all, while the ones further down (with no counterpart in the
+              previous project) still animate. Remounting also resets the
+              section-progress highlight and tears down any demo canvas the
+              previous case study had running. */}
           <ProjectDetail
+            key={selectedProject?.id ?? 'none'}
             project={selectedProject}
             nextProject={
               selectedProject

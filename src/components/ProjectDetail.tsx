@@ -581,7 +581,26 @@ const ProjectDetail = ({
             {project.content.sections.map((section, idx) => {
               const isActive = idx === activeIdx;
               return (
-              <div key={idx} data-section={idx} className="grid md:grid-cols-12 gap-5 md:gap-8 items-start group">
+              // One reveal for the whole section, so the numbered heading and
+              // the body it belongs to arrive together as a single block —
+              // the same entrance the cards and prose on the home page use.
+              // The reveal sits outside the grid rather than being it, so the
+              // two columns stay direct children of the grid and the
+              // `data-section` hook the progress highlight reads stays on the
+              // row itself.
+              //
+              // The threshold is 0.08 rather than the default 0.12 because
+              // these rows are tall: a section with a demo or a full-width
+              // image would otherwise be held back until it is well past the
+              // fold.
+              //
+              // The lift briefly puts the sticky heading under a transform.
+              // That is safe here: the reveal fires as the row enters from the
+              // bottom, where the heading is nowhere near the top of the
+              // viewport it eventually sticks to, and Reveal drops the
+              // transform entirely once the reveal lands.
+              <Reveal key={idx} variant="rise" threshold={0.08}>
+              <div data-section={idx} className="grid md:grid-cols-12 gap-5 md:gap-8 items-start group">
 
                 {/* Left Column: Heading */}
                 <div className="md:col-span-4 md:sticky md:top-24">
@@ -592,8 +611,15 @@ const ProjectDetail = ({
                   <h2 className={`text-xl font-bold tracking-tight leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-100'}`}>{section.title}</h2>
                 </div>
 
-                {/* Right Column: Content */}
-                <Reveal variant="wipe-right" className="md:col-span-8" threshold={0.08}>
+                {/* Right Column: Content. The reveal that used to wrap this
+                    column alone now wraps the whole row above. It was a
+                    `wipe-right`: a travelling edge drawing the text in. At
+                    the size of a case-study section — a paragraph, a list,
+                    often a 620px demo or a full-width image — the edge took
+                    most of a second to cross the column and read as the
+                    content being typed out rather than arriving, and it was
+                    the only place on the site with that entrance. */}
+                <div className="md:col-span-8">
                   <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal max-w-[42rem]">{section.content}</p>
 
                   {section.listItems && (
@@ -675,8 +701,9 @@ const ProjectDetail = ({
                       </a>
                     </div>
                   )}
-                </Reveal>
+                </div>
               </div>
+              </Reveal>
               );
             })}
           </div>
