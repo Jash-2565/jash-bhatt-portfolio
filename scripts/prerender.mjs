@@ -175,7 +175,7 @@ async function main() {
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="robots" content="noindex" />
 <meta name="theme-color" content="#010309" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href="/Jash-portfolio-logo.svg" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <title>Page not found | Jash Bhatt</title>
 <style>
