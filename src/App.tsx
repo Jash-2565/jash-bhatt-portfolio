@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import {
   X, Linkedin, ArrowRight, ArrowLeft,
   ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
@@ -869,6 +870,9 @@ const App = () => {
        fixed-position, so only the content wrapper and the footer are in flow. */
     <div className="min-h-[100svh] flex flex-col bg-[var(--ground)] text-slate-100 selection:bg-accent selection:text-slate-950 transition-colors duration-300">
       <Analytics {...analyticsLocation(analyticsRoute)} />
+      {/* Same `/work/[slug]` grouping as Analytics, so vitals for the case studies
+          pool into one row rather than eleven thin ones. */}
+      <SpeedInsights route={analyticsLocation(analyticsRoute).route} />
       {/* Static circuit-trace substrate. No wash, no drift, no scroll tracking —
           it is structure, not atmosphere. Sits behind everything; all page
           content is lifted above it with `relative z-10`. */}
