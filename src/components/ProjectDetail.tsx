@@ -143,14 +143,14 @@ const ProjectDetail = ({
         onBack();
         return;
       }
-      if (e.key === 'ArrowRight' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'ArrowRight' && (e.metaKey || e.ctrlKey) && nextProject) {
         e.preventDefault();
         onNext();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onBack, onNext]);
+  }, [onBack, onNext, nextProject]);
 
   // Highlight the section heading whose content sits near the top of the viewport.
   useEffect(() => {
@@ -845,9 +845,13 @@ const ProjectDetail = ({
           <span className="hidden md:flex items-center gap-2 text-xs text-slate-400">
             <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">Esc</kbd>
             back
-            <span className="mx-1 text-slate-500">·</span>
-            <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
-            next
+            {nextProject && (
+              <>
+                <span className="mx-1 text-slate-500">·</span>
+                <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
+                next
+              </>
+            )}
           </span>
         </div>
       </div>
