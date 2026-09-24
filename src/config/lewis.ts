@@ -1,4 +1,5 @@
 import { PUBLIC_URL } from '../utils/getBaseUrl';
+import { versionedUrl } from '../utils/versionedUrl';
 
 /**
  * The Lewis spritesheet's geometry and animation table.
@@ -12,7 +13,7 @@ export const ATLAS_COLS = 8;
 export const CELL_W = 192;
 export const CELL_H = 208;
 
-export const ATLAS_URL = `${PUBLIC_URL}/images/Lewis Pet/lewis-spritesheet.webp`;
+export const ATLAS_URL = versionedUrl(`${PUBLIC_URL}/images/Lewis Pet/lewis-spritesheet.webp`);
 
 export type Animation = {
   row: number;

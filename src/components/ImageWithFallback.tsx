@@ -3,6 +3,7 @@ import { Image } from 'lucide-react';
 import type { ResponsiveImageProps } from '../types';
 import AutoVideo from './AutoVideo';
 import { getImageSources, DEFAULT_SIZES } from '../utils/imageSources';
+import { versionedUrl } from '../utils/versionedUrl';
 
 const ImageWithFallback = ({
   src,
@@ -31,7 +32,7 @@ const ImageWithFallback = ({
 
   return (
     <img
-      src={src}
+      src={versionedUrl(src)}
       alt={captioned ? '' : alt}
       {...(captioned ? { role: 'presentation' as const } : {})}
       loading="lazy"

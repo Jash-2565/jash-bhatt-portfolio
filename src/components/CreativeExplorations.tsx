@@ -7,6 +7,7 @@ import { SUMMON_EVENT, type AnimationName } from '../config/lewis';
 import { usePointerFine } from '../hooks/usePointerFine';
 import { ui, galleryItems, aiItems, gallerySnippetItems } from '../config/ui';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
+import { versionedUrl } from '../utils/versionedUrl';
 import type { GalleryItem, LightboxImage } from '../types';
 
 /** The rows worth showing off, in the order they read best: the two you see
@@ -55,7 +56,7 @@ function Thumb({
     return (
       <div className={frame}>
         <video className="w-full h-full object-cover" controls playsInline preload="metadata" aria-label={item.alt}>
-          <source src={item.src} type="video/mp4" />
+          <source src={versionedUrl(item.src)} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -188,10 +189,10 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               // snapped to a 666px-tall box, shoving the page down.
               width={1920}
               height={1080}
-              poster={`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.poster.jpg`}
+              poster={versionedUrl(`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.poster.jpg`)}
               aria-label="Nothing brand animation"
             >
-              <source src={`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.mp4`} type="video/mp4" />
+              <source src={versionedUrl(`${PUBLIC_URL}/images/Photoshop and Animation/nothing-animation.mp4`)} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>

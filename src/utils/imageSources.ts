@@ -8,6 +8,8 @@ type ManifestEntry = {
   h: number;
   /** Widths of the generated `-<w>.webp` siblings, if any. */
   v?: number[];
+  /** Content hash, stamped at build time — see versionedUrl. */
+  c?: string;
 };
 
 const entries = manifest as Record<string, ManifestEntry>;
@@ -53,11 +55,13 @@ export function getImageSources(src: unknown): {
     return { width: entry.w, height: entry.h };
   }
 
+  // The hash covers the original and its variants, so one value versions all.
+  const version = entry.c ? `?v=${entry.c}` : '';
   const candidates = entry.v.map(
-    (w) => `${encodeURI(src.replace(/\.(webp|png|jpe?g)$/i, `-${w}.webp`))} ${w}w`
+    (w) => `${encodeURI(src.replace(/\.(webp|png|jpe?g)$/i, `-${w}.webp`))}${version} ${w}w`
   );
   // The original is the widest candidate, so it stays in play for large screens.
-  candidates.push(`${encodeURI(src)} ${entry.w}w`);
+  candidates.push(`${encodeURI(src)}${version} ${entry.w}w`);
 
   return { srcSet: candidates.join(', '), width: entry.w, height: entry.h };
 }
