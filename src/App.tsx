@@ -417,8 +417,10 @@ const App = () => {
   const handleNextProject = () => {
     if (selectedProject) {
       const currentIndex = orderedProjects.findIndex(p => p.id === selectedProject.id);
-      const nextIndex = (currentIndex + 1) % orderedProjects.length;
-      openProject(orderedProjects[nextIndex]);
+      // No wrap-around: the last case study ends the sequence rather than
+      // looping back to the first.
+      const next = orderedProjects[currentIndex + 1];
+      if (next) openProject(next);
     }
   };
 
@@ -1784,14 +1786,6 @@ const App = () => {
                 <ArrowLeft size={18} aria-hidden="true" className="group-hover:-translate-x-1 transition-transform" />
                 Back to Work
               </button>
-              <button
-                type="button"
-                onClick={() => handleProjectClick(featuredProjects[0])}
-                className={`group flex items-center gap-2 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors ${ui.focusRing}`}
-              >
-                Read {featuredProjects[0].title}
-                <ArrowRight size={18} aria-hidden="true" className="group-hover:translate-x-1 transition-transform" />
-              </button>
             </nav>
           </section>
         </div>
@@ -1812,10 +1806,7 @@ const App = () => {
             project={selectedProject}
             nextProject={
               selectedProject
-                ? orderedProjects[
-                    (orderedProjects.findIndex((p) => p.id === selectedProject.id) + 1) %
-                      orderedProjects.length
-                  ]
+                ? orderedProjects[orderedProjects.findIndex((p) => p.id === selectedProject.id) + 1] ?? null
                 : null
             }
             onBack={handleBackToHome}
