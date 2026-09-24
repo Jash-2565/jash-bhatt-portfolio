@@ -48,16 +48,6 @@ export const ui = {
 export const CONTACT_EMAIL = 'jashbhatt.contact@gmail.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/jash-bhatt';
 export const LINKEDIN_HANDLE = '/in/jash-bhatt';
-/**
- * TODO(jash): set this to your GitHub profile and the links appear.
- *
- * Left null rather than guessed: a portfolio whose case studies ship React,
- * Python, ONNX and Swift had no link to any of the code, which is the first
- * thing an engineering-adjacent reviewer looks for. Everything that renders it
- * is already wired up — footer, contact card, and the per-project repo links
- * below — and all of it stays hidden until this is a real URL.
- */
-export const GITHUB_URL: string | null = null;
 
 export const personalitySignals = [
   // The two role titles lead; the skill areas follow. 'Agentic AI Design'

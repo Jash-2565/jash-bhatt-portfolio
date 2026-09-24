@@ -14,7 +14,7 @@ export interface Section {
   gridWide?: boolean;
   imageHeight?: string;
   imageCrop?: boolean;
-  codeBlock?: string;
+  /** A playable demo, shown beside its Python source (see DEMO_CODE in ProjectDetail). */
   demoId?: 'arkanoid' | 'yolov8' | 'movie-recs';
 }
 
