@@ -107,8 +107,20 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
     /** Seconds of idling left before he picks something to do. */
     let idleCountdown = randomBetween(IDLE_DELAY_MIN, IDLE_DELAY_MAX);
 
+    /** How far to raise him so he stands on the footer's top edge instead of
+        over the credit line. Zero until the footer scrolls into view. */
+    let lift = 0;
+    const measureLift = () => {
+      const footer = document.querySelector('footer');
+      lift = footer ? Math.max(0, window.innerHeight - footer.getBoundingClientRect().top) : 0;
+    };
+    measureLift();
+    window.addEventListener('scroll', measureLift, { passive: true });
+    window.addEventListener('resize', measureLift);
+
     // What was last written to the DOM, so a pet standing still writes nothing.
     let drawnX = NaN;
+    let drawnLift = NaN;
     let drawnRow = NaN;
     let drawnFrame = NaN;
 
@@ -209,9 +221,10 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
       if (x > limit) x = limit;
       if (walkTarget === null && animation === 'idle' && x < minX()) walkTo(minX());
 
-      if (x !== drawnX) {
+      if (x !== drawnX || lift !== drawnLift) {
         drawnX = x;
-        node.style.transform = `translate3d(${x}px, 0, 0)`;
+        drawnLift = lift;
+        node.style.transform = `translate3d(${x}px, ${-lift}px, 0)`;
       }
 
       if (spec.row !== drawnRow || frameIndex !== drawnFrame) {
@@ -239,6 +252,8 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('scroll', measureLift);
+      window.removeEventListener('resize', measureLift);
     };
   }, [enabled, dismissed]);
 

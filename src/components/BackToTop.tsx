@@ -6,14 +6,40 @@ import { ArrowUp } from 'lucide-react';
 // phone the centred footer line runs under the button's corner.
 const FOOTER_CLEARANCE = 80;
 
+/** Mirrors `ui.shell` (max-w-[84rem], lg:px-12), as LewisPet does: the right
+    edge of the content column. */
+const SHELL_MAX_W = 1344;
+const SHELL_PAD = 48;
+/** The button's left edge: 20px in from the viewport edge, 48px wide. */
+const BUTTON_INSET = 20 + 48;
+
+/** True when the button fits in the gutter beside the content column. Below
+    that — phones, tablets, narrow laptop windows — it sits on top of body copy. */
+const fitsInGutter = () =>
+  window.innerWidth - BUTTON_INSET >=
+  (window.innerWidth + Math.min(window.innerWidth, SHELL_MAX_W)) / 2 - SHELL_PAD;
+
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    // NaN so the first call (on mount, for a page restored mid-scroll) always
+    // evaluates, and counts as not scrolling up.
+    let lastY = NaN;
     const onScroll = () => {
       const { scrollHeight } = document.documentElement;
-      const atFooter = window.innerHeight + window.scrollY > scrollHeight - FOOTER_CLEARANCE;
-      setVisible(window.scrollY > 700 && !atFooter);
+      const y = window.scrollY;
+      const atFooter = window.innerHeight + y > scrollHeight - FOOTER_CLEARANCE;
+      // Where it would cover text, it only appears on the way back up — the
+      // moment someone wants it — and gets out of the way while they read down.
+      // It was sitting on case-study copy and the "Tap to zoom" chips on phones.
+      const scrollingUp = y < lastY;
+      if (y !== lastY) {
+        setVisible(
+          y > 700 && !atFooter && (fitsInGutter() || scrollingUp)
+        );
+      }
+      lastY = y;
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
