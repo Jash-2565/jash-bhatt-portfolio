@@ -337,11 +337,12 @@
     ]
   },
   "/images/Revela/Revela-Thumbnail.webp": {
-    "w": 1200,
-    "h": 1200,
+    "w": 1640,
+    "h": 1230,
     "v": [
       480,
-      960
+      960,
+      1440
     ]
   },
   "/images/Revela/wamd-creation-2.webp": {
