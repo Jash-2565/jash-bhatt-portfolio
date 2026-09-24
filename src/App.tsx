@@ -27,7 +27,7 @@ import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, secondaryProjects, CONTAINED_THUMBNAIL_BACKDROPS } from './config/projects';
 import {
   ui, personalitySignals, operatorStats,
-  CONTACT_EMAIL, LINKEDIN_URL, LINKEDIN_HANDLE, GITHUB_URL,
+  CONTACT_EMAIL, LINKEDIN_URL, LINKEDIN_HANDLE,
 } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import { analyticsLocation } from './utils/analyticsRoute';
@@ -1839,11 +1839,6 @@ const App = () => {
             <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
               LinkedIn<span aria-hidden="true"> ↗</span>
             </a>
-            {GITHUB_URL && (
-              <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
-                GitHub<span aria-hidden="true"> ↗</span>
-              </a>
-            )}
             <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
               Résumé<span aria-hidden="true"> ↗</span>
             </a>

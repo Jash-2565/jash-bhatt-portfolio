@@ -1,8 +1,6 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react';
+import type { ComponentType } from 'react';
 import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase, Users, ZoomIn } from 'lucide-react';
-const ArkanoidDemo = lazy(() => import('./ArkanoidDemo'));
-const YoloV8Demo = lazy(() => import('./YoloV8Demo'));
-const MovieRecsDemo = lazy(() => import('./MovieRecsDemo'));
 import ResponsiveImage from './ResponsiveImage';
 import Reveal from './Reveal';
 import type { LightboxImage, Project, Section } from '../types';
@@ -10,6 +8,20 @@ import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME, CONTAINED_THUMBNAIL_BA
 import { ui } from '../config/ui';
 import { formatNameList } from '../utils/formatNameList';
 import { usePointerFine } from '../hooks/usePointerFine';
+import { ARKANOID_CODE } from '../data/arkanoidCode';
+import { YOLOV8_CODE } from '../data/yolov8Code';
+import { MOVIE_RECS_CODE } from '../data/movieRecsCode';
+
+/**
+ * Each demo with the Python it was ported from. The listings are imported here
+ * rather than in data/projects.ts so ~36KB of source text rides in this lazy
+ * chunk instead of the entry bundle every page loads.
+ */
+const DEMOS: Record<NonNullable<Section['demoId']>, { Demo: ComponentType; code: string }> = {
+  arkanoid: { Demo: lazy(() => import('./ArkanoidDemo')), code: ARKANOID_CODE },
+  yolov8: { Demo: lazy(() => import('./YoloV8Demo')), code: YOLOV8_CODE },
+  'movie-recs': { Demo: lazy(() => import('./MovieRecsDemo')), code: MOVIE_RECS_CODE },
+};
 
 const DemoLoader = () => (
   <div className="surface surface-marks !bg-[var(--ground)] h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
@@ -201,18 +213,8 @@ const ProjectDetail = ({
   const { heroTextClass, heroMutedTextClass, heroBodyTextClass } = projectHeroTheme;
 
   const renderDemoBlock = (section: Section) => {
-    const demoInner =
-      section.demoId === 'arkanoid'
-        ? <ArkanoidDemo />
-        : section.demoId === 'yolov8'
-          ? <YoloV8Demo />
-          : section.demoId === 'movie-recs'
-            ? <MovieRecsDemo />
-            : null;
-
-    const demoComponent = demoInner
-      ? <Suspense fallback={<DemoLoader />}>{demoInner}</Suspense>
-      : null;
+    if (!section.demoId) return null;
+    const { Demo, code } = DEMOS[section.demoId];
 
     const snippetContainerClass =
       'surface surface-marks !bg-[var(--ground)] h-[280px] sm:h-[440px] lg:h-[620px] rounded-2xl text-slate-100 flex flex-col';
@@ -221,41 +223,21 @@ const ProjectDetail = ({
     const snippetPreClass =
       'min-h-0 flex-1 overflow-auto overscroll-contain p-4 text-[11px] leading-relaxed sm:text-xs md:text-sm font-mono whitespace-pre';
 
-    if (demoComponent && section.codeBlock) {
-      return (
-        <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div className={snippetContainerClass}>
-            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-              <span className="text-xs uppercase tracking-widest text-slate-400">
-                Python Snippet
-                <span className="md:hidden normal-case tracking-normal text-slate-400"> · swipe →</span>
-              </span>
-              <CopyButton text={section.codeBlock} />
-            </div>
-            <pre className={snippetPreClass}>{section.codeBlock}</pre>
-          </div>
-          {demoComponent}
-        </div>
-      );
-    }
-
-    if (demoComponent) {
-      return <div className="mt-8">{demoComponent}</div>;
-    }
-
-    if (section.codeBlock) {
-      return (
-        <div className={`mt-8 ${snippetContainerClass}`}>
+    return (
+      <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className={snippetContainerClass}>
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-            <span className="text-xs uppercase tracking-widest text-slate-400">Python Snippet</span>
-            <CopyButton text={section.codeBlock} />
+            <span className="text-xs uppercase tracking-widest text-slate-400">
+              Python Snippet
+              <span className="md:hidden normal-case tracking-normal text-slate-400"> · swipe →</span>
+            </span>
+            <CopyButton text={code} />
           </div>
-          <pre className={snippetPreClass}>{section.codeBlock}</pre>
+          <pre className={snippetPreClass}>{code}</pre>
         </div>
-      );
-    }
-
-    return null;
+        <Suspense fallback={<DemoLoader />}><Demo /></Suspense>
+      </div>
+    );
   };
 
   const renderImages = (section: Section) => {

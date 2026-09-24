@@ -161,12 +161,7 @@
   },
   "/images/Lewis Pet/lewis-spritesheet.webp": {
     "w": 1536,
-    "h": 1872,
-    "v": [
-      480,
-      960,
-      1440
-    ]
+    "h": 1872
   },
   "/images/Photography/camera.png": {
     "w": 512,

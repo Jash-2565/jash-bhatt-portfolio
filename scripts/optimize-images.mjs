@@ -40,6 +40,13 @@ const QUALITY = 80;
 /** Don't bother with variants below this width — no meaningful saving. */
 const MIN_WIDTH_FOR_VARIANTS = 700;
 /**
+ * Sources that are never served through a srcset, so variants would ship and
+ * never be requested. The Lewis spritesheet is a CSS background whose frame
+ * offsets are computed against its full 1536px width (config/lewis.ts); a
+ * narrower copy would put every frame in the wrong place.
+ */
+const NO_VARIANTS = new Set(['images/Lewis Pet/lewis-spritesheet.webp']);
+/**
  * Bytes-per-pixel above which an image is re-encoded even if its dimensions are
  * already fine. Lossy WebP at q80 lands around 0.05–0.15 bpp; anything near 0.8
  * is a lossless export that slipped into the pipeline (the six wand-glow shots
@@ -181,7 +188,7 @@ async function main() {
     }
 
     // --- 2. Emit srcset variants --------------------------------------------
-    const widths = width >= MIN_WIDTH_FOR_VARIANTS
+    const widths = width >= MIN_WIDTH_FOR_VARIANTS && !NO_VARIANTS.has(rel)
       ? VARIANTS.filter((w) => w < width)
       : [];
 

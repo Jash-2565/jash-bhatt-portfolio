@@ -34,10 +34,15 @@ export default defineConfig(() => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-lucide': ['lucide-react'],
-          'vendor-onnx': ['onnxruntime-web'],
+        // Matched by path, not by package entry: the object form only pins the
+        // bare `react-dom` entry, and the app imports `react-dom/client`, so
+        // react-dom and scheduler were landing in the app chunk and getting
+        // re-downloaded on every content edit.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (/[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'vendor-react'
+          if (id.includes('lucide-react')) return 'vendor-lucide'
+          if (id.includes('onnxruntime-web')) return 'vendor-onnx'
         },
       },
     },

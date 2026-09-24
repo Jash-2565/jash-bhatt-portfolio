@@ -1,12 +1,5 @@
 import type { Project } from '../types';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
-import { ARKANOID_CODE } from './arkanoidCode';
-import { YOLOV8_CODE } from './yolov8Code';
-import { MOVIE_RECS_CODE } from './movieRecsCode';
-
-const ARKANOID_SNIPPET = ARKANOID_CODE;
-const YOLOV8_SNIPPET = YOLOV8_CODE;
-const MOVIE_RECS_SNIPPET = MOVIE_RECS_CODE;
 
 export const projects: Project[] = [
   {
@@ -859,9 +852,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/Dino Spread/dino-spread-hero.webp`,
       role: "Industrial design, prototyping",
-      // TODO(jash): confirm the spelling — "Pereira" is the common form and
-      // this may be a transposition.
-      team: ["Analise Periera"],
+      team: ["Analise Pereira"],
       sections: [
         {
           title: "Overview",
@@ -1303,21 +1294,18 @@ export const projects: Project[] = [
             "Threaded capture & inference in the original Python build",
             "ONNX export + WebAssembly runtime for live in-browser detection"
           ],
-          codeBlock: YOLOV8_SNIPPET,
           demoId: "yolov8"
         },
         {
           title: "Python Arcade: Ultimate Arkanoid",
           content: "A classic arcade build written in Python, mirrored here as a playable JavaScript demo that preserves the feel of the original logic and visuals.",
           listItems: ["Physics-based ball motion", "Power-ups and scoring system", "Live playable demo"],
-          codeBlock: ARKANOID_SNIPPET,
           demoId: "arkanoid"
         },
         {
           title: "Movie Recommendation Engine",
           content: "A content-based recommender that blends genres, directors, cast, and country into a single feature vector, then ranks similar films using cosine similarity.",
           listItems: ["CountVectorizer-style bag of words", "Cosine similarity ranking", "Fuzzy title matching"],
-          codeBlock: MOVIE_RECS_SNIPPET,
           demoId: "movie-recs"
         },
         {
@@ -1348,9 +1336,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/Tinkering/tinkering-hero-2.webp`,
       role: "Circuit design, firmware, assembly",
-      // TODO(jash): replace with your teammate's actual name — the copy below
-      // says "my teammate and I", so the Team row has to name them.
-      team: ["Teammate"],
+      team: ["Dhruv Tolani"],
       sections: [
         {
           title: "Project Introduction",
