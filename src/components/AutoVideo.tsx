@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import manifest from '../data/videoManifest.json';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
+import { versionedUrl } from '../utils/versionedUrl';
 
 interface AutoVideoProps {
   /** The original .gif path from projects data — the encoded siblings
@@ -20,7 +21,7 @@ type VideoEntry = { w?: number; h?: number; mp4?: boolean; webm?: boolean; poste
 const entries = manifest as Record<string, VideoEntry>;
 
 // Swap a `.gif` reference for its encoded video/poster siblings.
-const swap = (src: string, ext: string) => src.replace(/\.gif$/i, ext);
+const swap = (src: string, ext: string) => versionedUrl(src.replace(/\.gif$/i, ext));
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&

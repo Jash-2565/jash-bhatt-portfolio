@@ -1,6 +1,7 @@
 import type { ResponsiveImageProps } from '../types';
 import AutoVideo from './AutoVideo';
 import { getImageSources, DEFAULT_SIZES } from '../utils/imageSources';
+import { versionedUrl } from '../utils/versionedUrl';
 
 /**
  * The site's standard <img>. Now actually responsive: it looks the source up in
@@ -31,7 +32,7 @@ const ResponsiveImage = ({
 
   return (
     <img
-      src={src}
+      src={versionedUrl(src)}
       // A caption underneath already says this; repeating it as alt made a
       // screen reader announce every case-study image twice.
       alt={captioned ? '' : alt}
