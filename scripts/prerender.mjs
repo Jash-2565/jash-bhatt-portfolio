@@ -73,7 +73,7 @@ function setMeta(html, selectorAttr, selectorValue, content) {
   return html.replace(re, `$1${escapeAttr(content)}$2`);
 }
 
-function render(template, { title, description, urlPath, image, imageAlt }) {
+function render(template, { title, description, shareDescription = description, urlPath, image, imageAlt }) {
   const url = `${ORIGIN}${urlPath}`;
   let html = template;
 
@@ -84,12 +84,12 @@ function render(template, { title, description, urlPath, image, imageAlt }) {
   );
   html = setMeta(html, 'name', 'description', description);
   html = setMeta(html, 'property', 'og:title', title);
-  html = setMeta(html, 'property', 'og:description', description);
+  html = setMeta(html, 'property', 'og:description', shareDescription);
   html = setMeta(html, 'property', 'og:url', url);
   html = setMeta(html, 'property', 'og:image', image);
   html = setMeta(html, 'property', 'og:image:alt', imageAlt);
   html = setMeta(html, 'name', 'twitter:title', title);
-  html = setMeta(html, 'name', 'twitter:description', description);
+  html = setMeta(html, 'name', 'twitter:description', shareDescription);
   html = setMeta(html, 'name', 'twitter:image', image);
 
   return html;
@@ -102,9 +102,12 @@ async function main() {
   const home = {
     title: 'Jash Bhatt | Product Designer & Agentic AI Designer',
     description:
-      'I design and build intelligent products that combine AI, software, and human-centered interaction.',
+      'Conversational AI agents at Bajaj Finance, a B2B marketplace for corporate mobility, and a Spotify data story — case studies from a B.Des student at FLAME University.',
+    // The share card already carries the pitch, so the text under it in a link
+    // preview just names the site. Search results keep the fuller description.
+    shareDescription: 'Jash Bhatt Portfolio',
     imageAlt:
-      'Jash Bhatt — product designer and agentic AI designer. Product Design, UI/UX, Agentic AI, Circuits.',
+      'Jash Bhatt — product designer and agentic AI designer, with a portrait of Jash.',
   };
 
   const routes = [
