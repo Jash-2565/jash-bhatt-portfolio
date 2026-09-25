@@ -193,11 +193,9 @@ label {
   cursor: auto !important;
 }
 
-/* Custom cursor (desktop pointer only): a glowing dot pinned to the exact
-   pointer, and a ring around it. Free, the ring is a 32px circle; over anything
-   clickable it locks on, morphing into a rounded outline around the target.
-   CursorGlow sets the ring's position, size and radius every frame, so only
-   colour is transitioned here. */
+/* Custom cursor (desktop pointer only): a precise dot pinned to the exact pointer position — the point to actually
+   to the exact pointer position — the point to actually follow. The trailing
+   ring below just adds feel. */
 .cursor-dot {
   position: fixed;
   top: 0;
@@ -213,18 +211,8 @@ label {
      stays visible when an image or video is opened full screen. */
   z-index: 101;
   opacity: 0;
-  transition: opacity 200ms ease, width 160ms ease, height 160ms ease, margin 160ms ease,
-    box-shadow 160ms ease;
+  transition: opacity 200ms ease;
   will-change: transform;
-}
-/* Locked onto a large target — a whole project row — the ring sits far from
-   the pointer, so the dot itself has to carry "you are here". The ground
-   keyline keeps it readable over white screenshots. */
-.cursor-dot[data-locked='true'] {
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
-  box-shadow: 0 0 0 1.5px var(--ground), 0 0 12px rgb(var(--accent-rgb) / 0.9);
 }
 .cursor-ring {
   position: fixed;
@@ -232,6 +220,7 @@ label {
   left: 0;
   width: 32px;
   height: 32px;
+  margin: -16px 0 0 -16px;
   border: 1.5px solid rgb(var(--accent-rgb) / 0.55);
   border-radius: 9999px;
   pointer-events: none;
@@ -240,8 +229,9 @@ label {
   will-change: transform;
   transition: background-color 200ms ease, border-color 200ms ease, opacity 200ms ease;
 }
-.cursor-ring[data-locked='true'] {
-  background: rgb(var(--accent-rgb) / 0.06);
+/* Hover feedback is colour only: the ring keeps its size. */
+.cursor-ring[data-hover='true'] {
+  background: rgb(var(--accent-rgb) / 0.1);
   border-color: rgb(var(--accent-rgb) / 0.85);
 }
 
