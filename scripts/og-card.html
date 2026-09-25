@@ -2,70 +2,106 @@
 <html>
 <head>
 <meta charset="utf-8">
+<!-- Source layout for public/og-image.png / .jpg (1200×630).
+     Mirrors the site hero: same ground, type, accent and schematic panes.
+     Render: headless Chrome at 1200×630, screenshot. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Oxanium:wght@500;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --accent: 1 245 209;
+    --accent-bright: 158 247 234;
+    --accent-deep: 0 161 155;
+    --ground: #010309;
+    --surface-1: #0d141c;
+    --surface-2: #161f28;
+  }
   * { margin:0; padding:0; box-sizing:border-box; }
-  html,body { width:1200px; height:630px; }
+  html, body { width:1200px; height:630px; }
   body {
-    background:
-      radial-gradient(900px circle at 78% 18%, rgba(1,245,209,.16), transparent 55%),
-      radial-gradient(700px circle at 12% 88%, rgba(0,161,155,.18), transparent 55%),
-      linear-gradient(160deg,#031018 0%,#062126 42%,#02060f 100%);
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: var(--ground);
     color:#f1f5f9;
-    padding:66px 84px 60px;
-    display:flex; flex-direction:column; justify-content:space-between;
+    font-family:'Sora', sans-serif;
     position:relative; overflow:hidden;
   }
-  .grid {
+  /* The site's circuit-trace ground, same tile and falloff. */
+  .ground {
     position:absolute; inset:0;
-    background-image:linear-gradient(rgba(1,245,209,.045) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(1,245,209,.045) 1px,transparent 1px);
-    background-size:56px 56px;
+    background-image:linear-gradient(rgb(var(--accent) / .5), rgb(var(--accent) / .5));
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'512'%20height%3D'512'%20viewBox%3D'0%200%20512%20512'%3E%3Cg%20fill%3D'none'%20stroke%3D'%23000'%20stroke-opacity%3D'0.085'%20stroke-width%3D'1.15'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M0%2096%20H72%20L104%2064%20H168%20L200%2096%20H312%20L344%20128%20H400%20L432%2096%20H512'%2F%3E%3Cpath%20d%3D'M0%20288%20H56%20L88%20256%20H176%20L208%20288%20H288%20L320%20320%20H392%20L424%20288%20H512'%2F%3E%3Cpath%20d%3D'M0%20424%20H120%20L152%20456%20H240%20L272%20424%20H512'%2F%3E%3Cpath%20d%3D'M64%200%20V40%20L96%2072%20V160%20L64%20192%20V296%20L96%20328%20V400%20L64%20432%20V512'%2F%3E%3Cpath%20d%3D'M288%200%20V48%20L256%2080%20V152%20L288%20184%20V240%20L256%20272%20V344%20L288%20376%20V512'%2F%3E%3Cpath%20d%3D'M416%200%20V72%20L448%20104%20V200%20L416%20232%20V512'%2F%3E%3Cpath%20d%3D'M352%20176%20H424'%2F%3E%3Cpath%20d%3D'M120%20216%20V264'%2F%3E%3Cpath%20d%3D'M216%20480%20H296'%2F%3E%3Cpath%20d%3D'M180%2032%20V80'%2F%3E%3Cpath%20d%3D'M456%20344%20H512'%2F%3E%3Cpath%20d%3D'M0%20344%20H40'%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D'104'%20cy%3D'64'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'200'%20cy%3D'96'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'344'%20cy%3D'128'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'88'%20cy%3D'256'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'320'%20cy%3D'320'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'152'%20cy%3D'456'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'424'%20cy%3D'176'%20r%3D'3.2'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'120'%20cy%3D'264'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'456'%20cy%3D'344'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'296'%20cy%3D'480'%20r%3D'3'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'96'%20cy%3D'72'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'448'%20cy%3D'104'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'256'%20cy%3D'272'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'180'%20cy%3D'32'%20r%3D'2.4'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3Ccircle%20cx%3D'216'%20cy%3D'480'%20r%3D'2.6'%20fill%3D'%23000'%20fill-opacity%3D'0.3'%2F%3E%3C%2Fsvg%3E"), radial-gradient(112% 88% at 4% -10%, #000 0%, rgba(0,0,0,.45) 38%, transparent 82%);
+    -webkit-mask-size:512px 512px, 100% 100%;
+    -webkit-mask-repeat:repeat, no-repeat;
+    -webkit-mask-composite:source-in;
   }
-  .row { display:flex; align-items:center; gap:18px; position:relative; }
-  .mark { font-size:44px; font-weight:800; letter-spacing:-1.5px; color:#01F5D1; }
-  .pill {
-    font-size:19px; font-weight:600; color:#9EF7EA;
-    border:1.5px solid rgba(1,245,209,.42); background:rgba(1,245,209,.10);
-    padding:9px 20px; border-radius:999px; display:flex; align-items:center; gap:10px;
+  .wrap {
+    position:relative; height:100%;
+    display:grid; grid-template-columns:1fr 292px; gap:56px;
+    padding:56px 64px 52px 72px;
   }
-  .dot { width:9px; height:9px; border-radius:50%; background:#01F5D1; }
+  .left { display:flex; flex-direction:column; }
+  .top { display:flex; align-items:center; gap:20px; }
+  .mark { font-family:'Oxanium', sans-serif; font-weight:700; font-size:34px; letter-spacing:.02em; color:rgb(var(--accent)); }
+  .chip {
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--surface-2); border-radius:3px;
+    padding:8px 16px; font-size:16px; font-weight:500; color:#e2e8f0;
+  }
+  .dot { width:8px; height:8px; border-radius:50%; background:rgb(var(--accent)); box-shadow:0 0 0 4px rgb(var(--accent) / .18); }
   h1 {
-    position:relative; font-size:63px; line-height:1.08; font-weight:800;
-    letter-spacing:-1.9px; max-width:980px;
+    font-family:'Oxanium', sans-serif; font-weight:500;
+    font-size:50px; line-height:1.1; letter-spacing:.01em;
+    margin-top:36px;
   }
-  h1 .accent { color:#01F5D1; }
-  .sub { position:relative; font-size:25px; color:#cbd5e1; margin-top:22px; max-width:900px; line-height:1.4; }
-  .foot { display:flex; justify-content:space-between; align-items:flex-end; position:relative; }
-  .tags { display:flex; gap:11px; }
-  .tag {
-    font-size:17px; color:#cbd5e1; border:1px solid #334155;
-    background:rgba(15,23,42,.75); padding:8px 17px; border-radius:999px;
+  .accent {
+    font-weight:600;
+    background-image:linear-gradient(90deg, rgb(var(--accent)) 0%, rgb(var(--accent-bright)) 45%, rgb(var(--accent)) 70%, rgb(var(--accent-deep)) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
   }
-  .url { font-size:20px; color:#64748b; font-weight:500; letter-spacing:.3px; }
+  .sub { font-size:20px; line-height:1.5; color:#cbd5e1; margin-top:20px; }
+  .sub b { color:#f1f5f9; font-weight:600; }
+  .stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:auto; }
+  .surface { position:relative; background:var(--surface-1); border-radius:4px; }
+  .marks::before, .marks::after {
+    content:''; position:absolute; width:9px; height:9px;
+    border:0 solid rgb(var(--accent) / .45);
+  }
+  .marks::before { top:5px; left:5px; border-top-width:1px; border-left-width:1px; }
+  .marks::after { bottom:5px; right:5px; border-bottom-width:1px; border-right-width:1px; }
+  .stat { padding:16px 18px 17px; }
+  .label { font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#94a3b8; }
+  .value { font-size:17px; font-weight:600; margin-top:7px; color:#f1f5f9; white-space:nowrap; }
+  .right { display:flex; flex-direction:column; gap:14px; }
+  .portrait { padding:14px; flex:1; display:flex; }
+  .portrait .img {
+    flex:1; border-radius:3px;
+    background:url('../public/images/Jash-portrait.webp') center top / cover no-repeat;
+  }
+  .url {
+    font-family:'JetBrains Mono', monospace; font-size:14px; letter-spacing:.14em;
+    color:rgb(var(--accent)); text-align:right;
+  }
 </style>
 </head>
 <body>
-  <div class="grid"></div>
-
-  <div class="row">
-    <span class="mark">JB</span>
-    <span class="pill"><span class="dot"></span>Open to Work</span>
-  </div>
-
-  <div>
-    <h1>I design and build <span class="accent">intelligent products</span> that combine AI, software, and human-centered interaction.</h1>
-    <p class="sub">Jash Bhatt — product designer &amp; agentic AI designer.</p>
-  </div>
-
-  <div class="foot">
-    <div class="tags">
-      <span class="tag">Product Design</span>
-      <span class="tag">UI/UX</span>
-      <span class="tag">Agentic AI</span>
-      <span class="tag">Circuits</span>
+  <div class="ground"></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="top">
+        <span class="mark">JB</span>
+        <span class="chip"><span class="dot"></span>Open to Work</span>
+      </div>
+      <h1>I design and build <span class="accent">intelligent products</span> that combine AI, software, and human-centered interaction.</h1>
+      <p class="sub"><b>Jash Bhatt</b> — product designer &amp; agentic AI designer.</p>
+      <div class="stats">
+        <div class="surface marks stat"><div class="label">Currently</div><div class="value">B.Des · FLAME University</div></div>
+        <div class="surface marks stat"><div class="label">Last role</div><div class="value">Agentic AI · Bajaj Finance</div></div>
+        <div class="surface marks stat"><div class="label">Focus</div><div class="value">Agentic AI · AI UX</div></div>
+      </div>
     </div>
-    <span class="url">Portfolio &amp; case studies</span>
+    <div class="right">
+      <div class="surface marks portrait"><div class="img"></div></div>
+      <div class="url">JASHBHATT.COM</div>
+    </div>
   </div>
 </body>
 </html>
