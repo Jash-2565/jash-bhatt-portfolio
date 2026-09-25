@@ -590,9 +590,13 @@ const App = () => {
 
     apply(
       'Jash Bhatt | Product Designer & Agentic AI Designer',
-      'I design and build intelligent products that combine AI, software, and human-centered interaction.',
+      'Conversational AI agents at Bajaj Finance, a B2B marketplace for corporate mobility, and a Spotify data story — case studies from a B.Des student at FLAME University.',
       mobilePage === 'home' ? '/' : `/${mobilePage}`
     );
+    // Matches scripts/prerender.mjs: the share card carries the pitch, so the
+    // link-preview text only names the site.
+    setMeta('meta[property="og:description"]', 'Jash Bhatt Portfolio');
+    setMeta('meta[name="twitter:description"]', 'Jash Bhatt Portfolio');
   }, [currentView, selectedProject, mobilePage]);
 
   // Scroll spy. Uses IntersectionObserver rather than a scroll handler: the old
