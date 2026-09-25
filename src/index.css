@@ -173,21 +173,19 @@ label {
 }
 
 /* When the custom ring is active, hide the native OS cursor (arrow + pointer)
-   so only the ring shape is visible. Added by CursorGlow on desktop pointer
+   so only the custom cursor is visible. Added by CursorGlow on desktop pointer
    devices only, so touch/reduced-motion users keep the normal cursor. */
 .hide-native-cursor,
 .hide-native-cursor * {
   cursor: none !important;
 }
 
-/* …but not everywhere. `cursor: none` on `*` also removed the text I-beam over
-   body copy and killed the `cursor-zoom-in` on every zoomable case-study image
-   — which, on the grid and mixed layouts, was the only thing saying those
-   images open at all. The custom ring still covers the page; these three
-   reinstate the cursors that carry meaning. */
-.hide-native-cursor :is(p, li, h1, h2, h3, h4, h5, h6, figcaption, dd, blockquote, code, pre) {
-  cursor: text !important;
-}
+/* …but not everywhere. `cursor: none` on `*` also killed the `cursor-zoom-in`
+   on every zoomable case-study image — which, on the grid and mixed layouts,
+   was the only thing saying those images open at all — and hid the caret
+   position in form fields. These reinstate those two. The text I-beam over
+   copy is deliberately left off: it showed up inside the ring as a second
+   cursor, and text still selects normally without it. */
 .hide-native-cursor :is([role='button'], .cursor-zoom-in) {
   cursor: zoom-in !important;
 }
@@ -195,9 +193,11 @@ label {
   cursor: auto !important;
 }
 
-/* Custom cursor (desktop pointer only): a precise dot pinned to the exact pointer position — the point to actually
-   to the exact pointer position — the point to actually follow. The trailing
-   ring below just adds feel. */
+/* Custom cursor (desktop pointer only): a glowing dot pinned to the exact
+   pointer, and a ring around it. Free, the ring is a 32px circle; over anything
+   clickable it locks on, morphing into a rounded outline around the target.
+   CursorGlow sets the ring's position, size and radius every frame, so only
+   colour is transitioned here. */
 .cursor-dot {
   position: fixed;
   top: 0;
@@ -213,8 +213,18 @@ label {
      stays visible when an image or video is opened full screen. */
   z-index: 101;
   opacity: 0;
-  transition: opacity 200ms ease;
+  transition: opacity 200ms ease, width 160ms ease, height 160ms ease, margin 160ms ease,
+    box-shadow 160ms ease;
   will-change: transform;
+}
+/* Locked onto a large target — a whole project row — the ring sits far from
+   the pointer, so the dot itself has to carry "you are here". The ground
+   keyline keeps it readable over white screenshots. */
+.cursor-dot[data-locked='true'] {
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  box-shadow: 0 0 0 1.5px var(--ground), 0 0 12px rgb(var(--accent-rgb) / 0.9);
 }
 .cursor-ring {
   position: fixed;
@@ -222,21 +232,16 @@ label {
   left: 0;
   width: 32px;
   height: 32px;
-  margin: -16px 0 0 -16px;
   border: 1.5px solid rgb(var(--accent-rgb) / 0.55);
   border-radius: 9999px;
   pointer-events: none;
   z-index: 100;
   opacity: 0;
   will-change: transform;
-  transition: width 200ms ease, height 200ms ease, margin 200ms ease,
-    background-color 200ms ease, border-color 200ms ease, opacity 200ms ease;
+  transition: background-color 200ms ease, border-color 200ms ease, opacity 200ms ease;
 }
-.cursor-ring[data-hover='true'] {
-  width: 52px;
-  height: 52px;
-  margin: -26px 0 0 -26px;
-  background: rgb(var(--accent-rgb) / 0.1);
+.cursor-ring[data-locked='true'] {
+  background: rgb(var(--accent-rgb) / 0.06);
   border-color: rgb(var(--accent-rgb) / 0.85);
 }
 
