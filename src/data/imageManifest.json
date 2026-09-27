@@ -120,6 +120,42 @@
     "w": 481,
     "h": 650
   },
+  "/images/ETSConnect/ETSConnect-Prototype-Compare-Bids.webp": {
+    "w": 2400,
+    "h": 2152,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ETSConnect/ETSConnect-Prototype-Contract.webp": {
+    "w": 2400,
+    "h": 1500,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ETSConnect/ETSConnect-Prototype-Search.webp": {
+    "w": 2400,
+    "h": 1500,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ETSConnect/ETSConnect-Prototype-Submit-Bid.webp": {
+    "w": 2400,
+    "h": 1500,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
   "/images/Jash-portrait.webp": {
     "w": 800,
     "h": 1067,

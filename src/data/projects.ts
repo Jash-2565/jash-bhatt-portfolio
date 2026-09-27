@@ -23,16 +23,17 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "India's employee transport sector moves millions of people to work every day, and almost none of that work is won through anything resembling a system. Corporates find providers by asking peers. Providers find work by already knowing someone.\n\nWe came into it through a Pune-based corporate mobility operator, Vagabond Translink, who asked us how to grow. Two field visits in, it was clear the company had already solved its operational problems and was stuck on a market-structure one — so that is what the project became about."
+          content: "India's employee transport sector moves millions of people to work every day, yet almost none of that work is won through a system. Corporates find providers by asking peers, and providers find work by already knowing someone.\n\nA Pune-based operator, Vagabond Translink, asked us how to grow. Two field visits in, it was clear their operations were already solved. Their problem was the structure of the market."
         },
         {
           title: "The Market",
-          content: "Before questioning the brief we needed to know whether the ceiling was the company or the category. India's employee transportation services market sits around $10B and is compounding at 8.2% — faster than the global average — with corporate car rental and shared mobility growing alongside it.\n\nThe number that reframed the project was penetration. India runs roughly 546 employees per corporate mobility vehicle. China is at 372, the USA at 36, Europe at 10. The demand isn't missing; the connective tissue is.",
+          content: "The ceiling wasn't the category. The demand is there. What's missing is anything connecting it to supply.",
+          stats: [
+            { value: "$10B", label: "India's employee transport market" },
+            { value: "8.2%", label: "Annual growth, ahead of global" },
+            { value: "546", label: "Employees per vehicle in India. Europe: 10" }
+          ],
           images: [
-            {
-              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Market.svg`,
-              caption: "India's corporate mobility segment is growing faster than global markets across every sub-category we sized."
-            },
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Penetration.svg`,
               caption: "546 employees per vehicle against Europe's 10 — the headroom is structural, not seasonal."
@@ -40,19 +41,13 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "How We Researched It",
-          content: "The research was deliberately multi-method, because the gap we suspected was between what people say happens in procurement and what actually happens. Two on-site field visits with the operator's CEO and CTO gave us the supply-side view; seven conversations across the corporate side — procurement, admin, transport management — gave us the buyer's; a survey let us check whether what we were hearing generalized.",
+          title: "Research",
+          content: "We suspected a gap between how procurement is described and how it actually happens, so we heard from both sides. We interviewed the operator's leadership on site, spoke with the corporate buyers, and ran a survey to check whether what we heard held up more widely.\n\nMapping the stakeholders showed the operator in the middle of a chain it only partly controls.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Research.svg`,
               caption: "Observation, stakeholder interviews, process mapping, and validation loops back to the people we'd interviewed."
-            }
-          ]
-        },
-        {
-          title: "The Ecosystem",
-          content: "Mapping the stakeholders made the shape of the problem visible. An ETS operator sits at the center of a chain it only partly controls: it contracts with corporate clients, but the vehicles belong to fleet vendors and the service quality depends on drivers it doesn't employ. Around that sit procurement teams, the employees who actually ride, competitors, financiers, and a regulatory layer.\n\nEvery pain point we found later traces back to a relationship in this map that has no formal channel running through it.",
-          images: [
+            },
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Stakeholders.svg`,
               caption: "Primary, secondary, and tertiary layers of the corporate mobility ecosystem."
@@ -60,42 +55,26 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Ground Realities",
-          content: "These are the constraints that showed up on the ground rather than in the brief — the things that quietly decide who wins work in this industry.",
-          listItems: [
-            "Financial barriers — corporates pay on 45-day cycles, so vendor selection quietly favours whoever can float payroll and fuel that long, regardless of capability.",
-            "Fragmented market — there is no standardized way to discover, compare, or onboard a provider anywhere in the industry.",
-            "Mission-critical service — a delay or a safety incident hits the client's own operations, so the buying decision is really a risk decision.",
-            "Limited tech application — technology runs routing and tracking well, and touches procurement or vendor discovery not at all.",
-            "Unstable driver layer — long hours, fatigue, high churn, and inconsistent professionalism make service quality variable no matter how good the operator is."
-          ]
-        },
-        {
-          title: "Key Findings",
-          content: "Synthesizing the interviews produced six findings. Each one is a place where the system behaves differently from how it describes itself.",
-          listItems: [
-            "Reliability-driven decisions — 95–97% on-time SLAs and safety requirements shift the buying decision away from cost and towards risk mitigation.",
-            "Informally gated access — the RFP process is genuinely structured, but only vendors already known to the buyer are invited into it.",
-            "A split system — trust is built informally before entry, then enforced formally after selection.",
-            "Visibility, not capability — competition is constrained by exposure; qualified vendors are excluded simply because nobody has heard of them.",
-            "Price, not discovery — procurement optimizes price discovery (L1/L2) within a fixed pool, rather than searching for a better-fitting vendor.",
-            "Control, not connection — technology is deployed as a control layer over execution, never as a discovery layer between demand and supply."
-          ]
-        },
-        {
-          title: "The Real Challenge",
-          content: "Stated plainly, the client's problem was not operations. It was contracts — acquiring and securing more of them, through a channel that doesn't scale.\n\nWhat made this worth designing for is that the pain is symmetrical. Vendors can't be found; corporates can't find anyone new. Both sides described the same missing thing from opposite ends, and neither could build it alone.",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-System-Inefficiency.svg`,
-              caption: "The same structural gap, articulated independently by vendors and by corporate procurement teams."
-            }
+          title: "What We Found",
+          content: "Six findings, each a place where the system works differently from how it describes itself.",
+          cards: [
+            { title: "Risk over price", body: "95–97% on-time SLAs and safety turn vendor choice into a risk decision, not a cost one." },
+            { title: "Gated access", body: "The RFP process is structured, but only vendors the buyer already knows get invited." },
+            { title: "Split trust", body: "Trust is built informally before a vendor gets in, then enforced formally after selection." },
+            { title: "Visibility, not capability", body: "Qualified vendors lose out simply because nobody has heard of them." },
+            { title: "Price, not discovery", body: "Procurement haggles within a fixed pool instead of looking for a better-fitting vendor." },
+            { title: "Control, not connection", body: "Technology runs routing and tracking, but never connects buyers with new vendors." }
           ]
         },
         {
           title: "The Direction Shift",
-          content: "This was the decision the project turned on.\n\nThe obvious move was to stay inside the brief and optimize a single operator — tighten coordination, improve driver management, sharpen the feedback loops. We rejected it. Operations were already standardized, procurement systems on the client side were rigid and closed to us, and the realistic ceiling on that work was incremental.\n\nSo we moved up a level, from company to ecosystem. If the bottleneck is that qualified vendors and willing corporates cannot see each other, then the intervention isn't a better fleet process — it's the missing marketplace. That reframing also changed who the client is: solving it for the industry solves it for the client, but not only for the client.",
+          callout: { text: "The client's problem wasn't operations. It was winning contracts." },
+          content: "Vendors can't be found, and corporates can't find anyone new. Both sides described the same gap from opposite ends.\n\nThe obvious move was to stay inside the brief and optimize one operator. We rejected it: operations were already standardized, and the buyers' procurement systems were closed to us. So we moved from the company to the ecosystem. If the market has no way for supply and demand to meet, the fix is the missing marketplace, which solves it for the client and for everyone else too.",
           images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-System-Inefficiency.svg`,
+              caption: "The same structural gap, articulated independently by vendors and by corporate procurement teams."
+            },
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Direction-Shift.svg`,
               caption: "Rejecting the company-level brief in favour of ecosystem-level enablement."
@@ -104,7 +83,7 @@ export const projects: Project[] = [
         },
         {
           title: "Prioritizing the Opportunity",
-          content: "We generated a wide set of options — EV fleets as an ESG offering, commute personalization, event transport, hospitality expansion, referral networks — and plotted them against business value and customer value. Most of the operational ideas clustered as incremental. A centralized procurement platform was the one intervention sitting high on both axes, and the only one that addressed the contract bottleneck directly.",
+          content: "We mapped every idea, from EV fleets to event transport, against business and customer value. Only a centralized procurement platform scored high on both, and it was the only idea that addressed the contract bottleneck.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Priority-Matrix.svg`,
@@ -114,17 +93,13 @@ export const projects: Project[] = [
         },
         {
           title: "ETSConnect",
-          content: "ETSConnect formalises the informal. It is a B2B digital procurement marketplace connecting verified corporates with verified employee-transport providers, so both sides can discover each other, bid, verify compliance, and finalise contracts in one place — matched across India by proximity and requirement.\n\nBoth sides are verified before they get access. Corporates are checked for legitimacy and genuine contract intent, so providers aren't bidding into noise. Providers are checked on fleet, compliance documents, and operational track record, so corporates are never exposed to unverified operators.",
-          listItems: [
-            "Save time — a structured digital RFQ replaces weeks of phone calls and email chains; procurement completes in days, not months.",
-            "Reduce risk — verified providers, tracked compliance documents, and auditable bid records remove hidden procurement risk.",
-            "Control costs — transparent, side-by-side bid comparison prevents over-pricing and produces data-backed contract values.",
-            "Safer commutes — only compliance-verified providers participate, raising the baseline safety standard on every contracted route."
-          ]
-        },
-        {
-          title: "What the Platform Does",
-          content: "The product is organized around the four stages of the procurement lifecycle we mapped during research — the same four stages that are currently handled by phone calls, spreadsheets, and personal relationships.",
+          content: "A B2B procurement marketplace where verified corporates and verified transport providers find each other, bid, check compliance, and sign contracts in one place. Both sides are vetted before they get access, so neither is dealing with noise or unverified operators.",
+          cards: [
+            { title: "Save time", body: "A structured digital RFQ replaces weeks of calls and email chains." },
+            { title: "Reduce risk", body: "Verified providers, tracked compliance, and auditable bid records." },
+            { title: "Control costs", body: "Side-by-side bids stop over-pricing and set data-backed contract values." },
+            { title: "Safer commutes", body: "Only compliance-verified providers can bid on a route." }
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Pillars.svg`,
@@ -133,38 +108,62 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "The Business Case",
-          content: "The revenue model is deliberately two-sided and low-friction on the demand side, because the platform is only valuable to corporates once enough verified supply is listed — so supply is what we charge for.",
-          listItems: [
-            "₹5,000 per month, per ETS provider listing — covering verified listing, bid access, and the compliance dashboard.",
-            "2.5% one-time fee on estimated contract value, calculated from the kilometre estimate submitted during bidding.",
-            "Target customer: companies of 500+ employees with recurring daily employee transport across multiple routes and shifts.",
-            "Cost structure: platform development and maintenance, cloud infrastructure, two-sided acquisition, and the legal and verification operations that make the trust layer real."
-          ]
+          title: "The Prototype",
+          content: "A clickable prototype with a portal for corporates and one for providers. One request, for 200 employees at a new Whitefield campus, runs through both portals from posting to signed contract.",
+          imageLayout: "grid",
+          // One per row: these are full desktop screens, and the prices and
+          // document states the captions point at are unreadable at half width.
+          gridWide: true,
+          imageHeight: "auto",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Prototype-Search.webp`,
+              caption: "Discover. Corporates filter verified providers by city, fleet, and safety services like female drivers and SOS, which came straight from the research."
+            },
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Prototype-Submit-Bid.webp`,
+              caption: "Bid. Providers price against the corporate's routes, shifts, and services. They see how many rivals they face, but never what those rivals bid."
+            },
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Prototype-Compare-Bids.webp`,
+              caption: "Compare. Every bid comes down to the same four numbers. The lowest is flagged, but rating and fleet size stay next to it."
+            },
+            {
+              src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Prototype-Contract.webp`,
+              caption: "Contract. Documents from both sides go through upload and ETSConnect verification before service begins."
+            }
+          ],
+          cta: {
+            text: "Open the prototype",
+            url: "https://people-vital-30894278.figma.site/"
+          }
         },
         {
-          title: "Impact at Scale",
-          content: "The reason this is worth building rather than just proposing is that its value compounds. Employee transport demand recurs daily, so every additional participant makes the network more useful to everyone already on it.",
-          listItems: [
-            "Reduced operational risk — structured discovery, standardized bidding, and verified compliance remove corporates' exposure to unverified operators and informal arrangements.",
-            "Expanded market access — providers receive qualified inbound demand beyond their existing networks, reducing dependence on referrals.",
-            "Network defensibility — daily, consistent demand means the platform gets more valuable to both sides as it grows, and harder to replicate.",
-            "Critical ecosystem infrastructure — at scale it becomes the operating layer for corporate mobility procurement in India, not merely a tool."
+          title: "The Business Case",
+          content: "Supply pays, because corporates only find the platform useful once enough verified providers are on it. Demand for employee transport recurs every day, so each new participant makes the network more valuable to everyone already on it, and harder to replicate.",
+          stats: [
+            { value: "₹5,000", label: "Per provider listing, monthly" },
+            { value: "2.5%", label: "One-time fee on contract value" },
+            { value: "500+", label: "Employees at target customers" }
           ]
         },
         {
           title: "Validation",
-          content: "We took the concept back to a senior transport manager at HCL — someone who sits on the buying side of exactly this process. His reaction was that the transparency is the point: today he has to ask peers whether a vendor is any good, and a biased recommendation is indistinguishable from an honest one.\n\nHis pushback was equally useful, and both notes changed how we framed the concept:",
-          listItems: [
-            "Don't over-restrict access — gating the platform too tightly would recreate the closed network we set out to open.",
-            "Show limited pricing benchmarks, but stop short of full transparency that would disadvantage providers in their own negotiations.",
-            "Let employees rate provider profiles, so service quality becomes visible rather than anecdotal.",
-            "Expect trust-building and process complexity — not technology — to be the real adoption barriers."
+          callout: {
+            text: "Transparency is the point. Today, a biased vendor recommendation looks exactly like an honest one.",
+            attribution: "Senior transport manager, HCL · paraphrased"
+          },
+          content: "We took the concept to someone on the buying side of this exact process. His pushback changed how we framed it:",
+          cards: [
+            { title: "Don't over-restrict", body: "Gating too tightly would rebuild the closed network we set out to open." },
+            { title: "Partial pricing", body: "Show benchmarks, but not so much that providers lose negotiating power." },
+            { title: "Employee ratings", body: "Let riders rate providers, so service quality is visible, not anecdotal." },
+            { title: "Trust is the barrier", body: "Adoption will be slowed by trust and process, not technology." }
           ]
         },
         {
           title: "Reflection",
-          content: "The most useful thing I did on this project was argue for not answering the question we were asked. The client wanted help running its fleet better, and we could have delivered a competent set of operational improvements that changed very little. Sitting with the research long enough to see that the bottleneck was structural — that the market itself had no way for supply and demand to find each other — was uncomfortable, because it meant telling a client their brief was aimed at the wrong level.\n\nIt also taught me that business design has a research burden that visual work doesn't. Every claim here had to survive a conversation with someone who does this for a living, and the validation session was where the concept actually earned its shape."
+          content: "The most useful thing I did was argue against the question we were asked. We could have delivered competent operational fixes that changed very little. Seeing that the real bottleneck was structural meant telling a client their brief was aimed at the wrong level.\n\nBusiness design also has a research burden that visual work doesn't. Every claim here had to survive someone who does this for a living."
         }
       ]
     }

@@ -4,6 +4,14 @@ export interface Section {
   title: string;
   content: string;
   listItems?: string[];
+  /** Big-number tiles, e.g. market size. Short value, one-line label. */
+  stats?: { value: string; label: string }[];
+  /** Short titled cards in a two-column grid — for points that would otherwise
+      be "Label — sentence" bullets. */
+  cards?: { title: string; body: string }[];
+  /** One emphasised line above the body: the section's thesis, or a
+      paraphrased takeaway (rendered without quote marks for that reason). */
+  callout?: { text: string; attribution?: string };
   images?: { src: string; caption: string; fullWidth?: boolean; borderless?: boolean; whiteBg?: boolean; containerClass?: string; bgClass?: string }[];
   cta?: { text: string; url: string };
   embedUrl?: string;
