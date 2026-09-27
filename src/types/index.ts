@@ -66,6 +66,9 @@ export interface GalleryItem {
   type: 'image' | 'video' | 'placeholder';
   src?: string;
   alt?: string;
+  /** Shown on the tile instead of the alt text, which stays literal for
+      screen readers. */
+  caption?: string;
 }
 
 export interface ProjectHeroTheme {
