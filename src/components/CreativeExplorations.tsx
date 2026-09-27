@@ -90,7 +90,7 @@ function Thumb({
       />
       {showCaption && (
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
-          {item.alt}
+          {item.caption ?? item.alt}
         </div>
       )}
     </button>
@@ -135,7 +135,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             </div>
             <h2 className="text-xl font-bold text-slate-100">Photography Gallery</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Nature photography has been the constant since school — DSLR when I'm carrying one, phone when I'm not. It is where I practise paying attention to light without a brief attached.</p>
+          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Nature photography has been a constant since I was young. I shoot on a DSLR when I have one with me, and on my phone when I don't. It's the one thing I do just for myself.</p>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
             {gallerySnippetItems.map((item, i) => {
               const positionClass = i === 0
