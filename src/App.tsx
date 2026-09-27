@@ -1389,10 +1389,14 @@ const App = () => {
           {/* Work Section */}
           {showsPage('work') && (
           <section id="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
-            <Reveal className="mb-10 sm:mb-14 md:mb-16">
+            {/* Capped at the paragraph's width so the wipe spans the text. At
+                full shell width the text ends halfway across and is fully
+                shown in the first ~180ms, so it reads far faster than the
+                Explorations card below, whose fill spans the whole wipe. */}
+            <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl">
               <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
               <p className="text-ink-body max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
-              <Reveal variant="grow-width" delay={180} duration={900}>
+              <Reveal variant="grow-width">
                 <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
             </Reveal>
@@ -1484,7 +1488,7 @@ const App = () => {
                       {/* Text Column (5 cols) */}
                       <div className={`md:col-span-5 px-5 pt-4 pb-5 md:p-0 ${index % 2 === 1 ? 'md:order-1' : ''}`}>
                         {/* Wraps rather than forcing one line — categories run as
-                            long as "UI Design Internship / Design Systems". */}
+                            long as "Data Visualization / Design Engineering". */}
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 md:gap-x-4 mb-3 md:mb-5">
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                           <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-accent/50 to-transparent" />
@@ -1539,18 +1543,20 @@ const App = () => {
                   <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
                 </Reveal>
               </Reveal>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* `auto-rows-fr` gives every row the tallest one's height, so the
+                  cards match without cutting any text off. */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 auto-rows-fr gap-4">
                 {secondaryProjects.map((project, index) => {
                   const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
                   const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
-                    <Reveal variant="rise" key={project.id} delay={index * 80}>
+                    <Reveal variant="rise" key={project.id} delay={index * 80} className="h-full">
                       <a
                         href={`#${project.slug}`}
                         id={`project-${project.id}`}
                         onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                         aria-label={`Open case study for ${project.title}`}
-                        className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
+                        className={`group h-full w-full text-left flex items-center gap-3 sm:gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
                         <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-white/5'}`}>
                           {!thumbnail.includes('placeholder') ? (
@@ -1567,16 +1573,23 @@ const App = () => {
                             </div>
                           )}
                         </div>
-                        <div className="min-w-0 flex-1">
+                        <div className="min-w-0 flex-1 [container-type:inline-size]">
                           <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-ink-muted">{project.category}</p>
-                          <h3 className="mt-1 text-base font-bold text-ink group-hover:text-accent transition-colors">{project.title}</h3>
+                          {/* On phones the size follows the column width (cqw) so the
+                              longest one-line title, "RAHI Design System v2" at 12em,
+                              always fits; it stays at 1rem whenever there is room. */}
+                          <h3 className="mt-1 text-base max-sm:[font-size:min(1rem,calc(100cqw/12.5))] font-bold text-ink group-hover:text-accent transition-colors">{project.title}</h3>
+                          {/* Under the title rather than beside it: as its own
+                              flex item it took ~120px from the text column on
+                              a phone, wrapping the category and title onto
+                              seven lines and doubling the card's height. */}
+                          {project.content.sections.some((section) => section.demoId) && (
+                            <span className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
+                              <span className="pulse-dot" aria-hidden="true" />
+                              Try it live
+                            </span>
+                          )}
                         </div>
-                        {project.content.sections.some((section) => section.demoId) && (
-                          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
-                            <span className="pulse-dot" aria-hidden="true" />
-                            Try it live
-                          </span>
-                        )}
                         <ArrowRight size={18} className="shrink-0 text-ink-faint group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
                       </a>
                     </Reveal>
