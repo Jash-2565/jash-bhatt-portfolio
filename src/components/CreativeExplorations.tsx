@@ -89,7 +89,7 @@ function Thumb({
         sizes={sizes}
       />
       {showCaption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-ink transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-5 text-[0.625rem] leading-tight sm:px-3 sm:pb-2.5 sm:pt-8 sm:text-xs sm:leading-normal font-medium text-ink transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
           {item.caption ?? item.alt}
         </div>
       )}
