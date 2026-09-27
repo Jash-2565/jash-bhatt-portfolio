@@ -870,7 +870,7 @@ const App = () => {
        the screen — Contact — the footer sits at the bottom instead of floating
        with a band of dead background beneath it. Every other child here is
        fixed-position, so only the content wrapper and the footer are in flow. */
-    <div className="min-h-[100svh] flex flex-col bg-[var(--ground)] text-slate-100 selection:bg-accent selection:text-slate-950 transition-colors duration-300">
+    <div className="min-h-[100svh] flex flex-col bg-[var(--ground)] text-ink selection:bg-accent selection:text-ink-inverse transition-colors duration-300">
       <Analytics {...analyticsLocation(analyticsRoute)} />
       {/* Same `/work/[slug]` grouping as Analytics, so vitals for the case studies
           pool into one row rather than eleven thin ones. */}
@@ -894,7 +894,7 @@ const App = () => {
           main.focus();
           main.scrollIntoView({ block: 'start' });
         }}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:bg-white focus:text-ink-inverse focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-lg"
       >
         Skip to content
       </a>
@@ -948,13 +948,13 @@ const App = () => {
                 sizes="90vw"
               />
               {(selectedImage.caption ?? selectedImage.alt) && (
-                <figcaption className="max-w-2xl px-4 text-center text-sm text-slate-300">
+                <figcaption className="max-w-2xl px-4 text-center text-sm text-ink-body">
                   {selectedImage.caption ?? selectedImage.alt}
                 </figcaption>
               )}
             </figure>
           </div>
-          <p className="md:hidden absolute bottom-[max(1rem,env(safe-area-inset-bottom))] inset-x-0 text-center text-xs text-slate-400 pointer-events-none">
+          <p className="md:hidden absolute bottom-[max(1rem,env(safe-area-inset-bottom))] inset-x-0 text-center text-xs text-ink-muted pointer-events-none">
             Pinch to zoom · tap outside to close
           </p>
         </div>
@@ -988,7 +988,7 @@ const App = () => {
                       // Explorations sits under Work, so Work stays marked there.
                       activeSection === item.toLowerCase() && isHomeNavContext
                         ? 'text-accent'
-                        : 'text-slate-300 hover:text-accent-br'
+                        : 'text-ink-body hover:text-accent-br'
                     }`}
                   >
                     {item}
@@ -1008,7 +1008,7 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent font-mono text-xs uppercase tracking-[0.08em] hover:bg-accent hover:text-slate-950 transition-all duration-200 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent font-mono text-xs uppercase tracking-[0.08em] hover:bg-accent hover:text-ink-inverse transition-all duration-200 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 {/* Spaced with `gap`, not a literal space: the arrow glyph has
                     almost no left side bearing, so a single space reads tight.
@@ -1079,7 +1079,7 @@ const App = () => {
                     className={`flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl border-l-2 transition-colors ${
                       isCurrent
                         ? 'text-accent border-accent bg-accent/10'
-                        : 'text-slate-200 border-transparent active:bg-white/10'
+                        : 'text-ink border-transparent active:bg-white/10'
                     }`}
                   >
                     {item}
@@ -1148,22 +1148,22 @@ const App = () => {
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
                   <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-                    <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm text-slate-200 text-sm font-medium">
+                    <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm text-ink text-sm font-medium">
                       <span className="pulse-dot" aria-hidden="true" />
                       Open to Work
                     </span>
                   </div>
-                  <h1 className={`${ui.h1} font-display text-slate-100 mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
+                  <h1 className={`${ui.h1} font-display text-ink mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
                     I design and build <span className="accent-shimmer font-semibold">intelligent products</span> that combine AI, software, and human-centered interaction.
                   </h1>
-                  <p className="text-[1.05rem] md:text-[1.34rem] text-slate-300 mb-4 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
+                  <p className="text-[1.05rem] md:text-[1.34rem] text-ink-body mb-4 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
                     {/* Two different good breaks at two widths, so the rules differ.
                         Everywhere: "agentic AI" and "FLAME University." never split.
                         At md+ the line fits in two, so the trailing clause is held
                         whole and the break lands on the comma; below md it needs
                         three lines, where locking the clause left a short ragged
                         middle line, so it wraps freely there instead. */}
-                    I'm <span className="font-semibold text-slate-100">Jash Bhatt</span> — product designer and agentic&nbsp;AI designer,{' '}
+                    I'm <span className="font-semibold text-ink">Jash Bhatt</span> — product designer and agentic&nbsp;AI designer,{' '}
                     <span className="md:whitespace-nowrap">studying at FLAME&nbsp;University.</span>
                   </p>
 
@@ -1172,14 +1172,14 @@ const App = () => {
                   <div className="flex items-center mb-5 lg:hidden min-h-[32px] border-l-2 border-accent pl-3 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                     <RotatingText
                       phrases={personalitySignals}
-                      className="text-base font-semibold text-slate-200"
+                      className="text-base font-semibold text-ink"
                     />
                   </div>
 
                   <div className="hidden lg:flex items-center mb-8 min-h-[36px] whitespace-nowrap border-l-2 border-accent pl-3.5 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
                     <RotatingText
                       phrases={personalitySignals}
-                      className="text-lg font-semibold text-slate-200"
+                      className="text-lg font-semibold text-ink"
                     />
                   </div>
 
@@ -1248,8 +1248,8 @@ const App = () => {
                           1.75vw and the ceiling at 1.6rem, since the 84rem
                           shell stops widening the card at 357px.
                           Re-measure if any operatorStats value gets longer. */}
-                      <div className="text-xs uppercase tracking-[0.16em] text-slate-400 mb-1.5">{stat.label}</div>
-                      <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-slate-100 [text-wrap:balance]">{stat.value}</div>
+                      <div className="text-xs uppercase tracking-[0.16em] text-ink-muted mb-1.5">{stat.label}</div>
+                      <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-ink [text-wrap:balance]">{stat.value}</div>
                   </div>
                 ))}
               </div>
@@ -1258,7 +1258,7 @@ const App = () => {
 
             {/* Desktop only. On mobile the portrait card below now sits partly in
                 view at rest, which advertises the scroll better than an arrow. */}
-            <div className="hidden lg:flex lg:mt-7 justify-center animate-nudge text-slate-400">
+            <div className="hidden lg:flex lg:mt-7 justify-center animate-nudge text-ink-muted">
               <ChevronDown size={32} />
             </div>
           </section>
@@ -1292,8 +1292,8 @@ const App = () => {
                 <dl className="border-y border-white/10 divide-y divide-white/10">
                   {operatorStats.map((stat) => (
                     <div key={`mobile-stat-${stat.label}`} className="py-2.5">
-                      <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-slate-400">{stat.label}</dt>
-                      <dd className="text-[0.95rem] font-semibold text-slate-100 mt-0.5">{stat.value}</dd>
+                      <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-ink-muted">{stat.label}</dt>
+                      <dd className="text-[0.95rem] font-semibold text-ink mt-0.5">{stat.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -1311,7 +1311,7 @@ const App = () => {
           {isMobile && mobilePage === 'home' && (
             <section aria-labelledby="home-featured-heading" className={`${ui.shell} pt-14 sm:pt-16 pb-12 sm:pb-16`}>
               <Reveal variant="rise-soft" className="mb-6">
-                <h2 id="home-featured-heading" className="text-2xl font-display text-slate-100">Selected Projects</h2>
+                <h2 id="home-featured-heading" className="text-2xl font-display text-ink">Selected Projects</h2>
               </Reveal>
 
               <div className="grid grid-cols-1 gap-4">
@@ -1337,15 +1337,15 @@ const App = () => {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <PhotoIcon size={20} className="text-slate-600" />
+                              <PhotoIcon size={20} className="text-ink-faint" />
                             </div>
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-slate-400">{project.category}</p>
-                          <h3 className="mt-1 text-base font-bold text-slate-100 group-active:text-accent transition-colors">{project.title}</h3>
+                          <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-ink-muted">{project.category}</p>
+                          <h3 className="mt-1 text-base font-bold text-ink group-active:text-accent transition-colors">{project.title}</h3>
                         </div>
-                        <ArrowRight size={18} className="shrink-0 text-slate-600" />
+                        <ArrowRight size={18} className="shrink-0 text-ink-faint" />
                       </a>
                     </Reveal>
                   );
@@ -1369,8 +1369,8 @@ const App = () => {
           {isMobile && mobilePage === 'home' && (
             <section className={`${ui.shell} pb-14 sm:pb-20`} aria-labelledby="home-contact-heading">
               <Reveal variant="rise-soft" className="mb-5">
-                <h2 id="home-contact-heading" className="text-2xl font-display text-slate-100">Let's Build Something</h2>
-                <p className="mt-2 text-[0.95rem] text-slate-300">Open to roles in agentic&nbsp;AI, product design, and UI/UX.</p>
+                <h2 id="home-contact-heading" className="text-2xl font-display text-ink">Let's Build Something</h2>
+                <p className="mt-2 text-[0.95rem] text-ink-body">Open to roles in agentic&nbsp;AI, product design, and UI/UX.</p>
               </Reveal>
               <Reveal variant="rise" delay={80} className="grid grid-cols-1 gap-3">
                 <CopyEmail email={CONTACT_EMAIL} />
@@ -1390,8 +1390,8 @@ const App = () => {
           {showsPage('work') && (
           <section id="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
             <Reveal className="mb-10 sm:mb-14 md:mb-16">
-              <h2 id="work-heading" className={`${ui.h2} font-display text-slate-100 mb-3 md:mb-4`}>Selected Projects</h2>
-              <p className="text-slate-300 max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
+              <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
+              <p className="text-ink-body max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" delay={180} duration={900}>
                 <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
@@ -1471,8 +1471,8 @@ const App = () => {
                           ) : (
                             <div className="w-full h-full flex items-center justify-center p-8 text-center">
                               <div>
-                                <PhotoIcon className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                                <p className="text-slate-400 font-medium">Click to view {project.title}</p>
+                                <PhotoIcon className="w-16 h-16 text-ink-body mx-auto mb-4" />
+                                <p className="text-ink-muted font-medium">Click to view {project.title}</p>
                               </div>
                             </div>
                           )}
@@ -1488,7 +1488,7 @@ const App = () => {
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 md:gap-x-4 mb-3 md:mb-5">
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                           <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-accent/50 to-transparent" />
-                          <span className="text-slate-400 text-[0.6875rem] md:text-xs font-mono uppercase tracking-[0.08em] md:tracking-[0.2em]">{project.category}</span>
+                          <span className="text-ink-muted text-[0.6875rem] md:text-xs font-mono uppercase tracking-[0.08em] md:tracking-[0.2em]">{project.category}</span>
                           {project.content.sections.some((section) => section.demoId) && (
                             <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
                               <span className="pulse-dot" aria-hidden="true" />
@@ -1497,10 +1497,10 @@ const App = () => {
                           )}
                         </div>
 
-                        <h3 className={`text-2xl md:text-4xl font-bold text-slate-100 mb-2 md:mb-4 transition-colors group-hover:text-accent`}>
+                        <h3 className={`text-2xl md:text-4xl font-bold text-ink mb-2 md:mb-4 transition-colors group-hover:text-accent`}>
                           {project.title}
                         </h3>
-                        <p className="text-slate-300 text-[0.95rem] md:text-lg leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-none">
+                        <p className="text-ink-body text-[0.95rem] md:text-lg leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-none">
                           {project.description}
                         </p>
 
@@ -1534,7 +1534,7 @@ const App = () => {
             <section id="archive" aria-labelledby="archive-heading" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
               <Reveal variant="rise-soft" className="mb-8">
                 <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
-                <h2 id="archive-heading" className={`${ui.h2} font-display text-slate-100`}>More work</h2>
+                <h2 id="archive-heading" className={`${ui.h2} font-display text-ink`}>More work</h2>
                 <Reveal variant="grow-width" delay={180} duration={900}>
                   <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
                 </Reveal>
@@ -1563,13 +1563,13 @@ const App = () => {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <PhotoIcon size={20} className="text-slate-600" />
+                              <PhotoIcon size={20} className="text-ink-faint" />
                             </div>
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-slate-400">{project.category}</p>
-                          <h3 className="mt-1 text-base font-bold text-slate-100 group-hover:text-accent transition-colors">{project.title}</h3>
+                          <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-ink-muted">{project.category}</p>
+                          <h3 className="mt-1 text-base font-bold text-ink group-hover:text-accent transition-colors">{project.title}</h3>
                         </div>
                         {project.content.sections.some((section) => section.demoId) && (
                           <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
@@ -1577,7 +1577,7 @@ const App = () => {
                             Try it live
                           </span>
                         )}
-                        <ArrowRight size={18} className="shrink-0 text-slate-600 group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
+                        <ArrowRight size={18} className="shrink-0 text-ink-faint group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
                       </a>
                     </Reveal>
                   );
@@ -1599,8 +1599,8 @@ const App = () => {
                 >
                   <div className="min-w-0 flex-1">
                     <p className={ui.eyebrow}>Beyond case studies</p>
-                    <h3 className="mt-1.5 text-lg font-bold text-slate-100 group-hover:text-accent group-active:text-accent transition-colors">Creative Explorations</h3>
-                    <p className="mt-1.5 text-sm text-slate-400">Photoshop, brand motion, AI generations, and photography.</p>
+                    <h3 className="mt-1.5 text-lg font-bold text-ink group-hover:text-accent group-active:text-accent transition-colors">Creative Explorations</h3>
+                    <p className="mt-1.5 text-sm text-ink-muted">Photoshop, brand motion, AI generations, and photography.</p>
                   </div>
                   <ArrowRight size={20} className="shrink-0 text-accent" />
                 </a>
@@ -1614,8 +1614,8 @@ const App = () => {
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal variant="rise-soft">
-                  <h2 id="about-heading" className={`${ui.h2} font-display text-slate-100 mb-5 md:mb-8`}>About Me</h2>
-                  <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-300 leading-relaxed">
+                  <h2 id="about-heading" className={`${ui.h2} font-display text-ink mb-5 md:mb-8`}>About Me</h2>
+                  <div className="space-y-4 md:space-y-6 text-base md:text-lg text-ink-body leading-relaxed">
                     <p>
                       I design products that span software and hardware — conversational AI agents inside Bajaj Finance's Agentic AI unit, design-system components at RAHI, and interfaces running on circuits I soldered myself.
                     </p>
@@ -1626,12 +1626,12 @@ const App = () => {
                 </Reveal>
 
                 <Reveal variant="rise-soft" delay={140}>
-                  <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-slate-100 mb-5 md:mb-9`}>Expertise</h2>
+                  <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-ink mb-5 md:mb-9`}>Expertise</h2>
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
                         <Briefcase size={20} className="text-accent" aria-hidden="true" />
-                        <h3 className="text-xl font-semibold tracking-tight text-slate-100">Design</h3>
+                        <h3 className="text-xl font-semibold tracking-tight text-ink">Design</h3>
                       </div>
                       <PipeList
                         items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design Systems', 'Industrial Design']}
@@ -1643,7 +1643,7 @@ const App = () => {
                     <div>
                       <div className="flex items-center gap-3 mb-4">
                         <Award size={20} className="text-accent" aria-hidden="true" />
-                        <h3 className="text-xl font-semibold tracking-tight text-slate-100">Tools &amp; Tech</h3>
+                        <h3 className="text-xl font-semibold tracking-tight text-ink">Tools &amp; Tech</h3>
                       </div>
                       <PipeList
                         items={['Figma', 'Python', 'React.js', 'n8n', 'Microsoft Copilot Studio', 'Arduino IDE', 'Fusion 360', 'Adobe Suite']}
@@ -1661,33 +1661,33 @@ const App = () => {
               <Reveal variant="rise-soft" delay={200}>
                 <div className="mt-10 md:mt-16 grid md:grid-cols-2 gap-8 md:gap-16">
                   <div className="border-l-2 border-accent-deep pl-4">
-                    <h3 className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Experience</h3>
+                    <h3 className="text-xl font-semibold tracking-tight text-ink mb-4">Experience</h3>
                     <div className="space-y-4 md:space-y-6">
                       <div>
-                        <h4 className="text-lg font-bold text-slate-100">Design &amp; Development Intern</h4>
-                        <p className="text-slate-300 font-medium">Bajaj Finance · Agentic AI Unit</p>
+                        <h4 className="text-lg font-bold text-ink">Design &amp; Development Intern</h4>
+                        <p className="text-ink-body font-medium">Bajaj Finance · Agentic AI Unit</p>
                         <p className="text-sm text-accent-deep font-medium mt-1">Summer 2026</p>
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-slate-100">UI Design Intern</h4>
-                        <p className="text-slate-300 font-medium">RAHI Platform Technologies</p>
+                        <h4 className="text-lg font-bold text-ink">UI Design Intern</h4>
+                        <p className="text-ink-body font-medium">RAHI Platform Technologies</p>
                         <p className="text-sm text-accent-deep font-medium mt-1">Summer 2025</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="border-l-2 border-accent-deep pl-4">
-                    <h3 className="text-xl font-semibold tracking-tight text-slate-100 mb-4">Education</h3>
+                    <h3 className="text-xl font-semibold tracking-tight text-ink mb-4">Education</h3>
                     <div className="space-y-4 md:space-y-6">
                       <div>
-                        <h4 className="text-lg font-bold text-slate-100">Bachelor of Design (B.Des)</h4>
-                        <p className="text-slate-300 font-medium">FLAME University</p>
+                        <h4 className="text-lg font-bold text-ink">Bachelor of Design (B.Des)</h4>
+                        <p className="text-ink-body font-medium">FLAME University</p>
                         <p className="text-sm text-accent-deep font-medium mt-1">2023 – 2027</p>
                       </div>
                       <div className="opacity-80">
-                        <h4 className="text-base font-medium text-slate-300">Cambridge International Education</h4>
-                        <p className="text-sm text-slate-400">VIBGYOR High School, NIBM, Pune</p>
-                        <p className="text-xs text-slate-400 mt-0.5">2018 – 2023</p>
+                        <h4 className="text-base font-medium text-ink-body">Cambridge International Education</h4>
+                        <p className="text-sm text-ink-muted">VIBGYOR High School, NIBM, Pune</p>
+                        <p className="text-xs text-ink-muted mt-0.5">2018 – 2023</p>
                       </div>
                     </div>
                   </div>
@@ -1705,8 +1705,8 @@ const App = () => {
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-16">
                 <Reveal variant="rise-soft">
-                  <h2 id="contact-heading" className={`${ui.h2} font-display text-slate-100 mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
-                  <p className="text-base lg:text-xl text-slate-300 mb-4 lg:mb-6">
+                  <h2 id="contact-heading" className={`${ui.h2} font-display text-ink mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
+                  <p className="text-base lg:text-xl text-ink-body mb-4 lg:mb-6">
                     I am actively looking for opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
                   </p>
                   <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
@@ -1760,13 +1760,13 @@ const App = () => {
             <Reveal className="mb-10 sm:mb-14">
               <button
                 onClick={() => scrollToSection('work')}
-                className="inline-flex items-center gap-1.5 -ml-1 mb-2 min-h-11 pr-3 pl-1 text-sm font-medium text-slate-400 hover:text-accent active:text-accent transition-colors"
+                className="inline-flex items-center gap-1.5 -ml-1 mb-2 min-h-11 pr-3 pl-1 text-sm font-medium text-ink-muted hover:text-accent active:text-accent transition-colors"
               >
                 <ArrowLeft size={16} /> Work
               </button>
               <p className={`${ui.eyebrow} mb-2`}>Beyond case studies</p>
-              <h1 id="explorations-heading" className={`${ui.h2} font-display text-slate-100 mb-3`}>Creative Explorations</h1>
-              <p className="text-slate-300 max-w-2xl">
+              <h1 id="explorations-heading" className={`${ui.h2} font-display text-ink mb-3`}>Creative Explorations</h1>
+              <p className="text-ink-body max-w-2xl">
                 Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
               </p>
               <Reveal variant="grow-width" delay={180} duration={900}>
@@ -1781,7 +1781,7 @@ const App = () => {
               <button
                 type="button"
                 onClick={() => scrollToSection('work')}
-                className={`group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors ${ui.focusRing}`}
+                className={`group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm text-base font-medium text-ink-body hover:text-accent active:bg-white/10 transition-colors ${ui.focusRing}`}
               >
                 <ArrowLeft size={18} aria-hidden="true" className="group-hover:-translate-x-1 transition-transform" />
                 Back to Work
@@ -1828,19 +1828,19 @@ const App = () => {
           {/* This was one credit line. The footer is where someone who read to
               the end looks for a way to get in touch, and there wasn't one. */}
           <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs">
-            <a href={`mailto:${CONTACT_EMAIL}`} className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+            <a href={`mailto:${CONTACT_EMAIL}`} className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
               Email
             </a>
-            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
               LinkedIn<span aria-hidden="true"> ↗</span>
             </a>
-            <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-slate-300 hover:text-accent transition-colors">
+            <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
               Résumé<span aria-hidden="true"> ↗</span>
             </a>
           </nav>
           {/* `text-balance` so the credit doesn't leave "scratch." alone on a
               second line at 320px. */}
-          <p className="text-slate-400 text-xs text-center [text-wrap:balance]">
+          <p className="text-ink-muted text-xs text-center [text-wrap:balance]">
             © 2026 Jash Bhatt — designed &amp; built from scratch.
           </p>
         </div>

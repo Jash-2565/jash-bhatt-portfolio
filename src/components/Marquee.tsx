@@ -8,13 +8,13 @@ type MarqueeProps = {
 export default function Marquee({ items }: MarqueeProps) {
   const row = [...items, ...items];
   return (
-    <div className="marquee-wrap border-y border-slate-800/80 py-5" aria-hidden="true">
+    <div className="marquee-wrap border-y border-[var(--rule)] py-5" aria-hidden="true">
       <div className="marquee-mask">
         <div className="marquee-track">
           {row.map((item, i) => (
             <span
               key={i}
-              className="flex items-center shrink-0 font-mono text-xs md:text-sm uppercase tracking-[0.22em] text-slate-400"
+              className="flex items-center shrink-0 font-mono text-xs md:text-sm uppercase tracking-[0.22em] text-ink-muted"
             >
               <span className="marquee-item-text transition-colors duration-300">{item}</span>
               {/* A drawn separator rather than a dot: the band reads as a

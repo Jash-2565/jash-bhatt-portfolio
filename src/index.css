@@ -12,7 +12,21 @@
   --accent-bright-rgb: 158 247 234;
   --accent-deep-rgb: 0 161 155;
 
-  --ink-900: #e5e8ea;
+  /* Text scale, as RGB channels for the same reason as the accent: Tailwind's
+     `ink` colours read these, so text-ink-muted/60 etc. work. Four steps,
+     each with a distinct job — previously nine slate shades plus a separate
+     body colour did the same four jobs.
+     - ink:         headings and primary text           #f1f5f9
+     - ink-body:    paragraph copy                      #cbd5e1
+     - ink-muted:   metadata, eyebrows, small print     #94a3b8
+     - ink-faint:   decorative only (icons, separators) #475569 — 3.0:1 on
+                    the ground, so never use it for text someone must read.
+     - ink-inverse: text on a cyan or white fill        #020617 */
+  --ink-rgb: 241 245 249;
+  --ink-body-rgb: 203 213 225;
+  --ink-muted-rgb: 148 163 184;
+  --ink-faint-rgb: 71 85 105;
+  --ink-inverse-rgb: 2 6 23;
   /* Surface scale. Everything is opaque: panes are told apart from the ground
      by a hairline rule and their corner marks, not by a translucent material. */
   /* A blue-black, not a neutral one — blue runs ~9x red here, the same cool
@@ -64,7 +78,7 @@ html {
 
 body {
   font-family: 'Sora', sans-serif;
-  color: var(--ink-900);
+  color: rgb(var(--ink-rgb));
   overflow-x: clip;
   /* Ground colour only. The app root paints an opaque --ground over the body,
      so any colour layered here is invisible — which is why the washes that
@@ -297,7 +311,7 @@ label {
    masking the element that carries the background would fade that background
    out at both ends too, letting the traces back through exactly at the edges. */
 .marquee-wrap {
-  background: #060d15;
+  background: var(--surface-1);
 }
 .marquee-mask {
   overflow: hidden;

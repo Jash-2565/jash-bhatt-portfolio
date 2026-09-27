@@ -1169,8 +1169,8 @@ const ArkanoidDemo = () => {
     <div className="rounded-2xl p-4 sm:p-6 bg-[var(--surface-1)] shadow-sm lg:h-[680px] flex flex-col">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
-          <p className="text-sm font-semibold text-slate-200">Play the demo</p>
-          <p className="text-xs text-slate-400">
+          <p className="text-sm font-semibold text-ink">Play the demo</p>
+          <p className="text-xs text-ink-muted">
             {isTouch
               ? 'Drag on the board to move. Tap to launch. Run Demo to start.'
               : 'Arrow keys to move. Tap to launch. Shift for boost. ESC pauses.'}
@@ -1217,7 +1217,7 @@ const ArkanoidDemo = () => {
             setIsRunning(false);
             drawIdle();
           }}
-          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:bg-accent/10 hover:text-accent-br transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-ink hover:bg-accent/10 hover:text-accent-br transition"
         >
           Reset
         </button>

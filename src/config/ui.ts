@@ -5,16 +5,16 @@ export const ui = {
   // Controls are square-cornered and mono-labelled: the radius scale in
   // tailwind.config.js tops out at 4px, so `rounded` here is 2px, not a pill.
   btnBase: 'inline-flex items-center justify-center gap-2 min-h-12 px-6 py-3.5 sm:px-8 sm:py-4 rounded font-mono text-sm uppercase tracking-[0.08em] transition-all duration-200',
-  btnPrimary: 'bg-accent text-black hover:bg-accent-br hover:-translate-y-0.5',
+  btnPrimary: 'bg-accent text-ink-inverse hover:bg-accent-br hover:-translate-y-0.5',
   // Filled rather than outlined: with .surface unoutlined a control needs the
   // raised tone to read as a control against a --surface-1 pane.
-  btnSecondary: 'surface surface-hover !bg-[var(--surface-2)] text-slate-100 hover:text-accent-br',
+  btnSecondary: 'surface surface-hover !bg-[var(--surface-2)] text-ink hover:text-accent-br',
   cardBase: 'surface surface-marks rounded-sm',
   cardHover: 'surface-hover',
   /** Small caps label above a heading. Mono, like the project category labels,
-      and slate-400 — slate-500 on the ground is 4.26:1, under AA for 12px. */
-  eyebrow: 'font-mono text-xs uppercase tracking-[0.2em] text-slate-400',
-  chipBase: 'chip label px-2.5 py-1.5 text-slate-200 rounded-sm hover:text-accent-br',
+      and ink-muted — anything dimmer (ink-faint) fails AA for 12px on the ground. */
+  eyebrow: 'font-mono text-xs uppercase tracking-[0.2em] text-ink-muted',
+  chipBase: 'chip label px-2.5 py-1.5 text-ink rounded-sm hover:text-accent-br',
   chipAccent: 'chip label px-2.5 py-1.5 text-accent-br rounded-sm !bg-accent/10',
 
   // --- Shared layout rhythm -------------------------------------------------

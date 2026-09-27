@@ -26,7 +26,7 @@ export default function PipeList({ items, flow = 'row', className = '' }: Props)
   // back under the separator.
   const item = (label: string) => (
     <div key={label} className="flex gap-2 break-inside-avoid pb-1.5">
-      <span aria-hidden="true" className="text-slate-600">|</span>
+      <span aria-hidden="true" className="text-ink-faint">|</span>
       <span>{label}</span>
     </div>
   );

@@ -25,8 +25,8 @@ const DEMOS: Record<NonNullable<Section['demoId']>, { Demo: ComponentType; code:
 
 const DemoLoader = () => (
   <div className="surface surface-marks !bg-[var(--ground)] h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
-    <div className="flex flex-col items-center gap-3 text-slate-400">
-      <div className="w-7 h-7 border-2 border-slate-700 border-t-accent rounded-full animate-spin" />
+    <div className="flex flex-col items-center gap-3 text-ink-muted">
+      <div className="w-7 h-7 border-2 border-ink-faint border-t-accent rounded-full animate-spin" />
       <span className="text-[10px] tracking-widest uppercase">Loading Demo</span>
     </div>
   </div>
@@ -75,7 +75,7 @@ const zoomProps = (
  * suppressed site-wide by the custom cursor.
  */
 const ZoomHint = () => (
-  <span className="absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-slate-200 pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100">
+  <span className="absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-ink pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100">
     <ZoomIn size={11} aria-hidden="true" />
     <span className="md:hidden">Tap to zoom</span>
     <span className="hidden md:inline">Click to zoom</span>
@@ -94,7 +94,7 @@ const CopyButton = ({ text }: { text: string }) => {
     <button
       onClick={copy}
       aria-label={copied ? 'Code copied' : 'Copy code snippet'}
-      className="flex items-center justify-center gap-1.5 min-h-11 min-w-11 -my-2 px-2 text-xs text-slate-400 hover:text-accent active:text-accent transition-colors"
+      className="flex items-center justify-center gap-1.5 min-h-11 min-w-11 -my-2 px-2 text-xs text-ink-muted hover:text-accent active:text-accent transition-colors"
     >
       {copied ? <Check size={13} /> : <Copy size={13} />}
       {copied ? 'copied' : 'copy'}
@@ -217,7 +217,7 @@ const ProjectDetail = ({
     const { Demo, code } = DEMOS[section.demoId];
 
     const snippetContainerClass =
-      'surface surface-marks !bg-[var(--ground)] h-[280px] sm:h-[440px] lg:h-[620px] rounded-2xl text-slate-100 flex flex-col';
+      'surface surface-marks !bg-[var(--ground)] h-[280px] sm:h-[440px] lg:h-[620px] rounded-2xl text-ink flex flex-col';
     // `overscroll-contain` stops a sideways swipe inside the snippet from
     // chaining out to the page once it hits the end of the code.
     const snippetPreClass =
@@ -227,9 +227,9 @@ const ProjectDetail = ({
       <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className={snippetContainerClass}>
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-            <span className="text-xs uppercase tracking-widest text-slate-400">
+            <span className="text-xs uppercase tracking-widest text-ink-muted">
               Python Snippet
-              <span className="md:hidden normal-case tracking-normal text-slate-400"> · swipe →</span>
+              <span className="md:hidden normal-case tracking-normal text-ink-muted"> · swipe →</span>
             </span>
             <CopyButton text={code} />
           </div>
@@ -256,7 +256,7 @@ const ProjectDetail = ({
                     {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                   >
                     {isPlaceholder ? (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                      <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                         <PhotoIcon size={36} className="mb-3 opacity-60" />
                         <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                       </div>
@@ -274,7 +274,7 @@ const ProjectDetail = ({
                       </>
                     )}
                   </div>
-                  <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+                  <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
                 </figure>
               );
             })}
@@ -300,7 +300,7 @@ const ProjectDetail = ({
               {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
             >
               {isPlaceholder ? (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                   <PhotoIcon size={36} className="mb-3 opacity-60" />
                   <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                 </div>
@@ -318,7 +318,7 @@ const ProjectDetail = ({
                 </>
               )}
             </div>
-            <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+            <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
           </figure>
         );
       };
@@ -360,7 +360,7 @@ const ProjectDetail = ({
                       {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                     >
                       {isPlaceholder ? (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                        <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                           <PhotoIcon size={32} className="mb-3 opacity-60" />
                           <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                         </div>
@@ -377,7 +377,7 @@ const ProjectDetail = ({
                         </>
                       )}
                     </div>
-                    <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+                    <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
                   </figure>
                 );
               })}
@@ -390,7 +390,7 @@ const ProjectDetail = ({
                 {...zoomProps(img.src, !img.src || img.src.includes('placeholder'), img.caption, onImageClick)}
               >
                 {!img.src || img.src.includes('placeholder') ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                     <PhotoIcon size={36} className="mb-3 opacity-60" />
                     <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                   </div>
@@ -407,7 +407,7 @@ const ProjectDetail = ({
                   </>
                 )}
               </div>
-              <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+              <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
             </figure>
           ))}
         </div>
@@ -436,7 +436,7 @@ const ProjectDetail = ({
                   {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                 >
                   {isPlaceholder ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                    <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                       <PhotoIcon size={36} className="mb-3 opacity-60" />
                       <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                     </div>
@@ -460,7 +460,7 @@ const ProjectDetail = ({
                     </>
                   )}
                 </div>
-                <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+                <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
               </figure>
             );
           })}
@@ -489,7 +489,7 @@ const ProjectDetail = ({
                 {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
               >
                 {isPlaceholder ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                     <PhotoIcon size={32} className="mb-3 opacity-60" />
                     <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                   </div>
@@ -512,7 +512,7 @@ const ProjectDetail = ({
                   </>
                 )}
               </div>
-              <figcaption className="text-sm text-slate-400 text-center">{img.caption}</figcaption>
+              <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
             </figure>
           );
         })}
@@ -521,7 +521,7 @@ const ProjectDetail = ({
   };
 
   return (
-    <div className={`relative z-10 text-slate-100 min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+    <div className={`relative z-10 text-ink min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
       {/* Project Hero */}
       <div className="w-full pt-[calc(var(--nav-h)+2rem)] pb-12 md:pt-32 md:pb-24 border-b border-white/10">
@@ -529,7 +529,7 @@ const ProjectDetail = ({
           <button
             type="button"
             onClick={() => onBack()}
-            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-slate-300 hover:text-accent active:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-ink-body hover:text-accent active:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             Back to Projects
@@ -555,19 +555,19 @@ const ProjectDetail = ({
             "Overview". */}
         <dl className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-12 gap-6 md:gap-8 mb-12 pb-8 md:mb-20 md:pb-12 border-b border-white/10">
           <div className="md:col-span-3">
-            <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+            <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink-muted mb-3">
               <Briefcase size={13} className="text-accent" aria-hidden="true" /> Role
             </dt>
-            <dd className="font-medium text-slate-100 text-sm leading-6">{project.content.role}</dd>
+            <dd className="font-medium text-ink text-sm leading-6">{project.content.role}</dd>
           </div>
           <div className="md:col-span-3">
-            <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+            <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink-muted mb-3">
               <Clock size={13} className="text-accent" aria-hidden="true" /> Timeline
             </dt>
-            <dd className="font-medium text-slate-100 text-sm leading-6">{project.timeline}</dd>
+            <dd className="font-medium text-ink text-sm leading-6">{project.timeline}</dd>
           </div>
           <div className="xs:col-span-2 md:col-span-6">
-            <dt className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tech &amp; Tools</dt>
+            <dt className="text-xs font-bold uppercase tracking-wider text-ink-muted mb-3">Tech &amp; Tools</dt>
             <dd className="flex flex-wrap gap-2">
               {project.tags.map((tag, i) => (
                 <span key={i} className={ui.chipBase}>{tag}</span>
@@ -576,10 +576,10 @@ const ProjectDetail = ({
           </div>
           {project.content.team && project.content.team.length > 0 && (
             <div className="xs:col-span-2 md:col-span-12">
-              <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+              <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink-muted mb-3">
                 <Users size={13} className="text-accent" aria-hidden="true" /> Team
               </dt>
-              <dd className="font-medium text-slate-100 text-sm leading-6">
+              <dd className="font-medium text-ink text-sm leading-6">
                 Built alongside {formatNameList(project.content.team)}
               </dd>
             </div>
@@ -622,7 +622,7 @@ const ProjectDetail = ({
               </div>
             ) : (
               <div className="w-full aspect-video flex items-center justify-center">
-                <div className="text-center text-slate-400">
+                <div className="text-center text-ink-muted">
                   <PhotoIcon size={48} className="mx-auto mb-4 opacity-50" />
                   <span className="text-sm font-medium tracking-wide uppercase">Project Hero Image</span>
                 </div>
@@ -638,13 +638,13 @@ const ProjectDetail = ({
               <div key={idx} className="surface surface-marks rounded-3xl border-l-2 border-accent/50 p-5 sm:p-8 md:p-10">
                 <div className="mb-6">
                   <div className={`${ui.eyebrow} tracking-[0.35em] mb-3`}>Live demo</div>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-100 mb-3">{section.title}</h2>
-                  <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line max-w-[42rem]">{section.content}</p>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-ink mb-3">{section.title}</h2>
+                  <p className="text-base md:text-lg text-ink-body leading-relaxed whitespace-pre-line max-w-[42rem]">{section.content}</p>
                 </div>
                 {section.listItems && (
                   <ul className="space-y-3 mb-4 pl-1">
                     {section.listItems.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-200">
+                      <li key={i} className="flex items-start gap-3 text-ink">
                         <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.sectionAccent}`}></span>
                         <span className="leading-relaxed">{item}</span>
                       </li>
@@ -683,11 +683,11 @@ const ProjectDetail = ({
 
                 {/* Left Column: Heading */}
                 <div className="md:col-span-4 md:sticky md:top-24">
-                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-slate-400'}`}>
+                  <span className={`block font-mono text-xs tracking-[0.3em] mb-3 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-ink-muted'}`}>
                     {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
                   </span>
                   <div className={`h-1 ${project.sectionAccent} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
-                  <h2 className={`text-xl font-bold tracking-tight leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-100'}`}>{section.title}</h2>
+                  <h2 className={`text-xl font-bold tracking-tight leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-ink'}`}>{section.title}</h2>
                 </div>
 
                 {/* Right Column: Content. The reveal that used to wrap this
@@ -715,7 +715,7 @@ const ProjectDetail = ({
                   )}
 
                   {section.content && (
-                    <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal max-w-[42rem]">{section.content}</p>
+                    <p className="text-base md:text-lg text-ink-body leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal max-w-[42rem]">{section.content}</p>
                   )}
 
                   {/* Numbers that would otherwise sit mid-sentence, pulled out
@@ -741,7 +741,7 @@ const ProjectDetail = ({
                         <li key={i} className={`${ui.cardBase} p-5`}>
                           <span className={`block h-1 w-6 mb-4 ${project.sectionAccent}`} aria-hidden="true"></span>
                           <h3 className="text-base font-semibold text-white mb-2">{card.title}</h3>
-                          <p className="text-sm md:text-base text-slate-300 leading-relaxed">{card.body}</p>
+                          <p className="text-sm md:text-base text-ink-body leading-relaxed">{card.body}</p>
                         </li>
                       ))}
                     </ul>
@@ -750,7 +750,7 @@ const ProjectDetail = ({
                   {section.listItems && (
                     <ul className="space-y-3 mb-8 pl-1">
                       {section.listItems.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-slate-200">
+                        <li key={i} className="flex items-start gap-3 text-ink">
                           <span className={`mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.sectionAccent}`}></span>
                           <span className="leading-relaxed">{item}</span>
                         </li>
@@ -779,10 +779,10 @@ const ProjectDetail = ({
                           <ExternalLink size={20} />
                         </span>
                         <span className="min-w-0 text-left">
-                          <span className="block text-sm text-slate-400 font-medium">
+                          <span className="block text-sm text-ink-muted font-medium">
                             {section.embedWide ? 'Design board' : 'Interactive prototype'}
                           </span>
-                          <span className="block text-slate-100 font-semibold text-sm">
+                          <span className="block text-ink font-semibold text-sm">
                             Open in Figma ↗
                           </span>
                         </span>
@@ -799,10 +799,10 @@ const ProjectDetail = ({
                           ></iframe>
                         </div>
                       ) : (
-                        <div className="hidden md:block mt-12 w-full max-w-[360px] mx-auto aspect-[9/19] bg-slate-900 rounded-[2.5rem] overflow-hidden border-[8px] border-slate-800 shadow-2xl relative">
+                        <div className="hidden md:block mt-12 w-full max-w-[360px] mx-auto aspect-[9/19] bg-[var(--surface-1)] rounded-[2.5rem] overflow-hidden border-[8px] border-[var(--surface-2)] shadow-2xl relative">
                           <iframe
                             src={section.embedUrl}
-                            className="w-full h-full bg-slate-50"
+                            className="w-full h-full bg-white"
                             allowFullScreen
                             loading="lazy"
                             style={{ border: 'none' }}
@@ -856,7 +856,7 @@ const ProjectDetail = ({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <PhotoIcon size={28} className="text-slate-600" />
+                      <PhotoIcon size={28} className="text-ink-faint" />
                     </div>
                   )}
                 </div>
@@ -865,14 +865,14 @@ const ProjectDetail = ({
                   {/* `line-clamp`, not `truncate`: a single-line ellipsis cut
                       "Agentic AI / Enterpris…" at 320px and would have cut
                       "The Soundtrack of Seven Years" too. */}
-                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-slate-100 line-clamp-2 group-hover:text-accent transition-colors [text-wrap:balance]">
+                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-ink line-clamp-2 group-hover:text-accent transition-colors [text-wrap:balance]">
                     {nextProject.title}
                   </h3>
-                  <p className="mt-1 text-sm text-slate-400 line-clamp-2">{nextProject.category}</p>
+                  <p className="mt-1 text-sm text-ink-muted line-clamp-2">{nextProject.category}</p>
                 </div>
                 <ArrowRight
                   size={28}
-                  className="hidden md:block shrink-0 text-slate-500 group-hover:text-accent group-hover:translate-x-2 transition-all duration-300"
+                  className="hidden md:block shrink-0 text-ink-muted group-hover:text-accent group-hover:translate-x-2 transition-all duration-300"
                 />
               </div>
             </button>
@@ -884,17 +884,17 @@ const ProjectDetail = ({
           <button
             type="button"
             onClick={() => onBack()}
-            className="group -ml-3 min-h-11 px-3 rounded-sm text-base font-medium text-slate-300 hover:text-accent active:bg-white/10 transition-colors flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="group -ml-3 min-h-11 px-3 rounded-sm text-base font-medium text-ink-body hover:text-accent active:bg-white/10 transition-colors flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>
-          <span className="hidden md:flex items-center gap-2 text-xs text-slate-400">
-            <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">Esc</kbd>
+          <span className="hidden md:flex items-center gap-2 text-xs text-ink-muted">
+            <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-ink-muted">Esc</kbd>
             back
             {nextProject && (
               <>
-                <span className="mx-1 text-slate-500">·</span>
-                <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-slate-400">→</kbd>
+                <span className="mx-1 text-ink-muted">·</span>
+                <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-ink-muted">→</kbd>
                 next
               </>
             )}

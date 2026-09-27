@@ -22,7 +22,7 @@ const ImageWithFallback = ({
 
   if (hasError) {
     return (
-      <div className="w-full h-full flex items-center justify-center text-slate-300">
+      <div className="w-full h-full flex items-center justify-center text-ink-body">
         <Image size={24} />
       </div>
     );

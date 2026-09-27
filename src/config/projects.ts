@@ -28,9 +28,9 @@ const PROJECT_ORDER_PRIORITY: Record<string, number> = {
 };
 
 export const DEFAULT_PROJECT_HERO_THEME: ProjectHeroTheme = {
-  heroTextClass: 'text-slate-100',
-  heroMutedTextClass: 'text-slate-400',
-  heroBodyTextClass: 'text-slate-300',
+  heroTextClass: 'text-ink',
+  heroMutedTextClass: 'text-ink-muted',
+  heroBodyTextClass: 'text-ink-body',
 };
 
 export const PROJECT_HERO_THEMES: Record<string, ProjectHeroTheme> = {

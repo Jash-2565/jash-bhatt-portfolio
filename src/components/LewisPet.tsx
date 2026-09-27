@@ -305,7 +305,7 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
       >
         <span
           aria-hidden="true"
-          className="grid h-7 w-7 place-items-center rounded-full bg-black/70 text-sm leading-none text-slate-300 ring-1 ring-white/20 hover:text-white"
+          className="grid h-7 w-7 place-items-center rounded-full bg-black/70 text-sm leading-none text-ink-body ring-1 ring-white/20 hover:text-white"
         >
           ×
         </span>

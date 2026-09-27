@@ -273,24 +273,24 @@ const MovieRecsDemo = () => {
     <div className="rounded-2xl bg-[var(--surface-1)] shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-slate-100">Movie Recommendation Demo</h3>
-          <p className="text-sm text-slate-400">5,043 films · content-based, runs in this tab</p>
+          <h3 className="text-lg font-semibold text-ink">Movie Recommendation Demo</h3>
+          <p className="text-sm text-ink-muted">5,043 films · content-based, runs in this tab</p>
         </div>
-        <span className="text-xs uppercase tracking-widest text-slate-300 bg-slate-800 px-3 py-1 rounded-sm">
+        <span className="text-xs uppercase tracking-widest text-ink-body bg-[var(--surface-2)] px-3 py-1 rounded-sm">
           {armed ? status : 'idle'}
         </span>
       </div>
 
       {!armed ? (
         <div className="rounded-xl bg-[var(--ground)] p-6 text-center">
-          <p className="text-sm text-slate-300">
+          <p className="text-sm text-ink-body">
             The dataset is a 1.4&nbsp;MB CSV, parsed and vectorised in your browser.
             It only downloads if you ask for it.
           </p>
           <button
             type="button"
             onClick={() => setArmed(true)}
-            className="mt-4 min-h-11 px-5 rounded-sm text-sm font-semibold bg-accent text-black hover:bg-accent-br transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ground)]"
+            className="mt-4 min-h-11 px-5 rounded-sm text-sm font-semibold bg-accent text-ink-inverse hover:bg-accent-br transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ground)]"
           >
             Load dataset (1.4 MB)
           </button>
@@ -302,7 +302,7 @@ const MovieRecsDemo = () => {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Enter movie title"
-            className="w-full flex-1 min-w-0 min-h-11 rounded-sm bg-[var(--ground)] px-3 py-2.5 text-base sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full flex-1 min-w-0 min-h-11 rounded-sm bg-[var(--ground)] px-3 py-2.5 text-base sm:text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:items-center lg:w-auto lg:flex-nowrap lg:gap-2">
             <button
@@ -316,19 +316,19 @@ const MovieRecsDemo = () => {
             <button
               type="button"
               onClick={handleClear}
-              className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:bg-accent/10 hover:text-accent-br transition"
+              className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-ink hover:bg-accent/10 hover:text-accent-br transition"
             >
               Clear
             </button>
           </div>
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-slate-400">
+        <div className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-ink-muted">
           {exampleList.map((item) => (
             <button
               key={item}
               type="button"
               onClick={() => setQuery(item)}
-              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap chip rounded-sm px-4 py-1.5 text-sm text-slate-300 hover:text-accent-br active:text-accent"
+              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap chip rounded-sm px-4 py-1.5 text-sm text-ink-body hover:text-accent-br active:text-accent"
             >
               {item}
             </button>
@@ -338,11 +338,11 @@ const MovieRecsDemo = () => {
       )}
 
       <div className="mt-5">
-        <p className="text-sm text-slate-300 mb-3" role="status">{message}</p>
+        <p className="text-sm text-ink-body mb-3" role="status">{message}</p>
         {results.length > 0 && (
           <ul className="grid gap-2 md:grid-cols-2">
             {results.map((title) => (
-              <li key={title} className="rounded-lg bg-slate-800 px-3 py-2 text-sm text-slate-100">
+              <li key={title} className="rounded-lg bg-[var(--surface-2)] px-3 py-2 text-sm text-ink">
                 {title}
               </li>
             ))}
