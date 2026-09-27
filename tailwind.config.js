@@ -21,6 +21,15 @@ export default {
         accent: "rgb(var(--accent-rgb) / <alpha-value>)",
         "accent-br": "rgb(var(--accent-bright-rgb) / <alpha-value>)",
         "accent-deep": "rgb(var(--accent-deep-rgb) / <alpha-value>)",
+        // Text scale, same pattern. See the :root comment in index.css for
+        // which step does which job.
+        ink: {
+          DEFAULT: "rgb(var(--ink-rgb) / <alpha-value>)",
+          body: "rgb(var(--ink-body-rgb) / <alpha-value>)",
+          muted: "rgb(var(--ink-muted-rgb) / <alpha-value>)",
+          faint: "rgb(var(--ink-faint-rgb) / <alpha-value>)",
+          inverse: "rgb(var(--ink-inverse-rgb) / <alpha-value>)",
+        },
       },
       // Labels and metadata carry the schematic read, so the mono is a real
       // face rather than whatever ui-monospace resolves to per OS.

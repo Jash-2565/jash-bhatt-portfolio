@@ -24,11 +24,11 @@ export default function MenuIcon({ open }: Props) {
       />
       {/* Middle — shortest bar. Fades so the X reads as two clean strokes. */}
       <span
-        className={`${bar} top-[9px] bg-slate-300 ${open ? 'w-6 opacity-0' : 'w-[15px] opacity-100'}`}
+        className={`${bar} top-[9px] bg-ink-body ${open ? 'w-6 opacity-0' : 'w-[15px] opacity-100'}`}
       />
       {/* Bottom — mid length, giving the ragged left edge. */}
       <span
-        className={`${bar} bg-slate-300 ${open ? 'top-[9px] w-6 -rotate-45' : 'top-[15px] w-[20px] rotate-0'}`}
+        className={`${bar} bg-ink-body ${open ? 'top-[9px] w-6 -rotate-45' : 'top-[15px] w-[20px] rotate-0'}`}
       />
     </span>
   );

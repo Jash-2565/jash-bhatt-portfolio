@@ -413,16 +413,16 @@ const YoloV8Demo = () => {
     <div className="rounded-2xl bg-[var(--surface-1)] shadow-sm p-4 lg:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-slate-100">Live Webcam Detection</h3>
-          <p className="text-sm text-slate-400">Model: `public/models/yolov8s-int8.onnx`</p>
+          <h3 className="text-lg font-semibold text-ink">Live Webcam Detection</h3>
+          <p className="text-sm text-ink-muted">Model: `public/models/yolov8s-int8.onnx`</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs uppercase tracking-widest text-emerald-300 bg-emerald-900/30 px-3 py-1 rounded-sm">
+          <span className="text-xs uppercase tracking-widest text-accent-br bg-accent/10 px-3 py-1 rounded-sm">
             {status}
           </span>
         </div>
       </div>
-      <p className="text-xs text-slate-400 mb-3">{debug}</p>
+      <p className="text-xs text-ink-muted mb-3">{debug}</p>
 
       {/* Before the stream attaches the <video> has no intrinsic size, so the
           box (and the overlay pinned to it) would collapse to zero height. */}
@@ -430,9 +430,9 @@ const YoloV8Demo = () => {
         <video ref={videoRef} className="w-full h-full object-cover block" muted playsInline />
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
         {!isRunning && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[var(--ground)]/70 px-6 text-center text-slate-200 text-sm">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[var(--ground)]/70 px-6 text-center text-ink text-sm">
             <span>Run the demo to enable your camera</span>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-ink-muted">
               Downloads an ~11&nbsp;MB model on first run
             </span>
           </div>
@@ -450,7 +450,7 @@ const YoloV8Demo = () => {
         <button
           type="button"
           onClick={handleStop}
-          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-slate-200 hover:bg-accent/10 hover:text-accent-br transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-ink hover:bg-accent/10 hover:text-accent-br transition"
         >
           Reset
         </button>

@@ -66,7 +66,7 @@ function Thumb({
   if (!item.src) {
     return (
       <div className={frame}>
-        <PhotoIcon className="text-slate-300 w-full h-full p-4" />
+        <PhotoIcon className="text-ink-body w-full h-full p-4" />
       </div>
     );
   }
@@ -89,7 +89,7 @@ function Thumb({
         sizes={sizes}
       />
       {showCaption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-slate-100 transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2.5 pt-8 text-xs font-medium text-ink transition-all duration-300 pointer-events-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
           {item.caption ?? item.alt}
         </div>
       )}
@@ -112,8 +112,8 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
         <Reveal variant="rise-soft" className="mt-16 sm:mt-20 md:mt-32 mb-10 sm:mb-14 md:mb-16 flex items-center gap-4 sm:gap-6">
           <div className="h-px flex-1 bg-white/10"></div>
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 mb-1">Beyond case studies</p>
-            <h2 className="text-2xl font-display text-slate-300">Creative Explorations</h2>
+            <p className="text-xs uppercase tracking-[0.2em] text-ink-muted mb-1">Beyond case studies</p>
+            <h2 className="text-2xl font-display text-ink-body">Creative Explorations</h2>
           </div>
           <div className="h-px flex-1 bg-white/10"></div>
         </Reveal>
@@ -133,9 +133,9 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 sizes="40px"
               />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">Photography Gallery</h2>
+            <h2 className="text-xl font-bold text-ink">Photography Gallery</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Nature photography has been a constant since I was young. I shoot on a DSLR when I have one with me, and on my phone when I don't. It's the one thing I do just for myself.</p>
+          <p className="text-ink-body text-sm md:text-base mb-5 md:mb-6">Nature photography has been a constant since I was young. I shoot on a DSLR when I have one with me, and on my phone when I don't. It's the one thing I do just for myself.</p>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-6 md:auto-rows-fr">
             {gallerySnippetItems.map((item, i) => {
               const positionClass = i === 0
@@ -174,10 +174,10 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 sizes="40px"
               />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">Nothing Brand Animation</h2>
+            <h2 className="text-xl font-bold text-ink">Nothing Brand Animation</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
-          <p className="text-slate-400 text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
+          <p className="text-ink-body text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
+          <p className="text-ink-muted text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
           <div className="rounded-xl overflow-hidden bg-white/5">
             <video
               className="w-full h-auto"
@@ -210,9 +210,9 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 sizes="40px"
               />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">Photoshop &amp; Animation</h2>
+            <h2 className="text-xl font-bold text-ink">Photoshop &amp; Animation</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
+          <p className="text-ink-body text-sm md:text-base mb-5 md:mb-6">Explorations in visual design, motion graphics, and digital art created during my academic coursework.</p>
           <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {galleryItems.map((item, i) => (
               <Thumb
@@ -240,9 +240,9 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 sizes="28px"
               />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">Lamborghini Jetski AI</h2>
+            <h2 className="text-xl font-bold text-ink">Lamborghini Jetski AI</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
+          <p className="text-ink-body text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
           <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {aiItems.map((item, i) => (
               <Thumb
@@ -264,16 +264,16 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <LewisSprite animation="waving" scale={0.19} />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">Lewis — a desktop pet</h2>
+            <h2 className="text-xl font-bold text-ink">Lewis — a desktop pet</h2>
           </div>
-          <p className="text-slate-300 text-sm md:text-base mb-1.5">
+          <p className="text-ink-body text-sm md:text-base mb-1.5">
             A chibi pixel-art pet for macOS, inspired by Sir Lewis Hamilton in a black
             Mercedes-AMG fire suit. He lives on the edge of the screen in a transparent
             Cocoa window — idling, running between errands, waving when you catch him.
             Written in Swift, with nine hand-directed animation rows packed into a single
             1536×1872 atlas.
           </p>
-          <p className="text-slate-400 text-xs md:text-sm mb-5 md:mb-6">
+          <p className="text-ink-muted text-xs md:text-sm mb-5 md:mb-6">
             Swift · AppKit · generated and hand-QA'd sprite pipeline
           </p>
 
@@ -282,7 +282,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               {LEWIS_STRIP.map(({ animation, label }) => (
                 <div key={animation} className="flex flex-col items-center gap-2">
                   <LewisSprite animation={animation} scale={0.42} label={`Lewis ${label}`} />
-                  <span className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                  <span className="text-[11px] uppercase tracking-[0.14em] text-ink-muted">
                     {label}
                   </span>
                 </div>
@@ -312,7 +312,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               />
             </button>
             <div>
-              <p className="text-slate-400 text-sm mb-4">
+              <p className="text-ink-muted text-sm mb-4">
                 The packed result: 72 cells, nine rows, one sheet. Every frame was reviewed
                 on a contact sheet before it got here — silhouette, frame count, and the walk
                 cycle's contact poses all had to hold up at 40% scale, which is the only size
@@ -327,12 +327,12 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                   >
                     Wake Lewis
                   </button>
-                  <p className="text-slate-400 text-xs mt-2">
+                  <p className="text-ink-muted text-xs mt-2">
                     He'll walk along the bottom of this page.
                   </p>
                 </>
               ) : (
-                <p className="text-slate-400 text-xs">
+                <p className="text-ink-muted text-xs">
                   He walks along the bottom of this page on a mouse-driven screen.
                 </p>
               )}

@@ -185,7 +185,7 @@ async function main() {
   :root { --ground:#010309; --accent:#01f5d1; }
   *{box-sizing:border-box}
   body{margin:0;min-height:100svh;display:flex;align-items:center;background:var(--ground);
-    color:#e5e8ea;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:#f1f5f9;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
     line-height:1.6;-webkit-font-smoothing:antialiased}
   .wrap{max-width:34rem;margin:0 auto;padding:3rem 1.25rem}
   .kicker{font:500 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.2em;
@@ -198,7 +198,7 @@ async function main() {
     text-transform:uppercase;text-decoration:none;transition:background-color .2s,color .2s}
   .primary{background:var(--accent);color:#020617}
   .primary:hover{background:#9ef7ea}
-  .secondary{border:1px solid rgba(255,255,255,.15);color:#e5e8ea}
+  .secondary{border:1px solid rgba(255,255,255,.15);color:#f1f5f9}
   .secondary:hover{color:var(--accent);border-color:rgba(1,245,209,.4)}
   a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>

@@ -80,16 +80,16 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         href={`mailto:${email}`}
         className="flex min-w-0 flex-1 items-center gap-4 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
-        <span aria-hidden="true" className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-slate-950 group-hover:scale-110 group-hover:rotate-6">
+        <span aria-hidden="true" className="shrink-0 p-2.5 lg:p-3 bg-accent-deep/25 text-accent-br rounded-sm transition-all duration-300 group-hover:bg-accent group-hover:text-ink-inverse group-hover:scale-110 group-hover:rotate-6">
           <Mail size={22} />
         </span>
         <span className="text-left min-w-0">
-          <span className="block text-sm text-slate-400 font-medium">Email me</span>
-          <span className="block text-slate-100 font-semibold text-sm truncate group-hover:text-accent transition-colors">
+          <span className="block text-sm text-ink-muted font-medium">Email me</span>
+          <span className="block text-ink font-semibold text-sm truncate group-hover:text-accent transition-colors">
             {copied ? 'Copied to clipboard' : email}
           </span>
         </span>
-        <ArrowUpRight aria-hidden="true" size={18} className="ml-auto shrink-0 text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
+        <ArrowUpRight aria-hidden="true" size={18} className="ml-auto shrink-0 text-ink-faint opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-300" />
       </a>
 
       {/* The check stays visible once copied — it is a confirmation, not a
@@ -98,7 +98,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         type="button"
         onClick={handleCopy}
         aria-label={copied ? 'Email address copied to clipboard' : `Copy email address ${email}`}
-        className="relative shrink-0 grid h-11 w-11 place-items-center rounded-sm border border-white/10 text-slate-400 transition-colors hover:text-accent hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="relative shrink-0 grid h-11 w-11 place-items-center rounded-sm border border-white/10 text-ink-muted transition-colors hover:text-accent hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         {copied ? <Check size={18} className="text-accent" /> : <Copy size={18} />}
       </button>
