@@ -1392,11 +1392,15 @@ const App = () => {
             {/* Capped at the paragraph's width so the wipe spans the text. At
                 full shell width the text ends halfway across and is fully
                 shown in the first ~180ms, so it reads far faster than the
-                Explorations card below, whose fill spans the whole wipe. */}
-            <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl">
+                Explorations card below, whose fill spans the whole wipe.
+                Below md the mask is overridden, here and on the bar, so the
+                header is simply there:
+                it sits in view on arrival, alongside an HR Genie card whose
+                subtle rise read as no animation beside the wipe. */}
+            <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
               <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
               <p className="text-ink-body max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
-              <Reveal variant="grow-width">
+              <Reveal variant="grow-width" className="max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
                 <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
             </Reveal>
