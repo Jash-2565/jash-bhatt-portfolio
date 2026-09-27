@@ -699,7 +699,53 @@ const ProjectDetail = ({
                     content being typed out rather than arriving, and it was
                     the only place on the site with that entrance. */}
                 <div className="md:col-span-8">
-                  <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal max-w-[42rem]">{section.content}</p>
+                  {/* The section's thesis, set larger than the body. No quote
+                      marks: callouts are often paraphrases, and punctuating
+                      one as a quote would claim someone said it verbatim. */}
+                  {section.callout && (
+                    <figure className="m-0 mb-6 md:mb-8 flex gap-4 max-w-[42rem]">
+                      <span className={`w-1 flex-shrink-0 rounded-full ${project.sectionAccent}`} aria-hidden="true"></span>
+                      <div>
+                        <p className="text-xl md:text-2xl font-semibold text-white leading-snug">{section.callout.text}</p>
+                        {section.callout.attribution && (
+                          <figcaption className={`${ui.eyebrow} mt-3`}>{section.callout.attribution}</figcaption>
+                        )}
+                      </div>
+                    </figure>
+                  )}
+
+                  {section.content && (
+                    <p className="text-base md:text-lg text-slate-300 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-normal max-w-[42rem]">{section.content}</p>
+                  )}
+
+                  {/* Numbers that would otherwise sit mid-sentence, pulled out
+                      so they can be read at a glance. On a phone each is a row,
+                      number then label: three tiles in a two-column grid left
+                      one orphaned on a line of its own. */}
+                  {section.stats && (
+                    <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
+                      {section.stats.map((stat, i) => (
+                        <div key={i} className={`${ui.cardBase} p-4 md:p-5 flex flex-row-reverse justify-end items-center gap-4 sm:flex-col-reverse sm:items-start sm:justify-start sm:gap-2`}>
+                          <dt className={`${ui.eyebrow} !tracking-[0.12em] leading-relaxed`}>{stat.label}</dt>
+                          <dd className="m-0 min-w-[5.5rem] sm:min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight">{stat.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+
+                  {/* Short titled points. A grid of these scans far faster
+                      than the same content as long "Label — sentence" bullets. */}
+                  {section.cards && (
+                    <ul className="grid sm:grid-cols-2 gap-3 mb-8">
+                      {section.cards.map((card, i) => (
+                        <li key={i} className={`${ui.cardBase} p-5`}>
+                          <span className={`block h-1 w-6 mb-4 ${project.sectionAccent}`} aria-hidden="true"></span>
+                          <h3 className="text-base font-semibold text-white mb-2">{card.title}</h3>
+                          <p className="text-sm md:text-base text-slate-300 leading-relaxed">{card.body}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   {section.listItems && (
                     <ul className="space-y-3 mb-8 pl-1">
