@@ -34,7 +34,7 @@ import { PUBLIC_URL } from './utils/getBaseUrl';
 import { analyticsLocation } from './utils/analyticsRoute';
 import { parseLocation, routeToPath, hasLegacyHash, SITE_ORIGIN } from './utils/routes';
 import type { Route } from './utils/routes';
-import type { Project, MobilePage, View } from './types';
+import type { Project, MobilePage, View, LightboxImage } from './types';
 
 const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'about', 'contact'];
 const isMobilePage = (value: string): value is MobilePage =>
@@ -122,10 +122,6 @@ const INITIAL_PROJECT: Project | null =
     : null;
 const INITIAL_VIEW: View =
   INITIAL_ROUTE.view === 'project' && !INITIAL_PROJECT ? 'home' : INITIAL_ROUTE.view;
-
-/** What the lightbox is showing. The alt travels with the src so the dialog can
-    announce the image rather than the words "Full size view". */
-type LightboxImage = { src: string; alt: string };
 
 // --- Main Component ---
 const App = () => {
@@ -951,9 +947,9 @@ const App = () => {
                 loading="eager"
                 sizes="90vw"
               />
-              {selectedImage.alt && (
+              {(selectedImage.caption ?? selectedImage.alt) && (
                 <figcaption className="max-w-2xl px-4 text-center text-sm text-slate-300">
-                  {selectedImage.alt}
+                  {selectedImage.caption ?? selectedImage.alt}
                 </figcaption>
               )}
             </figure>

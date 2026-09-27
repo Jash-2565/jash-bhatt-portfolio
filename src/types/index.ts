@@ -80,8 +80,10 @@ export interface ProjectHeroTheme {
 /** What the lightbox needs to show and announce an image. */
 export interface LightboxImage {
   src: string;
-  /** Used as the image's alt text and shown as its caption. */
+  /** Used as the image's alt text, and shown as its caption when there is
+      no `caption`. */
   alt: string;
+  caption?: string;
 }
 
 export type ResponsiveImageProps = ImgHTMLAttributes<HTMLImageElement> & {

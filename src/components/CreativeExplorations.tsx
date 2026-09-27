@@ -78,7 +78,7 @@ function Thumb({
   return (
     <button
       type="button"
-      onClick={() => onImageClick({ src, alt: item.alt ?? '' })}
+      onClick={() => onImageClick({ src, alt: item.alt ?? '', caption: item.caption })}
       aria-label={item.alt ? `Open ${item.alt} full screen` : 'Open image full screen'}
       className={`${frame} block w-full cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
     >
