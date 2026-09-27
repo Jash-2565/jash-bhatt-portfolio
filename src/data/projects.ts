@@ -188,7 +188,12 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows for a workforce of thousands. The unit’s mandate is company-wide: an initiative internally called FINAI / Employee Blu, aiming to deploy 800+ autonomous agents across business functions. My job was to design and build the HR-facing agents inside that system — collectively branded HR Genie.",
+          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows. They sit inside FINAI / Employee Blu, a company-wide push toward 800+ autonomous agents, under the name HR Genie.",
+          stats: [
+            { value: "800+", label: "Agents on the FINAI roadmap" },
+            { value: "3", label: "HR agents I built" },
+            { value: "17", label: "Topics I migrated to Gen 2" }
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Scale.svg`,
@@ -198,16 +203,11 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
-          content: "Bajaj Finance's HR operations ran on CHROMA, a form-based HRMS — every leave request, reimbursement claim, or document lookup meant navigating multi-step forms, manual validation, and email follow-ups. Simple, repetitive tasks were consuming real time for a workforce of thousands. The Agentic AI Unit's mandate was to replace these form-based flows with conversational agents employees could just talk to."
+          content: "HR ran on CHROMA, a form-based HRMS. Every leave request, reimbursement, or document lookup meant multi-step forms, manual validation, and email follow-ups, for a workforce of thousands."
         },
         {
           title: "Apply Leave",
-          content: "A conversational flow letting employees check leave balances and submit requests — Privilege Leave, Sick Leave, Casual Leave, Loss of Pay, Maternity, and Vacation Leave — each with its own eligibility rules and validation logic. Connected live to the CHROMA HRMS via API, with balance checks and error handling built directly into the conversation rather than a form.",
-          listItems: [
-            "Live balance lookups per leave type via the CHROMA API",
-            "Type-specific eligibility rules and validation, handled conversationally",
-            "Error handling surfaced in-chat instead of a rejected form submission"
-          ],
+          content: "Employees check balances and apply for any of six leave types in conversation. Each type's eligibility rules run live against the CHROMA API, and errors are explained in the chat instead of bouncing a form.",
           imageLayout: "row",
           imageHeight: "md:h-[36rem]",
           images: [
@@ -219,12 +219,7 @@ export const projects: Project[] = [
         },
         {
           title: "Creche Reimbursement",
-          content: "An agent that reads submitted invoices using OCR, validates them against city-tier-based reimbursement caps, checks child age eligibility, and processes the claim — turning a manual document-review process into a same-session conversational one.",
-          listItems: [
-            "OCR extraction straight from the uploaded invoice — no manual data entry",
-            "City-tier reimbursement caps and child-age eligibility validated automatically",
-            "Claim resolved in the same chat session it was opened in"
-          ],
+          content: "The agent reads the uploaded invoice with OCR, checks it against city-tier caps and the child's age, and settles the claim in the same session.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-Flow.svg`,
@@ -234,12 +229,7 @@ export const projects: Project[] = [
         },
         {
           title: "Local Conveyance Claim",
-          content: "Matches claims against a vendor master list, calculates reimbursement based on transport mode, and was the first topic I built natively on Copilot Studio's newer no-code architecture.",
-          listItems: [
-            "Claims cross-checked against a vendor master list",
-            "Reimbursement calculated in Power Fx based on transport mode and distance",
-            "First topic built end-to-end on Copilot Studio's Gen 2 architecture"
-          ],
+          content: "Claims are matched against a vendor master list and priced in Power Fx by transport mode. It was the first topic I built natively on Copilot Studio's Gen 2 architecture.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conveyance-Architecture.svg`,
@@ -248,8 +238,15 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "The Turning Point: Leading a Platform Migration",
-          content: "Partway through the internship, I identified a structural problem: the agents were being built on Copilot Studio's older, node-based Gen 1 architecture — powerful, but harder to scale and maintain as the number of agents grew. I evaluated Copilot Studio's newer Gen 2 architecture, a no-code, skill-based approach, built a proof-of-concept, and made the case to leadership that migrating would pay off in maintainability and speed for the 800+ agent roadmap ahead. The recommendation was adopted. I went on to lead the full migration of 17 topics from Gen 1 to Gen 2, and built the Local Conveyance Claim agent natively on the new architecture as a template for future builds. This was the shift in the internship from executing what I was asked to build to shaping how the team builds going forward — from builder to decision-influencer.",
+          title: "Leading a Platform Migration",
+          callout: { text: "From building what I was asked to, to shaping how the team builds." },
+          content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent on an 800+ roadmap.",
+          cards: [
+            { title: "Spotted it", body: "Gen 1 worked, but it would not scale to the roadmap ahead." },
+            { title: "Proved it", body: "I built a proof of concept on Gen 2's no-code, skill-based approach." },
+            { title: "Pitched it", body: "I made the case to leadership, and the recommendation was adopted." },
+            { title: "Led it", body: "I migrated all 17 topics, and built Local Conveyance on Gen 2 as the template." }
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg`,
@@ -258,19 +255,9 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Skills in Practice",
-          content: "This internship pulled together design, engineering, and stakeholder skills across a real enterprise system rather than a single discipline.",
-          listItems: [
-            "Conversational flow & interaction design — mapping multi-step business logic into natural, low-friction dialogue",
-            "Technical implementation — Power Fx formulas, YAML topic logic, Adaptive Card JSON for rich in-chat UI",
-            "Systems thinking — architecture evaluation, migration planning, cross-topic consistency",
-            "API integration — live connections to enterprise HRMS and document storage systems",
-            "Stakeholder communication — presenting a technical recommendation (Gen 1 → Gen 2) to leadership and getting buy-in"
-          ]
-        },
-        {
           title: "Reflection",
-          content: "Designing for a system where the interface is a conversation, not a screen, changed how I think about validation and trust — every rule a form usually enforces silently now has to be said out loud, clearly, in the moment it matters. Leading the Gen 1 to Gen 2 migration also taught me that the most valuable design work isn't always the next feature — sometimes it's stepping back and questioning the foundation everyone else is building on."
+          callout: { text: "Every rule a form enforces silently now has to be said out loud." },
+          content: "When the interface is a conversation, validation has to be clear in the moment it matters. And the migration taught me that the most valuable design work is sometimes questioning the foundation everyone else is building on."
         }
       ]
     }
@@ -295,7 +282,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "ClassFlow is a full-stack AI scheduling assistant built specifically for professors. Instead of manually building 45+ calendar events at the start of every semester, professors simply describe their course in a chat — topics, meeting days, times, and dates — and ClassFlow generates the entire semester schedule automatically. It is a complete, end-to-end product built and iterated on as a solo project.",
+          content: "ClassFlow is an AI scheduling assistant for professors. They describe a course in a chat, and it builds the whole semester's calendar. I designed and built it end to end, on my own.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Landing.webp`,
@@ -305,34 +292,33 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
-          content: "At the start of every semester, professors face the same invisible labour: planning an entire course calendar by hand. For a typical 15-week course meeting three times a week, that is 45+ events to create — topics mapped to weeks, recurring sessions set up, assignment deadlines tracked, all entered into a calendar one by one. It is repetitive, error-prone, and burns hours that professors don't have."
-        },
-        {
-          title: "The Solution",
-          content: "ClassFlow removes that burden entirely. A professor describes their course once in a natural language chat — topics by week, meeting days and times, semester dates — and Gemini generates the full semester schedule instantly. The result is a structured, visual, editable calendar ready to export to Google Calendar or download as a .ics file.",
-          imageLayout: "stack",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Import-Chatbot.webp`,
-              caption: "Import Data screen: AI chatbot (left), live Parsed Plan with schedule pattern and events (center), Assignment tracker (right)"
-            }
+          content: "Every semester starts with the same invisible labour: typing an entire course into a calendar, one event at a time.",
+          stats: [
+            { value: "15", label: "Weeks in a typical course" },
+            { value: "3", label: "Sessions a week" },
+            { value: "45+", label: "Events entered by hand" }
           ]
         },
         {
           title: "How It Works",
-          content: "The entire app is built around a three-step flow: describe, review, export.",
-          listItems: [
-            "Describe — the professor types their course details into the AI chatbot: topics by week, meeting days and times, semester start and end dates.",
-            "Parse — Gemini 2.5 Flash extracts a recurring schedule pattern, maps topics to specific class sessions, and populates a live Parsed Plan panel in real time.",
-            "Review — the professor switches to View Schedule and sees the full semester across three views: month grid, hourly week grid, or searchable event list.",
-            "Refine — events can be edited directly on the calendar, or adjusted via follow-up chat (“Move the midterm to March 20”, “Add office hours every Thursday at 2pm”).",
-            "Export — one-click push to Google Calendar via OAuth with a live progress bar, or download as a standards-compliant .ics file for Outlook, Apple Calendar, or any client.",
-            "Persist — authenticated users have all courses and schedules auto-saved to Firestore across sessions."
+          content: "Describe the course once. Everything after that is review.",
+          cards: [
+            { title: "Describe", body: "Type topics by week, meeting days, times, and semester dates into the chat." },
+            { title: "Review", body: "Gemini fills a live Parsed Plan, then the full semester appears as a calendar." },
+            { title: "Refine", body: "Edit events directly, or just ask: “Move the midterm to March 20.”" },
+            { title: "Export", body: "Push to Google Calendar with a live progress bar, or download an .ics file. The .ics is written by hand, with no calendar library." }
+          ],
+          imageLayout: "stack",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Import-Chatbot.webp`,
+              caption: "Chat on the left, the Parsed Plan filling in beside it, assignments on the right."
+            }
           ]
         },
         {
           title: "Calendar Views",
-          content: "Once a schedule is generated, professors can explore it in three different views — each designed for a different purpose.",
+          content: "Three views of the same schedule: the semester, the week, and every event in order.",
           imageLayout: "grid",
           // One per row. At half column width these month and week grids came
           // out ~400px even on a 1920 screen, which made the very cells the
@@ -342,86 +328,52 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Calendar-March.webp`,
-              caption: "Month grid — full semester at a glance. Assignment deadlines appear as color-coded markers (DUE: Midterm Essay visible on March 1)."
+              caption: "Month. Deadlines show as colour-coded markers, like DUE: Midterm Essay on March 1."
             },
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Week-View.webp`,
-              caption: "Hourly week grid — shows exact session times (10:00–11:00am), today's date highlighted, and Mon/Wed/Fri pattern clearly visible."
-            }
-          ]
-        },
-        {
-          title: "Event List View",
-          content: "The searchable list view gives professors a chronological breakdown of every event across all their courses — with date, time, topic, and course label all visible at once. Useful for reviewing the full semester quickly or finding specific sessions.",
-          images: [
+              caption: "Week. Exact session times, with the Mon/Wed/Fri pattern visible at a glance."
+            },
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-List-View.webp`,
-              caption: "List view — every session listed chronologically with date, time, topic, and course tag. Fully searchable."
+              caption: "List. Every session across every course, searchable."
             }
           ]
         },
         {
-          title: "AI Chatbot Architecture",
-          content: "The chatbot is the core of ClassFlow — not a wrapper around a chat UI, but a structured AI pipeline that turns natural language into calendar data. Every message sent to Gemini 2.5 Flash includes the full current schedule state, a persistent chat memory object, the last 12 conversation turns, and date/time hints pre-extracted via regex.",
+          title: "Under the Hood",
+          callout: { text: "The AI reads the request. Plain code builds the calendar, so the output is always predictable." },
+          content: "Every message to Gemini 2.5 Flash carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions.",
           imageLayout: 'row',
           imageHeight: 'h-[15rem] sm:h-[22rem]',
           imageCrop: true,
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Chatbot-Only.webp`,
-              caption: "The AI chatbot panel — natural language input drives the full schedule generation pipeline"
+              caption: "The chatbot panel, the only way schedules get in."
             }
           ],
-          listItems: [
-            "Response types: answer (info only), clarify (asking for missing info), or update (modify the schedule).",
-            "Supports replace, append, remove, and targeted update operations on individual events.",
-            "Returns a recurringConfig object (days[], startDate, endDate, startTime, endTime) that drives the schedule generation engine.",
-            "Maintains a chatMemory object across turns — topics, times, recurring config — so professors never have to repeat context.",
-            "Handles API overload with exponential backoff retry: 500ms → 1000ms → 1800ms before surfacing an error.",
-            "Pending updates shown in-chat as a “Review & Apply” card with Apply, Discard, and Replace options before any state change."
+          cards: [
+            { title: "Three kinds of reply", body: "Each response either answers, asks for what's missing, or updates the schedule." },
+            { title: "Review before apply", body: "Changes arrive as a card to apply, discard, or replace. Nothing changes silently." },
+            { title: "Nothing dropped", body: "Extra topics go into an event's notes. Empty sessions become placeholders." },
+            { title: "Fails gracefully", body: "If the API is overloaded, it retries at 500ms, 1s, and 1.8s before showing an error." }
           ]
         },
         {
-          title: "Schedule Generation Engine",
-          content: "Once the AI extracts a recurring config from the chat, a custom scheduling engine maps topics to class sessions deterministically — no AI involvement at this step, so the output is always predictable and correct.",
-          listItems: [
-            "generateRecurringDates() iterates across the full date range, filters to the configured weekdays, and assigns week numbers to each session.",
-            "Topics tagged by week (e.g. week: 3) are distributed evenly across that week's available class slots.",
-            "If a week has more topics than sessions, extras are appended to the notes field of existing events rather than dropped.",
-            "If sessions outnumber topics, slots are created as blank placeholders the professor can fill manually.",
-            "Assignment deadlines are injected as special marker events: Given (blue), Check-in (amber), Due (orange) — visible on the calendar alongside regular sessions."
-          ]
-        },
-        {
-          title: "Key Features",
-          content: "Every feature in ClassFlow was built around a real professor workflow — not what looks impressive in a demo.",
-          listItems: [
-            "AI chatbot as the only input method — no file uploads, no forms, just conversation.",
-            "Multi-course support — each course gets its own color, isolated state, and appears in a shared calendar view.",
-            "Three calendar views: month grid, hourly week grid (7am–10pm), and searchable event list.",
-            "Conflict detection — flags overlapping sessions across courses with a badge count and highlighted rows in list view.",
-            "Undo stack — per-course snapshots (last 10 actions) for safe experimentation and mistake recovery.",
-            "Assignment tracker — professors add Given, Check-in, and Due dates per assignment; these inject as color-coded marker events in the calendar.",
-            "Google Calendar export — OAuth 2.0 flow with batched API calls and a real-time progress bar showing export status.",
-            ".ics download — custom VEVENT serialization, importable into any calendar client.",
-            "Guest mode — full scheduling functionality without login; login with Firebase to save across sessions."
-          ]
-        },
-        {
-          title: "Tech Stack",
-          content: "Built entirely as a solo project over multiple iterations.",
-          listItems: [
-            "React 19 + Vite 7 — component-based frontend with fast HMR development",
-            "Tailwind CSS + Lucide React — utility-first styling with consistent iconography",
-            "Google Gemini 2.5 Flash — AI model handling both the chatbot responses and schedule parsing",
-            "Firebase Auth + Firestore — Google sign-in and per-user cloud persistence",
-            "Google Calendar API — OAuth 2.0 token flow with batched event creation requests",
-            "Custom ICS serialization — VEVENT generation without any third-party calendar library"
+          title: "Built for Real Workflows",
+          content: "Features came from how professors actually plan, not what demos well.",
+          cards: [
+            { title: "Many courses, one calendar", body: "Each course gets its own colour, and clashes between them are flagged." },
+            { title: "Undo", body: "The last 10 changes per course, so trying things is safe." },
+            { title: "Assignment tracker", body: "Given, check-in, and due dates appear on the calendar as markers." },
+            { title: "Sign in with Google", body: "Courses and schedules save to your account and follow you across sessions. Guest mode is there for a first try." }
           ]
         },
         {
           title: "What I Learned",
-          content: "ClassFlow taught me what it actually means to build an AI-powered product — not just call an API and display a response, but architect a system where AI output is structured, validated, and applied to real state. The hardest problem was not making the AI generate a schedule. It was making it feel trustworthy: handling edge cases, surfacing pending changes before applying them, keeping memory across turns, and recovering gracefully when the model returns unexpected output. A professor is trusting this tool with their entire semester. That shaped every design and engineering decision."
+          callout: { text: "A professor is trusting this tool with their entire semester." },
+          content: "Getting the AI to generate a schedule was the easy part. The hard part was making it trustworthy: showing changes before applying them, remembering context, and recovering when the model returns something unexpected."
         }
       ]
     }
@@ -1172,7 +1124,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns that into five slides you forget by January; the raw export is 120,547 rows nobody reads.\n\nI wanted the thing in between — something that reads like a magazine feature and tells you what a top ten cannot. Eight chapters, every number computed from the export, shipped as one HTML file.\n\nIt keeps Wrapped’s second person on purpose. The history is mine, but the format it is arguing with talks to you, and dropping that voice would have lost the argument.",
+          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns that into five slides you forget by January; the raw export is 120,547 rows nobody reads.\n\nI wanted the thing in between: a magazine feature in eight chapters, every number computed from the export, shipped as one HTML file. It keeps Wrapped's second person on purpose, because that is the format it is arguing with.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
@@ -1190,18 +1142,23 @@ export const projects: Project[] = [
         },
         {
           title: "Getting the Numbers Honest First",
-          content: "Most of the work happened before anything was drawn. Spotify re-chunks your whole history on every export, so the twelve files overlapped heavily; timestamps arrive in UTC for an account that listens in IST. And the export credits only the album artist, so one play in six goes to the wrong name.",
-          listItems: [
-            "12 export files deduplicated to 120,547 distinct plays",
-            "98,111 counted streams, on Spotify's own 30-second threshold",
-            "UTC → IST before any question about time of day",
-            "16,253 featured-artist plays parsed from track titles — an alternate view, never a silent merge",
-            "Every published figure re-derived by a second script that shares no code with the builder"
+          content: "Most of the work happened before anything was drawn.",
+          stats: [
+            { value: "120,547", label: "Distinct plays after dedup" },
+            { value: "98,111", label: "Streams past the 30-second rule" },
+            { value: "1 in 6", label: "Plays credited to the wrong artist" }
+          ],
+          cards: [
+            { title: "Deduplicated", body: "Spotify re-chunks the whole history on every export, so the twelve files overlapped heavily." },
+            { title: "UTC to IST", body: "Timestamps were converted before any question about time of day." },
+            { title: "Fixed credits", body: "16,253 featured-artist plays parsed from track titles, shown as an alternate view, never silently merged." },
+            { title: "Checked twice", body: "Every published figure is re-derived by a second script that shares no code with the builder." }
           ]
         },
         {
           title: "What the Data Knew That I Didn't",
-          content: "The findings I kept are the ones no ranking would surface. I heard Khalid four times in 2019, then not once for 663 days — and 1,584 times since. Of the 5,676 songs in the library, 226 of them account for a third of everything I have played.",
+          callout: { text: "Four plays of Khalid in 2019. Then nothing for 663 days. Then 1,584." },
+          content: "The findings I kept are the ones no ranking would surface. Of 5,676 songs in the library, 226 account for a third of everything I have played.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Surprises.webp`,
@@ -1211,21 +1168,25 @@ export const projects: Project[] = [
         },
         {
           title: "Picking the Chart for the Question",
-          content: "Each chart follows from the question rather than from what was easy to draw.\n\n“How much of the last seven years had music in it?” is a question about density across a long span, so it became eight concentric rings — one per year, one sliver per day. 2,469 lit days, 67 silent ones.\n\n“Do songs get retired, or just played less?” is a question about a lifetime, so the ten most-played got a row each across seven years. All ten are still in rotation.",
+          content: "Each chart follows from the question, not from what was easy to draw.",
+          cards: [
+            { title: "How much of seven years had music in it?", body: "A question about density over a long span, so eight concentric rings, one sliver per day." },
+            { title: "Do songs get retired, or just played less?", body: "A question about a lifetime, so the ten most-played get a row each across seven years." }
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Calendar.webp`,
-              caption: "2,469 days with music, wound into eight rings. 2019 is the innermost, 2026 the outermost."
+              caption: "2,469 days with music, 67 without, wound into eight rings. 2019 is the innermost, 2026 the outermost."
             },
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Songs.webp`,
-              caption: "Ten songs, seven years, one row each — the dot grows with that year's play count."
+              caption: "Ten songs, seven years, one row each. All ten are still in rotation."
             }
           ]
         },
         {
           title: "Composing It, Not Laying It Out",
-          content: "Twenty charts in a row is a report, and nobody finishes a report. So the eight chapters are announced rather than stacked — a number, a sentence, a lot of air — and the sections carry deliberately different weights, from full-height beats down to one-line asides.\n\nColor holds it together. The surface and type scale are fixed for the whole page; each chapter re-binds only an accent and a nine-step ramp, and every chart inside inherits it. Every accent clears 4.5:1, every ramp is monotonic in lightness.",
+          content: "Twenty charts in a row is a report, and nobody finishes a report. So chapters are announced rather than stacked, with a number, a sentence, and a lot of air, and sections carry deliberately different weights.\n\nColour holds it together. Each chapter re-binds only an accent and a nine-step ramp that every chart inherits. Every accent clears 4.5:1.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Artists.webp`,
@@ -1239,7 +1200,13 @@ export const projects: Project[] = [
         },
         {
           title: "Shipping It as One File",
-          content: "The finished page is one HTML file — the data, the extras, and every piece of album artwork inlined as base64. It opens from a disk with the network switched off.\n\nThe headlines are generated too: the copy assembles around whatever the payload says won. Re-run the pipeline against a fresh export and the sentences change with it.",
+          content: "The headlines are generated too. Re-run the pipeline on a fresh export and the sentences change with it.",
+          cards: [
+            { title: "One file", body: "Data and album artwork inlined. It opens from a disk with the network off." },
+            { title: "No third parties", body: "No server, no build step, and no outside requests once the page is open." },
+            { title: "Reduced motion", body: "One observer drives every reveal. With reduced motion, the numbers land finished." },
+            { title: "A dated snapshot", body: "On purpose: the live API is missing fields half the piece depends on." }
+          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Week.webp`,
@@ -1249,12 +1216,6 @@ export const projects: Project[] = [
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Artist-Arcs.webp`,
               caption: "Eight artists on one shared scale, so the comparison between them is real rather than per-panel."
             }
-          ],
-          listItems: [
-            "One file, no server, no build step at read time",
-            "Artwork inlined as base64 — no third-party requests once the page is open",
-            "A single observer for every reveal and counter; reduced motion lands on the finished numbers",
-            "A dated snapshot by design — the live endpoint is missing the fields half the piece depends on"
           ],
           cta: {
             text: "Open the live piece",

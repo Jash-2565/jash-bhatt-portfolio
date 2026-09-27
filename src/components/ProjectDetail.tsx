@@ -727,7 +727,7 @@ const ProjectDetail = ({
                       {section.stats.map((stat, i) => (
                         <div key={i} className={`${ui.cardBase} p-4 md:p-5 flex flex-row-reverse justify-end items-center gap-4 sm:flex-col-reverse sm:items-start sm:justify-start sm:gap-2`}>
                           <dt className={`${ui.eyebrow} !tracking-[0.12em] leading-relaxed`}>{stat.label}</dt>
-                          <dd className="m-0 min-w-[5.5rem] sm:min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight">{stat.value}</dd>
+                          <dd className="m-0 flex-shrink-0 whitespace-nowrap min-w-[5.5rem] sm:min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight">{stat.value}</dd>
                         </div>
                       ))}
                     </dl>
