@@ -19,6 +19,7 @@ import BackToTop from './components/BackToTop';
 import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
 import CopyEmail from './components/CopyEmail';
+import CopyEmailLink from './components/CopyEmailLink';
 import ContactLinkCard from './components/ContactLinkCard';
 import HeroParticles from './components/HeroParticles';
 import CircuitGround from './components/CircuitGround';
@@ -1393,8 +1394,7 @@ const App = () => {
           <section id="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
             {/* Capped at the paragraph's width so the wipe spans the text. At
                 full shell width the text ends halfway across and is fully
-                shown in the first ~180ms, so it reads far faster than the
-                Explorations card below, whose fill spans the whole wipe.
+                shown in the first ~180ms of a 780ms wipe and reads as a snap.
                 Below md the mask is overridden, here and on the bar, so the
                 header is simply there:
                 it sits in view on arrival, alongside an HR Genie card whose
@@ -1538,14 +1538,22 @@ const App = () => {
 
           {/* Everything outside the five flagship case studies — demos, older
               app work, and coursework — in a section of its own so Work reads
-              as the strongest projects and nothing else. Mounts on the Work
-              page below `lg`. */}
+              as the strongest projects and nothing else. Short bottom padding
+              at every breakpoint — `lg:pb-8` too, or ui.section's lg:py-24
+              wins: the Explorations card that follows reads as the end of
+              this list, and the full section padding left a 96px hole. */}
           {showsPage('work') && secondaryProjects.length > 0 && (
-            <section id="archive" aria-labelledby="archive-heading" className={`${ui.section} pt-0 ${ui.shell} ${ui.scrollMt}`}>
-              <Reveal variant="rise-soft" className="mb-8">
+            <section id="archive" aria-labelledby="archive-heading" className={`${ui.section} pt-0 pb-6 sm:pb-8 lg:pb-8 ${ui.shell} ${ui.scrollMt}`}>
+              {/* The Selected Projects wipe, tuned for a much shorter heading.
+                  The box fits the text (~180px) so the whole wipe is spent on
+                  it, over 500ms rather than 780ms: at 780ms it crawled, and on
+                  that header's 672px box the text was shown in ~110ms and
+                  barely read as a reveal. Unlike that header it still animates
+                  on phones — it is scrolled to, not on screen on arrival. */}
+              <Reveal className="mb-8 w-fit" duration={500}>
                 <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
                 <h2 id="archive-heading" className={`${ui.h2} font-display text-ink`}>More work</h2>
-                <Reveal variant="grow-width" delay={180} duration={900}>
+                <Reveal variant="grow-width">
                   <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
                 </Reveal>
               </Reveal>
@@ -1556,7 +1564,11 @@ const App = () => {
                   const thumbnail = project.content.thumbnailImage ?? project.content.heroImage;
                   const containedBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
                   return (
-                    <Reveal variant="rise" key={project.id} delay={index * 80} className="h-full">
+                    // Staggered by column, not by position: each row enters
+                    // as it scrolls in, and an index-based delay left the last
+                    // row trailing by up to 400ms. The left card and the
+                    // Explorations card below go at once, the right one 80ms on.
+                    <Reveal variant="rise" key={project.id} delay={(index % 2) * 80} className="h-full">
                       <a
                         href={`#${project.slug}`}
                         id={`project-${project.id}`}
@@ -1610,7 +1622,7 @@ const App = () => {
               this scroll. */}
           {showsPage('work') && (
             <section aria-label="Beyond case studies" className={`${ui.shell} pb-14 sm:pb-20`}>
-              <Reveal>
+              <Reveal variant="rise">
                 <a
                   href="#explorations"
                   onClick={(event) => onInPageLink(event, () => openExplorations())}
@@ -1621,7 +1633,7 @@ const App = () => {
                     <h3 className="mt-1.5 text-lg font-bold text-ink group-hover:text-accent group-active:text-accent transition-colors">Creative Explorations</h3>
                     <p className="mt-1.5 text-sm text-ink-muted">Photoshop, brand motion, AI generations, and photography.</p>
                   </div>
-                  <ArrowRight size={20} className="shrink-0 text-accent" />
+                  <ArrowRight size={20} className="shrink-0 text-ink-faint group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
                 </a>
               </Reveal>
             </section>
@@ -1847,14 +1859,21 @@ const App = () => {
           {/* This was one credit line. The footer is where someone who read to
               the end looks for a way to get in touch, and there wasn't one. */}
           <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs">
-            <a href={`mailto:${CONTACT_EMAIL}`} className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
-              Email
+            {/* The ↗ appears on hover or keyboard focus, sliding in from the
+                left. It keeps its space while hidden, so the links don't
+                shift. Only where there is hover: on touch it stays visible, as
+                the sign these lead off the page. Same pattern as the gallery
+                captions in CreativeExplorations. Email copies the address
+                instead of leaving, so its glyph is a copy icon. */}
+            <CopyEmailLink
+              email={CONTACT_EMAIL}
+              className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+            />
+            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="group min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
+              LinkedIn<span aria-hidden="true" className="ml-1 inline-block transition-all duration-200 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">↗</span>
             </a>
-            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
-              LinkedIn<span aria-hidden="true"> ↗</span>
-            </a>
-            <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
-              Résumé<span aria-hidden="true"> ↗</span>
+            <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="group min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
+              Résumé<span aria-hidden="true" className="ml-1 inline-block transition-all duration-200 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">↗</span>
             </a>
           </nav>
           {/* `text-balance` so the credit doesn't leave "scratch." alone on a
