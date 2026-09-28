@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 // refuses (older Safari, non-secure origins).
 export function useCopyText(text: string, resetMs = 1800) {
   const [copied, setCopied] = useState(false);
-  const timer = useRef<number>();
+  const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
