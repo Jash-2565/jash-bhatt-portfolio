@@ -274,6 +274,17 @@ label {
   100% { transform: scale(26); opacity: 0; }
 }
 
+/* Lewis's idle loop as pure CSS, for surfaces with no script to drive the
+   sprite: the crash screen (and, in its own inline copy, the static 404).
+   Row 0 of the atlas, 6 frames at 0.18s; the element sets --lewis-cell to
+   its displayed cell width. */
+.lewis-idle {
+  animation: lewis-idle 1.08s steps(6) infinite;
+}
+@keyframes lewis-idle {
+  to { background-position-x: calc(var(--lewis-cell) * -6); }
+}
+
 /* Pulsing availability dot. */
 .pulse-dot {
   position: relative;
@@ -549,7 +560,8 @@ label {
   .accent-shimmer,
   .pulse-dot::after,
   .marquee-track,
-  .copy-ripple {
+  .copy-ripple,
+  .lewis-idle {
     animation: none !important;
   }
   .tilt-card,
