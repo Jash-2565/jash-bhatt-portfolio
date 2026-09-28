@@ -19,7 +19,7 @@
      - ink:         headings and primary text           #f1f5f9
      - ink-body:    paragraph copy                      #cbd5e1
      - ink-muted:   metadata, eyebrows, small print     #94a3b8
-     - ink-faint:   decorative only (icons, separators) #475569 — 3.0:1 on
+     - ink-faint:   decorative only (icons, separators) #475569 — 2.7:1 on
                     the ground, so never use it for text someone must read.
      - ink-inverse: text on a cyan or white fill        #020617 */
   --ink-rgb: 241 245 249;
