@@ -21,6 +21,7 @@ import CursorGlow from './components/CursorGlow';
 import CopyEmail from './components/CopyEmail';
 import ContactLinkCard from './components/ContactLinkCard';
 import HeroParticles from './components/HeroParticles';
+import CircuitGround from './components/CircuitGround';
 import MenuIcon from './components/MenuIcon';
 import CreativeExplorations from './components/CreativeExplorations';
 import { useIsMobile } from './hooks/useIsMobile';
@@ -869,15 +870,16 @@ const App = () => {
     /* Flex column with `mt-auto` on the footer: on a page short enough to fit
        the screen — Contact — the footer sits at the bottom instead of floating
        with a band of dead background beneath it. Every other child here is
-       fixed-position, so only the content wrapper and the footer are in flow. */
-    <div className="min-h-[100svh] flex flex-col bg-[var(--ground)] text-ink selection:bg-accent selection:text-ink-inverse transition-colors duration-300">
+       fixed-position, so only the content wrapper and the footer are in flow.
+       `relative` anchors the circuit ground, which spans the full page height. */
+    <div className="relative min-h-[100svh] flex flex-col bg-[var(--ground)] text-ink selection:bg-accent selection:text-ink-inverse transition-colors duration-300">
       <Analytics {...analyticsLocation(analyticsRoute)} />
       {/* Same `/work/[slug]` grouping as Analytics, so vitals for the case studies
           pool into one row rather than eleven thin ones. */}
       <SpeedInsights route={analyticsLocation(analyticsRoute).route} />
-      {/* Static circuit-trace substrate. No wash, no drift, no scroll tracking —
-          it is structure, not atmosphere. Sits behind everything; all page
-          content is lifted above it with `relative z-10`. */}
+      {/* Circuit-trace ground: one board the height of the page, scrolling
+          with it. Sits behind everything; all page content is lifted above it
+          with `relative z-10`. */}
       {/* First focusable thing in the document. It used to sit after the
           back-to-top button and the pet's dismiss button, so the first two Tab
           stops were an invisible control and a decoration — which is precisely
@@ -898,7 +900,7 @@ const App = () => {
       >
         Skip to content
       </a>
-      <div className="schematic-ground" aria-hidden="true" />
+      <CircuitGround />
       <CursorGlow />
       {/* Every width: the mobile nav is a hamburger menu, so nothing else takes
           a long page back to the top. */}
