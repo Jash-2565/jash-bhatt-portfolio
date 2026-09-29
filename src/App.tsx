@@ -1242,8 +1242,13 @@ const App = () => {
               </div>
 
               <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
-                {operatorStats.map((stat) => (
-                  <div key={stat.label} className="surface surface-marks surface-hover rounded-2xl p-6 h-full">
+                {/* The hero's fade-up, continuing its stagger after the buttons
+                    (380ms). On a wrapper, not the card: fadeInUp fills `both`,
+                    so its final transform would stay on the card and override
+                    .surface-hover's 2px lift. */}
+                {operatorStats.map((stat, index) => (
+                  <div key={stat.label} className="animate-fade-in-up" style={{ animationDelay: `${440 + index * 60}ms` }}>
+                  <div className="surface surface-marks surface-hover rounded-2xl p-6 h-full">
                       {/* These values are phrases, not numbers, and at 2.2rem all
                           three wrapped with a single orphaned word on line two.
                           Sized to hold one line instead. The binding value is
@@ -1253,6 +1258,7 @@ const App = () => {
                           Re-measure if any operatorStats value gets longer. */}
                       <div className="text-xs uppercase tracking-[0.16em] text-ink-muted mb-1.5">{stat.label}</div>
                       <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-ink [text-wrap:balance]">{stat.value}</div>
+                  </div>
                   </div>
                 ))}
               </div>
@@ -1398,8 +1404,12 @@ const App = () => {
                 Below md the mask is overridden, here and on the bar, so the
                 header is simply there:
                 it sits in view on arrival, alongside an HR Genie card whose
-                subtle rise read as no animation beside the wipe. */}
-            <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
+                subtle rise read as no animation beside the wipe.
+                The -18% trigger line: at the default -10% this wiped in at
+                the bottom edge while the hero still filled the screen, and
+                was over before anyone looked down; at -25% it lagged the
+                scroll. */}
+            <Reveal rootMargin="0px 0px -18% 0px" className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
               <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
               <p className="text-ink-body max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" className="max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
@@ -1429,10 +1439,15 @@ const App = () => {
                 const needsBackdrop = isPlaceholder || fitsInside;
 
                 return (
+                  // Waits for 20% of the card, not the default 12%: these are
+                  // ~540px tall, so at 12% the fade had finished while most
+                  // of the card — HR Genie especially, arriving under the
+                  // hero — was still below the fold. 30% lagged the scroll.
                   <Reveal
                     key={project.id}
                     variant="rise"
                     delay={Math.min(index * 60, 240)}
+                    threshold={0.2}
                   >
                   <a
                     href={`#${project.slug}`}
