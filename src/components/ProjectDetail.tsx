@@ -11,6 +11,9 @@ import { usePointerFine } from '../hooks/usePointerFine';
 import { ARKANOID_CODE } from '../data/arkanoidCode';
 import { YOLOV8_CODE } from '../data/yolov8Code';
 import { MOVIE_RECS_CODE } from '../data/movieRecsCode';
+import { getImageSources } from '../utils/imageSources';
+import { PUBLIC_URL } from '../utils/getBaseUrl';
+import videoManifest from '../data/videoManifest.json';
 
 /**
  * Each demo with the Python it was ported from. The listings are imported here
@@ -65,6 +68,17 @@ const zoomProps = (
   };
 };
 
+/** Width ÷ height of a project image or GIF clip, from the build manifests.
+    Falls back to 4:3 for anything they don't list (SVGs, remote files). */
+const videoEntries = videoManifest as Record<string, { w?: number; h?: number }>;
+const mediaAspect = (src: string) => {
+  const image = getImageSources(src);
+  if (image) return image.width / image.height;
+  const key = (PUBLIC_URL && src.startsWith(PUBLIC_URL) ? src.slice(PUBLIC_URL.length) : src).replace(/\.gif$/i, '');
+  const video = videoEntries[key];
+  return video?.w && video?.h ? video.w / video.h : 4 / 3;
+};
+
 /**
  * The affordance that says a picture opens full screen.
  *
@@ -74,8 +88,8 @@ const zoomProps = (
  * any more either: the CSS cursor that was carrying the hint on desktop is
  * suppressed site-wide by the custom cursor.
  */
-const ZoomHint = () => (
-  <span className="absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-ink pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100">
+const ZoomHint = ({ className = '' }: { className?: string }) => (
+  <span className={`absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-ink pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100 ${className}`}>
     <ZoomIn size={11} aria-hidden="true" />
     <span className="md:hidden">Tap to zoom</span>
     <span className="hidden md:inline">Click to zoom</span>
@@ -223,19 +237,29 @@ const ProjectDetail = ({
     const snippetPreClass =
       'min-h-0 flex-1 overflow-auto overscroll-contain p-4 text-[11px] leading-relaxed sm:text-xs md:text-sm font-mono whitespace-pre';
 
+    // The demo leads at full width; the source is there for anyone who wants
+    // it, folded away. Side by side, a 740-line file got as much room as the
+    // thing people came to try — and on a phone it came first.
     return (
-      <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className={snippetContainerClass}>
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-            <span className="text-xs uppercase tracking-widest text-ink-muted">
-              Python Snippet
-              <span className="md:hidden normal-case tracking-normal text-ink-muted"> · swipe →</span>
-            </span>
-            <CopyButton text={code} />
-          </div>
-          <pre className={snippetPreClass}>{code}</pre>
-        </div>
+      <div className="mt-8 flex flex-col gap-4">
         <Suspense fallback={<DemoLoader />}><Demo /></Suspense>
+        <details className="group">
+          <summary className={`${ui.chipBase} inline-flex items-center gap-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>
+            <ArrowRight size={13} aria-hidden="true" className="transition-transform group-open:rotate-90" />
+            <span className="group-open:hidden">View the Python source</span>
+            <span className="hidden group-open:inline">Hide the Python source</span>
+          </summary>
+          <div className={`${snippetContainerClass} mt-4`}>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+              <span className="text-xs uppercase tracking-widest text-ink-muted">
+                Python Snippet
+                <span className="md:hidden normal-case tracking-normal text-ink-muted"> · swipe →</span>
+              </span>
+              <CopyButton text={code} />
+            </div>
+            <pre className={snippetPreClass}>{code}</pre>
+          </div>
+        </details>
       </div>
     );
   };
@@ -243,16 +267,55 @@ const ProjectDetail = ({
   const renderImages = (section: Section) => {
     if (!section.images) return null;
 
+    if (section.imageLayout === 'justified') {
+      // One row at a single height that fills the column: each tile grows in
+      // proportion to its aspect ratio, so portrait and landscape media sit
+      // side by side uncropped — on a phone too, where they get small but
+      // stay in one row and open full screen on tap.
+      return (
+        <div className="mt-10 flex gap-2 sm:gap-3 md:gap-4 items-start">
+          {section.images.map((img, i) => {
+            const aspect = mediaAspect(img.src);
+            return (
+              <figure
+                key={`justified-${i}`}
+                className="m-0 min-w-0 basis-0 flex flex-col gap-2 sm:gap-3"
+                style={{ flexGrow: aspect }}
+              >
+                <div
+                  className={`group/media relative w-full rounded-lg overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md ${ZOOMABLE}`}
+                  style={{ aspectRatio: aspect }}
+                  {...zoomProps(img.src, false, img.caption, onImageClick)}
+                >
+                  <ResponsiveImage
+                    src={img.src}
+                    alt={img.caption}
+                    captioned
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    sizes="(min-width: 640px) 40vw, 90vw"
+                  />
+                  {/* The chip is wider than the smallest tiles on a phone. */}
+                  <ZoomHint className="max-sm:hidden" />
+                </div>
+                <figcaption className="text-xs sm:text-sm text-ink-muted text-center">{img.caption}</figcaption>
+              </figure>
+            );
+          })}
+        </div>
+      );
+    }
+
     if (section.imageLayout === 'storyboard') {
       return (
         <div className="mt-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
             {section.images.map((img, i) => {
               const isPlaceholder = !img.src || img.src.includes('placeholder');
               return (
-                <figure key={`story-${i}`} className="m-0 min-w-0 lg:min-w-[14rem] flex flex-col gap-3">
+                <figure key={`story-${i}`} className="m-0 min-w-0 lg:min-w-[14rem] flex flex-col gap-2 sm:gap-3">
                   <div
-                    className={`group/media relative rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-44 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
+                    className={`group/media relative rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-36 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
                     {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                   >
                     {isPlaceholder ? (
@@ -268,7 +331,7 @@ const ProjectDetail = ({
                           captioned
                           className="w-full h-full object-cover object-center"
                           loading="lazy"
-                          sizes="(min-width: 1280px) 400px, (min-width: 640px) 45vw, 90vw"
+                          sizes="(min-width: 1280px) 400px, 45vw"
                         />
                         <ZoomHint />
                       </>
@@ -284,61 +347,42 @@ const ProjectDetail = ({
     }
 
     if (section.imageLayout === 'techSplit') {
-      const [rectangleImage, ...squareImages] = section.images;
-      if (!rectangleImage) return null;
-
-      const renderMediaCard = (
-        img: { src: string; caption: string; fullWidth?: boolean; borderless?: boolean; whiteBg?: boolean; bgClass?: string },
-        heightClass: string,
-        key: string
-      ) => {
-        const isPlaceholder = !img.src || img.src.includes('placeholder');
-        return (
-          <figure key={key} className="m-0 flex flex-col gap-3">
-            <div
-              className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${heightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
-              {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
-            >
-              {isPlaceholder ? (
-                <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
-                  <PhotoIcon size={36} className="mb-3 opacity-60" />
-                  <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
-                </div>
-              ) : (
-                <>
-                  <ResponsiveImage
-                    src={img.src}
-                    alt={img.caption}
-                    captioned
-                    className="w-full h-full object-cover object-center"
-                    loading="lazy"
-                    sizes="(min-width: 1024px) 620px, 90vw"
-                  />
-                  <ZoomHint />
-                </>
-              )}
-            </div>
-            <figcaption className="text-sm text-ink-muted text-center">{img.caption}</figcaption>
-          </figure>
-        );
-      };
-
+      // Every clip that lands here is the same 480×848 portrait, so they sit
+      // side by side at one size. The old lead-plus-two-stacked split made
+      // three equal clips look unequal and left a column of dead space.
       return (
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-          {/* Every clip that lands in this layout is portrait (480×848), so a
-              landscape box cover-cropped roughly two thirds of each frame
-              away. The lead tile keeps the same 9:16 as the two beside it. */}
-          <div className="lg:col-span-7">
-            {renderMediaCard(rectangleImage, 'aspect-[9/16] max-h-[34rem] mx-auto', 'tech-rect')}
-          </div>
-          {/* `aspect-[9/16]` rather than a fixed landscape height: both of the
-              clips that land here are 480×848 portrait, and a cover crop into a
-              short box was throwing away about two thirds of every frame. */}
-          <div className="lg:col-span-5 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-1 gap-4">
-            {squareImages.slice(0, 2).map((img, i) =>
-              renderMediaCard(img, 'aspect-[9/16] max-h-[26rem] mx-auto', `tech-square-${i}`)
-            )}
-          </div>
+        <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-4 items-start">
+          {section.images.map((img, i) => {
+            const isPlaceholder = !img.src || img.src.includes('placeholder');
+            return (
+              <figure key={`tech-${i}`} className="m-0 min-w-0 flex flex-col gap-2 sm:gap-3">
+                <div
+                  className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md aspect-[9/16] w-full ${isPlaceholder ? '' : ZOOMABLE}`}
+                  {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
+                >
+                  {isPlaceholder ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
+                      <PhotoIcon size={36} className="mb-3 opacity-60" />
+                      <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                    </div>
+                  ) : (
+                    <>
+                      <ResponsiveImage
+                        src={img.src}
+                        alt={img.caption}
+                        captioned
+                        className="w-full h-full object-cover object-center"
+                        loading="lazy"
+                        sizes="(min-width: 640px) 30vw, 90vw"
+                      />
+                      <ZoomHint />
+                    </>
+                  )}
+                </div>
+                <figcaption className="text-xs sm:text-sm text-ink-muted text-center">{img.caption}</figcaption>
+              </figure>
+            );
+          })}
         </div>
       );
     }
@@ -637,9 +681,16 @@ const ProjectDetail = ({
             {project.content.sections.map((section, idx) => (
               <div key={idx} className="surface surface-marks rounded-3xl border-l-2 border-accent/50 p-5 sm:p-8 md:p-10">
                 <div className="mb-6">
-                  <div className={`${ui.eyebrow} tracking-[0.35em] mb-3`}>Live demo</div>
+                  {section.demoId && <div className={`${ui.eyebrow} tracking-[0.35em] mb-3`}>Live demo</div>}
                   <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-ink mb-3">{section.title}</h2>
                   <p className="text-base md:text-lg text-ink-body leading-relaxed whitespace-pre-line max-w-[42rem]">{section.content}</p>
+                  {section.labels && (
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {section.labels.map((label, i) => (
+                        <li key={i} className={ui.chipBase}>{label}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 {section.listItems && (
                   <ul className="space-y-3 mb-4 pl-1">
