@@ -15,6 +15,9 @@ type RevealProps = {
   className?: string;
   style?: CSSProperties;
   threshold?: number;
+  /** IntersectionObserver rootMargin; the default starts a reveal once the
+      element crosses the bottom 10% of the screen. */
+  rootMargin?: string;
 };
 
 // Each wipe is a solid mask anchored to one edge, grown from nothing to full
@@ -72,8 +75,9 @@ export default function Reveal({
   className = '',
   style,
   threshold,
+  rootMargin,
 }: RevealProps) {
-  const { ref, inView } = useInView<HTMLElement>({ threshold });
+  const { ref, inView } = useInView<HTMLElement>({ threshold, rootMargin });
   const [settled, setSettled] = useState(false);
 
   useEffect(() => {
