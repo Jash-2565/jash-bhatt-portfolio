@@ -897,7 +897,7 @@ export const projects: Project[] = [
     title: "SolarLink",
     category: "Service Design",
     timeline: "Service design course, 2025",
-    description: "A service design concept to help housing societies confidently adopt solar — the gap isn't infrastructure, it's decision-making.",
+    description: "Designing the infrastructure for future-proof renewable energy services: a service design concept that helps housing societies confidently adopt solar.",
     tags: ["Service Design", "Sustainability", "Systems Thinking"],
     color: "bg-[#D9F43F]/80",
     accentColor: "text-[#D8F36A]",
@@ -911,31 +911,23 @@ export const projects: Project[] = [
       team: ["Khushii Mehta", "Kaushal Gajipara"],
       sections: [
         {
-          title: "SDG 7 Context",
-          content: "SDG 7: Affordable & Clean Energy (Sub-goal 7.2) focuses on increasing the share of renewable energy in the global energy mix.\n\nIndia has vast rooftop solar potential, especially in urban housing societies, yet community-level adoption remains slow. The gap is not infrastructure. It's decision-making."
-        },
-        {
           title: "Overview",
-          content: "SolarLink is a service design concept that reframes solar adoption from a technology challenge into a decision-making problem.\n\nThe project explores how housing societies can move from confusion and indecision to shared clarity and confidence before any installation begins."
+          content: "India has vast rooftop solar potential in its urban housing societies, yet they rarely adopt it. SolarLink is a service design concept, aligned with SDG 7.2, that treats this as a decision problem rather than a technology one: it helps a society move from confusion to shared confidence before any installation begins."
         },
         {
-          title: "Problem Statement",
-          content: "Housing societies want solar, but struggle to move forward. Solar keeps becoming “next year’s agenda.”",
-          listItems: [
-            "Confusion and misinformation about how solar works",
-            "Multiple stakeholders with conflicting opinions",
-            "Fear of making the wrong decision for everyone",
-            "Lack of neutral guidance — only vendor-driven sales"
-          ]
-        },
-        {
-          title: "Research & Understanding",
-          content: "India has an estimated 124 GW of rooftop solar potential. Only ~11 GW has been installed — less than 10% utilized.\n\nKey observations from research:",
-          listItems: [
-            "Residential societies contribute less than 20% of rooftop solar installations",
-            "Decision-making in societies takes 2–3x longer than individual homes",
-            "60%+ residents cite lack of clear information as a bigger barrier than cost",
-            "Committee members fear irreversible decisions that affect the whole building"
+          title: "The Problem",
+          callout: { text: "Solar doesn't fail because people don't care. It fails because deciding together is hard." },
+          content: "Costs are falling and subsidies exist, yet solar keeps becoming next year's agenda. Society decisions take 2–3x longer than individual homes, and over 60% of residents cite unclear information as a bigger barrier than cost.",
+          stats: [
+            { value: "124 GW", label: "India's rooftop solar potential" },
+            { value: "~11 GW", label: "Actually installed" },
+            { value: "<20%", label: "Of installs from housing societies" }
+          ],
+          cards: [
+            { title: "Fragmented information", body: "What residents hear is conflicting, and mostly comes from vendors." },
+            { title: "Clashing opinions", body: "Many stakeholders, no shared picture to argue from." },
+            { title: "Fear of the wrong call", body: "Committees won't risk an irreversible decision for the whole building." },
+            { title: "No neutral guide", body: "The only advice available is a sales pitch." }
           ],
           images: [
             {
@@ -946,12 +938,7 @@ export const projects: Project[] = [
         },
         {
           title: "Primary User: Rajesh Nair",
-          content: "Rajesh Nair is the Secretary of Sagar Heights CHS — a 15-floor, 50-flat cooperative society in Ghatkopar East, Mumbai. He manages energy, maintenance, and vendor contracts through a single managing committee, with monthly electricity bills described as “excessively high.”\n\nAs an informal decision-maker, Rajesh is practical and risk-averse. His biggest concern is not price — it is making the wrong call for the entire building.",
-          listItems: [
-            "Goals: Reduce electricity costs, digitize maintenance, create a self-managed sustainable community",
-            "Pain points: High bills, no centralized tracking, difficulty managing vendor reliability and after-sales service",
-            "Needs: Reliable data on feasibility and savings, a guided decision framework, and long-term vendor support"
-          ],
+          content: "Rajesh is Secretary of Sagar Heights, a 50-flat cooperative society in Ghatkopar, Mumbai, with electricity bills residents call excessively high. He is practical and risk-averse. His biggest worry is not price, it is making the wrong call for the entire building.",
           images: [
             {
               src: `${PUBLIC_URL}/images/SolarLink/SolarLink-Persona-Rajesh.webp`,
@@ -962,7 +949,7 @@ export const projects: Project[] = [
         },
         {
           title: "Current Solar Journey",
-          content: "Before SolarLink, a housing society attempting solar adoption faces 7 sequential stages — each requiring coordination between vendors, government bodies, and committee members. The process is fragmented, unclear, and easy to abandon at any point.\n\nThis is what we set out to redesign.",
+          content: "Today a society faces seven sequential stages, each needing coordination between vendors, government bodies, and the committee. It is easy to abandon at any point. This is what we set out to redesign.",
           images: [
             {
               src: `${PUBLIC_URL}/images/SolarLink/SolarLink-Current-Journey.webp`,
@@ -972,12 +959,15 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Core Insight",
-          content: "Clean energy is not a technology problem. It's a decision problem.\n\nSolar adoption fails not because people don't care — but because deciding together is hard.\n\nHousing societies don't need persuasion. They need confidence.\n\nAdoption must begin before panels: with clarity, shared understanding, and trust."
-        },
-        {
-          title: "Design Question",
-          content: "How might we move housing societies from confusion to clarity before any solar installation begins?",
+          title: "Design Direction",
+          callout: { text: "Housing societies don't need persuasion. They need confidence." },
+          content: "How might we move housing societies from confusion to clarity before any solar installation begins? The answer had to be:",
+          cards: [
+            { title: "Neutral", body: "Not vendor-driven, so trust can come before execution." },
+            { title: "Collective", body: "Built for a committee deciding together, not one buyer." },
+            { title: "Low-risk", body: "Reduce the fear around long-term commitments." },
+            { title: "Discussable", body: "Make solar something residents can understand and talk about." }
+          ],
           imageLayout: "grid",
           images: [
             {
@@ -999,24 +989,9 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Design Direction",
-          content: "The solution needed to:",
-          listItems: [
-            "Be neutral, not vendor-driven",
-            "Support collective decision-making",
-            "Reduce fear around long-term commitments",
-            "Make solar understandable and discussable",
-            "Build trust before execution"
-          ]
-        },
-        {
-          title: "The Solution: SolarLink",
-          content: "SolarLink is a service ecosystem designed to guide housing societies through solar adoption with confidence.\n\nWe are not a solar vendor. We are a neutral facilitator.",
-          listItems: [
-            "Understand solar",
-            "Discuss options together",
-            "Decide confidently"
-          ],
+          title: "The Solution: Solar Sunday",
+          callout: { text: "We are not a solar vendor. We are a neutral facilitator." },
+          content: "SolarLink's core intervention is Solar Sunday: a one-day, on-site event that turns the society terrace into a calm space to explore solar. Nobody is being sold to, so questions are safe, myths get surfaced instead of argued with, and the committee decides from the same picture.",
           images: [
             {
               src: `${PUBLIC_URL}/images/SolarLink/Solar-Sunday-2.webp`,
@@ -1026,17 +1001,14 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Core Intervention: Solar Sunday",
-          content: "Solar Sunday is a one-day, on-site experience designed to help housing societies explore solar without pressure.\n\nInstead of a sales presentation, it turns the society terrace into a calm, interactive learning space. Solar adoption begins with understanding, and this is where that understanding gets built.",
-          listItems: [
-            "Questions are safe — nobody is being sold to, so nobody has to pretend they already know.",
-            "Myths are surfaced rather than argued with.",
-            "Understanding is shared, so the committee decides from the same picture."
-          ]
-        },
-        {
           title: "Key Experience Touchpoints",
-          content: "Solar Confession Booth: A private, judgment-free space where residents openly express doubts and myths. Most common confession: “I don’t really understand solar.” Surfacing uncertainty early reduces resistance later.\n\nAR Energy Visualizer: Residents see projected costs, savings, and energy generation mapped onto their own building. Solar becomes tangible, not abstract.\n\nPledge Wall: Residents make small, non-binding commitments to show intent and interest. Small signals build collective ownership.\n\nNo selling. Just shared understanding.",
+          content: "No selling. Just shared understanding.",
+          cards: [
+            { title: "Solar Confession Booth", body: "A private space to admit doubts. The most common: “I don't really understand solar.”" },
+            { title: "AR Energy Visualizer", body: "Costs, savings, and generation mapped onto the residents' own building." },
+            { title: "Pledge Wall", body: "Small, non-binding commitments that build collective ownership." },
+            { title: "Guided Decision Framework", body: "Structured comparisons replace opinion-based debate." }
+          ],
           imageLayout: "stack",
           images: [
             {
@@ -1053,12 +1025,12 @@ export const projects: Project[] = [
         },
         {
           title: "Redefined Journey",
-          content: "Solar does not move faster by pushing harder. It moves faster when people feel ready — which is what changes between these two journeys.",
-          listItems: [
-            "Fragmented information becomes structured learning.",
-            "Vendor bias becomes neutral facilitation.",
-            "Endless discussion becomes transparent comparison.",
-            "Delayed decisions become confidence before approvals."
+          content: "Solar doesn't move faster by pushing harder. It moves when people feel ready, so success is measured in decision friction and trust, not panels installed.",
+          cards: [
+            { title: "Structured learning", body: "Instead of fragmented information." },
+            { title: "Neutral facilitation", body: "Instead of vendor bias." },
+            { title: "Transparent comparison", body: "Instead of endless discussion." },
+            { title: "Confidence before approvals", body: "Instead of delayed decisions." }
           ],
           images: [
             {
@@ -1069,17 +1041,8 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Impact & SDG Alignment",
-          content: "SolarLink supports SDG 7: Affordable & Clean Energy by addressing the decision layer of adoption rather than the technology layer. The impact is not measured in panels installed.",
-          listItems: [
-            "Reduced decision friction — the committee has a process instead of a standing argument.",
-            "Increased trust — neutral facilitation removes the vendor's thumb from the scale.",
-            "Higher likelihood of adoption — readiness, not persuasion, is what converts."
-          ]
-        },
-        {
           title: "Explore the Design Board",
-          content: "The full FigJam board contains the complete research synthesis, affinity mapping, service blueprint, and storyboard developed across the team project.",
+          content: "The full research synthesis, affinity map, blueprint, and storyboard from the team project.",
           embedUrl: "https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/board/cqhXU5e7apFNog7yvWeDx6/Service-design-final-_-Team-5",
           embedWide: true,
           cta: {
@@ -1089,17 +1052,8 @@ export const projects: Project[] = [
         },
         {
           title: "What I Learned",
-          content: "This project strengthened my understanding that:",
-          listItems: [
-            "Sustainability adoption is a systems problem",
-            "Designing for confidence is as important as efficiency",
-            "Service design can unlock stalled behaviors",
-            "Community decisions require facilitation, not persuasion"
-          ]
-        },
-        {
-          title: "Why This Project Matters in My Portfolio",
-          content: "SolarLink reflects my approach to design: insight-led, not solution-first; human-centered at a systems scale; focused on clarity, trust, and behavior.\n\nIt demonstrates how design can enable sustainable change by reshaping how decisions are made."
+          callout: { text: "Community decisions need facilitation, not persuasion." },
+          content: "Sustainability adoption is a systems problem, and designing for confidence matters as much as designing for efficiency. SolarLink is the clearest example of how I work: insight first, then the solution."
         }
       ]
     }
