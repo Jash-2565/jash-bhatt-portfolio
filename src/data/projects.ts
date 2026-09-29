@@ -628,34 +628,27 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "Revela is a handheld wand that guides children aged 4–7 to their own misplaced things by getting warmer — literally, in color — as they get closer. There are no screens and no app, which was the constraint the whole project hangs off.\n\nThe brief was a tangible interface for a life skill. We picked losing things because it is the one children are told off for and given no tool to fix, and because the feedback a child needs there is continuous rather than binary: not “found / not found” but “warmer, warmer, here.” I owned the electronics end — the ESP32 builds, the LED feedback logic, the power system, and the enclosure that had to survive a seven-year-old."
+          content: "Revela is a handheld wand that guides children aged 4–7 to their misplaced things by getting warmer, literally in colour, as they get closer. No screens, no app.\n\nThe brief was a tangible interface for a life skill. We picked losing things because children get told off for it but are never given a tool to fix it. I owned the electronics: the ESP32 builds, the LED feedback logic, the power system, and an enclosure that had to survive a seven-year-old."
         },
         {
-          title: "How Might We",
-          content: "How might we help young children find their belongings independently, in a way that feels playful, magical, and intuitive?"
-        },
-        {
-          title: "Design Rationale",
-          content: "During an unstructured discussion, we found that children learn best through movement, touch, and tangible feedback. They are especially engaged by objects that respond with visual cues when they interact with them. Our goal was to make the technology fade into the background of a child's daily life, supporting the development of life skills rather than becoming a distraction."
-        },
-        {
-          title: "System Requirements",
-          content: "From early research, we defined strict requirements:",
-          listItems: [
-            "Zero screens or apps",
-            "Immediate feedback loop (<100 ms perceived latency)",
-            "Continuous (not binary) guidance",
-            "Readable by children with no instructions",
-            "Low power consumption",
-            "Safe, enclosed hardware"
+          title: "The Brief",
+          callout: { text: "How might we help young children find their belongings on their own, in a way that feels playful and magical?" },
+          content: "Children learn best through movement, touch, and objects that respond to them, so the technology had to fade into the background. That set strict requirements:",
+          cards: [
+            { title: "Zero screens", body: "No display and no app, anywhere in the system." },
+            { title: "Instant", body: "Under 100 ms perceived latency, so movement and light feel linked." },
+            { title: "Continuous", body: "Not “found or not found”, but “warmer, warmer, here.”" },
+            { title: "No instructions", body: "Readable by a four-year-old on first pick-up." },
+            { title: "Low power", body: "Enough battery to last through play." },
+            { title: "Safe", body: "Fully enclosed hardware in a child's hands." }
           ]
         },
         {
           title: "System Architecture",
-          content: "Revela is composed of a handheld explorer wand and distributed beacon nodes.",
-          listItems: [
-            "Explorer Wand: ESP32-S3 XIAO, NeoPixel LED strip, 3.7V Li-Po with onboard charging, physical power switch",
-            "Beacon Nodes: ESP32-C2 modules attached to objects emitting proximity signals"
+          content: "A handheld wand and small beacons attached to the things that go missing.",
+          cards: [
+            { title: "Explorer Wand", body: "ESP32-S3 XIAO, a NeoPixel strip, and a 3.7V Li-Po with onboard charging and a physical switch." },
+            { title: "Beacon Nodes", body: "ESP32-C2 modules on each object, broadcasting a proximity signal." }
           ],
           images: [
             {
@@ -666,7 +659,7 @@ export const projects: Project[] = [
         },
         {
           title: "Interaction Loop",
-          content: "Physical movement changes signal strength, which is processed on-device and translated into LED color and animation. The loop runs continuously and guides user movement in real time.",
+          content: "As the child moves, signal strength changes. The wand turns that into colour and animation on the spot, continuously, so the light steers where they walk next.",
           imageLayout: "row",
           imageHeight: "max-w-[20rem] md:h-[24rem]",
           images: [
@@ -678,7 +671,7 @@ export const projects: Project[] = [
         },
         {
           title: "Proximity-to-Feedback Mapping",
-          content: "Instead of numeric or directional output, Revela uses perceptual mapping.",
+          content: "No numbers and no arrows. Distance maps straight to colour.",
           imageLayout: "storyboard",
           images: [
             {
@@ -708,18 +701,33 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Power & Performance Constraints",
-          content: "Engineering tradeoffs focused on battery life, heat, and responsiveness.",
-          listItems: [
-            "Balanced LED brightness vs battery life",
-            "Minimized heat buildup in a small enclosure",
-            "Ensured fast response without draining power",
-            "Avoided wireless complexity that could fail in real environments"
+          title: "Building the Wand",
+          content: "I turned the chosen form into a build-ready prototype: planning the internal layout, routing the wiring, and checking grip, balance, and how visible the light was in a child's hand.",
+          imageLayout: "justified",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/Revela/wand-creation.gif`,
+              caption: "Wand creation process"
+            },
+            {
+              src: `${PUBLIC_URL}/images/Revela/wamd-creation-2.webp`,
+              caption: "Wand creation detail"
+            },
+            {
+              src: `${PUBLIC_URL}/images/Revela/tag-printing.gif`,
+              caption: "Tag printing process"
+            }
           ]
         },
         {
-          title: "Technical Testing & Validation",
-          content: "We validated both electronics reliability and interaction behavior through iterative bench and in-context testing, including soldering quality checks and distance-response tuning across different ranges.",
+          title: "Testing, and What Broke",
+          content: "We tested soldering quality on the bench and tuned distance response in context. Most of what failed came down to power and space.",
+          cards: [
+            { title: "Unstable power", body: "ESP32s failed on shaky power delivery, and charging modules degraded with use." },
+            { title: "LEDs", body: "Strips failed after repeated reassembly, and uneven diffusion made colours harder to read." },
+            { title: "Wiring stress", body: "Tight internal space kept straining the connections." },
+            { title: "Heat vs battery", body: "Brightness had to be balanced against battery life and heat in a small enclosure." }
+          ],
           imageLayout: "techSplit",
           images: [
             {
@@ -737,52 +745,9 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Technical Failures",
-          content: "Multiple rounds of hardware and form iteration were required to resolve reliability and ergonomics together.",
-          listItems: [
-            "ESP32 failures from unstable power delivery",
-            "LED malfunctions after repeated reassembly",
-            "Charging modules degrading after prolonged use",
-            "Wiring stress from tight internal constraints",
-            "LED diffusion inconsistencies affecting readability"
-          ]
-        },
-        {
-          title: "My Technical Contributions",
-          content: "I built and integrated embedded hardware systems, implemented LED feedback logic tied to proximity signals, designed interaction states, integrated battery + charging systems, and tested responsiveness in real environments."
-        },
-        {
-          title: "Prototype Form Creation",
-          content: "After ideation, I translated the selected form direction into a build-ready prototype by planning internal layout, routing wiring paths, and validating grip, balance, and visibility through hands-on assembly and testing.",
-          imageLayout: "mixed",
-          imageHeight: "md:h-[24rem]",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/Revela/wand-creation.gif`,
-              caption: "Wand creation process"
-            },
-            {
-              src: `${PUBLIC_URL}/images/Revela/wamd-creation-2.webp`,
-              caption: "Wand creation detail"
-            },
-            {
-              src: `${PUBLIC_URL}/images/Revela/tag-printing.gif`,
-              caption: "Tag printing process",
-              fullWidth: true
-            }
-          ]
-        },
-        {
-          title: "Design Validation (Systems + UX)",
-          content: "Revela applies core HCI principles: immediate feedback, clear mapping, strong affordance, and constrained interaction — creating a low-error, low-friction experience."
-        },
-        {
-          title: "Outcome & Reflection",
-          content: "Revela demonstrates how embedded systems can replace screen-based interfaces while delivering continuous, meaningful feedback. The project reinforced that great embedded systems disappear into the experience. Future iterations would explore multi-beacon environments, adaptive sensitivity tuning, and improved enclosure manufacturability."
-        },
-        {
-          title: "Why This Project Matters",
-          content: "Revela sits at the intersection of embedded systems, human-centered interaction, and physical computing. It demonstrates my ability to design end-to-end systems where hardware, firmware, and experience are developed together."
+          title: "Reflection",
+          callout: { text: "Great embedded systems disappear into the experience." },
+          content: "Immediate feedback, clear mapping, and a single thing to do made Revela hard to use wrong. Next, I'd explore rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
         }
       ]
     }
@@ -1202,34 +1167,25 @@ export const projects: Project[] = [
       sections: [
         {
           title: "YOLOv8 Live Object Detection",
-          content: "Turn on your camera and this runs a real neural network in your browser — no server, no upload, nothing leaves your device. The Python workflow uses Ultralytics YOLO for webcam inference; for the web, I exported the model to ONNX so it runs entirely client-side via WebAssembly with real-time bounding-box overlays.",
-          listItems: [
-            "Runs fully on-device — the video feed never leaves your machine",
-            "Threaded capture & inference in the original Python build",
-            "ONNX export + WebAssembly runtime for live in-browser detection"
-          ],
+          content: "Turn on your camera and a real neural network runs in your browser. Nothing is uploaded: I exported the YOLOv8 model to ONNX, and it runs through WebAssembly on your device.",
+          labels: ["Runs on your device", "ONNX + WebAssembly", "11 MB, loaded on start"],
           demoId: "yolov8"
         },
         {
           title: "Python Arcade: Ultimate Arkanoid",
-          content: "A classic arcade build written in Python, mirrored here as a playable JavaScript demo that preserves the feel of the original logic and visuals.",
-          listItems: ["Physics-based ball motion", "Power-ups and scoring system", "Live playable demo"],
+          content: "An arcade game I wrote in Python, rewritten in JavaScript so you can play it here with the same physics and feel.",
+          labels: ["Ball physics", "Power-ups", "Scoring"],
           demoId: "arkanoid"
         },
         {
           title: "Movie Recommendation Engine",
-          content: "A content-based recommender that blends genres, directors, cast, and country into a single feature vector, then ranks similar films using cosine similarity.",
-          listItems: ["CountVectorizer-style bag of words", "Cosine similarity ranking", "Fuzzy title matching"],
+          content: "Pick a film and it finds similar ones. Genres, director, cast, and country are blended into one feature vector, then ranked by cosine similarity.",
+          labels: ["Bag of words", "Cosine similarity", "Fuzzy title search"],
           demoId: "movie-recs"
         },
         {
           title: "Why These Run In The Browser",
-          content: "All three started as Python scripts on my own machine, and all three are here because a portfolio that asks you to take its word for it is worth less than one you can poke at.\n\nPorting them taught me where that line actually falls. The detector was worth the work — exporting YOLOv8 to ONNX and running it through WebAssembly means the video never leaves your device, which is a privacy property, not just a performance one. The recommender was worth it because cosine similarity over five thousand rows is genuinely fast in JavaScript. The arcade game was a straight rewrite, and the honest answer is that it is a port rather than the original Python.",
-          listItems: [
-            "On-device inference is a design decision as much as a technical one — nothing to upload means nothing to explain.",
-            "The model is int8-quantized to 11MB and only fetched when you press start; the page itself stays light.",
-            "The dataset behind the recommender loads on demand for the same reason."
-          ]
+          content: "All three started as Python scripts on my laptop. They're here because a portfolio you can poke at is worth more than one you have to take on trust.\n\nRunning the detector on-device is a privacy decision as much as a technical one: nothing to upload means nothing to explain. The model and the recommender's dataset only load when you ask for them, so the page stays light."
         }
       ]
     }

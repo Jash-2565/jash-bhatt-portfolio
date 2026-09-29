@@ -16,14 +16,16 @@ export interface Section {
   cta?: { text: string; url: string };
   embedUrl?: string;
   embedWide?: boolean;
-  imageLayout?: 'row' | 'stack' | 'mixed' | 'grid' | 'techSplit' | 'storyboard';
+  imageLayout?: 'row' | 'stack' | 'mixed' | 'grid' | 'techSplit' | 'storyboard' | 'justified';
   /** `grid` only: one image per row instead of two. For dense UI screenshots
       whose detail is unreadable at half column width. */
   gridWide?: boolean;
   imageHeight?: string;
   imageCrop?: boolean;
-  /** A playable demo, shown beside its Python source (see DEMO_CODE in ProjectDetail). */
+  /** A playable demo, with its Python source folded away beneath it (see DEMOS in ProjectDetail). */
   demoId?: 'arkanoid' | 'yolov8' | 'movie-recs';
+  /** Short chips under the body — for facts too small to earn a card. */
+  labels?: string[];
 }
 
 export interface ProjectContent {
