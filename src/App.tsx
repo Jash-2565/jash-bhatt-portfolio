@@ -409,8 +409,10 @@ const App = () => {
    */
   const showsPage = (page: MobilePage) => !isMobile || mobilePage === page;
 
-  /** Explorations is a sub-page of Work, so the nav keeps Work marked there. */
-  const isHomeNavContext = currentView === 'home' || currentView === 'explorations';
+  /** The nav item to mark. On the home pages it follows the scroll; a case
+      study and Explorations both sit under Work, so Work stays marked there.
+      Only the marking — each item still does what it did when clicked. */
+  const activeNavItem = currentView === 'home' ? activeSection : 'work';
 
   const handleNextProject = () => {
     if (selectedProject) {
@@ -713,11 +715,11 @@ const App = () => {
   // Active-nav underline — recalc when active section, view, or resize changes
   useEffect(() => {
     const recalc = () => {
-      if (!isHomeNavContext || !navItemsRef.current) {
+      if (!navItemsRef.current) {
         setUnderline((prev) => ({ ...prev, visible: false }));
         return;
       }
-      const activeBtn = navButtonRefs.current[activeSection];
+      const activeBtn = navButtonRefs.current[activeNavItem];
       if (!activeBtn) {
         setUnderline((prev) => ({ ...prev, visible: false }));
         return;
@@ -731,9 +733,17 @@ const App = () => {
       });
     };
     recalc();
+    // Again once the web fonts land: measured in the fallback face, the
+    // underline sat ~6px off its item on any page loaded straight into a
+    // marked item, such as a case study.
+    let live = true;
+    document.fonts?.ready.then(() => { if (live) recalc(); });
     window.addEventListener('resize', recalc);
-    return () => window.removeEventListener('resize', recalc);
-  }, [activeSection, currentView, isHomeNavContext]);
+    return () => {
+      live = false;
+      window.removeEventListener('resize', recalc);
+    };
+  }, [activeNavItem]);
 
   // Close mobile menu on outside click or Escape
   useEffect(() => {
@@ -988,8 +998,7 @@ const App = () => {
                     ref={(el) => { navButtonRefs.current[item.toLowerCase()] = el; }}
                     onClick={() => scrollToSection(item.toLowerCase())}
                     className={`flex items-center min-h-11 px-1 rounded-sm text-base font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                      // Explorations sits under Work, so Work stays marked there.
-                      activeSection === item.toLowerCase() && isHomeNavContext
+                      activeNavItem === item.toLowerCase()
                         ? 'text-accent'
                         : 'text-ink-body hover:text-accent-br'
                     }`}
@@ -1070,10 +1079,11 @@ const App = () => {
             <div className="px-3 pt-3 pb-2 space-y-1">
               {['Home', 'Work', 'About', 'Contact'].map((item) => {
                 const page = item.toLowerCase();
-                // Explorations is reached from Work, so Work stays marked there.
-                const isCurrent = currentView === 'explorations'
-                  ? page === 'work'
-                  : currentView === 'home' && sectionForAnchor(mobilePage) === page;
+                // A case study and Explorations sit under Work, so Work stays
+                // marked there.
+                const isCurrent = currentView === 'home'
+                  ? sectionForAnchor(mobilePage) === page
+                  : page === 'work';
                 return (
                   <button
                     key={item}
