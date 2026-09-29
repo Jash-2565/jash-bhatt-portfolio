@@ -217,9 +217,6 @@ const ProjectDetail = ({
 
   const projectHeroTheme = PROJECT_HERO_THEMES[project.slug] ?? DEFAULT_PROJECT_HERO_THEME;
   const isPythonCodes = project.slug === 'python-codes';
-  // The Live Demos hero is a logo, not a screenshot, so it is contained on its
-  // own plate the way the RAHI lockup is rather than bled edge to edge.
-  const heroBackdrop = CONTAINED_THUMBNAIL_BACKDROPS[project.slug];
   const isCountdownMotorControl = project.slug === 'tinkering';
   const nextThumbnailBackdrop = nextProject
     ? CONTAINED_THUMBNAIL_BACKDROPS[nextProject.slug]
@@ -632,14 +629,15 @@ const ProjectDetail = ({
 
         {/* Hero Image. One background class, chosen up front — emitting
             `bg-white/5` and `bg-transparent` together left the winner to
-            whichever one Tailwind happened to write last. */}
-        {(
+            whichever one Tailwind happened to write last.
+            None on the Live Demos page: its hero was only the Python logo,
+            and the demos below are the thing to see. The logo stays as the
+            project's thumbnail on the Work page. */}
+        {!isPythonCodes && (
           <div className={`w-full rounded-lg mb-12 md:mb-24 overflow-hidden shadow-sm ${
             isCountdownMotorControl
               ? 'bg-transparent aspect-square max-w-[420px] mx-auto'
-              : isPythonCodes
-                ? `${heroBackdrop ?? 'bg-white/5'} aspect-square max-w-[280px] mx-auto p-10`
-                : 'bg-white/5'
+              : 'bg-white/5'
           }`}>
             {!project.content.heroImage.includes('placeholder') ? (
               <div ref={heroParallaxRef} className="w-full h-full will-change-transform">
@@ -649,18 +647,14 @@ const ProjectDetail = ({
                   className={
                     isCountdownMotorControl
                       ? 'w-full h-full object-cover object-center'
-                      : isPythonCodes
-                        ? 'w-full h-full object-contain'
-                        : 'w-full h-auto block'
+                      : 'w-full h-auto block'
                   }
                   loading="eager"
                   fetchPriority="high"
                   sizes={
                     isCountdownMotorControl
                       ? '(min-width: 480px) 420px, 90vw'
-                      : isPythonCodes
-                        ? '280px'
-                        : '(min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw'
+                      : '(min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw'
                   }
                 />
               </div>
