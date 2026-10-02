@@ -110,7 +110,7 @@ export const CONTAINED_THUMBNAIL_BACKDROPS: Record<string, string> = {
   // A 16:9 lockup on white; the white bars above and below it are invisible.
   'rahi-design-system-v2': 'bg-white',
   // The Python mark is the one thumbnail with a transparent background — 37%
-  // of the file is fully transparent — so the default bg-white/5 plate showed
+  // of the file is fully transparent — so the default surface plate showed
   // through the gaps in the glyph as a lit square around it. It wants no plate
   // at all; the logo sits straight on the card.
   'python-codes': 'bg-transparent',
