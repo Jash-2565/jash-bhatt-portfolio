@@ -1345,7 +1345,7 @@ const App = () => {
                         aria-label={`Open case study for ${project.title}`}
                         className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
-                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-white/5'}`}>
+                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-[var(--surface-1)]'}`}>
                           {!thumbnail.includes('placeholder') ? (
                             <ResponsiveImage
                               src={thumbnail}
@@ -1601,7 +1601,7 @@ const App = () => {
                         aria-label={`Open case study for ${project.title}`}
                         className={`group h-full w-full text-left flex items-center gap-3 sm:gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
                       >
-                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-white/5'}`}>
+                        <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-[var(--surface-1)]'}`}>
                           {!thumbnail.includes('placeholder') ? (
                             <ResponsiveImage
                               src={thumbnail}

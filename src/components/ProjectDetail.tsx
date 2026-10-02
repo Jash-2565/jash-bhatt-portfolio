@@ -280,7 +280,7 @@ const ProjectDetail = ({
                 style={{ flexGrow: aspect }}
               >
                 <div
-                  className={`group/media relative w-full rounded-lg overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md ${ZOOMABLE}`}
+                  className={`group/media relative w-full rounded-lg overflow-hidden bg-[var(--surface-1)] shadow-sm transition-all hover:shadow-md ${ZOOMABLE}`}
                   style={{ aspectRatio: aspect }}
                   {...zoomProps(img.src, false, img.caption, onImageClick)}
                 >
@@ -312,7 +312,7 @@ const ProjectDetail = ({
               return (
                 <figure key={`story-${i}`} className="m-0 min-w-0 lg:min-w-[14rem] flex flex-col gap-2 sm:gap-3">
                   <div
-                    className={`group/media relative rounded-xl overflow-hidden bg-white/5 shadow-sm transition-all hover:shadow-md h-36 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
+                    className={`group/media relative rounded-xl overflow-hidden bg-[var(--surface-1)] shadow-sm transition-all hover:shadow-md h-36 sm:h-56 ${isPlaceholder ? '' : ZOOMABLE}`}
                     {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                   >
                     {isPlaceholder ? (
@@ -354,7 +354,7 @@ const ProjectDetail = ({
             return (
               <figure key={`tech-${i}`} className="m-0 min-w-0 flex flex-col gap-2 sm:gap-3">
                 <div
-                  className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md aspect-[9/16] w-full ${isPlaceholder ? '' : ZOOMABLE}`}
+                  className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-[var(--surface-1)]')} shadow-sm`} transition-all hover:shadow-md aspect-[9/16] w-full ${isPlaceholder ? '' : ZOOMABLE}`}
                   {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                 >
                   {isPlaceholder ? (
@@ -397,7 +397,7 @@ const ProjectDetail = ({
                 return (
                   <figure key={`row-${i}`} className="m-0 flex flex-col gap-3 items-center max-w-full">
                     <div
-                      className={`group/media relative rounded-lg overflow-hidden max-w-full ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : `${ZOOMABLE} w-fit`}`}
+                      className={`group/media relative rounded-lg overflow-hidden max-w-full ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-[var(--surface-1)]')} shadow-sm`} transition-all hover:shadow-md ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : `${ZOOMABLE} w-fit`}`}
                       {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                     >
                       {isPlaceholder ? (
@@ -427,7 +427,7 @@ const ProjectDetail = ({
           {fullWidthImages.map((img, i) => (
             <figure key={`full-${i}`} className={`m-0 flex flex-col gap-3 ${img.containerClass || 'w-full'}`}>
               <div
-                className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : ZOOMABLE}`}
+                className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-[var(--surface-1)]')} shadow-sm`} transition-all hover:shadow-md ${!img.src || img.src.includes('placeholder') ? 'h-44 sm:h-56 md:h-64 w-full' : ZOOMABLE}`}
                 {...zoomProps(img.src, !img.src || img.src.includes('placeholder'), img.caption, onImageClick)}
               >
                 {!img.src || img.src.includes('placeholder') ? (
@@ -473,7 +473,7 @@ const ProjectDetail = ({
             return (
               <figure key={i} className="m-0 flex flex-col gap-3">
                 <div
-                  className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
+                  className={`group/media relative rounded-lg overflow-hidden ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-[var(--surface-1)]')} shadow-sm`} transition-all hover:shadow-md ${gridHeightClass} ${isPlaceholder ? '' : ZOOMABLE}`}
                   {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
                 >
                   {isPlaceholder ? (
@@ -526,7 +526,7 @@ const ProjectDetail = ({
               className={`m-0 max-w-full flex flex-col gap-3 ${section.imageLayout === 'row' ? 'w-full md:w-auto md:flex-shrink-0 md:min-w-0' : ''} ${section.imageCrop ? 'items-center' : ''}`}
             >
               <div
-                className={`group/media relative rounded-lg overflow-hidden max-w-full ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-white/5')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : ZOOMABLE}`}
+                className={`group/media relative rounded-lg overflow-hidden max-w-full ${img.borderless ? 'bg-transparent shadow-none' : `${img.bgClass || (img.whiteBg ? 'bg-white' : 'bg-[var(--surface-1)]')} shadow-sm`} transition-all hover:shadow-md ${section.imageLayout === 'row' ? (section.imageCrop ? 'w-full' : 'w-full md:w-fit') : ''} ${section.imageCrop && section.imageHeight ? section.imageHeight : ''} ${isPlaceholder ? 'w-full h-40 sm:h-48 md:h-56' : ZOOMABLE}`}
                 {...zoomProps(img.src, isPlaceholder, img.caption, onImageClick)}
               >
                 {isPlaceholder ? (
@@ -637,7 +637,7 @@ const ProjectDetail = ({
           <div className={`w-full rounded-lg mb-12 md:mb-24 overflow-hidden shadow-sm ${
             isCountdownMotorControl
               ? 'bg-transparent aspect-square max-w-[420px] mx-auto'
-              : 'bg-white/5'
+              : 'bg-[var(--surface-1)]'
           }`}>
             {!project.content.heroImage.includes('placeholder') ? (
               <div ref={heroParallaxRef} className="w-full h-full will-change-transform">
@@ -888,7 +888,7 @@ const ProjectDetail = ({
               aria-label={`Open next project: ${nextProject.title}`}
             >
               <div className="flex items-center gap-4 sm:gap-6">
-                <div className={`block shrink-0 w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden ${nextThumbnailBackdrop ?? 'bg-white/5'}`}>
+                <div className={`block shrink-0 w-16 h-16 xs:w-20 xs:h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden ${nextThumbnailBackdrop ?? 'bg-[var(--surface-1)]'}`}>
                   {!(nextProject.content.thumbnailImage ?? nextProject.content.heroImage).includes('placeholder') ? (
                     <ResponsiveImage
                       src={nextProject.content.thumbnailImage ?? nextProject.content.heroImage}

@@ -50,7 +50,7 @@ function Thumb({
   // The lift, the image scale and the caption fade are the hover affordance.
   // There used to be a `hover:border-*` here too, left over from when panes
   // carried borders — with no border-width it painted nothing.
-  const frame = `relative overflow-hidden rounded-xl bg-white/5 transition-all group hover:-translate-y-1 ${className}`;
+  const frame = `relative overflow-hidden rounded-xl bg-[var(--surface-1)] transition-all group hover:-translate-y-1 ${className}`;
 
   if (isVideo) {
     return (
@@ -178,7 +178,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
           </div>
           <p className="text-ink-body text-sm md:text-base mb-1.5">A brand motion piece for Nothing (phone company), focused on clean geometry and sound-led pacing.</p>
           <p className="text-ink-muted text-xs md:text-sm mb-5 md:mb-6">Built alongside Yash Khanna</p>
-          <div className="rounded-xl overflow-hidden bg-white/5">
+          <div className="rounded-xl overflow-hidden bg-[var(--surface-1)]">
             <video
               className="w-full h-auto"
               controls
@@ -277,7 +277,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             Swift · AppKit · generated and hand-QA'd sprite pipeline
           </p>
 
-          <div className="rounded-xl bg-white/5 px-4 py-5 mb-5 md:mb-6">
+          <div className="rounded-xl bg-[var(--surface-1)] px-4 py-5 mb-5 md:mb-6">
             <div className="flex flex-wrap items-end justify-center gap-x-6 gap-y-4 sm:gap-x-10">
               {LEWIS_STRIP.map(({ animation, label }) => (
                 <div key={animation} className="flex flex-col items-center gap-2">
@@ -296,7 +296,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             <button
               type="button"
               aria-label="Open the Lewis atlas full screen"
-              className="relative flex w-full justify-center overflow-hidden rounded-xl bg-white/5 p-3 cursor-pointer transition-all hover:-translate-y-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="relative flex w-full justify-center overflow-hidden rounded-xl bg-[var(--surface-1)] p-3 cursor-pointer transition-all hover:-translate-y-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               onClick={() =>
                 onImageClick({
                   src: `${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`,
