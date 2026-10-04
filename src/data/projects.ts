@@ -748,6 +748,14 @@ export const projects: Project[] = [
           title: "Reflection",
           callout: { text: "Great embedded systems disappear into the experience." },
           content: "Immediate feedback, clear mapping, and a single thing to do made Revela hard to use wrong. Next, I'd explore rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
+        },
+        {
+          title: "Demo",
+          content: "The whole interaction in twelve seconds: a child walks the wand toward a lost backpack, and the light moves from red to yellow to green, then pulses white when it's found.",
+          video: {
+            src: `${PUBLIC_URL}/images/Revela/revela-demo.mp4`,
+            caption: "Animated demo of the proximity-to-colour interaction"
+          }
         }
       ]
     }

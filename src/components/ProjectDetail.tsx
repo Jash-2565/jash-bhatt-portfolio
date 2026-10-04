@@ -2,6 +2,7 @@ import { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import type { ComponentType } from 'react';
 import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase, Users, ZoomIn } from 'lucide-react';
 import ResponsiveImage from './ResponsiveImage';
+import DemoVideo from './DemoVideo';
 import Reveal from './Reveal';
 import type { LightboxImage, Project, Section } from '../types';
 import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME, CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
@@ -805,6 +806,7 @@ const ProjectDetail = ({
 
                   {renderDemoBlock(section)}
                   {renderImages(section)}
+                  {section.video && <DemoVideo src={section.video.src} caption={section.video.caption} />}
 
                   {/* Embed (Figma etc). Below md the iframes are replaced by a
                       link out: a FigJam board rendered ~340px wide is unreadable,

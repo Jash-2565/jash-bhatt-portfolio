@@ -24,6 +24,9 @@ export interface Section {
   imageCrop?: boolean;
   /** A playable demo, with its Python source folded away beneath it (see DEMOS in ProjectDetail). */
   demoId?: 'arkanoid' | 'yolov8' | 'movie-recs';
+  /** A click-to-play video with controls (DemoVideo). `src` is the .mp4; its
+      .webm and .poster.jpg siblings are found through videoManifest. */
+  video?: { src: string; caption: string };
   /** Short chips under the body — for facts too small to earn a card. */
   labels?: string[];
 }

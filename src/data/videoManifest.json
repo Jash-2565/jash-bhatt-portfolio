@@ -48,6 +48,13 @@
     "webm": false,
     "poster": true
   },
+  "/images/Revela/revela-demo": {
+    "w": 1280,
+    "h": 720,
+    "mp4": true,
+    "webm": true,
+    "poster": true
+  },
   "/images/Revela/tag-printing": {
     "w": 508,
     "h": 288,
