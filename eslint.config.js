@@ -9,7 +9,7 @@ export default defineConfig([
   // node_modules is symlinked to node_modules.nosync to keep dependencies out
   // of iCloud sync, and ESLint's built-in node_modules ignore does not match
   // the renamed directory — without this it lints every dependency.
-  globalIgnores(['dist', 'node_modules.nosync']),
+  globalIgnores(['dist', 'node_modules.nosync', 'revela-video']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
