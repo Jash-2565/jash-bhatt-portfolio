@@ -165,7 +165,7 @@ async function main() {
       urlPath: '/about',
       title: 'About | Jash Bhatt',
       description:
-        'Product designer working across software and hardware — conversational AI agents at Bajaj Finance, design systems at RAHI, and interfaces running on circuits I soldered myself.',
+        'Product designer from Pune, in my final year of design at FLAME University. I build what I design, and test it until it works.',
       imageAlt: home.imageAlt,
     },
     {

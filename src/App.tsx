@@ -1637,10 +1637,10 @@ const App = () => {
                   <h2 id="about-heading" className={`${ui.h2} font-display text-ink mb-5 md:mb-8`}>About Me</h2>
                   <div className="space-y-4 md:space-y-6 text-base md:text-lg text-ink-body leading-relaxed">
                     <p>
-                      I design products that span software and hardware — conversational AI agents inside Bajaj Finance's Agentic AI unit, design-system components at RAHI, and interfaces running on circuits I soldered myself.
+                      I grew up in Pune and I'm still here, in my final year of design at FLAME University. Two things pulled me into design: wanting to know how things work, and loving to make images.
                     </p>
                     <p>
-                      What ties it together is a preference for building the thing rather than describing it. I'd rather test a rough prototype than argue about a mockup, and I care most that a product behaves exactly the way someone expects it to.
+                      Both still shape how I work. I'd rather build a rough prototype and test it than argue about a mockup, and I keep going until a product behaves exactly the way someone expects it to.
                     </p>
                   </div>
                 </Reveal>
