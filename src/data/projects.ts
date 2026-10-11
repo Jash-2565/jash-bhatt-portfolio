@@ -184,7 +184,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Hero.svg`,
       thumbnailImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Thumbnail.svg`,
-      role: "Agentic AI Intern",
+      role: "AI Agent Development Intern",
       sections: [
         {
           title: "Overview",

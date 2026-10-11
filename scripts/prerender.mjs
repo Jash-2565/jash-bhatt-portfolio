@@ -80,7 +80,7 @@ const PERSON = {
   '@id': `${ORIGIN}/#person`,
   name: 'Jash Bhatt',
   url: `${ORIGIN}/`,
-  jobTitle: 'Product Designer & Agentic AI Designer',
+  jobTitle: 'Product Designer',
   image: DEFAULT_IMAGE,
   affiliation: { '@type': 'CollegeOrUniversity', name: 'FLAME University' },
   sameAs: ['https://www.linkedin.com/in/jash-bhatt'],
@@ -122,14 +122,14 @@ async function main() {
   const projects = await loadProjects();
 
   const home = {
-    title: 'Jash Bhatt | Product Designer & Agentic AI Designer',
+    title: 'Jash Bhatt | Product Designer',
     description:
       'Conversational AI agents at Bajaj Finance, a B2B marketplace for corporate mobility, and a Spotify data story — case studies from a B.Des student at FLAME University.',
     // The share card already carries the pitch, so the text under it in a link
     // preview just names the site. Search results keep the fuller description.
     shareDescription: 'Jash Bhatt Portfolio',
     imageAlt:
-      'Jash Bhatt — product designer and agentic AI designer, with a portrait of Jash.',
+      'Jash Bhatt — product designer, with a portrait of Jash.',
   };
 
   const routes = [
@@ -173,7 +173,7 @@ async function main() {
       urlPath: '/contact',
       title: 'Contact | Jash Bhatt',
       description:
-        'Open to roles in agentic AI, product design, and UI/UX — from research through to implementation.',
+        'Product designer, graduating 2027 and open to full-time roles from August 2027. Email, LinkedIn and résumé.',
       imageAlt: home.imageAlt,
     },
     {

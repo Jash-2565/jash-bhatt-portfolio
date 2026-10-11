@@ -81,7 +81,7 @@ export default class ErrorBoundary extends Component<Props, State> {
             </p>
             <h1 className="mt-3 text-3xl font-display sm:text-4xl">Jash Bhatt</h1>
             <p className="mt-2 text-lg text-ink-body">
-              Product designer and agentic AI designer.
+              Product designer.
             </p>
             <p className="mt-6 max-w-xl text-ink-muted">
               This page hit an error it couldn&rsquo;t recover from. Reloading usually

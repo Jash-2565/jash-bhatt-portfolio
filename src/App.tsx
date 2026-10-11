@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import {
   X, Linkedin, ArrowRight, ArrowLeft,
-  ChevronDown, Image as PhotoIcon, Download, Briefcase, Award,
+  ChevronDown, Image as PhotoIcon, Briefcase, Award,
 } from 'lucide-react';
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 // The desktop pet is ~0.5MB of sprite sheet for a flourish. Splitting it out
@@ -11,7 +11,6 @@ const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 const LewisPet = lazy(() => import('./components/LewisPet'));
 import ResponsiveImage from './components/ResponsiveImage';
 import Reveal from './components/Reveal';
-import RotatingText from './components/RotatingText';
 import PipeList from './components/PipeList';
 import TiltCard from './components/TiltCard';
 import BackToTop from './components/BackToTop';
@@ -28,7 +27,7 @@ import { useIsMobile } from './hooks/useIsMobile';
 import { projects } from './data/projects';
 import { orderedProjects, featuredProjects, secondaryProjects, CONTAINED_THUMBNAIL_BACKDROPS } from './config/projects';
 import {
-  ui, personalitySignals, operatorStats,
+  ui, operatorStats,
   CONTACT_EMAIL, LINKEDIN_URL, LINKEDIN_HANDLE,
 } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
@@ -546,7 +545,7 @@ const App = () => {
       description: string,
       path: string,
       image = `${SITE_ORIGIN}/og-image.png`,
-      imageAlt = 'Jash Bhatt — product designer and agentic AI designer.'
+      imageAlt = 'Jash Bhatt — product designer, with a portrait of Jash.'
     ) => {
       const url = `${SITE_ORIGIN}${path === '/' ? '/' : path}`;
       document.title = title;
@@ -583,7 +582,7 @@ const App = () => {
     }
 
     apply(
-      'Jash Bhatt | Product Designer & Agentic AI Designer',
+      'Jash Bhatt | Product Designer',
       'Conversational AI agents at Bajaj Finance, a B2B marketplace for corporate mobility, and a Spotify data story — case studies from a B.Des student at FLAME University.',
       mobilePage === 'home' ? '/' : `/${mobilePage}`
     );
@@ -1102,11 +1101,12 @@ const App = () => {
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                download="Jash_Bhatt_Resume.pdf"
                 onClick={() => setIsMenuOpen(false)}
                 className="flex w-full items-center gap-2 min-h-12 px-4 mt-2 pt-4 border-t border-white/10 text-lg font-medium text-accent rounded-xl active:bg-white/10"
               >
-                <Download size={18} aria-hidden="true" /> Résumé (PDF)
+                Résumé (PDF)
+                <span aria-hidden="true">↗</span>
+                <span className="sr-only">(opens in a new tab)</span>
               </a>
             </div>
           </div>
@@ -1158,40 +1158,24 @@ const App = () => {
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
                   <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-                    <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm text-ink text-sm font-medium">
-                      <span className="pulse-dot" aria-hidden="true" />
-                      Open to Work
+                    {/* The site's one statement of availability. A chip here
+                        and another in Contact both used to claim it, vaguely
+                        and a year early. No pulse dot: it signalled
+                        "available now". */}
+                    {/* "Aug" below sm: spelled out, the chip wraps to two lines at 375px. */}
+                    <span className="chip inline-flex items-center px-4 py-1.5 rounded-sm text-ink text-sm font-medium">
+                      Graduating 2027 · Full-time from&nbsp;<span className="sm:hidden">Aug</span><span className="hidden sm:inline">August</span>&nbsp;2027
                     </span>
                   </div>
                   <h1 className={`${ui.h1} font-display text-ink mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
-                    I design and build <span className="accent-shimmer font-semibold">intelligent products</span> that combine AI, software, and human-centered interaction.
+                    I design products, then <span className="accent-shimmer font-semibold">build them</span> until they work.
                   </h1>
-                  <p className="text-[1.05rem] md:text-[1.34rem] text-ink-body mb-4 md:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
-                    {/* Two different good breaks at two widths, so the rules differ.
-                        Everywhere: "agentic AI" and "FLAME University." never split.
-                        At md+ the line fits in two, so the trailing clause is held
-                        whole and the break lands on the comma; below md it needs
-                        three lines, where locking the clause left a short ragged
-                        middle line, so it wraps freely there instead. */}
-                    I'm <span className="font-semibold text-ink">Jash Bhatt</span> — product designer and agentic&nbsp;AI designer,{' '}
-                    <span className="md:whitespace-nowrap">studying at FLAME&nbsp;University.</span>
+                  {/* One title. The line under it used to cycle through five
+                      identities, from Product Designer to Circuit & Hardware;
+                      the projects named here make the case instead. */}
+                  <p className="text-[1.05rem] md:text-[1.34rem] text-ink-body mb-5 lg:mb-8 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
+                    I'm <span className="font-semibold text-ink">Jash Bhatt</span>, a product designer in my final year at FLAME&nbsp;University. HR agents at Bajaj Finance, a semester planner for professors, a wand that guides children to lost things: I designed each one, then built it.
                   </p>
-
-                  {/* The accent rule replaces the old `>` prompt: it keeps the
-                      line anchored to the left margin without the console idiom. */}
-                  <div className="flex items-center mb-5 lg:hidden min-h-[32px] border-l-2 border-accent pl-3 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                    <RotatingText
-                      phrases={personalitySignals}
-                      className="text-base font-semibold text-ink"
-                    />
-                  </div>
-
-                  <div className="hidden lg:flex items-center mb-8 min-h-[36px] whitespace-nowrap border-l-2 border-accent pl-3.5 animate-fade-in-up" style={{ animationDelay: '260ms' }}>
-                    <RotatingText
-                      phrases={personalitySignals}
-                      className="text-lg font-semibold text-ink"
-                    />
-                  </div>
 
                   <div className="hidden lg:flex flex-col sm:flex-row gap-4 mt-auto animate-fade-in-up" style={{ animationDelay: '380ms' }}>
                     <Magnetic
@@ -1209,17 +1193,6 @@ const App = () => {
                       className={`${ui.btnBase} ${ui.btnSecondary} ${ui.focusRing}`}
                     >
                       Get in Touch
-                    </Magnetic>
-                    <Magnetic
-                      as="a"
-                      strength={28}
-                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                      download="Jash_Bhatt_Resume.pdf"
-                      className={`${ui.btnBase} ${ui.btnSecondary}`}
-                    >
-                      <Download size={18} aria-hidden="true" /> Résumé
                     </Magnetic>
                   </div>
                 </div>
@@ -1383,18 +1356,11 @@ const App = () => {
             <section className={`${ui.shell} pb-14 sm:pb-20`} aria-labelledby="home-contact-heading">
               <Reveal variant="rise-soft" className="mb-5">
                 <h2 id="home-contact-heading" className="text-2xl font-display text-ink">Let's Build Something</h2>
-                <p className="mt-2 text-[0.95rem] text-ink-body">Open to roles in agentic&nbsp;AI, product design, and UI/UX.</p>
+                <p className="mt-2 text-[0.95rem] text-ink-body">Hiring a product designer who can also build? Email is the quickest way to reach&nbsp;me.</p>
               </Reveal>
               <Reveal variant="rise" delay={80} className="grid grid-cols-1 gap-3">
                 <CopyEmail email={CONTACT_EMAIL} />
                 <ContactLinkCard href={LINKEDIN_URL} icon={<Linkedin size={22} />} label="LinkedIn" value={LINKEDIN_HANDLE} />
-                <ContactLinkCard
-                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                      icon={<Download size={22} />}
-                      label="Résumé"
-                      value="Download PDF"
-                      download="Jash_Bhatt_Resume.pdf"
-                    />
               </Reveal>
             </section>
           )}
@@ -1408,7 +1374,7 @@ const App = () => {
                 simply there: it sits in view on arrival. */}
             <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
               <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
-              <p className="text-ink-body max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
+              <p className="text-ink-body max-w-2xl mb-5 md:mb-6">Each one taken from a question to a working build: what I designed, why, and what I built to prove it.</p>
               <Reveal variant="grow-width" className="max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
                 <div className="h-1 w-24 bg-gradient-to-r from-accent to-accent-deep rounded-sm"></div>
               </Reveal>
@@ -1668,7 +1634,7 @@ const App = () => {
                         <h3 className="text-xl font-semibold tracking-tight text-ink">Design</h3>
                       </div>
                       <PipeList
-                        items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design Systems', 'Industrial Design']}
+                        items={['Product Design', 'UI/UX Design', 'Agentic AI Workflows', 'Design Systems', 'Circuit Design', 'Industrial Design', 'Generative AI in Design']}
                         flow="column"
                         className="text-sm font-medium text-accent-br"
                       />
@@ -1698,12 +1664,12 @@ const App = () => {
                     <h3 className="text-xl font-semibold tracking-tight text-ink mb-4">Experience</h3>
                     <div className="space-y-4 md:space-y-6">
                       <div>
-                        <h4 className="text-lg font-bold text-ink">Design &amp; Development Intern</h4>
+                        <h4 className="text-lg font-bold text-ink">AI Agent Development Intern</h4>
                         <p className="text-ink-body font-medium">Bajaj Finance · Agentic AI Unit</p>
                         <p className="text-sm text-accent-deep font-medium mt-1">Summer 2026</p>
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-ink">UI Design Intern</h4>
+                        <h4 className="text-lg font-bold text-ink">UI/UX Intern</h4>
                         <p className="text-ink-body font-medium">RAHI Platform Technologies</p>
                         <p className="text-sm text-accent-deep font-medium mt-1">Summer 2025</p>
                       </div>
@@ -1741,12 +1707,8 @@ const App = () => {
                 <Reveal variant="rise-soft">
                   <h2 id="contact-heading" className={`${ui.h2} font-display text-ink mb-3 lg:mb-6`}>Let's Build <span className="accent-shimmer">Something</span></h2>
                   <p className="text-base lg:text-xl text-ink-body mb-4 lg:mb-6">
-                    I am actively looking for opportunities in agentic&nbsp;AI, product design, and UI/UX — where I can contribute from research through to implementation.
+                    Hiring a product designer who can also build? Email is the quickest way to reach&nbsp;me.
                   </p>
-                  <span className="chip inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm !bg-accent/10 text-accent-br text-sm font-medium">
-                    <span className="pulse-dot" aria-hidden="true" />
-                    Currently available
-                  </span>
                 </Reveal>
 
                 <div className="grid grid-cols-1 gap-4 w-full max-w-[26rem]">
@@ -1762,17 +1724,6 @@ const App = () => {
                     </Magnetic>
                   </Reveal>
 
-                  <Reveal variant="rise" delay={240} className="h-full">
-                    <Magnetic className="h-full">
-                      <ContactLinkCard
-                      href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                      icon={<Download size={22} />}
-                      label="Résumé"
-                      value="Download PDF"
-                      download="Jash_Bhatt_Resume.pdf"
-                    />
-                    </Magnetic>
-                  </Reveal>
                 </div>
               </div>
             </div>

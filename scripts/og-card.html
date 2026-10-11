@@ -35,7 +35,7 @@
   }
   .wrap {
     position:relative; height:100%;
-    display:grid; grid-template-columns:1fr 292px; gap:56px;
+    display:grid; grid-template-columns:minmax(0, 1fr) 292px; gap:56px;
     padding:56px 64px 52px 72px;
   }
   .left { display:flex; flex-direction:column; }
@@ -49,8 +49,8 @@
   .dot { width:8px; height:8px; border-radius:50%; background:rgb(var(--accent)); box-shadow:0 0 0 4px rgb(var(--accent) / .18); }
   h1 {
     font-family:'Oxanium', sans-serif; font-weight:500;
-    font-size:50px; line-height:1.1; letter-spacing:.01em;
-    margin-top:36px;
+    font-size:60px; line-height:1.08; letter-spacing:.01em;
+    margin-top:34px;
   }
   .accent {
     font-weight:600;
@@ -88,14 +88,14 @@
     <div class="left">
       <div class="top">
         <span class="mark">JB</span>
-        <span class="chip"><span class="dot"></span>Open to Work</span>
+        <span class="chip">Graduating 2027 · Full-time from August 2027</span>
       </div>
-      <h1>I design and build <span class="accent">intelligent products</span> that combine AI, software, and human-centered interaction.</h1>
-      <p class="sub"><b>Jash Bhatt</b> — product designer &amp; agentic AI designer.</p>
+      <h1>I design products,<br>then <span class="accent">build them</span><br>until they work.</h1>
+      <p class="sub"><b>Jash Bhatt</b> — product designer. HR agents at Bajaj Finance, a semester planner for professors, a wand that guides children to lost things.</p>
       <div class="stats">
-        <div class="surface marks stat"><div class="label">Currently</div><div class="value">B.Des · FLAME University</div></div>
+        <div class="surface marks stat"><div class="label">Currently</div><div class="value">Final-year B.Des · FLAME</div></div>
         <div class="surface marks stat"><div class="label">Last role</div><div class="value">Agentic AI · Bajaj Finance</div></div>
-        <div class="surface marks stat"><div class="label">Focus</div><div class="value">Agentic AI · AI UX</div></div>
+        <div class="surface marks stat"><div class="label">Builds with</div><div class="value">Figma · React · ESP32</div></div>
       </div>
     </div>
     <div class="right">

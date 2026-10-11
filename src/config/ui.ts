@@ -49,25 +49,12 @@ export const CONTACT_EMAIL = 'jashbhatt.contact@gmail.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/jash-bhatt';
 export const LINKEDIN_HANDLE = '/in/jash-bhatt';
 
-export const personalitySignals = [
-  // The two role titles lead; the skill areas follow. 'Agentic AI Design'
-  // sits apart from 'AI-Assisted Design' so the two AI lines never land
-  // back to back in the cycle.
-  'Product Designer',
-  'Agentic AI Design',
-  'UI/UX & Interaction Design',
-  'Circuit & Hardware',
-  'AI-Assisted Design',
-];
-
 export const operatorStats = [
-  { label: 'Currently', value: 'B.Des · FLAME University' },
+  { label: 'Currently', value: 'Final-year B.Des · FLAME' },
   { label: 'Last Role', value: 'Agentic AI · Bajaj Finance' },
-  // Was "Status: Available for work" — the third of four places the page said
-  // the same thing, between the hero's "Open to Work" chip and two more in
-  // Contact. A stat card is a poor use of the fourth-most-read line on the
-  // page for a fact already established above it.
-  { label: 'Focus', value: 'Agentic AI · AI UX' },
+  // Availability lives once, in the hero chip. This card backs up the
+  // headline's "then build them" with what the building is done in.
+  { label: 'Builds with', value: 'Figma · React · ESP32' },
 ];
 
 export const galleryItems: GalleryItem[] = [
