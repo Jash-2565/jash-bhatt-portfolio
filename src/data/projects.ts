@@ -507,7 +507,7 @@ export const projects: Project[] = [
         },
         {
           title: "Storyboarding",
-          content: "To visualize the solution, we created comparative storyboards. The first illustrates the friction of the current method, while the second demonstrates the seamless flow using WePick.",
+          content: "To visualise the solution, we created comparative storyboards. The first illustrates the friction of the current method, while the second demonstrates the seamless flow using WePick.",
           images: [
             {
               src: `${PUBLIC_URL}/images/WePick/storyboard-without-app.webp`,
@@ -1068,7 +1068,7 @@ export const projects: Project[] = [
           content: "No selling. Just shared understanding.",
           cards: [
             { title: "Solar Confession Booth", body: "A private space to admit doubts. The most common: “I don't really understand solar.”" },
-            { title: "AR Energy Visualizer", body: "Costs, savings, and generation mapped onto the residents' own building." },
+            { title: "AR Energy Visualiser", body: "Costs, savings, and generation mapped onto the residents' own building." },
             { title: "Pledge Wall", body: "Small, non-binding commitments that build collective ownership." },
             { title: "Guided Decision Framework", body: "Structured comparisons replace opinion-based debate." }
           ],
