@@ -157,7 +157,7 @@ async function main() {
       urlPath: '/work',
       title: 'Selected Work | Jash Bhatt',
       description:
-        'AI agents, AI-enabled interfaces, and the circuits underneath them — eleven projects in design, engineering, and behavior.',
+        'Eleven projects, each taken from a question to a working build: HR agents at Bajaj Finance, a semester planner for professors, a wand for children, a B2B marketplace and more.',
       imageAlt: home.imageAlt,
     },
     {
