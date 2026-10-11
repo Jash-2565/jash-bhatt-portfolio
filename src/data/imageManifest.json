@@ -166,11 +166,12 @@
     ]
   },
   "/images/HR Genie/HR-Genie-Thumbnail.webp": {
-    "w": 1424,
-    "h": 1068,
+    "w": 2400,
+    "h": 1800,
     "v": [
       480,
-      960
+      960,
+      1440
     ]
   },
   "/images/Jash-portrait.webp": {

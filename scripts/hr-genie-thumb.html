@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Source for public/images/HR Genie/HR-Genie-Thumbnail.webp.
+     The end of the creche happy path from hr-genie-flows, every line as the
+     agent says it, in that project's palette and type.
+     Render: headless Chrome at 1200×900, device scale factor 2. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* Same palette and type as hr-genie-flows (tailwind.config.js there). */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1200px; height:900px; }
+  body { background: radial-gradient(120% 90% at 50% 0%, #0f1a26 0%, #070b10 70%); font-family: Inter, sans-serif; color:#f1f5f9;
+         display:flex; align-items:center; justify-content:center; }
+  .chat { width: 820px; display:flex; flex-direction:column; gap: 34px; }
+  .head { display:flex; align-items:center; gap:16px; padding-bottom: 26px; border-bottom: 1px solid #243140; }
+  .av { width:52px; height:52px; border-radius:50%; background:#0f2226; border:1.5px solid rgba(1,245,209,.45); color:#01f5d1;
+        display:grid; place-items:center; font-weight:700; font-size:19px; }
+  .head b { font-size:24px; font-weight:600; display:block; }
+  .head span { font-size:17px; color:#94a3b8; }
+  .row { display:flex; }
+  .agent { background:#161f28; border-radius: 22px 22px 22px 8px; padding: 22px 28px; font-size:26px; line-height:1.35; }
+  .user { margin-left:auto; background:#01f5d1; color:#04201c; border-radius: 22px 22px 8px 22px; padding: 20px 30px; font-size:26px; font-weight:600; }
+  .sum { background:#0d141c; border:1px solid #243140; border-radius: 18px; padding: 22px 28px; display:flex; justify-content:space-between; align-items:baseline; }
+  .sum .l { font-size:19px; color:#94a3b8; }
+  .sum .v { text-align:right; }
+  .sum .v b { font-size:34px; color:#01f5d1; font-weight:700; display:block; }
+  .sum .v span { font-size:17px; color:#f87171; }
+  .done { border:2px solid #4ade80; background:#0f2a1b; border-radius:18px; padding: 22px 28px; display:flex; align-items:center; justify-content:space-between; }
+  .done b { color:#4ade80; font-size:26px; font-weight:600; }
+  .done code { font-family:'JetBrains Mono', monospace; font-size:24px; letter-spacing:.04em; color:#f1f5f9; }
+</style></head>
+<body>
+  <div class="chat">
+    <div class="head"><div class="av">HG</div><div><b>HR Genie</b><span>Creche Reimbursement</span></div></div>
+    <div class="sum"><div class="l">Allowed amount</div><div class="v"><b>₹15,000</b><span>₹6,417 over cap will not be reimbursed</span></div></div>
+    <div class="row"><div class="agent">Shall I submit this claim?</div></div>
+    <div class="row"><div class="user">Yes, submit it</div></div>
+    <div class="done"><b>✓ Claim submitted</b><code>CR-2026-048213</code></div>
+  </div>
+</body></html>
