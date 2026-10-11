@@ -52,9 +52,9 @@ export const LINKEDIN_HANDLE = '/in/jash-bhatt';
 export const operatorStats = [
   { label: 'Currently', value: 'Final-year B.Des · FLAME' },
   { label: 'Last Role', value: 'Agentic AI · Bajaj Finance' },
-  // Availability lives once, in the hero chip. This card backs up the
-  // headline's "then build them" with what the building is done in.
-  { label: 'Builds with', value: 'Figma · React · ESP32' },
+  // Availability lives once, in the hero chip, so this card names the focus
+  // rather than repeating it.
+  { label: 'Focus', value: 'Agentic AI · AI UX' },
 ];
 
 export const galleryItems: GalleryItem[] = [
