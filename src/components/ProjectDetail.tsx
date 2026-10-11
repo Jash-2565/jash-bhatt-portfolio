@@ -13,7 +13,7 @@ import { usePointerFine } from '../hooks/usePointerFine';
 import { ARKANOID_CODE } from '../data/arkanoidCode';
 import { YOLOV8_CODE } from '../data/yolov8Code';
 import { MOVIE_RECS_CODE } from '../data/movieRecsCode';
-import { getImageSources } from '../utils/imageSources';
+import { getImageSources, scaledSlot, DEFAULT_SIZES } from '../utils/imageSources';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 import videoManifest from '../data/videoManifest.json';
 
@@ -29,10 +29,10 @@ const DEMOS: Record<NonNullable<Section['demoId']>, { Demo: ComponentType; code:
 };
 
 const DemoLoader = () => (
-  <div className="surface surface-marks !bg-[var(--ground)] h-full lg:h-[620px] rounded-2xl flex items-center justify-center">
+  <div className="surface surface-marks !bg-[var(--ground)] h-full lg:h-[38.75rem] rounded-2xl flex items-center justify-center">
     <div className="flex flex-col items-center gap-3 text-ink-muted">
       <div className="w-7 h-7 border-2 border-ink-faint border-t-accent rounded-full animate-spin" />
-      <span className="text-[10px] tracking-widest uppercase">Loading Demo</span>
+      <span className="text-[0.625rem] tracking-widest uppercase">Loading Demo</span>
     </div>
   </div>
 );
@@ -91,7 +91,7 @@ const mediaAspect = (src: string) => {
  * suppressed site-wide by the custom cursor.
  */
 const ZoomHint = ({ className = '' }: { className?: string }) => (
-  <span className={`absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-medium text-ink pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100 ${className}`}>
+  <span className={`absolute bottom-2 right-2 chip flex items-center gap-1 px-2 py-1 rounded-sm text-[0.625rem] font-medium text-ink pointer-events-none opacity-70 transition-opacity duration-200 group-hover/media:opacity-100 ${className}`}>
     <ZoomIn size={11} aria-hidden="true" />
     <span className="md:hidden">Tap to zoom</span>
     <span className="hidden md:inline">Click to zoom</span>
@@ -230,11 +230,11 @@ const ProjectDetail = ({
     const { Demo, code } = DEMOS[section.demoId];
 
     const snippetContainerClass =
-      'surface surface-marks !bg-[var(--ground)] h-[280px] sm:h-[440px] lg:h-[620px] rounded-2xl text-ink flex flex-col';
+      'surface surface-marks !bg-[var(--ground)] h-[17.5rem] sm:h-[27.5rem] lg:h-[38.75rem] rounded-2xl text-ink flex flex-col';
     // `overscroll-contain` stops a sideways swipe inside the snippet from
     // chaining out to the page once it hits the end of the code.
     const snippetPreClass =
-      'min-h-0 flex-1 overflow-auto overscroll-contain p-4 text-[11px] leading-relaxed sm:text-xs md:text-sm font-mono whitespace-pre';
+      'min-h-0 flex-1 overflow-auto overscroll-contain p-4 text-[0.6875rem] leading-relaxed sm:text-xs md:text-sm font-mono whitespace-pre';
 
     // The demo leads at full width; the source is there for anyone who wants
     // it, folded away. Side by side, a 740-line file got as much room as the
@@ -320,7 +320,7 @@ const ProjectDetail = ({
                     {isPlaceholder ? (
                       <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                         <PhotoIcon size={36} className="mb-3 opacity-60" />
-                        <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                        <span className="text-[0.625rem] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                       </div>
                     ) : (
                       <>
@@ -330,7 +330,7 @@ const ProjectDetail = ({
                           captioned
                           className="w-full h-full object-cover object-center"
                           loading="lazy"
-                          sizes="(min-width: 1280px) 400px, 45vw"
+                          sizes={`${scaledSlot(400)}, (min-width: 1280px) 400px, 45vw`}
                         />
                         <ZoomHint />
                       </>
@@ -362,7 +362,7 @@ const ProjectDetail = ({
                   {isPlaceholder ? (
                     <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                       <PhotoIcon size={36} className="mb-3 opacity-60" />
-                      <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                      <span className="text-[0.625rem] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                     </div>
                   ) : (
                     <>
@@ -405,7 +405,7 @@ const ProjectDetail = ({
                       {isPlaceholder ? (
                         <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                           <PhotoIcon size={32} className="mb-3 opacity-60" />
-                          <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                          <span className="text-[0.625rem] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                         </div>
                       ) : (
                         <>
@@ -435,7 +435,7 @@ const ProjectDetail = ({
                 {!img.src || img.src.includes('placeholder') ? (
                   <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                     <PhotoIcon size={36} className="mb-3 opacity-60" />
-                    <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                    <span className="text-[0.625rem] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                   </div>
                 ) : (
                   <>
@@ -464,8 +464,8 @@ const ProjectDetail = ({
       // their captions point at unreadable.
       const columns = section.gridWide ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2';
       const gridSizes = section.gridWide
-        ? '(min-width: 1360px) 830px, (min-width: 768px) calc(66vw - 4rem), 90vw'
-        : '(min-width: 1360px) 405px, (min-width: 640px) 33vw, 90vw';
+        ? `${scaledSlot(830)}, (min-width: 1360px) 830px, (min-width: 768px) calc(66vw - 4rem), 90vw`
+        : `${scaledSlot(405)}, (min-width: 1360px) 405px, (min-width: 640px) 33vw, 90vw`;
       return (
         <div className={`mt-8 md:mt-10 grid ${columns} gap-4`}>
           {section.images.map((img, i) => {
@@ -481,7 +481,7 @@ const ProjectDetail = ({
                   {isPlaceholder ? (
                     <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                       <PhotoIcon size={36} className="mb-3 opacity-60" />
-                      <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                      <span className="text-[0.625rem] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                     </div>
                   ) : (
                     <>
@@ -534,7 +534,7 @@ const ProjectDetail = ({
                 {isPlaceholder ? (
                   <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted">
                     <PhotoIcon size={32} className="mb-3 opacity-60" />
-                    <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
+                    <span className="text-[0.625rem] font-semibold tracking-[0.2em] uppercase">Image Placeholder</span>
                   </div>
                 ) : (
                   <>
@@ -638,7 +638,7 @@ const ProjectDetail = ({
         {!isPythonCodes && (
           <div className={`w-full rounded-lg mb-12 md:mb-24 overflow-hidden shadow-sm ${
             isCountdownMotorControl
-              ? 'bg-transparent aspect-square max-w-[420px] mx-auto'
+              ? 'bg-transparent aspect-square max-w-[26.25rem] mx-auto'
               : 'bg-[var(--surface-1)]'
           }`}>
             {!project.content.heroImage.includes('placeholder') ? (
@@ -655,8 +655,8 @@ const ProjectDetail = ({
                   fetchPriority="high"
                   sizes={
                     isCountdownMotorControl
-                      ? '(min-width: 480px) 420px, 90vw'
-                      : '(min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw'
+                      ? `${scaledSlot(420)}, (min-width: 480px) 420px, 90vw`
+                      : DEFAULT_SIZES
                   }
                 />
               </div>
@@ -888,7 +888,7 @@ const ProjectDetail = ({
                           ></iframe>
                         </div>
                       ) : (
-                        <div className="hidden md:block mt-12 w-full max-w-[360px] mx-auto aspect-[9/19] bg-[var(--surface-1)] rounded-[2.5rem] overflow-hidden border-[8px] border-[var(--surface-2)] shadow-2xl relative">
+                        <div className="hidden md:block mt-12 w-full max-w-[22.5rem] mx-auto aspect-[9/19] bg-[var(--surface-1)] rounded-[2.5rem] overflow-hidden border-[0.5rem] border-[var(--surface-2)] shadow-2xl relative">
                           <iframe
                             src={section.embedUrl}
                             className="w-full h-full bg-white"
@@ -977,7 +977,7 @@ const ProjectDetail = ({
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent/90">Next Project →</span>
+                  <span className="font-mono text-[0.6875rem] uppercase tracking-[0.3em] text-accent/90">Next Project →</span>
                   {/* `line-clamp`, not `truncate`: a single-line ellipsis cut
                       "Agentic AI / Enterpris…" at 320px and would have cut
                       "The Soundtrack of Seven Years" too. */}
@@ -1005,14 +1005,14 @@ const ProjectDetail = ({
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
           </button>
           <span className="hidden md:flex items-center gap-2 text-xs text-ink-muted">
-            <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-ink-muted">Esc</kbd>
+            <kbd className="chip px-2 py-1 rounded font-mono text-[0.625rem] text-ink-muted">Esc</kbd>
             back
             {nextProject && (
               <>
                 <span className="mx-1 text-ink-muted">·</span>
                 {/* The shortcut needs a modifier (see the keydown handler
                     above); a bare → scrolls. */}
-                <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-ink-muted">⌘/Ctrl →</kbd>
+                <kbd className="chip px-2 py-1 rounded font-mono text-[0.625rem] text-ink-muted">⌘/Ctrl →</kbd>
                 next
               </>
             )}

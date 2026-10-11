@@ -8,6 +8,7 @@ import { usePointerFine } from '../hooks/usePointerFine';
 import { ui, galleryItems, aiItems, gallerySnippetItems } from '../config/ui';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 import { versionedUrl } from '../utils/versionedUrl';
+import { scaledSlot } from '../utils/imageSources';
 import type { GalleryItem, LightboxImage } from '../types';
 
 /** The rows worth showing off, in the order they read best: the two you see
@@ -155,7 +156,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                   item={item}
                   onImageClick={onImageClick}
                   className={`${shapeClass} ${positionClass}`}
-                  sizes="(min-width: 768px) 340px, 60vw"
+                  sizes={`${scaledSlot(340)}, (min-width: 768px) 340px, 60vw`}
                 />
               );
             })}
@@ -220,7 +221,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 item={item}
                 onImageClick={onImageClick}
                 className="w-full aspect-square"
-                sizes="(min-width: 1024px) 340px, 45vw"
+                sizes={`${scaledSlot(340)}, (min-width: 1024px) 340px, 45vw`}
               />
             ))}
           </div>
@@ -250,7 +251,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 item={item}
                 onImageClick={onImageClick}
                 className="w-full aspect-square"
-                sizes="(min-width: 1024px) 340px, 45vw"
+                sizes={`${scaledSlot(340)}, (min-width: 1024px) 340px, 45vw`}
               />
             ))}
           </div>
@@ -282,7 +283,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
               {LEWIS_STRIP.map(({ animation, label }) => (
                 <div key={animation} className="flex flex-col items-center gap-2">
                   <LewisSprite animation={animation} scale={0.42} label={`Lewis ${label}`} />
-                  <span className="text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+                  <span className="text-[0.6875rem] uppercase tracking-[0.14em] text-ink-muted">
                     {label}
                   </span>
                 </div>
@@ -308,7 +309,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                 src={`${PUBLIC_URL}/images/Lewis Pet/lewis-atlas.webp`}
                 alt="The packed Lewis atlas — nine rows of animation frames on one 1536×1872 sheet"
                 className="h-auto max-h-72 w-auto max-w-full object-contain rounded-md group-hover:scale-[1.02] transition-transform duration-300"
-                sizes="(min-width: 768px) 260px, 70vw"
+                sizes={`${scaledSlot(260)}, (min-width: 768px) 260px, 70vw`}
               />
             </button>
             <div>

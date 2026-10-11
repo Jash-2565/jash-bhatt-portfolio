@@ -15,13 +15,24 @@ type ManifestEntry = {
 const entries = manifest as Record<string, ManifestEntry>;
 
 /**
+ * The `sizes` clause for a window wider than 1440px.
+ *
+ * Above 1440px the layout scales with the window (index.css), so a slot that
+ * is `px` wide at 1440 grows with it — by at most the window's own growth,
+ * since the scale follows the tighter of width and height. Stated in vw, the
+ * browser fetches for the slot's real width. Without it, a 1250px image shown
+ * at 2000px on a monitor was fetched for 1250 and upscaled.
+ */
+export const scaledSlot = (px: number) => `(min-width: 1441px) ${(px / 14.4).toFixed(1)}vw`;
+
+/**
  * Default `sizes` hint. Page content is capped at 84rem with gutters, so an
- * image is at most ~1050px wide on a large screen and effectively full-bleed
- * on a phone. Components that render into a narrower slot (thumbnails, gallery
- * tiles) should pass their own.
+ * image is at most ~1250px wide at 1440 and effectively full-bleed on a phone.
+ * Components that render into a narrower slot (thumbnails, gallery tiles)
+ * should pass their own.
  */
 export const DEFAULT_SIZES =
-  '(min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw';
+  `${scaledSlot(1250)}, (min-width: 1360px) 1250px, (min-width: 1024px) calc(100vw - 6rem), 100vw`;
 
 /**
  * Look up the srcset/dimension data for a public image path.

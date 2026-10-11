@@ -67,6 +67,35 @@
   border-radius: 2px;
 }
 
+/* The layout is drawn for a 1440px window, where the 84rem shell exactly
+   fills it. Past that, the root font size grows with the window, and because
+   type, spacing and the shell are all in rem, the whole composition scales
+   with it — instead of the shell stopping at 1344px and leaving an ever-wider
+   empty margin on an external monitor (at 2560px it filled half the screen).
+
+   The scale follows whichever of width and height is tighter. The height
+   reference is 768px, the shortest window in which the hero still fits one
+   screen at the base size: on a 1920×1080 monitor the browser leaves ~960px
+   of height, and scaling on width alone pushed the hero past the fold. On an
+   ultrawide, height is the limit, so some margin remains there by design.
+   Floored at the user's own default size; the 3x cap only guards against
+   absurd windows (a 4K screen at 100% sits at 2.5x).
+
+   The --ui-scale variable (utils/uiScale.ts) carries the same ratio to the
+   few things measured in pixels: icons below, Lewis, the circuit ground. */
+@media (min-width: 1441px) {
+  html {
+    font-size: clamp(100%, min(100vw / 90, 100vh / 48), 300%);
+  }
+}
+
+/* Icons are sized in px by their `size` prop, so they would stay put while
+   the text around them grew. `zoom` scales an element's px lengths, so this
+   one rule keeps all of them in proportion. */
+.lucide {
+  zoom: var(--ui-scale, 1);
+}
+
 html {
   /* `clip` rather than `hidden`: it still contains stray horizontal overflow,
      but does not turn the element into a scroll container — which is what was
@@ -288,8 +317,8 @@ label {
 /* Pulsing availability dot. */
 .pulse-dot {
   position: relative;
-  width: 8px;
-  height: 8px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 9999px;
   background: rgb(var(--accent-rgb));
   flex-shrink: 0;
@@ -412,8 +441,9 @@ label {
   .surface-marks::after {
     content: '';
     position: absolute;
-    width: 9px;
-    height: 9px;
+    /* rem, so the marks keep their place on a pane as the layout scales. */
+    width: 0.5625rem;
+    height: 0.5625rem;
     pointer-events: none;
     /* Style and colour for all four sides at zero width, so the rules below
        only have to switch on the two sides each mark needs. Setting the sides
@@ -423,14 +453,14 @@ label {
     transition: border-color 180ms ease;
   }
   .surface-marks::before {
-    top: 5px;
-    left: 5px;
+    top: 0.3125rem;
+    left: 0.3125rem;
     border-top-width: 1px;
     border-left-width: 1px;
   }
   .surface-marks::after {
-    bottom: 5px;
-    right: 5px;
+    bottom: 0.3125rem;
+    right: 0.3125rem;
     border-bottom-width: 1px;
     border-right-width: 1px;
   }
@@ -504,7 +534,7 @@ label {
      sites before this existed. */
   .label {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;

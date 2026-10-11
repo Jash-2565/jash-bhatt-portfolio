@@ -1166,7 +1166,7 @@ const ArkanoidDemo = () => {
   }, [isRunning]);
 
   return (
-    <div className="rounded-2xl p-4 sm:p-6 bg-[var(--surface-1)] shadow-sm lg:h-[680px] flex flex-col">
+    <div className="rounded-2xl p-4 sm:p-6 bg-[var(--surface-1)] shadow-sm lg:h-[42.5rem] flex flex-col">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
           <p className="text-sm font-semibold text-ink">Play the demo</p>

@@ -31,6 +31,7 @@ import {
   CONTACT_EMAIL, LINKEDIN_URL, LINKEDIN_HANDLE,
 } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
+import { scaledSlot } from './utils/imageSources';
 import { analyticsLocation } from './utils/analyticsRoute';
 import { parseLocation, routeToPath, hasLegacyHash, SITE_ORIGIN } from './utils/routes';
 import type { Route } from './utils/routes';
@@ -1203,7 +1204,7 @@ const App = () => {
                     `fetchPriority="high"`. */}
                 {!isMobile && (
                   <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
-                    <div className="surface surface-marks surface-hover max-w-[324px] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
+                    <div className="surface surface-marks surface-hover max-w-[20.25rem] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
                       <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
                         <ResponsiveImage
                           src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
@@ -1213,7 +1214,7 @@ const App = () => {
                           fetchPriority="high"
                           // The slot is 292px. Without this it inherited the
                           // 1050px default and pulled the full-size original.
-                          sizes="292px"
+                          sizes={`${scaledSlot(292)}, 292px`}
                         />
                       </div>
                     </div>

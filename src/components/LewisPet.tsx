@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePointerFine } from '../hooks/usePointerFine';
+import { getUiScale } from '../utils/uiScale';
 import {
   ANIMATIONS,
   CELL_H,
@@ -32,10 +33,11 @@ const WALK_SPEED = 92;
 /** Keeps him off the very edge of the viewport, where he'd clip. */
 const EDGE_MARGIN = 16;
 /** The back-to-top button occupies the bottom-right corner — 48px wide, 20px
-    in from the edge — and sits at the same z-index as the pet, who is tall
-    enough to cover it completely. Ending his walkable strip short of it keeps
-    him from parking on a control, rather than relying on him wandering off. */
-const BACK_TO_TOP_KEEPOUT = 20 + 48 + 12;
+    in from the edge, at the 16px root — and sits at the same z-index as the
+    pet, who is tall enough to cover it completely. Ending his walkable strip
+    short of it keeps him from parking on a control, rather than relying on
+    him wandering off. The button is sized in rem, so this scales with it. */
+const backToTopKeepout = () => (20 + 48) * getUiScale() + 12;
 
 /** How long he stands around before finding something to do, in seconds. The
     app calls this its 'normal' activity level; the range reads well here too. */
@@ -46,11 +48,12 @@ const STORAGE_KEY = 'lewis-pet-dismissed';
 
 /** Mirrors `ui.shell` (max-w-[84rem], lg:px-12): the right edge of the content
     column, centred in the viewport. Past it is the gutter, the only place he
-    walks: anywhere left of it he would be standing on the work. */
-const SHELL_MAX_W = 1344;
-const SHELL_PAD = 48;
-const contentRightEdge = () =>
-  (window.innerWidth + Math.min(window.innerWidth, SHELL_MAX_W)) / 2 - SHELL_PAD;
+    walks: anywhere left of it he would be standing on the work. Both are rem,
+    so they grow with the root font size above 1440px. */
+const contentRightEdge = () => {
+  const rem = 16 * getUiScale();
+  return (window.innerWidth + Math.min(window.innerWidth, 84 * rem)) / 2 - 3 * rem;
+};
 
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min);
 
@@ -83,7 +86,7 @@ export default function LewisPet() {
     let raf = 0;
     // He starts docked to the right, the app's default side — at the edge of
     // the walkable strip, which already stops short of the back-to-top button.
-    let x = Math.max(EDGE_MARGIN, window.innerWidth - PET_W - BACK_TO_TOP_KEEPOUT);
+    let x = Math.max(EDGE_MARGIN, window.innerWidth - PET_W - backToTopKeepout());
 
     let animation: AnimationName = 'idle';
     let frameIndex = 0;
@@ -112,7 +115,7 @@ export default function LewisPet() {
     let drawnFrame = NaN;
 
     const maxX = () =>
-      Math.max(EDGE_MARGIN, window.innerWidth - PET_W - BACK_TO_TOP_KEEPOUT);
+      Math.max(EDGE_MARGIN, window.innerWidth - PET_W - backToTopKeepout());
     /** The gutter's left edge. */
     const minX = () => contentRightEdge() + EDGE_MARGIN;
     /** A gutter too narrow to stand in — most laptop widths, where the column

@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { BAND, WIDTH, board } from '../lib/circuitBoard';
+import { getUiScale, subscribeUiScale } from '../utils/uiScale';
 
 // Static circuit-trace ground, generated once for the full height of the page
 // and scrolled with it. It replaces a fixed 512px tile that sat still behind
@@ -9,13 +10,17 @@ import { BAND, WIDTH, board } from '../lib/circuitBoard';
 // shares. This component only sizes the board to the page and draws it.
 
 // Phones draw the same board 1.25× larger, as the tile used to be, so it
-// reads as routing rather than as noise.
+// reads as routing rather than as noise. Above 1440px it scales with the rest
+// of the layout (see utils/uiScale), so the traces keep their weight beside
+// the content instead of thinning out on a monitor.
 const PHONE = '(max-width: 767px)';
 
 export default function CircuitGround() {
   const ref = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
-  const [scale, setScale] = useState(1);
+  const [isPhone, setIsPhone] = useState(false);
+  const uiScale = useSyncExternalStore(subscribeUiScale, getUiScale, () => 1);
+  const scale = isPhone ? 1.25 : uiScale;
 
   useEffect(() => {
     const el = ref.current;
@@ -23,7 +28,7 @@ export default function CircuitGround() {
     const observer = new ResizeObserver(([entry]) => setHeight(entry.contentRect.height));
     observer.observe(el);
     const phone = window.matchMedia(PHONE);
-    const sync = () => setScale(phone.matches ? 1.25 : 1);
+    const sync = () => setIsPhone(phone.matches);
     sync();
     phone.addEventListener('change', sync);
     return () => {
