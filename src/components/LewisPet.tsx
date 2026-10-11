@@ -379,15 +379,17 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
         // keyboard user reached on every page — ahead of the skip link. Still
         // reachable with a pointer, and still focusable programmatically.
         tabIndex={-1}
-        // A 44x44 hit area around a 28px glyph, which is the target size this
-        // codebase sets as its own standard in `ui.tapTarget`.
+        // A 32px hit area around a 20px glyph. Smaller than the 44px
+        // `ui.tapTarget` standard on purpose, since a 44px box covered a big
+        // part of a pet that can be 56px wide, but still above the 24px
+        // minimum in WCAG 2.2 (2.5.8). Mouse-only, like the pet himself.
         // Visible at rest, so sending him away never depends on finding a
         // control that only appears on hover.
-        className="absolute -top-[0.55rem] -right-[0.55rem] pointer-events-auto grid h-11 w-11 place-items-center opacity-70 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
+        className="absolute -top-2 -right-2 pointer-events-auto grid h-8 w-8 place-items-center opacity-70 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
       >
         <span
           aria-hidden="true"
-          className="grid h-7 w-7 place-items-center rounded-full bg-black/70 text-sm leading-none text-ink-body ring-1 ring-white/20 hover:text-white"
+          className="grid h-5 w-5 place-items-center rounded-full bg-black/70 text-xs leading-none text-ink-body ring-1 ring-white/20 hover:text-white"
         >
           ×
         </span>
