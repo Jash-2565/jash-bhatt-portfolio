@@ -3,6 +3,7 @@ import type { ComponentType } from 'react';
 import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, Clock, Briefcase, Users, ZoomIn } from 'lucide-react';
 import ResponsiveImage from './ResponsiveImage';
 import DemoVideo from './DemoVideo';
+import LiveEmbed from './LiveEmbed';
 import Reveal from './Reveal';
 import type { LightboxImage, Project, Section } from '../types';
 import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME, CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
@@ -725,6 +726,7 @@ const ProjectDetail = ({
               // viewport it eventually sticks to, and Reveal drops the
               // transform entirely once the reveal lands.
               <Reveal key={idx} variant="rise" threshold={0.08}>
+              <div>
               <div data-section={idx} className="grid md:grid-cols-12 gap-5 md:gap-8 items-start group">
 
                 {/* Left Column: Heading */}
@@ -874,6 +876,13 @@ const ProjectDetail = ({
                     </div>
                   )}
                 </div>
+
+              </div>
+
+              {/* A live embed takes the full width: its 1920×1080 stage scales
+                  to fit, and the 8-column body would shrink it to ~0.4×. It
+                  sits below the grid so the sticky heading doesn't ride over it. */}
+              {section.liveEmbed && <LiveEmbed {...section.liveEmbed} />}
               </div>
               </Reveal>
               );

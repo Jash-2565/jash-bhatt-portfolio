@@ -74,7 +74,26 @@ function setMeta(html, selectorAttr, selectorValue, content) {
   return html.replace(re, `$1${escapeAttr(content)}$2`);
 }
 
-function render(template, { title, description, shareDescription = description, urlPath, image, imageAlt }) {
+/** The one Person every page's structured data points back to. */
+const PERSON = {
+  '@type': 'Person',
+  '@id': `${ORIGIN}/#person`,
+  name: 'Jash Bhatt',
+  url: `${ORIGIN}/`,
+  jobTitle: 'Product Designer & Agentic AI Designer',
+  image: DEFAULT_IMAGE,
+  affiliation: { '@type': 'CollegeOrUniversity', name: 'FLAME University' },
+  sameAs: ['https://www.linkedin.com/in/jash-bhatt'],
+};
+
+/** Serialise for a <script> body; "<" is escaped so no value can close the tag. */
+const jsonLdTag = (data) =>
+  `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+
+function render(
+  template,
+  { title, description, shareDescription = description, urlPath, image, imageAlt, jsonLd }
+) {
   const url = `${ORIGIN}${urlPath}`;
   let html = template;
 
@@ -92,6 +111,8 @@ function render(template, { title, description, shareDescription = description, 
   html = setMeta(html, 'name', 'twitter:title', title);
   html = setMeta(html, 'name', 'twitter:description', shareDescription);
   html = setMeta(html, 'name', 'twitter:image', image);
+
+  if (jsonLd) html = html.replace('</head>', `    ${jsonLdTag(jsonLd)}\n  </head>`);
 
   return html;
 }
@@ -112,7 +133,25 @@ async function main() {
   };
 
   const routes = [
-    { out: 'index.html', urlPath: '/', ...home },
+    {
+      out: 'index.html',
+      urlPath: '/',
+      ...home,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          PERSON,
+          {
+            '@type': 'WebSite',
+            '@id': `${ORIGIN}/#website`,
+            url: `${ORIGIN}/`,
+            name: 'Jash Bhatt',
+            description: home.description,
+            publisher: { '@id': PERSON['@id'] },
+          },
+        ],
+      },
+    },
     {
       out: 'work/index.html',
       urlPath: '/work',
@@ -151,6 +190,17 @@ async function main() {
       title: `${project.title} — ${project.category} | Jash Bhatt`,
       description: project.description,
       imageAlt: `${project.title} — ${project.category}`,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'CreativeWork',
+        name: project.title,
+        description: project.description,
+        genre: project.category,
+        url: `${ORIGIN}/work/${project.slug}`,
+        image: DEFAULT_IMAGE,
+        author: PERSON,
+        isPartOf: { '@id': `${ORIGIN}/#website` },
+      },
     })),
   ];
 

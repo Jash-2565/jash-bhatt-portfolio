@@ -4,20 +4,38 @@
     {
       "name": "dev",
       "runtimeExecutable": "/bin/zsh",
-      "runtimeArgs": ["-lc", "npm run dev"],
+      "runtimeArgs": [
+        "-lc",
+        "npm run dev"
+      ],
       "port": 5177
     },
     {
       "name": "dev-alt",
       "runtimeExecutable": "/bin/zsh",
-      "runtimeArgs": ["-lc", "npm run dev -- --port 5188 --strictPort"],
+      "runtimeArgs": [
+        "-lc",
+        "npm run dev -- --port 5188 --strictPort"
+      ],
       "port": 5188
     },
     {
       "name": "preview",
       "runtimeExecutable": "/bin/zsh",
-      "runtimeArgs": ["-lc", "npm run preview"],
+      "runtimeArgs": [
+        "-lc",
+        "npm run preview"
+      ],
       "port": 4173
+    },
+    {
+      "name": "hr-genie-flows",
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": [
+        "-lc",
+        "cd hr-genie-flows && npm run dev"
+      ],
+      "port": 5190
     }
   ]
 }

@@ -27,6 +27,8 @@ export interface Section {
   /** A click-to-play video with controls (DemoVideo). `src` is the .mp4; its
       .webm and .poster.jpg siblings are found through videoManifest. */
   video?: { src: string; caption: string };
+  /** An interactive page of ours from public/, framed at 16:9 (LiveEmbed). */
+  liveEmbed?: { src: string; title: string; caption: string };
   /** Short chips under the body — for facts too small to earn a card. */
   labels?: string[];
 }

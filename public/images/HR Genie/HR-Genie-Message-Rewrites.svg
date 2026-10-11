@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 720" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#01F5D1"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="60" font-size="15" font-weight="700" fill="#94A3B8" letter-spacing="1">HOW A FORM WOULD SAY IT</text>
+  <text x="680" y="60" font-size="15" font-weight="700" fill="#01F5D1" letter-spacing="1">WHAT THE AGENT SAYS</text>
+
+  <g font-size="16">
+    <!-- row 1 -->
+    <text x="40" y="112" font-size="12.5" font-weight="700" fill="#64748B" letter-spacing="1">EMPANELLED CRECHE</text>
+    <rect x="40" y="126" width="560" height="80" rx="10" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="64" y="172" fill="#FCA5A5" font-family="'SF Mono', Menlo, monospace" font-size="15">Error: claim type not eligible.</text>
+    <line x1="610" y1="166" x2="666" y2="166" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+    <rect x="680" y="126" width="880" height="80" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="704" y="160" fill="#1E293B">
+      <tspan x="704" dy="0">Empanelled creches are billed to the company directly, so there's nothing to</tspan>
+      <tspan x="704" dy="24">reimburse. I'm passing you to the admin team.</tspan>
+    </text>
+
+    <!-- row 2 -->
+    <text x="40" y="262" font-size="12.5" font-weight="700" fill="#64748B" letter-spacing="1">INVOICE TOO OLD</text>
+    <rect x="40" y="276" width="560" height="80" rx="10" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="64" y="322" fill="#FCA5A5" font-family="'SF Mono', Menlo, monospace" font-size="15">Invalid invoice date.</text>
+    <line x1="610" y1="316" x2="666" y2="316" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+    <rect x="680" y="276" width="880" height="80" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="704" y="310" fill="#1E293B">
+      <tspan x="704" dy="0">Invoice dated 12 Feb 2026, more than 2 months ago. Invoices older than</tspan>
+      <tspan x="704" dy="24">2 months can't be reimbursed.</tspan>
+    </text>
+
+    <!-- row 3 -->
+    <text x="40" y="412" font-size="12.5" font-weight="700" fill="#64748B" letter-spacing="1">OVER THE CITY CAP</text>
+    <rect x="40" y="426" width="560" height="80" rx="10" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="64" y="472" fill="#FCA5A5" font-family="'SF Mono', Menlo, monospace" font-size="15">Amount exceeds permitted limit.</text>
+    <line x1="610" y1="466" x2="666" y2="466" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+    <rect x="680" y="426" width="880" height="80" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="704" y="460" fill="#1E293B">
+      <tspan x="704" dy="0">Hyderabad is a Tier 1 city, so the monthly cap is ₹15,000. Your invoice is</tspan>
+      <tspan x="704" dy="24">₹21,417, so ₹15,000 can be reimbursed.</tspan>
+    </text>
+
+    <!-- row 4 -->
+    <text x="40" y="562" font-size="12.5" font-weight="700" fill="#64748B" letter-spacing="1">BACKEND FAILURE</text>
+    <rect x="40" y="576" width="560" height="80" rx="10" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="64" y="622" fill="#FCA5A5" font-family="'SF Mono', Menlo, monospace" font-size="15">Submission failed. Try again later.</text>
+    <line x1="610" y1="616" x2="666" y2="616" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+    <rect x="680" y="576" width="880" height="80" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="704" y="610" fill="#1E293B">
+      <tspan x="704" dy="0">Sorry about that. Your details are saved, so you can try again in a</tspan>
+      <tspan x="704" dy="24">few minutes.</tspan>
+    </text>
+  </g>
+
+  <text x="40" y="700" font-size="13.5" fill="#64748B">Each message names the rule, the number, and what happens next.</text>
+</svg>

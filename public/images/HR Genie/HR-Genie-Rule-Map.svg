@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="40" y="52" font-size="15" font-weight="700" fill="#94A3B8" letter-spacing="1">CRECHE REIMBURSEMENT — FROM POLICY TO RULES</text>
+
+  <!-- header -->
+  <g font-size="13" font-weight="700" fill="#9ec8ff" letter-spacing="1">
+    <rect x="40" y="84" width="1520" height="44" rx="10" fill="#0b1730" stroke="#2563EB" stroke-opacity="0.5"/>
+    <text x="64" y="112">RULE</text>
+    <text x="320" y="112">CHECKED AGAINST</text>
+    <text x="640" y="112">IF IT FAILS</text>
+    <text x="980" y="112">WHAT THE AGENT SAYS</text>
+  </g>
+
+  <g font-size="15">
+    <!-- row 1: creche type -->
+    <rect x="40" y="140" width="1520" height="112" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="64" y="182" fill="#F1F5F9" font-weight="700" font-size="17">1 · Creche type</text>
+    <text x="64" y="208" fill="#B9C7E0" font-size="13.5">The only question asked</text>
+    <text x="320" y="182" fill="#E2E8F0">Employee's answer</text>
+    <text x="320" y="206" fill="#94A3B8" font-size="13.5">Empanelled or not?</text>
+    <text x="640" y="182" fill="#FCA5A5" font-weight="700">Empanelled</text>
+    <text x="640" y="206" fill="#E2B4B4" font-size="13.5">→ redirect to the Admin team</text>
+    <text x="980" y="182" fill="#E2E8F0" font-style="italic">
+      <tspan x="980" dy="0">“Empanelled creches are billed to the company</tspan>
+      <tspan x="980" dy="22">directly, so there's nothing to reimburse.”</tspan>
+    </text>
+
+    <!-- row 2: invoice date -->
+    <rect x="40" y="264" width="1520" height="96" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="64" y="306" fill="#F1F5F9" font-weight="700" font-size="17">2 · Invoice date</text>
+    <text x="64" y="330" fill="#B9C7E0" font-size="13.5">Read, not asked</text>
+    <text x="320" y="306" fill="#E2E8F0">Invoice, via OCR</text>
+    <text x="320" y="330" fill="#94A3B8" font-size="13.5">Within the last 2 months</text>
+    <text x="640" y="306" fill="#FCA5A5" font-weight="700">Older than 2 months</text>
+    <text x="640" y="330" fill="#E2B4B4" font-size="13.5">→ auto-rejected</text>
+    <text x="980" y="318" fill="#E2E8F0" font-style="italic">“Invoices older than 2 months can't be reimbursed.”</text>
+
+    <!-- row 3: city cap -->
+    <rect x="40" y="372" width="1520" height="112" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="64" y="414" fill="#F1F5F9" font-weight="700" font-size="17">3 · City cap</text>
+    <text x="64" y="440" fill="#B9C7E0" font-size="13.5">Monthly, by city tier</text>
+    <text x="320" y="414" fill="#E2E8F0">City on the invoice</text>
+    <text x="320" y="438" fill="#94A3B8" font-size="13.5">Tier 1 ₹15,000 · Tier 2 ₹10,000</text>
+    <text x="640" y="414" fill="#FCD34D" font-weight="700">Over the cap</text>
+    <text x="640" y="438" fill="#E8D7A8" font-size="13.5">→ reimbursed up to the cap</text>
+    <text x="980" y="414" fill="#E2E8F0" font-style="italic">
+      <tspan x="980" dy="0">“Hyderabad is a Tier 1 city, so the monthly cap is</tspan>
+      <tspan x="980" dy="22">₹15,000. Your invoice is ₹21,417, so ₹15,000 can be</tspan>
+      <tspan x="980" dy="22">reimbursed.”</tspan>
+    </text>
+
+    <!-- row 4: child age -->
+    <rect x="40" y="496" width="1520" height="128" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="64" y="538" fill="#F1F5F9" font-weight="700" font-size="17">4 · Child's age</text>
+    <text x="64" y="564" fill="#B9C7E0" font-size="13.5">Four bands</text>
+    <text x="320" y="538" fill="#E2E8F0">Birth certificate</text>
+    <text x="320" y="562" fill="#94A3B8" font-size="13.5">+ creche registration</text>
+    <text x="640" y="538" fill="#FCA5A5" font-weight="700">Under 6 months, or 10+</text>
+    <text x="640" y="562" fill="#E2B4B4" font-size="13.5">→ auto-rejected</text>
+    <text x="640" y="592" fill="#FCD34D" font-weight="700">6–10 years</text>
+    <text x="640" y="614" fill="#E8D7A8" font-size="13.5">→ daycare, employee confirms</text>
+    <text x="980" y="550" fill="#E2E8F0" font-style="italic">
+      <tspan x="980" dy="0">“Aarav is 7, so this will be filed as a daycare claim</tspan>
+      <tspan x="980" dy="22">rather than creche. Do you want to continue?”</tspan>
+    </text>
+
+    <!-- row 5: submission -->
+    <rect x="40" y="636" width="1520" height="96" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="64" y="678" fill="#F1F5F9" font-weight="700" font-size="17">5 · Submission</text>
+    <text x="64" y="702" fill="#B9C7E0" font-size="13.5">Only after “Yes, submit it”</text>
+    <text x="320" y="678" fill="#E2E8F0">MCP → CHROMA API</text>
+    <text x="320" y="702" fill="#94A3B8" font-size="13.5">Returns a Request ID</text>
+    <text x="640" y="678" fill="#FCA5A5" font-weight="700">API call fails</text>
+    <text x="640" y="702" fill="#E2B4B4" font-size="13.5">→ not submitted, details kept</text>
+    <text x="980" y="678" fill="#E2E8F0" font-style="italic">
+      <tspan x="980" dy="0">“Sorry about that. Your details are saved, so you</tspan>
+      <tspan x="980" dy="22">can try again in a few minutes.”</tspan>
+    </text>
+  </g>
+</svg>

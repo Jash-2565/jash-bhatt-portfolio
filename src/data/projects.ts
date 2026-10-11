@@ -172,7 +172,7 @@ export const projects: Project[] = [
     id: 8,
     slug: "hr-genie",
     title: "HR Genie",
-    category: "Agentic AI / Enterprise UX",
+    category: "Agentic AI",
     timeline: "Summer internship, 2026",
     description: "Conversational agents replacing Bajaj Finance's form-based HR workflows — part of a roadmap for 800+ agents.",
     tags: ["Microsoft Copilot Studio", "Power Fx", "Power Automate", "Adaptive Cards", "Azure"],
@@ -184,7 +184,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Hero.svg`,
       thumbnailImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Thumbnail.svg`,
-      role: "Conversational design, Power Fx & Copilot Studio build, architecture migration",
+      role: "Agentic AI Intern",
       sections: [
         {
           title: "Overview",
@@ -203,39 +203,95 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
-          content: "HR ran on CHROMA, a form-based HRMS. Every leave request, reimbursement, or document lookup meant multi-step forms, manual validation, and email follow-ups, for a workforce of thousands."
-        },
-        {
-          title: "Apply Leave",
-          content: "Employees check balances and apply for any of six leave types in conversation. Each type's eligibility rules run live against the CHROMA API, and errors are explained in the chat instead of bouncing a form.",
-          imageLayout: "row",
-          imageHeight: "md:h-[36rem]",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Chat-Mockup.svg`,
-              caption: "Apply Leave — a Figma recreation of the conversation flow (no internal CHROMA data shown)."
-            }
-          ]
-        },
-        {
-          title: "Creche Reimbursement",
-          content: "The agent reads the uploaded invoice with OCR, checks it against city-tier caps and the child's age, and settles the claim in the same session.",
+          content: "HR ran on CHROMA, a form-based HRMS. Every leave request, reimbursement, or document lookup meant multi-step forms, manual validation, and email follow-ups, for a workforce of thousands.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-Flow.svg`,
-              caption: "Before vs after — a multi-day manual review becomes a same-session conversation."
+              caption: "The goal, shown on creche claims: a manual, multi-day review becomes a single conversation."
             }
           ]
         },
         {
-          title: "Local Conveyance Claim",
-          content: "Claims are matched against a vendor master list and priced in Power Fx by transport mode. It was the first topic I built natively on Copilot Studio's Gen 2 architecture.",
+          title: "How I Worked",
+          content: "Every agent went through the same six stages, from the BRD to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement shows the method most clearly, so the next five sections follow it through.",
           images: [
             {
-              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conveyance-Architecture.svg`,
-              caption: "Input → validation → calculation → output — built as the template for future topics."
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Process.svg`,
+              caption: "Read the BRD, map the rules, script the chat, write the messages, review and test, ship."
             }
           ]
+        },
+        {
+          title: "From Policy to Rules",
+          content: "The BRD described creche reimbursement as policy prose. An agent can't act on prose, so my first job was turning each clause into a check: what it's checked against, what happens when it fails, and what the agent says then.\n\nWriting the failure path for every rule up front meant no claim could fall through a gap the form used to hide.",
+          labels: ["5 rules", "3 documents", "1 question asked"],
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Rule-Map.svg`,
+              caption: "The creche rule map, recreated from the agent's logic. Illustrative figures, not internal policy values."
+            }
+          ]
+        },
+        {
+          title: "Scripting the Conversation",
+          content: "With the rules fixed, I scripted the conversation turn by turn: the happy path first, then every point where a rule could take the employee off it.",
+          cards: [
+            { title: "Ask one question", body: "Whether the creche is empanelled is the one thing no document answers, and it ends the flow earliest. So it's asked first, and it's the only question." },
+            { title: "Read, don't ask", body: "Every field the form asked for comes from the invoice, the birth certificate, and the registration certificate instead." },
+            { title: "Nothing submits silently", body: "A summary with the allowed amount, and an explicit \u201cYes, submit it\u201d, come before anything reaches CHROMA." }
+          ],
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conversation-Script.svg`,
+              caption: "The creche script, recreated: ten turns on the happy path, and each exit a rule can take."
+            }
+          ]
+        },
+        {
+          title: "Writing the Hard Messages",
+          callout: { text: "Every rule a form enforces silently now has to be said out loud." },
+          content: "A form can grey out a button. A conversation has to explain itself. Each rejection and failure got its own message, written to name the rule, give the number, and say what happens next.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Message-Rewrites.svg`,
+              caption: "Left: a recreation of how a form would phrase it, not CHROMA's actual copy. Right: the agent's wording."
+            }
+          ]
+        },
+        {
+          title: "Review and Testing",
+          content: "My first draft still followed the form: ask for the details, then the invoice, then return a result. My team lead's review pushed it past the happy path, and testing on real invoices changed it three more times.",
+          cards: [
+            { title: "Lead review · Edge cases", body: "What happens when an invoice is incomplete, a value is missing, or a claim falls outside the rules." },
+            { title: "Lead review · Compliance", body: "Every approval had to trace back to the policy rule that allowed it." },
+            { title: "1 · OCR misreads", body: "Blurry invoices produced wrong amounts and dates. The extracted fields now appear in the chat, and a full summary comes before anything is submitted." },
+            { title: "2 · Unexplained rejections", body: "People didn't understand why a claim was refused. Every check now names its rule and number: 2 months, the age band, the cap and the amount over it." },
+            { title: "3 · Too many questions", body: "Asking for every detail felt like the form again. The agent now asks one question and reads the rest from the documents." }
+          ],
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-V1-V2.svg`,
+              caption: "The first draft against the shipped flow. The numbered steps are the three changes testing forced."
+            }
+          ]
+        },
+        {
+          title: "Every Branch, Playable",
+          content: "The creche agent's full logic as an interactive walkthrough. Pick a scenario to watch a claim move through the flowchart and the chat together: the happy path with a capped amount, an empanelled creche sent to admin, a stale invoice, each child-age rule, and a failed submission.",
+          liveEmbed: {
+            src: `${PUBLIC_URL}/demos/hr-genie-flows/creche.html`,
+            title: "Creche Reimbursement walkthrough",
+            caption: "Built in React from the agent's logic. Illustrative figures, not internal policy values."
+          }
+        },
+        {
+          title: "Apply Leave, Same Method",
+          content: "Apply Leave went through the same six stages, starting from BRD Module 1 for fixed-term contract employees. The rule map covered five leave types (PL, SL, CL, LWP and Maternity), each with its own balance, caps, overlap and block rules. The script asks for a supporting document only when a rule needs one, and every blocked request explains its rule in the chat: the monthly CL cap, LWP while balance remains, or dates that overlap an approved leave.",
+          liveEmbed: {
+            src: `${PUBLIC_URL}/demos/hr-genie-flows/leave.html`,
+            title: "Apply Leave walkthrough",
+            caption: "Built in React from the agent's logic. Illustrative figures, not internal policy values."
+          }
         },
         {
           title: "Leading a Platform Migration",
@@ -251,13 +307,16 @@ export const projects: Project[] = [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg`,
               caption: "The Gen 1 vs Gen 2 comparison I used to make the case for migration — 17 topics migrated as a result."
+            },
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conveyance-Architecture.svg`,
+              caption: "Local Conveyance, the first topic I built natively on Gen 2: input, validation, calculation, output. It became the template for future topics."
             }
           ]
         },
         {
           title: "Reflection",
-          callout: { text: "Every rule a form enforces silently now has to be said out loud." },
-          content: "When the interface is a conversation, validation has to be clear in the moment it matters. And the migration taught me that the most valuable design work is sometimes questioning the foundation everyone else is building on."
+          content: "When the interface is a conversation, validation has to be clear in the moment it matters. My first draft asked what a form would; the shipped agent asks one question and reads the rest. And the migration taught me that the most valuable design work is sometimes questioning the foundation everyone else is building on."
         }
       ]
     }

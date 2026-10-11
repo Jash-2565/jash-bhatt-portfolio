@@ -88,9 +88,9 @@
 
     <!-- box 4 -->
     <rect x="1230" y="382" width="330" height="128" rx="14" fill="#052e22" stroke="#059669"/>
-    <text x="1254" y="428" fill="#6EE7B7" font-weight="700">Instant Approval</text>
-    <text x="1254" y="452" fill="#B8F5DE">Same chat session</text>
-    <text x="1254" y="474" fill="#7ED9B6" font-size="13">Claim processed end-to-end</text>
+    <text x="1254" y="428" fill="#6EE7B7" font-weight="700">Submitted in Chat</text>
+    <text x="1254" y="452" fill="#B8F5DE">Request ID issued</text>
+    <text x="1254" y="474" fill="#7ED9B6" font-size="13">No forms, no email chase</text>
   </g>
 
   <g transform="translate(800,600)" text-anchor="middle">

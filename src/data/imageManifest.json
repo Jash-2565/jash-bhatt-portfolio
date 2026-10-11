@@ -807,5 +807,25 @@
   "/images/HR Genie/HR-Genie-Thumbnail.svg": {
     "w": 1200,
     "h": 900
+  },
+  "/images/HR Genie/HR-Genie-Process.svg": {
+    "w": 1600,
+    "h": 380
+  },
+  "/images/HR Genie/HR-Genie-Creche-V1-V2.svg": {
+    "w": 1600,
+    "h": 660
+  },
+  "/images/HR Genie/HR-Genie-Rule-Map.svg": {
+    "w": 1600,
+    "h": 760
+  },
+  "/images/HR Genie/HR-Genie-Conversation-Script.svg": {
+    "w": 1600,
+    "h": 900
+  },
+  "/images/HR Genie/HR-Genie-Message-Rewrites.svg": {
+    "w": 1600,
+    "h": 720
   }
 }

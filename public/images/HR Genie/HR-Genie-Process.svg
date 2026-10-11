@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 380" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2563EB"/>
+    </marker>
+    <marker id="arrowLoop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#01F5D1"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="52" font-size="15" font-weight="700" fill="#94A3B8" letter-spacing="1">HOW AN AGENT GETS DESIGNED</text>
+
+  <!-- iterate loop: Review & test back to Script -->
+  <path d="M1188 136 C1188 80, 670 80, 670 132" fill="none" stroke="#01F5D1" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrowLoop)"/>
+  <rect x="879" y="70" width="100" height="30" rx="15" fill="#0b1730" stroke="#01F5D1" stroke-opacity="0.6"/>
+  <text x="929" y="90" font-size="13" font-weight="700" fill="#01F5D1" text-anchor="middle" letter-spacing="1">ITERATE</text>
+
+  <g font-size="16">
+    <rect x="40" y="140" width="224" height="140" rx="16" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="62" y="180" fill="#9ec8ff" font-size="13" font-weight="700" letter-spacing="1">01 · INPUT</text>
+    <text x="62" y="212" fill="#F1F5F9" font-weight="700" font-size="19">Read the BRD</text>
+    <text x="62" y="242" fill="#B9C7E0" font-size="14">Policy, written as prose</text>
+    <line x1="264" y1="210" x2="299" y2="210" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arrowP)"/>
+
+    <rect x="299" y="140" width="224" height="140" rx="16" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="321" y="180" fill="#9ec8ff" font-size="13" font-weight="700" letter-spacing="1">02 · RULES</text>
+    <text x="321" y="212" fill="#F1F5F9" font-weight="700" font-size="19">Map the rules</text>
+    <text x="321" y="242" fill="#B9C7E0" font-size="14">Checks + failure paths</text>
+    <line x1="523" y1="210" x2="558" y2="210" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arrowP)"/>
+
+    <rect x="558" y="140" width="224" height="140" rx="16" fill="#0B1F2E" stroke="#0E7490"/>
+    <text x="580" y="180" fill="#67E8F9" font-size="13" font-weight="700" letter-spacing="1">03 · SCRIPT</text>
+    <text x="580" y="212" fill="#F1F5F9" font-weight="700" font-size="19">Script the chat</text>
+    <text x="580" y="242" fill="#BAE6E6" font-size="14">Turns and branch exits</text>
+    <line x1="782" y1="210" x2="817" y2="210" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowLoop)"/>
+
+    <rect x="817" y="140" width="224" height="140" rx="16" fill="#0B1F2E" stroke="#0E7490"/>
+    <text x="839" y="180" fill="#67E8F9" font-size="13" font-weight="700" letter-spacing="1">04 · COPY</text>
+    <text x="839" y="212" fill="#F1F5F9" font-weight="700" font-size="19">Write messages</text>
+    <text x="839" y="242" fill="#BAE6E6" font-size="14">Rejections said plainly</text>
+    <line x1="1041" y1="210" x2="1076" y2="210" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowLoop)"/>
+
+    <rect x="1076" y="140" width="224" height="140" rx="16" fill="#0B1F2E" stroke="#0E7490"/>
+    <text x="1098" y="180" fill="#67E8F9" font-size="13" font-weight="700" letter-spacing="1">05 · VALIDATE</text>
+    <text x="1098" y="212" fill="#F1F5F9" font-weight="700" font-size="19">Review &amp; test</text>
+    <text x="1098" y="242" fill="#BAE6E6" font-size="14">Lead review, real claims</text>
+    <line x1="1300" y1="210" x2="1335" y2="210" stroke="#2563EB" stroke-width="2.5" marker-end="url(#arrowP)"/>
+
+    <rect x="1335" y="140" width="225" height="140" rx="16" fill="#052e22" stroke="#059669"/>
+    <text x="1357" y="180" fill="#6EE7B7" font-size="13" font-weight="700" letter-spacing="1">06 · SHIP</text>
+    <text x="1357" y="212" fill="#F1F5F9" font-weight="700" font-size="19">Build &amp; ship</text>
+    <text x="1357" y="242" fill="#B8F5DE" font-size="14">Copilot Studio, live</text>
+  </g>
+
+  <g transform="translate(800,318)" text-anchor="middle">
+    <rect x="-390" y="0" width="780" height="44" rx="22" fill="#0b1730" stroke="#2563EB" stroke-opacity="0.5"/>
+    <text y="28" font-size="15" font-weight="600" fill="#CBD5E1">Shown end to end on Creche Reimbursement, then reused for Apply Leave</text>
+  </g>
+</svg>

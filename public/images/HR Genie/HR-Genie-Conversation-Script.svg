@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrowExit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F87171"/>
+    </marker>
+    <marker id="arrowWarn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#FCD34D"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="52" font-size="15" font-weight="700" fill="#94A3B8" letter-spacing="1">CONVERSATION SCRIPT — HAPPY PATH, WITH EVERY EXIT</text>
+  <text x="1040" y="52" font-size="15" font-weight="700" fill="#F87171" letter-spacing="1">WHERE IT CAN LEAVE THE PATH</text>
+
+  <!-- spine -->
+  <line x1="100" y1="96" x2="100" y2="852" stroke="#2C4A7C" stroke-width="2"/>
+
+  <g font-size="15">
+    <!-- turn 1 · user -->
+    <circle cx="100" cy="118" r="7" fill="#2563EB"/>
+    <rect x="140" y="90" width="840" height="56" rx="12" fill="#0f2a5c" stroke="#2563EB"/>
+    <text x="164" y="123" fill="#9ec8ff" font-size="12" font-weight="700" letter-spacing="1">USER</text>
+    <text x="250" y="123" fill="#F1F5F9">“I want to claim creche”</text>
+
+    <!-- turn 2 · agent : empanelled -->
+    <circle cx="100" cy="194" r="7" fill="#01F5D1"/>
+    <rect x="140" y="166" width="840" height="56" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="164" y="199" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="1">AGENT</text>
+    <text x="250" y="199" fill="#E2E8F0">“Is your child's creche company-empanelled or non-empanelled?”</text>
+
+    <!-- turn 3 · user -->
+    <circle cx="100" cy="270" r="7" fill="#2563EB"/>
+    <rect x="140" y="242" width="840" height="56" rx="12" fill="#0f2a5c" stroke="#2563EB"/>
+    <text x="164" y="275" fill="#9ec8ff" font-size="12" font-weight="700" letter-spacing="1">USER</text>
+    <text x="250" y="275" fill="#F1F5F9">“Non-empanelled”</text>
+
+    <!-- turn 4 · agent : upload -->
+    <circle cx="100" cy="346" r="7" fill="#01F5D1"/>
+    <rect x="140" y="318" width="840" height="56" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="164" y="351" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="1">AGENT</text>
+    <text x="250" y="351" fill="#E2E8F0">“Got it. Please upload your creche invoice.”</text>
+
+    <!-- turn 5 · user upload + OCR -->
+    <circle cx="100" cy="422" r="7" fill="#2563EB"/>
+    <rect x="140" y="394" width="840" height="56" rx="12" fill="#0f2a5c" stroke="#2563EB"/>
+    <text x="164" y="427" fill="#9ec8ff" font-size="12" font-weight="700" letter-spacing="1">USER</text>
+    <text x="250" y="427" fill="#F1F5F9">Uploads invoice  ·  OCR fields shown in the chat</text>
+
+    <!-- turn 6 · agent : cap -->
+    <circle cx="100" cy="498" r="7" fill="#01F5D1"/>
+    <rect x="140" y="470" width="840" height="56" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="164" y="503" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="1">AGENT</text>
+    <text x="250" y="503" fill="#E2E8F0">“Hyderabad is a Tier 1 city, so the monthly cap is ₹15,000…”</text>
+
+    <!-- turn 7 · agent : age docs -->
+    <circle cx="100" cy="574" r="7" fill="#01F5D1"/>
+    <rect x="140" y="546" width="840" height="56" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="164" y="579" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="1">AGENT</text>
+    <text x="250" y="579" fill="#E2E8F0" font-size="14.5">“Next, please upload your child's birth certificate and the creche registration certificate.”</text>
+
+    <!-- turn 8 · agent : summary -->
+    <circle cx="100" cy="650" r="7" fill="#01F5D1"/>
+    <rect x="140" y="622" width="840" height="56" rx="12" fill="#101E36" stroke="#2C4A7C"/>
+    <text x="164" y="655" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="1">AGENT</text>
+    <text x="250" y="655" fill="#E2E8F0">Summary card  ·  “Shall I submit this claim?”</text>
+
+    <!-- turn 9 · user confirm -->
+    <circle cx="100" cy="726" r="7" fill="#2563EB"/>
+    <rect x="140" y="698" width="840" height="56" rx="12" fill="#0f2a5c" stroke="#2563EB"/>
+    <text x="164" y="731" fill="#9ec8ff" font-size="12" font-weight="700" letter-spacing="1">USER</text>
+    <text x="250" y="731" fill="#F1F5F9">“Yes, submit it”</text>
+
+    <!-- turn 10 · success -->
+    <circle cx="100" cy="802" r="8" fill="#10B981"/>
+    <rect x="140" y="774" width="840" height="56" rx="12" fill="#052e22" stroke="#059669"/>
+    <text x="164" y="807" fill="#6EE7B7" font-size="12" font-weight="700" letter-spacing="1">AGENT</text>
+    <text x="250" y="807" fill="#D1FAE5">“All done. Keep Request ID CR-2026-… to track your claim.”</text>
+  </g>
+
+  <!-- exits -->
+  <g font-size="15">
+    <line x1="980" y1="194" x2="1036" y2="194" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
+    <rect x="1040" y="166" width="520" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="1064" y="190" fill="#FCA5A5" font-weight="700">Empanelled</text>
+    <text x="1064" y="211" fill="#E2B4B4" font-size="13.5">Redirected to the Admin team</text>
+
+    <line x1="980" y1="422" x2="1036" y2="422" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
+    <rect x="1040" y="394" width="520" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="1064" y="418" fill="#FCA5A5" font-weight="700">Invoice older than 2 months</text>
+    <text x="1064" y="439" fill="#E2B4B4" font-size="13.5">Auto-rejected, with the rule named</text>
+
+    <line x1="980" y1="498" x2="1036" y2="498" stroke="#FCD34D" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowWarn)"/>
+    <rect x="1040" y="470" width="520" height="56" rx="12" fill="#211b0b" stroke="#92400E"/>
+    <text x="1064" y="494" fill="#FCD34D" font-weight="700">Over the city cap</text>
+    <text x="1064" y="515" fill="#E8D7A8" font-size="13.5">Continues, reimbursed up to the cap</text>
+
+    <line x1="980" y1="574" x2="1036" y2="574" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
+    <rect x="1040" y="546" width="250" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="1060" y="570" fill="#FCA5A5" font-weight="700">Under 6 mo · 10+</text>
+    <text x="1060" y="591" fill="#E2B4B4" font-size="13.5">Auto-rejected</text>
+    <rect x="1300" y="546" width="260" height="56" rx="12" fill="#211b0b" stroke="#92400E"/>
+    <text x="1320" y="570" fill="#FCD34D" font-weight="700">6–10 years</text>
+    <text x="1320" y="591" fill="#E8D7A8" font-size="13.5">Daycare, employee confirms</text>
+
+    <line x1="980" y1="726" x2="1036" y2="726" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
+    <rect x="1040" y="698" width="520" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
+    <text x="1064" y="722" fill="#FCA5A5" font-weight="700">CHROMA API fails</text>
+    <text x="1064" y="743" fill="#E2B4B4" font-size="13.5">Not submitted, details saved for a retry</text>
+  </g>
+</svg>
