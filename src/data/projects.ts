@@ -17,7 +17,7 @@ export const projects: Project[] = [
     sectionAccent: "bg-[#EDE6FF]",
     content: {
       heroImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Hero.svg`,
-      thumbnailImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Thumbnail.svg`,
+      thumbnailImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Thumbnail.webp`,
       role: "Research, market analysis, concept design",
       team: ["Sharvani", "Hrishika", "Vasuman"],
       sections: [
@@ -183,7 +183,7 @@ export const projects: Project[] = [
     sectionAccent: "bg-[#DCE7FF]",
     content: {
       heroImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Hero.svg`,
-      thumbnailImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Thumbnail.svg`,
+      thumbnailImage: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Thumbnail.webp`,
       role: "AI Agent Development Intern",
       sections: [
         {

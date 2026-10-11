@@ -156,6 +156,24 @@
       1440
     ]
   },
+  "/images/ETSConnect/ETSConnect-Thumbnail.webp": {
+    "w": 2133,
+    "h": 1600,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/HR Genie/HR-Genie-Thumbnail.webp": {
+    "w": 2400,
+    "h": 1800,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
   "/images/Jash-portrait.webp": {
     "w": 800,
     "h": 1067,
@@ -776,13 +794,13 @@
     "w": 1600,
     "h": 800
   },
-  "/images/ETSConnect/ETSConnect-Thumbnail.svg": {
-    "w": 1200,
-    "h": 900
-  },
   "/images/HR Genie/HR-Genie-Chat-Mockup.svg": {
     "w": 900,
     "h": 1360
+  },
+  "/images/HR Genie/HR-Genie-Conversation-Script.svg": {
+    "w": 1600,
+    "h": 900
   },
   "/images/HR Genie/HR-Genie-Conveyance-Architecture.svg": {
     "w": 1600,
@@ -792,6 +810,10 @@
     "w": 1600,
     "h": 760
   },
+  "/images/HR Genie/HR-Genie-Creche-V1-V2.svg": {
+    "w": 1600,
+    "h": 660
+  },
   "/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg": {
     "w": 1600,
     "h": 980
@@ -800,32 +822,20 @@
     "w": 1600,
     "h": 900
   },
-  "/images/HR Genie/HR-Genie-Scale.svg": {
+  "/images/HR Genie/HR-Genie-Message-Rewrites.svg": {
     "w": 1600,
-    "h": 700
-  },
-  "/images/HR Genie/HR-Genie-Thumbnail.svg": {
-    "w": 1200,
-    "h": 900
+    "h": 720
   },
   "/images/HR Genie/HR-Genie-Process.svg": {
     "w": 1600,
     "h": 380
   },
-  "/images/HR Genie/HR-Genie-Creche-V1-V2.svg": {
-    "w": 1600,
-    "h": 660
-  },
   "/images/HR Genie/HR-Genie-Rule-Map.svg": {
     "w": 1600,
     "h": 760
   },
-  "/images/HR Genie/HR-Genie-Conversation-Script.svg": {
+  "/images/HR Genie/HR-Genie-Scale.svg": {
     "w": 1600,
-    "h": 900
-  },
-  "/images/HR Genie/HR-Genie-Message-Rewrites.svg": {
-    "w": 1600,
-    "h": 720
+    "h": 700
   }
 }
