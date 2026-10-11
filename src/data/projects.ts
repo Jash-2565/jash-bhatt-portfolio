@@ -837,7 +837,7 @@ export const projects: Project[] = [
         {
           title: "Reflection",
           callout: { text: "Great embedded systems disappear into the experience." },
-          content: "I designed Revela for children and never got to test it with one. Components kept failing (the ESP32s on unstable power, the LED strips after reassembly), and the prototype never held together long enough to put in a child's hands. So the most important question is still open: does a four-year-old understand it?\n\nThe first thing I'd do with a working wand is that test: three to five children aged 4 to 7, one beacon hidden in a familiar room, and no explanation. I'd watch whether they read red to green as getting closer without being told, how long the find takes, and what they make of the orange 'not connected' light. After that come rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
+          content: "I couldn't test Revela with children. Components kept failing, so the prototype never worked long enough to put in a child's hands."
         },
         {
           title: "Demo",
