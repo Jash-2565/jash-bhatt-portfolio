@@ -31,22 +31,25 @@ export const projects: Project[] = [
           stats: [
             { value: "$10B", label: "India's employee transport market" },
             { value: "8.2%", label: "Annual growth, ahead of global" },
-            { value: "546", label: "Employees per vehicle in India. Europe: 10" }
+            { value: "546", label: "Employees per corporate-mobility vehicle in India. Europe: 10" }
           ],
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Penetration.svg`,
-              caption: "546 employees per vehicle against Europe's 10 — the headroom is structural, not seasonal."
+              caption: "546 employees per corporate-mobility vehicle against Europe's 10 — the headroom is structural, not seasonal."
             }
+          ],
+          sources: [
+            { label: "Not yet confirmed. These figures are still being traced to their original references, so treat them as unverified." }
           ]
         },
         {
           title: "Research",
-          content: "We suspected a gap between how procurement is described and how it actually happens, so we heard from both sides. We interviewed the operator's leadership on site, spoke with the corporate buyers, and ran a survey to check whether what we heard held up more widely.\n\nMapping the stakeholders showed the operator in the middle of a chain it only partly controls.",
+          content: "We suspected a gap between how procurement is described and how it actually happens, so we heard from both sides: two field visits with the operator's CEO and CTO, and seven conversations with corporate stakeholders across the chain.\n\nMapping the stakeholders showed the operator in the middle of a chain it only partly controls.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Research.svg`,
-              caption: "Observation, stakeholder interviews, process mapping, and validation loops back to the people we'd interviewed."
+              caption: "Two field visits and seven conversations, worked through observation, stakeholder interviews, process mapping, and validation loops back to the people we'd interviewed."
             },
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Stakeholders.svg`,
@@ -58,7 +61,7 @@ export const projects: Project[] = [
           title: "What We Found",
           content: "Six findings, each a place where the system works differently from how it describes itself.",
           cards: [
-            { title: "Risk over price", body: "95–97% on-time SLAs and safety turn vendor choice into a risk decision, not a cost one." },
+            { title: "Risk over price", body: "In our conversations, 95–97% on-time SLAs and safety decided the vendor, which makes choosing one a risk decision, not a cost one." },
             { title: "Gated access", body: "The RFP process is structured, but only vendors the buyer already knows get invited." },
             { title: "Split trust", body: "Trust is built informally before a vendor gets in, then enforced formally after selection." },
             { title: "Visibility, not capability", body: "Qualified vendors lose out simply because nobody has heard of them." },
@@ -142,28 +145,33 @@ export const projects: Project[] = [
           title: "The Business Case",
           content: "Supply pays, because corporates only find the platform useful once enough verified providers are on it. Demand for employee transport recurs every day, so each new participant makes the network more valuable to everyone already on it, and harder to replicate.",
           stats: [
-            { value: "₹5,000", label: "Per provider listing, monthly" },
-            { value: "2.5%", label: "One-time fee on contract value" },
-            { value: "500+", label: "Employees at target customers" }
+            { value: "₹5,000", label: "Proposed: per provider listing, monthly" },
+            { value: "2.5%", label: "Proposed: one-time fee on contract value" },
+            { value: "500+", label: "Employees: our bar for a target customer" }
           ]
         },
         {
-          title: "Validation",
+          title: "First Feedback",
           callout: {
             text: "Transparency is the point. Today, a biased vendor recommendation looks exactly like an honest one.",
             attribution: "Senior transport manager, HCL · paraphrased"
           },
-          content: "We took the concept to someone on the buying side of this exact process. His pushback changed how we framed it:",
+          content: "We took the concept to one person on the buying side of this exact process. One conversation is a first reaction, not validation, but his pushback changed how we framed it:",
           cards: [
             { title: "Don't over-restrict", body: "Gating too tightly would rebuild the closed network we set out to open." },
             { title: "Partial pricing", body: "Show benchmarks, but not so much that providers lose negotiating power." },
             { title: "Employee ratings", body: "Let riders rate providers, so service quality is visible, not anecdotal." },
             { title: "Trust is the barrier", body: "Adoption will be slowed by trust and process, not technology." }
+          ],
+          listItems: [
+            "Next, we'd put the RFQ flow in front of three procurement managers and three operators, and see who would post or bid on a real route.",
+            "We'd test whether verified-only access reads as safety or as the closed network again, the risk his first point raised.",
+            "And we'd find out which pricing benchmarks buyers want to see, and which ones providers would refuse to share."
           ]
         },
         {
           title: "Reflection",
-          content: "The most useful thing I did was argue against the question we were asked. We could have delivered competent operational fixes that changed very little. Seeing that the real bottleneck was structural meant telling a client their brief was aimed at the wrong level.\n\nBusiness design also has a research burden that visual work doesn't. Every claim here had to survive someone who does this for a living."
+          content: "The most useful thing I did was argue against the question we were asked. We could have delivered competent operational fixes that changed very little. Seeing that the real bottleneck was structural meant telling a client their brief was aimed at the wrong level.\n\nBusiness design also has a research burden that visual work doesn't, and this project shows where mine still falls short: one feedback conversation, and market figures I have yet to trace to their source."
         }
       ]
     }
@@ -188,7 +196,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows. They sit inside FINAI / Employee Blu, a company-wide push toward 800+ autonomous agents, under the name HR Genie.",
+          content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows. They sit inside FINAI / Employee Blu, the company-wide agent roadmap, under the name HR Genie.",
           stats: [
             { value: "800+", label: "Agents on the FINAI roadmap" },
             { value: "3", label: "HR agents I built" },
@@ -197,13 +205,13 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Scale.svg`,
-              caption: "HR Genie's agents sit inside Bajaj Finance's 800+ agent FINAI / Employee Blu roadmap."
+              caption: "Where HR Genie's agents sit within FINAI / Employee Blu."
             }
           ]
         },
         {
           title: "The Problem",
-          content: "HR ran on CHROMA, a form-based HRMS. Every leave request, reimbursement, or document lookup meant multi-step forms, manual validation, and email follow-ups, for a workforce of thousands.",
+          content: "HR ran on CHROMA, a form-based HRMS. Every leave request, reimbursement, or document lookup meant multi-step forms, manual validation, and email follow-ups, for a workforce of thousands.\n\nTwo people paid for that. The employee filled in fields without seeing the rules behind them, and found out what was wrong only when a claim came back. The HR reviewer checked every claim by hand against the policy, and chased whatever was missing by email.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-Flow.svg`,
@@ -213,7 +221,7 @@ export const projects: Project[] = [
         },
         {
           title: "How I Worked",
-          content: "Every agent went through the same six stages, from the BRD to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement shows the method most clearly, so the next five sections follow it through.",
+          content: "Every agent went through the same six stages, from the BRD to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement shows the method most clearly, so the next six sections follow it through.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Process.svg`,
@@ -234,7 +242,7 @@ export const projects: Project[] = [
         },
         {
           title: "Scripting the Conversation",
-          content: "With the rules fixed, I scripted the conversation turn by turn: the happy path first, then every point where a rule could take the employee off it.",
+          content: "With the rules fixed, I scripted the conversation turn by turn: the happy path first, then every point where a rule could take the employee off it.\n\nThe script also decides the form of each reply. Anything the employee has to check or keep (the fields read from the invoice, the claim summary, the Request ID) arrives as an Adaptive Card. Questions and explanations stay as plain text.",
           cards: [
             { title: "Ask one question", body: "Whether the creche is empanelled is the one thing no document answers, and it ends the flow earliest. So it's asked first, and it's the only question." },
             { title: "Read, don't ask", body: "Every field the form asked for comes from the invoice, the birth certificate, and the registration certificate instead." },
@@ -246,6 +254,21 @@ export const projects: Project[] = [
               caption: "The creche script, recreated: ten turns on the happy path, and each exit a rule can take."
             }
           ]
+        },
+        {
+          title: "Who Decides What",
+          content: "Replacing a form with an agent means deciding what the agent may do without asking. I drew the line by asking one question of every step: is there one right answer in the policy, or does someone have to choose?",
+          table: {
+            caption: "The creche agent's autonomy, step by step.",
+            columns: ["The agent", "In the creche flow", "Why"],
+            rows: [
+              ["Decides alone", "Reads the invoice and certificates, checks the invoice date and the child's age, applies the city cap.", "Each check has one right answer. Asking the employee would bring the form back."],
+              ["Rejects alone, with the rule", "Invoices over 2 months old; children under 6 months or 10 and over.", "The policy is a hard line, so a person in the loop only adds a wait. The message names the rule."],
+              ["Asks first", "A daycare claim (child aged 6 to 10), and the final summary before anything is submitted.", "One is a judgement call, the other moves money. The employee decides both."],
+              ["Hands over", "Claims for company-empanelled creches go to the admin team.", "They follow a different process the agent doesn't own."],
+              ["Stops safely", "If the CHROMA call fails, nothing is submitted; the details are saved and the employee is asked to try again.", "A half-submitted claim is worse than none."]
+            ]
+          }
         },
         {
           title: "Writing the Hard Messages",
@@ -296,7 +319,7 @@ export const projects: Project[] = [
         {
           title: "Leading a Platform Migration",
           callout: { text: "From building what I was asked to, to shaping how the team builds." },
-          content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent on an 800+ roadmap.",
+          content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent added to a roadmap that size.",
           cards: [
             { title: "Spotted it", body: "Gen 1 worked, but it would not scale to the roadmap ahead." },
             { title: "Proved it", body: "I built a proof of concept on Gen 2's no-code, skill-based approach." },
@@ -351,12 +374,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
-          content: "Every semester starts with the same invisible labour: typing an entire course into a calendar, one event at a time.",
-          stats: [
-            { value: "15", label: "Weeks in a typical course" },
-            { value: "3", label: "Sessions a week" },
-            { value: "45+", label: "Events entered by hand" }
-          ]
+          content: "Every semester starts with the same invisible labour: typing an entire course into a calendar, one event at a time. By my own estimate, a 15-week course that meets three times a week is 45 events before a single deadline goes in."
         },
         {
           title: "How It Works",
@@ -374,6 +392,26 @@ export const projects: Project[] = [
               caption: "Chat on the left, the Parsed Plan filling in beside it, assignments on the right."
             }
           ]
+        },
+        {
+          title: "Designing for Trust",
+          callout: { text: "A professor is trusting this tool with their entire semester." },
+          content: "The model can misread a request, so the design question was what it may do without asking. My answer: it can read, ask and suggest on its own, but only the professor changes the calendar.",
+          cards: [
+            { title: "Three kinds of reply", body: "Each response either answers, asks for what's missing, or proposes a change. Keeping the three apart means a question is never mistaken for an edit." },
+            { title: "Review before apply", body: "A change arrives as a card to apply, discard, or replace. Nothing changes silently, because a schedule edit is the one thing that's costly to get wrong." },
+            { title: "Nothing dropped", body: "Extra topics go into an event's notes, and empty sessions become placeholders, so the calendar never quietly loses part of the syllabus." },
+            { title: "Fails in the open", body: "If the model can't be reached, ClassFlow says so after a few retries instead of guessing at a schedule." }
+          ],
+          table: {
+            caption: "What ClassFlow does on its own, and what it leaves to the professor.",
+            columns: ["ClassFlow", "What that covers"],
+            rows: [
+              ["Does alone", "Reads the message, fills the Parsed Plan, asks for whatever is missing, answers questions about the schedule."],
+              ["Asks first", "Every change to the calendar, shown as a card to apply, discard, or replace."],
+              ["Never", "Changes the calendar silently, or drops a topic it couldn't place."]
+            ]
+          }
         },
         {
           title: "Calendar Views",
@@ -402,7 +440,7 @@ export const projects: Project[] = [
         {
           title: "Under the Hood",
           callout: { text: "The AI reads the request. Plain code builds the calendar, so the output is always predictable." },
-          content: "Every message to Gemini 2.5 Flash carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions.",
+          content: "Every message to Gemini 2.5 Flash carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions. When the API is overloaded, a request is retried at 500ms, 1s and 1.8s before the error is shown.",
           imageLayout: 'row',
           imageHeight: 'h-[15rem] sm:h-[22rem]',
           imageCrop: true,
@@ -411,17 +449,11 @@ export const projects: Project[] = [
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Chatbot-Only.webp`,
               caption: "The chatbot panel, the only way schedules get in."
             }
-          ],
-          cards: [
-            { title: "Three kinds of reply", body: "Each response either answers, asks for what's missing, or updates the schedule." },
-            { title: "Review before apply", body: "Changes arrive as a card to apply, discard, or replace. Nothing changes silently." },
-            { title: "Nothing dropped", body: "Extra topics go into an event's notes. Empty sessions become placeholders." },
-            { title: "Fails gracefully", body: "If the API is overloaded, it retries at 500ms, 1s, and 1.8s before showing an error." }
           ]
         },
         {
-          title: "Built for Real Workflows",
-          content: "Features came from how professors actually plan, not what demos well.",
+          title: "After the First Import",
+          content: "The features that matter once the semester is running, not just on day one.",
           cards: [
             { title: "Many courses, one calendar", body: "Each course gets its own colour, and clashes between them are flagged." },
             { title: "Undo", body: "The last 10 changes per course, so trying things is safe." },
@@ -431,8 +463,7 @@ export const projects: Project[] = [
         },
         {
           title: "What I Learned",
-          callout: { text: "A professor is trusting this tool with their entire semester." },
-          content: "Getting the AI to generate a schedule was the easy part. The hard part was making it trustworthy: showing changes before applying them, remembering context, and recovering when the model returns something unexpected."
+          content: "Getting the AI to generate a schedule was the easy part. The hard part was making it trustworthy: showing changes before applying them, remembering context, and recovering when the model returns something unexpected.\n\nWhat I haven't done yet is watch a professor use it. Every decision above comes from my own reasoning about how a semester gets planned, not from observing one. Next, I want to sit with three or four professors as they set up a semester, and find out which of those assumptions hold."
         }
       ]
     }
@@ -697,7 +728,7 @@ export const projects: Project[] = [
             { title: "Zero screens", body: "No display and no app, anywhere in the system." },
             { title: "Instant", body: "Under 100 ms perceived latency, so movement and light feel linked." },
             { title: "Continuous", body: "Not “found or not found”, but “warmer, warmer, here.”" },
-            { title: "No instructions", body: "Readable by a four-year-old on first pick-up." },
+            { title: "No instructions", body: "Meant to be readable by a four-year-old on first pick-up." },
             { title: "Low power", body: "Enough battery to last through play." },
             { title: "Safe", body: "Fully enclosed hardware in a child's hands." }
           ]
@@ -779,8 +810,8 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Testing, and What Broke",
-          content: "We tested soldering quality on the bench and tuned distance response in context. Most of what failed came down to power and space.",
+          title: "Bench Testing, and What Broke",
+          content: "We tested soldering quality on the bench and tuned the distance response in a room. These were engineering tests, run by the team; no child has used the wand yet. Most of what failed came down to power and space.",
           cards: [
             { title: "Unstable power", body: "ESP32s failed on shaky power delivery, and charging modules degraded with use." },
             { title: "LEDs", body: "Strips failed after repeated reassembly, and uneven diffusion made colours harder to read." },
@@ -806,11 +837,11 @@ export const projects: Project[] = [
         {
           title: "Reflection",
           callout: { text: "Great embedded systems disappear into the experience." },
-          content: "Immediate feedback, clear mapping, and a single thing to do made Revela hard to use wrong. Next, I'd explore rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
+          content: "I designed Revela for children and never tested it with one. Everything above shows the wand works. None of it shows that a four-year-old understands it, and that is the gap I'd close first.\n\nThe first test: three to five children aged 4 to 7, one beacon hidden in a familiar room, and no explanation. I'd watch whether they read red to green as getting closer without being told, how long the find takes, and what they make of the orange 'not connected' light. After that come rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
         },
         {
           title: "Demo",
-          content: "The whole interaction in twelve seconds: a child walks the wand toward a lost backpack, and the light moves from red to yellow to green, then pulses white when it's found.",
+          content: "The intended interaction in twelve seconds, animated rather than filmed: a child walks the wand toward a lost backpack, and the light moves from red to yellow to green, then pulses white when it's found.",
           video: {
             src: `${PUBLIC_URL}/images/Revela/revela-demo.mp4`,
             caption: "Animated demo of the proximity-to-colour interaction"
@@ -1110,13 +1141,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns that into five slides you forget by January; the raw export is 120,547 rows nobody reads.\n\nI wanted the thing in between: a magazine feature in eight chapters, every number computed from the export, shipped as one HTML file. It keeps Wrapped's second person on purpose, because that is the format it is arguing with.",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
-              caption: "The opening screen. Nothing on the page is typed in by hand."
-            }
-          ],
+          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns a year of it into a few slides you forget by January; the raw export is 121,462 rows nobody reads.\n\nI wanted the thing in between: a magazine feature in eight chapters, every number computed from the export, shipped as one HTML file. It keeps Wrapped's second person on purpose, because that is the format it is arguing with.",
           // The piece is a static file in public/, not a route. Named
           // explicitly rather than as `/spotify-wrapped/`: a static host
           // resolves the directory to index.html, but Vite's dev server
@@ -1132,19 +1157,19 @@ export const projects: Project[] = [
           stats: [
             { value: "120,547", label: "Distinct plays after dedup" },
             { value: "98,111", label: "Streams past the 30-second rule" },
-            { value: "1 in 6", label: "Plays credited to the wrong artist" }
+            { value: "1 in 6", label: "Streams hiding an uncredited guest artist" }
           ],
           cards: [
-            { title: "Deduplicated", body: "Spotify re-chunks the whole history on every export, so the twelve files overlapped heavily." },
+            { title: "Deduplicated", body: "Spotify re-chunks the whole history on every export, so the twelve files overlap: 915 rows appeared twice and were dropped." },
             { title: "UTC to IST", body: "Timestamps were converted before any question about time of day." },
-            { title: "Fixed credits", body: "16,253 featured-artist plays parsed from track titles, shown as an alternate view, never silently merged." },
+            { title: "Guests credited", body: "The export names only the album artist. 16,253 streams with a guest in the track title are parsed into an alternate view, never silently merged." },
             { title: "Checked twice", body: "Every published figure is re-derived by a second script that shares no code with the builder." }
           ]
         },
         {
           title: "What the Data Knew That I Didn't",
-          callout: { text: "Four plays of Khalid in 2019. Then nothing for 663 days. Then 1,584." },
-          content: "The findings I kept are the ones no ranking would surface. Of 5,676 songs in the library, 226 account for a third of everything I have played.",
+          callout: { text: "Four plays of Khalid. Then nothing for 663 days. Then 1,584." },
+          content: "The findings I kept are the ones no ranking would surface. Of 5,676 different songs played, 226 account for a third of everything I have played.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Surprises.webp`,
