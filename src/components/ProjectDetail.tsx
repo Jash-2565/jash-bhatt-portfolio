@@ -741,7 +741,10 @@ const ProjectDetail = ({
                     most of a second to cross the column and read as the
                     content being typed out rather than arriving, and it was
                     the only place on the site with that entrance. */}
-                <div className="md:col-span-8">
+                {/* min-w-0: a grid item is otherwise as wide as its widest
+                    unbreakable child, so a table's min-width would stretch
+                    the column past a phone screen instead of scrolling. */}
+                <div className="md:col-span-8 min-w-0">
                   {/* The section's thesis, set larger than the body. No quote
                       marks: callouts are often paraphrases, and punctuating
                       one as a quote would claim someone said it verbatim. */}
@@ -799,6 +802,48 @@ const ProjectDetail = ({
                         </li>
                       ))}
                     </ul>
+                  )}
+
+                  {/* A real table rather than a diagram: these are read row
+                      by row, they need to work with a screen reader, and on a
+                      phone a 1600px SVG of one is unreadable. The wrapper
+                      scrolls sideways instead of squeezing the columns, and it
+                      is focusable so that scroll works from the keyboard. */}
+                  {section.table && (
+                    <figure className="m-0 mb-8">
+                      <div
+                        role="region"
+                        aria-label={section.table.caption}
+                        tabIndex={0}
+                        className="overflow-x-auto overscroll-x-contain rounded-sm bg-[var(--surface-1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        <table className={`w-full ${section.table.columns.length > 2 ? 'min-w-[36rem]' : ''} text-left text-sm md:text-[0.95rem]`}>
+                          <thead>
+                            <tr>
+                              {section.table.columns.map((column, i) => (
+                                <th key={i} scope="col" className={`${ui.eyebrow} !tracking-[0.12em] font-normal px-4 py-3 border-b border-white/10 align-bottom`}>
+                                  {column}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {section.table.rows.map((row, r) => (
+                              <tr key={r} className="border-b border-white/10 last:border-0">
+                                {row.map((cell, c) =>
+                                  c === 0 ? (
+                                    <th key={c} scope="row" className="px-4 py-3 align-top font-semibold text-white whitespace-nowrap">{cell}</th>
+                                  ) : (
+                                    <td key={c} className="px-4 py-3 align-top text-ink-body leading-relaxed">{cell}</td>
+                                  )
+                                )}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <figcaption className="mt-3 text-sm text-ink-muted">{section.table.caption}</figcaption>
+                    </figure>
                   )}
 
                   {renderDemoBlock(section)}
@@ -869,6 +914,26 @@ const ProjectDetail = ({
                         {section.cta.text} <ExternalLink size={20} className="opacity-80" />
                       </a>
                     </div>
+                  )}
+
+                  {/* Last in the column, like a footnote: every figure above it
+                      that wasn't calculated here says where it came from. */}
+                  {section.sources && (
+                    <p className="mt-6 max-w-[42rem] text-xs text-ink-muted leading-relaxed">
+                      <span className="font-mono uppercase tracking-[0.14em] mr-2">Sources</span>
+                      {section.sources.map((source, i) => (
+                        <span key={i}>
+                          {i > 0 && ' · '}
+                          {source.url ? (
+                            <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-accent">
+                              {source.label}
+                            </a>
+                          ) : (
+                            source.label
+                          )}
+                        </span>
+                      ))}
+                    </p>
                   )}
                 </div>
 
@@ -945,7 +1010,9 @@ const ProjectDetail = ({
             {nextProject && (
               <>
                 <span className="mx-1 text-ink-muted">·</span>
-                <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-ink-muted">→</kbd>
+                {/* The shortcut needs a modifier (see the keydown handler
+                    above); a bare → scrolls. */}
+                <kbd className="chip px-2 py-1 rounded font-mono text-[10px] text-ink-muted">⌘/Ctrl →</kbd>
                 next
               </>
             )}

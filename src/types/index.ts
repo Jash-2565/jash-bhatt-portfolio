@@ -31,6 +31,12 @@ export interface Section {
   liveEmbed?: { src: string; title: string; caption: string };
   /** Short chips under the body — for facts too small to earn a card. */
   labels?: string[];
+  /** A small table — a decision table, an autonomy matrix. The first cell of
+      each row is that row's label. */
+  table?: { caption: string; columns: string[]; rows: string[][] };
+  /** Where this section's figures come from, as a small line at its foot. A
+      label without a url is a citation only. */
+  sources?: { label: string; url?: string }[];
 }
 
 export interface ProjectContent {
