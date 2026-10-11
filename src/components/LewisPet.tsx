@@ -135,6 +135,9 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
     /** Where he's headed, or null when he's staying put. */
     let walkTarget: number | null = null;
     let walkSpeed = WALK_SPEED;
+    /** Set while he's walking out through one edge of the screen to come back
+        in through the other: where he reappears, and where he's headed then. */
+    let portal: { enterX: number; target: number } | null = null;
     const idleRange = (): [number, number] => (zoneRef.current === 'roam' ? IDLE.restless : IDLE.normal);
     /** Seconds of idling left before he picks something to do. */
     let idleCountdown = randomBetween(...IDLE.normal);
@@ -181,6 +184,25 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
       play(clamped < x ? 'runningLeft' : 'runningRight');
     };
 
+    /** For a change of section that would send him across most of the screen:
+        rather than running the whole width over the content, he walks off the
+        nearer edge and steps back in through the opposite one, as if through
+        a portal. A short move is just a walk. */
+    const travelTo = (target: number) => {
+      const clamped = Math.max(minX(), Math.min(maxX(), target));
+      if (Math.abs(clamped - x) <= window.innerWidth / 2) {
+        walkTo(clamped);
+        return;
+      }
+      const goingLeft = clamped < x;
+      const offRight = window.innerWidth + 4;
+      const offLeft = -petW() - 4;
+      portal = { enterX: goingLeft ? offLeft : offRight, target: clamped };
+      walkTarget = goingLeft ? offRight : offLeft;
+      walkSpeed = TRAVEL_SPEED;
+      play(goingLeft ? 'runningRight' : 'runningLeft');
+    };
+
     /** Idle long enough and he entertains himself. Walking is weighted highest
         — a pet that only ever emotes in place looks stuck — and in Contact
         it's nearly all he does. */
@@ -208,8 +230,9 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
       // A change of section: walk to the new zone, or set off in Contact.
       if (zoneRef.current !== currentZone) {
         currentZone = zoneRef.current;
-        if (currentZone === 'roam') walkTo(randomBetween(minX(), maxX()));
-        else if (x < minX() || x > maxX()) walkTo(x < minX() ? minX() : maxX());
+        portal = null;
+        if (currentZone === 'roam') travelTo(randomBetween(minX(), maxX()));
+        else if (x < minX() || x > maxX()) travelTo(x < minX() ? minX() : maxX());
         else rest();
       }
 
@@ -218,6 +241,7 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
       if (requested) {
         requestRef.current = null;
         walkTarget = null;
+        portal = null;
         play(requested);
       }
 
@@ -238,7 +262,15 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
         const gap = walkTarget - x;
         if (Math.abs(gap) <= step) {
           x = walkTarget;
-          rest();
+          if (portal) {
+            // Out one side, in the other.
+            x = portal.enterX;
+            walkTarget = portal.target;
+            portal = null;
+            play(walkTarget < x ? 'runningLeft' : 'runningRight');
+          } else {
+            rest();
+          }
         } else {
           x += Math.sign(gap) * step;
         }
