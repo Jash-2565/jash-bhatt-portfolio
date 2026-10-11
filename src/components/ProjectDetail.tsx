@@ -579,7 +579,9 @@ const ProjectDetail = ({
       </div>
 
       {/* Main Content Area */}
-      <div className={`${ui.shell} py-10 md:py-16`}>
+      {/* lg:pb-28 leaves room above the footer for Lewis, who walks along
+          its top edge on desktop when the window has no side margin. */}
+      <div className={`${ui.shell} py-10 md:py-16 lg:pb-28`}>
 
         {/* Project Meta. A description list, not headings: as <h3>s these sat
             between the <h1> and the first <h2> section, so every case study's

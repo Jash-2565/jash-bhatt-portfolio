@@ -1721,7 +1721,7 @@ const App = () => {
               screen without scrolling, so its mobile spacing is tuned to keep it
               that way — desktop keeps the original rhythm via the `lg:` values. */}
           {showsPage('contact') && (
-          <section id="contact" data-nav="contact" aria-labelledby="contact-heading" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
+          <section id="contact" data-nav="contact" aria-labelledby="contact-heading" className={`${ui.section} pb-6 lg:pb-28 ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-16">
                 <Reveal variant="rise-soft">

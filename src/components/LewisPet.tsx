@@ -116,13 +116,16 @@ export default function LewisPet() {
 
     const maxX = () =>
       Math.max(EDGE_MARGIN, window.innerWidth - PET_W - backToTopKeepout());
-    /** The gutter's left edge. */
-    const minX = () => contentRightEdge() + EDGE_MARGIN;
-    /** A gutter too narrow to stand in — most laptop widths, where the column
-        runs nearly edge to edge. He used to park beside the back-to-top button
-        there, which put him on top of the content; now he stays out of sight
-        until the window is wide enough. */
-    const hasRoom = () => maxX() >= minX();
+    /** Two places he can be without standing on the work: the gutter right
+        of the content column, or — when the window has no gutter, which since
+        the layout scales to fill wide screens is nearly always — the top edge
+        of the footer, in the empty space below the page's last section. He
+        is hidden only while neither is on screen. */
+    const gutterLeft = () => contentRightEdge() + EDGE_MARGIN;
+    const hasGutter = () => maxX() >= gutterLeft();
+    const onFooter = () => lift > 0;
+    const minX = () => (hasGutter() ? gutterLeft() : EDGE_MARGIN);
+    const hasRoom = () => hasGutter() || onFooter();
     let shown = true;
     /** Too little room to take a step: he stays put and only emotes. */
     const canWalk = () => maxX() - minX() >= PET_W;
@@ -213,11 +216,7 @@ export default function LewisPet() {
       if (room !== shown) {
         shown = room;
         node.style.visibility = room ? '' : 'hidden';
-        // Back in view at the dock rather than wherever he was when hidden.
-        if (room) {
-          x = maxX();
-          rest();
-        }
+        if (room) rest();
       }
 
       const limit = maxX();
