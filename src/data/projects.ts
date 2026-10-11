@@ -211,7 +211,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
-          content: "HR ran on CHROMA, a form-based HRMS. Every leave request, reimbursement, or document lookup meant multi-step forms, manual validation, and email follow-ups, for a workforce of thousands.\n\nTwo people paid for that. The employee filled in fields without seeing the rules behind them, and found out what was wrong only when a claim came back. The HR reviewer checked every claim by hand against the policy, and chased whatever was missing by email.",
+          content: "Employees used CHROMA, a form-based HRMS, to apply for leave and claim reimbursements. Each request meant multi-step forms, manual validation, and email follow-ups.\n\nEmployees filled in fields without seeing the rules behind them, and only found out something was wrong when a request came back. HR then checked each claim by hand and chased missing details by email.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-Flow.svg`,
@@ -374,7 +374,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
-          content: "Every semester starts with the same invisible labour: typing an entire course into a calendar, one event at a time. By my own estimate, a 15-week course that meets three times a week is 45 events before a single deadline goes in."
+          content: "Every semester starts with the same invisible labour: typing an entire course into a calendar, one event at a time. By my own estimate, a 15-week course that meets three times a week is 45 events that need to be made manually."
         },
         {
           title: "How It Works",
@@ -1125,10 +1125,10 @@ export const projects: Project[] = [
     id: 10,
     slug: "soundtrack-seven-years",
     title: "The Soundtrack of Seven Years",
-    category: "Data Visualization / Design Engineering",
+    category: "Data Visualisation",
     timeline: "Personal project, 2026",
     description: "Seven years of my own Spotify history — 98,111 plays — read as an eight-chapter scrollytelling piece.",
-    tags: ["Data Visualization", "Design Engineering", "Python", "SVG", "Editorial Design"],
+    tags: ["Python", "React"],
     color: "bg-[#0A0C0B]",
     accentColor: "text-[#3EC873]",
     hoverColor: "group-hover:text-[#3EC873]",
@@ -1137,7 +1137,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Thumbnail.webp`,
-      role: "Data pipeline, design, build",
+      role: "Data Visualization Designer",
       sections: [
         {
           title: "Overview",
