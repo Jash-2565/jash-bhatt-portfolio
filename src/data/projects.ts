@@ -679,7 +679,7 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Data Visualization Components",
+          title: "Data Visualisation Components",
           content: "I designed chart templates for line, scatter, combo, and radial styles with consistent titles, legends, axes, and utility controls for dashboard-level readability.",
           images: [
             {
@@ -1137,7 +1137,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/Spotify/Soundtrack-Thumbnail.webp`,
-      role: "Data Visualization Designer",
+      role: "Data Visualisation Designer",
       sections: [
         {
           title: "Overview",
