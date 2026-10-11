@@ -713,7 +713,7 @@ export const projects: Project[] = [
       // A tighter crop of the same shot, so the card and the hero are not the
       // identical image seen twice in a row.
       thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela-Thumbnail.webp`,
-      role: "Circuit design, hardware prototyping, physical computing",
+      role: "Circuit designer",
       team: ["Khushii Mehta", "Kaushal Gajipara", "Parinita Shiralige"],
       sections: [
         {
@@ -811,7 +811,7 @@ export const projects: Project[] = [
         },
         {
           title: "Bench Testing, and What Broke",
-          content: "We tested soldering quality on the bench and tuned the distance response in a room. These were engineering tests, run by the team; no child has used the wand yet. Most of what failed came down to power and space.",
+          content: "We tested soldering quality on the bench and tuned the distance response in a room. These were engineering tests, run by the team. Most of what failed came down to power and space, and those failures are why no child got to use the wand.",
           cards: [
             { title: "Unstable power", body: "ESP32s failed on shaky power delivery, and charging modules degraded with use." },
             { title: "LEDs", body: "Strips failed after repeated reassembly, and uneven diffusion made colours harder to read." },
@@ -837,7 +837,7 @@ export const projects: Project[] = [
         {
           title: "Reflection",
           callout: { text: "Great embedded systems disappear into the experience." },
-          content: "I designed Revela for children and never tested it with one. Everything above shows the wand works. None of it shows that a four-year-old understands it, and that is the gap I'd close first.\n\nThe first test: three to five children aged 4 to 7, one beacon hidden in a familiar room, and no explanation. I'd watch whether they read red to green as getting closer without being told, how long the find takes, and what they make of the orange 'not connected' light. After that come rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
+          content: "I designed Revela for children and never got to test it with one. Components kept failing (the ESP32s on unstable power, the LED strips after reassembly), and the prototype never held together long enough to put in a child's hands. So the most important question is still open: does a four-year-old understand it?\n\nThe first thing I'd do with a working wand is that test: three to five children aged 4 to 7, one beacon hidden in a familiar room, and no explanation. I'd watch whether they read red to green as getting closer without being told, how long the find takes, and what they make of the orange 'not connected' light. After that come rooms with many beacons, sensitivity that adapts, and an enclosure that's easier to manufacture."
         },
         {
           title: "Demo",
