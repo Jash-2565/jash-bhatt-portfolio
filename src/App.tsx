@@ -1189,10 +1189,9 @@ const App = () => {
                     I design products, then <span className="accent-shimmer font-semibold">build them</span> until they work.
                   </h1>
                   {/* One title. The line under it used to cycle through five
-                      identities, from Product Designer to Circuit & Hardware;
-                      the projects named here make the case instead. */}
+                      identities, from Product Designer to Circuit & Hardware. */}
                   <p className="text-[1.05rem] md:text-[1.34rem] text-ink-body mb-5 lg:mb-8 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
-                    I'm <span className="font-semibold text-ink">Jash Bhatt</span>, a product designer in my final year at FLAME&nbsp;University. HR agents at Bajaj Finance, a semester planner for professors, a wand that guides children to lost things: I designed each one, then built it.
+                    I'm <span className="font-semibold text-ink">Jash Bhatt</span>, a product designer in my final year at FLAME&nbsp;University.
                   </p>
 
                   <div className="hidden lg:flex flex-col sm:flex-row gap-4 mt-auto animate-fade-in-up" style={{ animationDelay: '380ms' }}>
