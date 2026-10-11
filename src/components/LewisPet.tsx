@@ -35,8 +35,10 @@ const TRAVEL_SPEED = 240;
 const TRAVEL_DISTANCE = 300;
 /** Keeps him off the very edge of the viewport, where he'd clip. */
 const EDGE_MARGIN = 16;
-/** Breathing room between him and the content column in the margin. */
-const MARGIN_GAP = 6;
+/** In the margin: room between him and the screen edge, and a wider berth
+    from the content so he reads as beside the work, not touching it. */
+const MARGIN_EDGE = 8;
+const CONTENT_GAP = 32;
 /** The back-to-top button occupies the bottom-right corner — 48px wide, 20px
     in from the edge, at the 16px root — and sits at the same z-index as the
     pet, who is tall enough to cover it completely. Ending his walkable strip
@@ -114,14 +116,14 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
 
     const targetScale = () => {
       if (zoneRef.current !== 'margin') return DISPLAY_SCALE;
-      const room = contentLeftEdge() - 2 * MARGIN_GAP;
+      const room = contentLeftEdge() - MARGIN_EDGE - CONTENT_GAP;
       return Math.max(MIN_SCALE, Math.min(DISPLAY_SCALE, room / CELL_W));
     };
 
-    const minX = () => (zoneRef.current === 'margin' ? MARGIN_GAP : EDGE_MARGIN);
+    const minX = () => (zoneRef.current === 'margin' ? MARGIN_EDGE : EDGE_MARGIN);
     const maxX = () =>
       zoneRef.current === 'margin'
-        ? Math.max(MARGIN_GAP, contentLeftEdge() - MARGIN_GAP - CELL_W * targetScale())
+        ? Math.max(MARGIN_EDGE, contentLeftEdge() - CONTENT_GAP - CELL_W * targetScale())
         : Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
 
     // He starts docked to the right, the app's default side — at the edge of
