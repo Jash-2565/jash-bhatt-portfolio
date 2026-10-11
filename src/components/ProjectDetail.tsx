@@ -13,9 +13,8 @@ import { usePointerFine } from '../hooks/usePointerFine';
 import { ARKANOID_CODE } from '../data/arkanoidCode';
 import { YOLOV8_CODE } from '../data/yolov8Code';
 import { MOVIE_RECS_CODE } from '../data/movieRecsCode';
-import { getImageSources, scaledSlot, DEFAULT_SIZES } from '../utils/imageSources';
-import { PUBLIC_URL } from '../utils/getBaseUrl';
-import videoManifest from '../data/videoManifest.json';
+import { scaledSlot, DEFAULT_SIZES } from '../utils/imageSources';
+import { mediaAspect } from '../utils/mediaAspect';
 
 /**
  * Each demo with the Python it was ported from. The listings are imported here
@@ -70,16 +69,6 @@ const zoomProps = (
   };
 };
 
-/** Width ÷ height of a project image or GIF clip, from the build manifests.
-    Falls back to 4:3 for anything they don't list (SVGs, remote files). */
-const videoEntries = videoManifest as Record<string, { w?: number; h?: number }>;
-const mediaAspect = (src: string) => {
-  const image = getImageSources(src);
-  if (image) return image.width / image.height;
-  const key = (PUBLIC_URL && src.startsWith(PUBLIC_URL) ? src.slice(PUBLIC_URL.length) : src).replace(/\.gif$/i, '');
-  const video = videoEntries[key];
-  return video?.w && video?.h ? video.w / video.h : 4 / 3;
-};
 
 /**
  * The affordance that says a picture opens full screen.

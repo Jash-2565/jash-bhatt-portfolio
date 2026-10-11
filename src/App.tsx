@@ -32,6 +32,7 @@ import {
 } from './config/ui';
 import { PUBLIC_URL } from './utils/getBaseUrl';
 import { scaledSlot } from './utils/imageSources';
+import { mediaAspect } from './utils/mediaAspect';
 import { analyticsLocation } from './utils/analyticsRoute';
 import { parseLocation, routeToPath, hasLegacyHash, SITE_ORIGIN } from './utils/routes';
 import type { Route } from './utils/routes';
@@ -174,6 +175,7 @@ const App = () => {
     event.currentTarget.style.setProperty('--my', '0px');
   };
   const isWhiteBgLightboxImage = selectedImage?.src.includes('Circuit-Design.webp');
+  const lightboxAspect = selectedImage ? mediaAspect(selectedImage.src) : 1;
 
   // Mounting happens here rather than in an effect keyed on isMenuOpen: both
   // flags land in the same commit, so the panel exists on the first render that
@@ -945,17 +947,32 @@ const App = () => {
             onClick={() => setSelectedImage(null)}
           >
             <figure className="m-0 flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
-              <ResponsiveImage
-                src={selectedImage.src}
-                // The caption, not "Full size view". This is the site's primary
-                // image-viewing surface; announcing the same four words for
-                // every diagram in every case study told a screen-reader user
-                // nothing at all.
-                alt={selectedImage.alt}
-                className={`max-w-full max-h-[80vh] w-auto h-auto object-contain rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : ''}`}
-                loading="eager"
-                sizes="90vw"
-              />
+              {/* Every image and clip opens as large as the screen allows, at
+                  its own proportions. They used to show at their own pixel
+                  size, capped at 80% of the height, so a 480px GIF opened at
+                  480px and had to be pinched up. The frame is sized from the
+                  media's aspect ratio: the width that fills the screen, or the
+                  width that fills the height left after the caption,
+                  whichever is smaller. */}
+              <div
+                className={`relative overflow-hidden rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : 'bg-[var(--surface-1)]'}`}
+                style={{
+                  aspectRatio: lightboxAspect,
+                  width: `min(calc(100vw - 2rem), calc((100dvh - 9rem) * ${lightboxAspect}))`,
+                }}
+              >
+                <ResponsiveImage
+                  src={selectedImage.src}
+                  // The caption, not "Full size view". This is the site's
+                  // primary image-viewing surface; announcing the same four
+                  // words for every diagram in every case study told a
+                  // screen-reader user nothing at all.
+                  alt={selectedImage.alt}
+                  className="block w-full h-full object-contain"
+                  loading="eager"
+                  sizes="100vw"
+                />
+              </div>
               {(selectedImage.caption ?? selectedImage.alt) && (
                 <figcaption className="max-w-2xl px-4 text-center text-sm text-ink-body">
                   {selectedImage.caption ?? selectedImage.alt}
