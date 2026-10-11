@@ -1419,9 +1419,12 @@ const App = () => {
                 const needsBackdrop = isPlaceholder || fitsInside;
 
                 return (
-                  // No stagger: the cards are a screen apart, so each one
-                  // arrives on its own and a delay only adds empty time.
-                  <Reveal key={project.id} variant="rise">
+                  // Starts as the card's top edge enters the screen, not
+                  // before it like the default: pre-triggered, the rise was
+                  // over before anyone saw it. Anything on screen is already
+                  // fading in, so a fast skim still never meets an empty
+                  // screen. No stagger: the cards are a screen apart.
+                  <Reveal key={project.id} variant="lift" rootMargin="0px" duration={800}>
                   <a
                     href={`#${project.slug}`}
                     id={`project-${project.id}`}

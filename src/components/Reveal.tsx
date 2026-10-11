@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useInView } from '../hooks/useInView';
 
 type WipeVariant = 'wipe-right' | 'wipe-left' | 'wipe-down' | 'grow-width';
-type RiseVariant = 'rise' | 'rise-soft';
+type RiseVariant = 'rise' | 'rise-soft' | 'lift';
 type RevealVariant = WipeVariant | RiseVariant | 'fade';
 
 type RevealProps = {
@@ -45,7 +45,9 @@ const wipes: Record<WipeVariant, { position: string; from: string }> = {
 // has established rather than a new one. `rise-soft` is half that: enough to
 // register as motion, little enough that a long paragraph doesn't appear to
 // slide into place.
-const rises: Record<RiseVariant, number> = { rise: 12, 'rise-soft': 6 };
+// `lift` is for the Work cards: they reveal as they enter the screen rather
+// than before it, so the motion has to be large enough to be seen.
+const rises: Record<RiseVariant, number> = { rise: 12, 'rise-soft': 6, lift: 40 };
 
 const isWipe = (v: RevealVariant): v is WipeVariant => v in wipes;
 const isRise = (v: RevealVariant): v is RiseVariant => v in rises;
