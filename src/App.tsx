@@ -14,7 +14,6 @@ import Reveal from './components/Reveal';
 import RotatingText from './components/RotatingText';
 import PipeList from './components/PipeList';
 import TiltCard from './components/TiltCard';
-import Marquee from './components/Marquee';
 import BackToTop from './components/BackToTop';
 import Magnetic from './components/Magnetic';
 import CursorGlow from './components/CursorGlow';
@@ -100,11 +99,6 @@ const lockBodyScroll = () => {
     window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
   };
 };
-
-const marqueeItems = [
-  'Product Design', 'UI/UX', 'Circuit Design', 'Interaction Design', 'Figma',
-  'React', 'Arduino', 'Generative AI', 'Prototyping', 'Motion Design', 'Photography',
-];
 
 /**
  * The entry URL, resolved once, before the first render.
@@ -599,50 +593,51 @@ const App = () => {
     setMeta('meta[name="twitter:description"]', 'Jash Bhatt Portfolio');
   }, [currentView, selectedProject, mobilePage]);
 
-  // Scroll spy. Uses IntersectionObserver rather than a scroll handler: the old
-  // version read offsetTop/offsetHeight for four sections on every scroll event
-  // from a non-passive listener, which forces layout on the main thread mid-swipe
-  // — the most expensive thing on the page during a touch scroll.
+  // Scroll spy. The nav marks whichever section crosses a line 35% of the way
+  // down the screen — where the eye is reading, not wherever the most pixels
+  // happen to be.
+  //
+  // It used to mark the section with the highest intersectionRatio, the share
+  // of the section on screen. That penalises tall sections: Work runs ~6,000px,
+  // so even filling the viewport it scored ~0.15, and a short About peeking in
+  // at the bottom outscored it. The More work list and the Explorations card
+  // were not observed at all, so reading them marked About. Sections tagged
+  // `data-nav` say which item they belong to, so all three of those mark Work.
   useEffect(() => {
     if (currentView !== 'home') return;
     // Paged mobile layout mounts one section at a time, so there is nothing to
     // spy on — `mobilePage` is the source of truth for the active tab there.
     if (isMobile) return;
 
-    const sections = ['home', 'work', 'about', 'contact'];
-    const elements = sections
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
+    const elements = Array.from(document.querySelectorAll<HTMLElement>('[data-nav]'));
     if (elements.length === 0) return;
 
-    // Ratios live outside the callback so a section leaving view can hand the
-    // active state to whichever section is now most visible.
-    const ratios = new Map<string, number>();
+    // Kept outside the callback, which only reports changes: after a manual
+    // scroll ends, the section already on the line is still known.
+    const onLine = new Set<HTMLElement>();
+    const markLine = () => {
+      if (isManualScroll.current) return;
+      const current = elements.find((el) => onLine.has(el));
+      if (current?.dataset.nav) setActiveSection(current.dataset.nav);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) onLine.add(el);
+          else onLine.delete(el);
         });
-        if (isManualScroll.current) return;
-
-        let bestId = '';
-        let bestRatio = 0;
-        ratios.forEach((ratio, id) => {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestId = id;
-          }
-        });
-        if (bestId) setActiveSection(bestId);
+        markLine();
       },
-      { threshold: [0, 0.15, 0.3, 0.5, 0.75, 1] }
+      // A one-percent band at 35% of the viewport height.
+      { rootMargin: '-35% 0px -64% 0px', threshold: 0 }
     );
 
     elements.forEach((el) => observer.observe(el));
 
-    // The contact section is short enough that it may never win on ratio, so
-    // hitting the bottom of the page still pins it explicitly.
+    // The contact section is short enough that it may never reach the line,
+    // so hitting the bottom of the page still pins it explicitly.
     const handleBottom = () => {
       if (isManualScroll.current) return;
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
@@ -917,12 +912,13 @@ const App = () => {
           a long page back to the top. */}
       <BackToTop />
       {/* The desktop pet, on the desktop layout only — he needs room to walk.
-          Off the home page he keeps to the gutter beside the content column.
+          He keeps to the gutter beside the content column on every page, and
+          stays hidden when the window has no gutter.
           Code-split and mounted on idle: his sprite sheet is ~0.5MB and used to
           land in the middle of the first paint. */}
       {!isMobile && showPet && (
         <Suspense fallback={null}>
-          <LewisPet gutterOnly={currentView !== 'home'} />
+          <LewisPet />
         </Suspense>
       )}
       {/* Lightbox Modal. The image sits in its own scroll container with
@@ -1141,6 +1137,7 @@ const App = () => {
           {showsPage('home') && (
           <section
             id="home"
+            data-nav="home"
             aria-label="Introduction"
             // No min-height below `lg`. Once the redundant CTAs came out, forcing
             // a full screen left ~290px of void above the fold; letting the hero
@@ -1320,9 +1317,6 @@ const App = () => {
             </section>
           )}
 
-          {/* Discipline Marquee */}
-          {showsPage('home') && <Marquee items={marqueeItems} />}
-
           {/* Featured work preview — paged mobile Home only. Keeps Home from
               being a dead end that shows no work, without dragging the whole
               6,300px Work section back onto it. The contact strip below it
@@ -1407,19 +1401,12 @@ const App = () => {
 
           {/* Work Section */}
           {showsPage('work') && (
-          <section id="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
-            {/* Capped at the paragraph's width so the wipe spans the text. At
-                full shell width the text ends halfway across and is fully
-                shown in the first ~180ms of a 780ms wipe and reads as a snap.
-                Below md the mask is overridden, here and on the bar, so the
-                header is simply there:
-                it sits in view on arrival, alongside an HR Genie card whose
-                subtle rise read as no animation beside the wipe.
-                The -18% trigger line: at the default -10% this wiped in at
-                the bottom edge while the hero still filled the screen, and
-                was over before anyone looked down; at -25% it lagged the
-                scroll. */}
-            <Reveal rootMargin="0px 0px -18% 0px" className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
+          <section id="work" data-nav="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
+            {/* Capped at the paragraph's width so the wipe spans the text
+                rather than finishing a third of the way across. Below md the
+                mask is overridden, here and on the bar, so the header is
+                simply there: it sits in view on arrival. */}
+            <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
               <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
               <p className="text-ink-body max-w-2xl mb-5 md:mb-6">AI agents, AI-enabled interfaces, and the circuits underneath them — each project shows how I think through design, engineering, and behavior together.</p>
               <Reveal variant="grow-width" className="max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
@@ -1449,16 +1436,9 @@ const App = () => {
                 const needsBackdrop = isPlaceholder || fitsInside;
 
                 return (
-                  // Waits for 20% of the card, not the default 12%: these are
-                  // ~540px tall, so at 12% the fade had finished while most
-                  // of the card — HR Genie especially, arriving under the
-                  // hero — was still below the fold. 30% lagged the scroll.
-                  <Reveal
-                    key={project.id}
-                    variant="rise"
-                    delay={Math.min(index * 60, 240)}
-                    threshold={0.2}
-                  >
+                  // No stagger: the cards are a screen apart, so each one
+                  // arrives on its own and a delay only adds empty time.
+                  <Reveal key={project.id} variant="rise">
                   <a
                     href={`#${project.slug}`}
                     id={`project-${project.id}`}
@@ -1568,14 +1548,12 @@ const App = () => {
               wins: the Explorations card that follows reads as the end of
               this list, and the full section padding left a 96px hole. */}
           {showsPage('work') && secondaryProjects.length > 0 && (
-            <section id="archive" aria-labelledby="archive-heading" className={`${ui.section} pt-0 pb-6 sm:pb-8 lg:pb-8 ${ui.shell} ${ui.scrollMt}`}>
-              {/* The Selected Projects wipe, tuned for a much shorter heading.
-                  The box fits the text (~180px) so the whole wipe is spent on
-                  it, over 500ms rather than 780ms: at 780ms it crawled, and on
-                  that header's 672px box the text was shown in ~110ms and
-                  barely read as a reveal. Unlike that header it still animates
-                  on phones — it is scrolled to, not on screen on arrival. */}
-              <Reveal className="mb-8 w-fit" duration={500}>
+            <section id="archive" data-nav="work" aria-labelledby="archive-heading" className={`${ui.section} pt-0 pb-6 sm:pb-8 lg:pb-8 ${ui.shell} ${ui.scrollMt}`}>
+              {/* The Selected Projects wipe on a box that fits the text, so
+                  the whole wipe is spent on it. Unlike that header it still
+                  animates on phones — it is scrolled to, not on screen on
+                  arrival. */}
+              <Reveal className="mb-8 w-fit">
                 <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
                 <h2 id="archive-heading" className={`${ui.h2} font-display text-ink`}>More work</h2>
                 <Reveal variant="grow-width">
@@ -1646,7 +1624,7 @@ const App = () => {
               that the galleries are a view of their own rather than part of
               this scroll. */}
           {showsPage('work') && (
-            <section aria-label="Beyond case studies" className={`${ui.shell} pb-14 sm:pb-20`}>
+            <section data-nav="work" aria-label="Beyond case studies" className={`${ui.shell} pb-14 sm:pb-20`}>
               <Reveal variant="rise">
                 <a
                   href="#explorations"
@@ -1666,7 +1644,7 @@ const App = () => {
 
           {/* About Section */}
           {showsPage('about') && (
-          <section id="about" aria-labelledby="about-heading" className={`${ui.section} ${ui.scrollMt}`}>
+          <section id="about" data-nav="about" aria-labelledby="about-heading" className={`${ui.section} ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <Reveal variant="rise-soft">
@@ -1757,7 +1735,7 @@ const App = () => {
               screen without scrolling, so its mobile spacing is tuned to keep it
               that way — desktop keeps the original rhythm via the `lg:` values. */}
           {showsPage('contact') && (
-          <section id="contact" aria-labelledby="contact-heading" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
+          <section id="contact" data-nav="contact" aria-labelledby="contact-heading" className={`${ui.section} pb-6 lg:pb-24 ${ui.scrollMt}`}>
             <div className={ui.shell}>
               <div className="grid md:grid-cols-2 gap-6 md:gap-16">
                 <Reveal variant="rise-soft">
@@ -1825,7 +1803,7 @@ const App = () => {
               <p className="text-ink-body max-w-2xl">
                 Photography, brand motion, generative experiments, and image-making — the work that keeps the visual muscles moving alongside the case studies.
               </p>
-              <Reveal variant="grow-width" delay={180} duration={900}>
+              <Reveal variant="grow-width" delay={180}>
                 <div className="mt-5 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
               </Reveal>
             </Reveal>

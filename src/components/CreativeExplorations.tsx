@@ -328,7 +328,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
                     Wake Lewis
                   </button>
                   <p className="text-ink-muted text-xs mt-2">
-                    He'll walk along the bottom of this page.
+                    He walks in the margin beside the page, on a screen wide enough to have one.
                   </p>
                 </>
               ) : (

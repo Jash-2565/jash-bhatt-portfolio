@@ -45,8 +45,8 @@ const IDLE_DELAY_MAX = 8;
 const STORAGE_KEY = 'lewis-pet-dismissed';
 
 /** Mirrors `ui.shell` (max-w-[84rem], lg:px-12): the right edge of the content
-    column, centred in the viewport. Past it is gutter he can walk in without
-    covering text. */
+    column, centred in the viewport. Past it is the gutter, the only place he
+    walks: anywhere left of it he would be standing on the work. */
 const SHELL_MAX_W = 1344;
 const SHELL_PAD = 48;
 const contentRightEdge = () =>
@@ -54,26 +54,13 @@ const contentRightEdge = () =>
 
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min);
 
-type LewisPetProps = {
-  /** Keep to the gutter right of the content column. For reading pages, where
-      walking the full width would carry him across body copy. */
-  gutterOnly?: boolean;
-};
-
-export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
+export default function LewisPet() {
   const petRef = useRef<HTMLDivElement>(null);
-  // Read by the loop every frame, so switching pages re-bounds him in place
-  // instead of restarting the effect and snapping him back to the dock.
-  const gutterOnlyRef = useRef(gutterOnly);
-  useEffect(() => {
-    gutterOnlyRef.current = gutterOnly;
-  }, [gutterOnly]);
   const enabled = usePointerFine();
   const [dismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.localStorage.getItem(STORAGE_KEY) === 'true';
   });
-  const [hovered, setHovered] = useState(false);
   /** Written by the pointer handlers, drained by the loop. A ref rather than
       state: greeting him must not re-render the page, and the loop owns the
       timing of when the interruption actually takes effect. */
@@ -126,12 +113,14 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
 
     const maxX = () =>
       Math.max(EDGE_MARGIN, window.innerWidth - PET_W - BACK_TO_TOP_KEEPOUT);
-    /** In gutter mode, the gutter's left edge — or maxX when the gutter is too
-        narrow to hold him, which parks him beside the back-to-top button. */
-    const minX = () => {
-      if (!gutterOnlyRef.current) return EDGE_MARGIN;
-      return Math.min(maxX(), contentRightEdge() + EDGE_MARGIN);
-    };
+    /** The gutter's left edge. */
+    const minX = () => contentRightEdge() + EDGE_MARGIN;
+    /** A gutter too narrow to stand in — most laptop widths, where the column
+        runs nearly edge to edge. He used to park beside the back-to-top button
+        there, which put him on top of the content; now he stays out of sight
+        until the window is wide enough. */
+    const hasRoom = () => maxX() >= minX();
+    let shown = true;
     /** Too little room to take a step: he stays put and only emotes. */
     const canWalk = () => maxX() - minX() >= PET_W;
 
@@ -217,9 +206,20 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
       // mid-stride, and the next frame puts him back in bounds regardless.
       // The same goes for entering gutter mode: he walks himself back out of
       // the content column rather than jumping.
+      const room = hasRoom();
+      if (room !== shown) {
+        shown = room;
+        node.style.visibility = room ? '' : 'hidden';
+        // Back in view at the dock rather than wherever he was when hidden.
+        if (room) {
+          x = maxX();
+          rest();
+        }
+      }
+
       const limit = maxX();
       if (x > limit) x = limit;
-      if (walkTarget === null && animation === 'idle' && x < minX()) walkTo(minX());
+      if (room && walkTarget === null && animation === 'idle' && x < minX()) walkTo(minX());
 
       if (x !== drawnX || lift !== drawnLift) {
         drawnX = x;
@@ -268,10 +268,8 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
       className="fixed bottom-0 left-0 z-40 pointer-events-none"
       style={{ ...spriteStyle(DISPLAY_SCALE), width: PET_W, height: PET_H }}
       onMouseEnter={() => {
-        setHovered(true);
         requestRef.current = 'waving';
       }}
-      onMouseLeave={() => setHovered(false)}
       onClick={() => {
         requestRef.current = 'jumping';
       }}
@@ -299,9 +297,9 @@ export default function LewisPet({ gutterOnly = false }: LewisPetProps) {
         tabIndex={-1}
         // A 44x44 hit area around a 28px glyph, which is the target size this
         // codebase sets as its own standard in `ui.tapTarget`.
-        className={`absolute -top-[0.55rem] -right-[0.55rem] pointer-events-auto grid h-11 w-11 place-items-center transition-opacity focus-visible:opacity-100 focus-visible:outline-none ${
-          hovered ? 'opacity-100' : 'opacity-0'
-        }`}
+        // Visible at rest, so sending him away never depends on finding a
+        // control that only appears on hover.
+        className="absolute -top-[0.55rem] -right-[0.55rem] pointer-events-auto grid h-11 w-11 place-items-center opacity-70 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
       >
         <span
           aria-hidden="true"

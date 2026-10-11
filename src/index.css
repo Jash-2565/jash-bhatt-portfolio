@@ -316,38 +316,6 @@ label {
   transform-style: preserve-3d;
 }
 
-/* Discipline marquee between hero and work. */
-/* The band is opaque so the circuit traces do not read through the keywords.
-   Background and rules live on the wrapper, the end-fade mask on the child:
-   masking the element that carries the background would fade that background
-   out at both ends too, letting the traces back through exactly at the edges. */
-.marquee-wrap {
-  background: var(--surface-1);
-}
-.marquee-mask {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll 30s linear infinite;
-}
-@media (hover: hover) and (pointer: fine) {
-  .marquee-wrap:hover .marquee-track {
-    animation-play-state: paused;
-  }
-  .marquee-wrap:hover .marquee-item-text {
-    color: rgb(var(--accent-bright-rgb));
-  }
-}
-
-@keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
 /* Outlined editorial index numbers on project cards. */
 .ghost-number {
   font-family: 'Oxanium', sans-serif;
@@ -559,7 +527,6 @@ label {
   .animate-nudge,
   .accent-shimmer,
   .pulse-dot::after,
-  .marquee-track,
   .copy-ripple,
   .lewis-idle {
     animation: none !important;

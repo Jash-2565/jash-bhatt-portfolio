@@ -715,17 +715,12 @@ const ProjectDetail = ({
               // `data-section` hook the progress highlight reads stays on the
               // row itself.
               //
-              // The threshold is 0.08 rather than the default 0.12 because
-              // these rows are tall: a section with a demo or a full-width
-              // image would otherwise be held back until it is well past the
-              // fold.
-              //
               // The lift briefly puts the sticky heading under a transform.
               // That is safe here: the reveal fires as the row enters from the
               // bottom, where the heading is nowhere near the top of the
               // viewport it eventually sticks to, and Reveal drops the
               // transform entirely once the reveal lands.
-              <Reveal key={idx} variant="rise" threshold={0.08}>
+              <Reveal key={idx} variant="rise">
               <div>
               <div data-section={idx} className="grid md:grid-cols-12 gap-5 md:gap-8 items-start group">
 

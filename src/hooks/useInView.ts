@@ -56,11 +56,17 @@ const unwatch = (check: () => void) => {
 };
 
 // Lightweight IntersectionObserver hook for scroll-triggered reveals.
-// Defaults are tuned so elements reveal slightly before they fully enter view.
+//
+// The defaults start a reveal *before* the element enters: the root is grown
+// 10% of a screen below the fold and any overlap counts. They used to wait
+// until 12% of the element was 10% above the fold, which on a tall section
+// meant hundreds of pixels of it sat on screen still hidden — skimming fast,
+// a reader scrolled through whole screens of empty background and took it for
+// the end of the page. Now the reveal is mostly done by the time it is seen.
 export function useInView<T extends HTMLElement = HTMLDivElement>(
   options: UseInViewOptions = {}
 ) {
-  const { rootMargin = '0px 0px -10% 0px', threshold = 0.12, once = true } = options;
+  const { rootMargin = '0px 0px 10% 0px', threshold = 0, once = true } = options;
   const ref = useRef<T | null>(null);
   // Without IntersectionObserver there is nothing to wait for, so start
   // revealed. Deciding this in the initialiser rather than in the effect keeps

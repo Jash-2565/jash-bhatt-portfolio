@@ -15,8 +15,8 @@ type RevealProps = {
   className?: string;
   style?: CSSProperties;
   threshold?: number;
-  /** IntersectionObserver rootMargin; the default starts a reveal once the
-      element crosses the bottom 10% of the screen. */
+  /** IntersectionObserver rootMargin; the default starts a reveal while the
+      element is still 10% of a screen below the fold. */
   rootMargin?: string;
 };
 
@@ -70,7 +70,9 @@ export default function Reveal({
   children,
   variant = 'wipe-right',
   delay = 0,
-  duration = 780,
+  // Short on purpose: a reveal is a courtesy, and a slow one is content the
+  // reader is kept waiting for.
+  duration = 400,
   as = 'div',
   className = '',
   style,
