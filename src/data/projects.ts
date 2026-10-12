@@ -243,11 +243,6 @@ export const projects: Project[] = [
         {
           title: "Scripting the Conversation",
           content: "With the rules fixed, I scripted the conversation in the flow that was intended by connecting all the necessary nodes.\n\nAdaptive Cards come in to display a summary of certain information and is editable by the user. The fields it reads from the documents, and the claim summary, are shown as interactive cards, so the employee can correct a mistake on the card instead of typing it out.",
-          cards: [
-            { title: "Ask one question", body: "Whether the creche is empanelled is the one thing no document answers, and it ends the flow earliest. So it's asked first, and it's the only question." },
-            { title: "Read, don't ask", body: "Every field the form asked for comes from the invoice, the birth certificate, and the registration certificate instead." },
-            { title: "Nothing submits silently", body: "A summary with the allowed amount, and an explicit \u201cYes, submit it\u201d, come before anything reaches CHROMA." }
-          ],
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conversation-Script.svg`,
