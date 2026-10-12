@@ -1,0 +1,65 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Source for public/images/ETSConnect/ETSConnect-Thumbnail.webp.
+     The Compare Bids moment from the ETSConnect prototype, every value as it
+     appears there (Whitefield request, both bids), in the prototype's own
+     blue on the project's lavender.
+     Render: headless Chrome at 1200×900, device scale factor 2. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1200px; height:900px; }
+  body { font-family: Inter, sans-serif; color:#0f172a;
+         background: radial-gradient(110% 90% at 50% 0%, #f6f2ff 0%, #e9e1ff 100%);
+         display:flex; align-items:center; justify-content:center; }
+  .wrap { width: 980px; display:flex; flex-direction:column; gap: 30px; }
+  .brand { display:flex; align-items:center; gap:12px; font-weight:700; font-size:24px; color:#1e293b; }
+  .brand svg { width:34px; height:34px; }
+  .req { background:#fff; border-radius:20px; padding: 30px 36px; box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 10px 30px -12px rgba(91,33,182,.18); }
+  .req h1 { font-size:34px; font-weight:800; letter-spacing:-.01em; }
+  .req p { margin-top:10px; font-size:19px; color:#475569; }
+  .pill { display:inline-block; margin-top:16px; background:#dbeafe; color:#1d4ed8; font-weight:600; font-size:16px; padding:7px 14px; border-radius:999px; }
+  .bids { display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .bid { background:#fff; border-radius:20px; padding: 28px 30px; border:2px solid transparent;
+         box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 10px 30px -12px rgba(91,33,182,.18); display:flex; flex-direction:column; gap:14px; }
+  .bid.low { border-color:#93c5fd; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .name { font-size:23px; font-weight:700; }
+  .star { background:#2563eb; color:#fff; font-weight:600; font-size:16px; padding:5px 10px; border-radius:7px; white-space:nowrap; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; min-height:31px; }
+  .tag { font-size:15px; font-weight:600; padding:5px 11px; border-radius:999px; background:#eff6ff; color:#1d4ed8; }
+  .tag.ok { background:#dcfce7; color:#15803d; }
+  .label { font-size:16px; color:#64748b; margin-top:4px; }
+  .price { font-size:40px; font-weight:800; color:#2563eb; letter-spacing:-.01em; line-height:1; }
+  .price small { font-size:17px; font-weight:500; color:#64748b; margin-left:6px; }
+  .fleet { font-size:16px; color:#475569; border-top:1px solid #e2e8f0; padding-top:14px; }
+</style></head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+      ETSConnect
+    </div>
+    <div class="req">
+      <h1>Employee Transport for Whitefield Campus</h1>
+      <p>Seeking reliable ETS provider for our new office in Whitefield, Bangalore</p>
+      <span class="pill">2 Bids Received</span>
+    </div>
+    <div class="bids">
+      <div class="bid low">
+        <div class="top"><span class="name">CorporateWheels Express</span><span class="star">★ 4.5</span></div>
+        <div class="tags"><span class="tag ok">Lowest Bid</span></div>
+        <div class="label">Total est. cost</div>
+        <div class="price">₹245,000<small>/ month</small></div>
+        <div class="fleet">Fleet size: <b>80 vehicles</b></div>
+      </div>
+      <div class="bid">
+        <div class="top"><span class="name">SafeCommute ETS</span><span class="star">★ 4.9</span></div>
+        <div class="tags"><span class="tag">Female Drivers</span><span class="tag">SOS Button</span></div>
+        <div class="label">Total est. cost</div>
+        <div class="price">₹285,000<small>/ month</small></div>
+        <div class="fleet">Fleet size: <b>200 vehicles</b></div>
+      </div>
+    </div>
+  </div>
+</body></html>
