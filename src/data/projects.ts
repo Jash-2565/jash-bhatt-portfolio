@@ -221,7 +221,7 @@ export const projects: Project[] = [
         },
         {
           title: "How I Worked",
-          content: "Every agent went through the same six stages, from the BRD to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement shows the method most clearly, so the next six sections follow it through.",
+          content: "Every agent went through the same six stages, from the Business Requirement Document to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement shows the method most clearly, so the next six sections follow it through.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Process.svg`,
