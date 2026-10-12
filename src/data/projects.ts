@@ -292,7 +292,7 @@ export const projects: Project[] = [
         },
         {
           title: "Apply Leave, Same Method",
-          content: "Apply Leave went through the same six stages, starting from BRD Module 1 for fixed-term contract employees. The rule map covered five leave types (PL, SL, CL, LWP and Maternity), each with its own balance, caps, overlap and block rules. The script asks for a supporting document only when a rule needs one, and every blocked request explains its rule in the chat: the monthly CL cap, LWP while balance remains, or dates that overlap an approved leave.",
+          content: "Apply Leave went through the same six stages, starting from BRD Module 1 for fixed-term contract employees. The rule map covered five leave types (Privileged Leave, Sick Leave, Casual Leave, Leave without Pay and Maternity Leave), each with its own balance, caps, overlap and block rules. The script asks for a supporting document only when a rule needs one, and every blocked request explains its rule in the chat: the monthly CL cap, LWP while balance remains, or dates that overlap an approved leave.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/leave.html`,
             title: "Apply Leave walkthrough",
