@@ -1111,7 +1111,7 @@ export const projects: Project[] = [
     category: "Data Visualisation",
     timeline: "Personal project, 2026",
     description: "Seven years of my own Spotify history — 98,111 plays — read as an eight-chapter scrollytelling piece.",
-    tags: ["Python", "React"],
+    tags: ["Python", "HTML"],
     color: "bg-[#0A0C0B]",
     accentColor: "text-[#3EC873]",
     hoverColor: "group-hover:text-[#3EC873]",
@@ -1124,7 +1124,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Overview",
-          content: "Spotify emails you your Extended Streaming History as twelve JSON files. Wrapped turns a year of it into a few slides you forget by January; the raw export is 121,462 rows nobody reads.\n\nI wanted the thing in between: a magazine feature in eight chapters, every number computed from the export, shipped as one HTML file. It keeps Wrapped's second person on purpose, because that is the format it is arguing with.",
+          content: "Spotify emails you your Extended Streaming History as twelve JSON files: 121,462 rows that nobody reads.\n\nI turned it into a magazine feature in eight chapters, every number computed from the export, shipped as one HTML file. It keeps Wrapped's second person on purpose, because that is the format it is arguing with.",
           // The piece is a static file in public/, not a route. Named
           // explicitly rather than as `/spotify-wrapped/`: a static host
           // resolves the directory to index.html, but Vite's dev server
