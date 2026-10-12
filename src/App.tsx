@@ -914,8 +914,9 @@ const App = () => {
           a long page back to the top. */}
       <BackToTop />
       {/* The desktop pet, on the desktop layout only — he needs room to walk.
-          Out on the page in the hero, in the left margin while the work and
-          About are being read (and on every case study), roaming in Contact.
+          In the side margins in the hero (crossing between them through a
+          portal), in the left margin while the work and About are being read
+          (and on every case study), roaming in Contact.
           Code-split and mounted on idle: his sprite sheet is ~0.5MB and used to
           land in the middle of the first paint. */}
       {!isMobile && showPet && (
@@ -926,7 +927,7 @@ const App = () => {
                 ? 'margin'
                 : activeSection === 'contact'
                   ? 'roam'
-                  : 'free'
+                  : 'home'
             }
           />
         </Suspense>

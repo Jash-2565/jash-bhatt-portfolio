@@ -63,17 +63,25 @@ const contentLeftEdge = () => {
   return (window.innerWidth - Math.min(window.innerWidth, 84 * rem)) / 2 + 3 * rem;
 };
 
+/** The right edge of the content column — the start of the right margin. */
+const contentRightEdge = () => {
+  const rem = 16 * getUiScale();
+  return (window.innerWidth + Math.min(window.innerWidth, 84 * rem)) / 2 - 3 * rem;
+};
+
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min);
 
 /**
  * Where he's allowed to be, set by the section being read:
- * - `free`   — the hero. He's out on the page to say hello.
+ * - `home`   — the hero. He keeps to the side margins, and now and then
+ *              crosses to the other one through a portal: off one edge of the
+ *              screen, back in through the other. Never over the content.
  * - `margin` — Work, About, and the case studies. He walks into the left
- *              margin and stays there, shrinking to fit it, so he never stands
- *              on the work.
+ *              margin and stays there.
  * - `roam`   — Contact. He wanders the whole width, restlessly.
+ * In either margin he shrinks to fit when it's narrower than he is.
  */
-export type LewisZone = 'free' | 'margin' | 'roam';
+export type LewisZone = 'home' | 'margin' | 'roam';
 
 export default function LewisPet({ zone }: { zone: LewisZone }) {
   const petRef = useRef<HTMLDivElement>(null);
@@ -114,27 +122,37 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
     let scale = DISPLAY_SCALE;
     const petW = () => CELL_W * scale;
 
+    /** Which margin he's in. Work and About only use the left one; in the
+        hero he moves between the two. */
+    let side: 'left' | 'right' = zoneRef.current === 'home' ? 'right' : 'left';
+    const inMargin = () => zoneRef.current !== 'roam';
+    const onLeft = () => zoneRef.current === 'margin' || side === 'left';
+
     const targetScale = () => {
-      if (zoneRef.current !== 'margin') return DISPLAY_SCALE;
+      if (!inMargin()) return DISPLAY_SCALE;
+      // The two margins are the same width; the left one is the measure.
       const room = contentLeftEdge() - MARGIN_EDGE - CONTENT_GAP;
       return Math.max(MIN_SCALE, Math.min(DISPLAY_SCALE, room / CELL_W));
     };
 
-    const minX = () => (zoneRef.current === 'margin' ? MARGIN_EDGE : EDGE_MARGIN);
-    const maxX = () =>
-      zoneRef.current === 'margin'
-        ? Math.max(MARGIN_EDGE, contentLeftEdge() - CONTENT_GAP - CELL_W * targetScale())
-        : Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
+    const minX = () => {
+      if (!inMargin()) return EDGE_MARGIN;
+      return onLeft() ? MARGIN_EDGE : contentRightEdge() + CONTENT_GAP;
+    };
+    const maxX = () => {
+      if (!inMargin()) return Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
+      const w = CELL_W * targetScale();
+      return onLeft()
+        ? Math.max(MARGIN_EDGE, contentLeftEdge() - CONTENT_GAP - w)
+        : Math.max(minX(), window.innerWidth - MARGIN_EDGE - w);
+    };
 
     // He starts where the current section wants him: docked to the right,
     // the app's default side, or already standing in the margin when the
     // page loads into Work or About. Starting at the dock regardless meant a
     // refresh on Work sent him running across the whole page.
     scale = targetScale();
-    let x =
-      zoneRef.current === 'margin'
-        ? maxX()
-        : Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
+    let x = maxX();
 
     let animation: AnimationName = 'idle';
     let frameIndex = 0;
@@ -215,6 +233,13 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
         — a pet that only ever emotes in place looks stuck — and in Contact
         it's nearly all he does. */
     const decide = () => {
+      // In the hero, now and then he crosses to the other margin. It's far
+      // enough that travelTo sends him through the portal.
+      if (zoneRef.current === 'home' && Math.random() < 0.3) {
+        side = side === 'left' ? 'right' : 'left';
+        travelTo(randomBetween(minX(), maxX()));
+        return;
+      }
       const roll = Math.random();
       const walkChance = zoneRef.current === 'roam' ? 0.85 : 0.55;
       if (roll < walkChance) {
@@ -239,6 +264,8 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
       if (zoneRef.current !== currentZone) {
         currentZone = zoneRef.current;
         portal = null;
+        // Into the hero he keeps whichever margin he's nearest.
+        if (currentZone === 'home') side = x < window.innerWidth / 2 ? 'left' : 'right';
         if (currentZone === 'roam') travelTo(randomBetween(minX(), maxX()));
         else if (x < minX() || x > maxX()) travelTo(x < minX() ? minX() : maxX());
         else rest();
