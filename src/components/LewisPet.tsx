@@ -126,9 +126,15 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
         ? Math.max(MARGIN_EDGE, contentLeftEdge() - CONTENT_GAP - CELL_W * targetScale())
         : Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
 
-    // He starts docked to the right, the app's default side — at the edge of
-    // the walkable strip, which already stops short of the back-to-top button.
-    let x = Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
+    // He starts where the current section wants him: docked to the right,
+    // the app's default side, or already standing in the margin when the
+    // page loads into Work or About. Starting at the dock regardless meant a
+    // refresh on Work sent him running across the whole page.
+    scale = targetScale();
+    let x =
+      zoneRef.current === 'margin'
+        ? maxX()
+        : Math.max(EDGE_MARGIN, window.innerWidth - petW() - backToTopKeepout());
 
     let animation: AnimationName = 'idle';
     let frameIndex = 0;
@@ -293,8 +299,8 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
       // Corrected here rather than on a resize listener: the window can narrow
       // mid-stride, and the next frame puts him back in bounds regardless.
       if (walkTarget === null && animation === 'idle') {
-        if (x > maxX()) walkTo(maxX());
-        else if (x < minX()) walkTo(minX());
+        if (x > maxX()) travelTo(maxX());
+        else if (x < minX()) travelTo(minX());
       }
 
       if (scale !== drawnScale) {
