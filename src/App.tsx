@@ -1493,7 +1493,7 @@ const App = () => {
                       {/* Text Column (5 cols) */}
                       <div className={`md:col-span-5 px-5 pt-4 pb-5 md:p-0 ${index % 2 === 1 ? 'md:order-1' : ''}`}>
                         {/* Wraps rather than forcing one line — categories run as
-                            long as "Business Design / B2B Platform". */}
+                            long as "Experimental Prototyping". */}
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 md:gap-x-4 mb-3 md:mb-5">
                           <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                           <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-accent/50 to-transparent" />

@@ -6,7 +6,7 @@ export const projects: Project[] = [
     id: 9,
     slug: "etsconnect",
     title: "ETSConnect",
-    category: "Business Design / B2B Platform",
+    category: "Business Design",
     timeline: "Business design course, 2026",
     description: "The bottleneck wasn't the fleet, it was winning contracts. So we built a B2B procurement marketplace.",
     tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modeling"],
