@@ -16,8 +16,8 @@
     <line x1="610" y1="166" x2="666" y2="166" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
     <rect x="680" y="126" width="880" height="80" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
     <text x="704" y="160" fill="#1E293B">
-      <tspan x="704" dy="0">Empanelled creches are billed to the company directly, so there's nothing to</tspan>
-      <tspan x="704" dy="24">reimburse. I'm passing you to the admin team.</tspan>
+      <tspan x="704" dy="0">Empanelled creche claims are handled by the administration team. Please</tspan>
+      <tspan x="704" dy="24">contact them directly.</tspan>
     </text>
 
     <!-- row 2 -->
@@ -49,8 +49,8 @@
     <line x1="610" y1="616" x2="666" y2="616" stroke="#01F5D1" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
     <rect x="680" y="576" width="880" height="80" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
     <text x="704" y="610" fill="#1E293B">
-      <tspan x="704" dy="0">Sorry about that. Your details are saved, so you can try again in a</tspan>
-      <tspan x="704" dy="24">few minutes.</tspan>
+      <tspan x="704" dy="0">Something went wrong on our side, so your claim hasn't been submitted.</tspan>
+      <tspan x="704" dy="24">Please try again later.</tspan>
     </text>
   </g>
 

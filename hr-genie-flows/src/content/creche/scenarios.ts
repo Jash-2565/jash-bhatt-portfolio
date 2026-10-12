@@ -245,7 +245,7 @@ const failure = (): Beat => ({
       title: "Claim not submitted",
       detail: "Due to error on backend your claim was not submitted",
     },
-    { kind: "agent", text: "Sorry about that. Your details are saved, so you can try again in a few minutes." },
+    { kind: "agent", text: "Something went wrong on our side, so your claim hasn't been submitted. Please try again later." },
   ],
 });
 
@@ -320,7 +320,7 @@ export const scenarios: Scenario[] = [
   {
     id: "empanelled",
     label: "Empanelled creche",
-    blurb: "Company-empanelled creches are redirected to the admin team",
+    blurb: "Company-empanelled creches: the employee is told to contact administration",
     beats: [
       trigger(),
       crecheType(true),
@@ -330,13 +330,13 @@ export const scenarios: Scenario[] = [
         events: [
           {
             kind: "agent",
-            text: "Empanelled creches are billed to the company directly, so there's nothing to reimburse. I'm passing you to the admin team.",
+            text: "Empanelled creche claims are handled by the administration team. Please contact them directly.",
           },
           {
             kind: "end",
             tone: "redirect",
-            title: "Redirected to the admin team",
-            detail: "Company-empanelled creches are handled by Admin",
+            title: "Contact administration",
+            detail: "Company-empanelled creches are handled by administration",
           },
         ],
       },

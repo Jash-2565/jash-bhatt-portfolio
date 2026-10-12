@@ -81,7 +81,7 @@
     <line x1="980" y1="194" x2="1036" y2="194" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
     <rect x="1040" y="166" width="520" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
     <text x="1064" y="190" fill="#FCA5A5" font-weight="700">Empanelled</text>
-    <text x="1064" y="211" fill="#E2B4B4" font-size="13.5">Redirected to the Admin team</text>
+    <text x="1064" y="211" fill="#E2B4B4" font-size="13.5">Told to contact administration</text>
 
     <line x1="980" y1="422" x2="1036" y2="422" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
     <rect x="1040" y="394" width="520" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
@@ -104,6 +104,6 @@
     <line x1="980" y1="726" x2="1036" y2="726" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>
     <rect x="1040" y="698" width="520" height="56" rx="12" fill="#1B1420" stroke="#7F1D1D"/>
     <text x="1064" y="722" fill="#FCA5A5" font-weight="700">CHROMA API fails</text>
-    <text x="1064" y="743" fill="#E2B4B4" font-size="13.5">Not submitted, details saved for a retry</text>
+    <text x="1064" y="743" fill="#E2B4B4" font-size="13.5">Not submitted, employee told it failed</text>
   </g>
 </svg>

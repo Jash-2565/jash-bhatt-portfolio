@@ -13,7 +13,7 @@ const nodes: FlowNode[] = [
   step("confirm", 9, "User confirmation", "Employee approves the claim"),
   step("submit", 10, "Submission", "CHROMA API via MCP", true),
 
-  side({ id: "end-admin", kind: "end", tone: "redirect", title: "Redirect to admin", subtitle: "Company-empanelled", x: LANE_A, y: ROWS[1] }),
+  side({ id: "end-admin", kind: "end", tone: "redirect", title: "Contact admin", subtitle: "Company-empanelled", x: LANE_A, y: ROWS[1] }),
   side({ id: "end-stale", kind: "end", tone: "reject", title: "Auto-rejected", subtitle: "Invoice > 2 months old", x: LANE_A, y: ROWS[4] }),
   side({ id: "end-infant", kind: "end", tone: "reject", title: "Auto-rejected", subtitle: "Child under 6 months", x: LANE_B, y: 140 }),
   side({ id: "end-over10", kind: "end", tone: "reject", title: "Auto-rejected", subtitle: "Child 10 years or older", x: LANE_B, y: 215 }),

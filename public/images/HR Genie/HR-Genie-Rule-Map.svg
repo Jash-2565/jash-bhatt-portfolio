@@ -14,20 +14,20 @@
     <!-- row 1: creche type -->
     <rect x="40" y="140" width="1520" height="112" rx="12" fill="#101E36" stroke="#2C4A7C"/>
     <text x="64" y="182" fill="#F1F5F9" font-weight="700" font-size="17">1 · Creche type</text>
-    <text x="64" y="208" fill="#B9C7E0" font-size="13.5">The only question asked</text>
+    <text x="64" y="208" fill="#B9C7E0" font-size="13.5">Asked of the employee</text>
     <text x="320" y="182" fill="#E2E8F0">Employee's answer</text>
     <text x="320" y="206" fill="#94A3B8" font-size="13.5">Empanelled or not?</text>
     <text x="640" y="182" fill="#FCA5A5" font-weight="700">Empanelled</text>
-    <text x="640" y="206" fill="#E2B4B4" font-size="13.5">→ redirect to the Admin team</text>
+    <text x="640" y="206" fill="#E2B4B4" font-size="13.5">→ told to contact administration</text>
     <text x="980" y="182" fill="#E2E8F0" font-style="italic">
-      <tspan x="980" dy="0">“Empanelled creches are billed to the company</tspan>
-      <tspan x="980" dy="22">directly, so there's nothing to reimburse.”</tspan>
+      <tspan x="980" dy="0">“Empanelled creche claims are handled by the</tspan>
+      <tspan x="980" dy="22">administration team. Please contact them.”</tspan>
     </text>
 
     <!-- row 2: invoice date -->
     <rect x="40" y="264" width="1520" height="96" rx="12" fill="#101E36" stroke="#2C4A7C"/>
     <text x="64" y="306" fill="#F1F5F9" font-weight="700" font-size="17">2 · Invoice date</text>
-    <text x="64" y="330" fill="#B9C7E0" font-size="13.5">Read, not asked</text>
+    <text x="64" y="330" fill="#B9C7E0" font-size="13.5">Read from the invoice</text>
     <text x="320" y="306" fill="#E2E8F0">Invoice, via OCR</text>
     <text x="320" y="330" fill="#94A3B8" font-size="13.5">Within the last 2 months</text>
     <text x="640" y="306" fill="#FCA5A5" font-weight="700">Older than 2 months</text>
@@ -70,10 +70,10 @@
     <text x="320" y="678" fill="#E2E8F0">MCP → CHROMA API</text>
     <text x="320" y="702" fill="#94A3B8" font-size="13.5">Returns a Request ID</text>
     <text x="640" y="678" fill="#FCA5A5" font-weight="700">API call fails</text>
-    <text x="640" y="702" fill="#E2B4B4" font-size="13.5">→ not submitted, details kept</text>
+    <text x="640" y="702" fill="#E2B4B4" font-size="13.5">→ not submitted, employee told</text>
     <text x="980" y="678" fill="#E2E8F0" font-style="italic">
-      <tspan x="980" dy="0">“Sorry about that. Your details are saved, so you</tspan>
-      <tspan x="980" dy="22">can try again in a few minutes.”</tspan>
+      <tspan x="980" dy="0">“Something went wrong on our side, so your claim</tspan>
+      <tspan x="980" dy="22">hasn't been submitted. Please try again later.”</tspan>
     </text>
   </g>
 </svg>

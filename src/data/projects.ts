@@ -283,7 +283,7 @@ export const projects: Project[] = [
         },
         {
           title: "Every Branch, Playable",
-          content: "The creche agent's full logic as an interactive walkthrough. Pick a scenario to watch a claim move through the flowchart and the chat together: the happy path with a capped amount, an empanelled creche sent to admin, a stale invoice, each child-age rule, and a failed submission.",
+          content: "The creche agent's full logic as an interactive walkthrough. Pick a scenario to watch a claim move through the flowchart and the chat together: the happy path with a capped amount, an empanelled creche pointed to administration, a stale invoice, each child-age rule, and a failed submission.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/creche.html`,
             title: "Creche Reimbursement walkthrough",
