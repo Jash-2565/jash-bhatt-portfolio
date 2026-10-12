@@ -1177,13 +1177,13 @@ const App = () => {
             // field, which is fixed and therefore identical at every scroll
             // position. A section-scoped backdrop here would put a visible
             // colour edge in the page at the point the hero ends.
-            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1rem)] pb-4 lg:pt-20 lg:pb-10 ${ui.scrollMt} overflow-hidden bg-transparent`}
+            className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden bg-transparent`}
           >
             {!isTransitioning && activeSection === 'home' && <HeroParticles />}
             <div className={`${ui.shell} relative`}>
               <div className="grid lg:grid-cols-12 gap-10 items-stretch">
                 <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
-                  <div className="mb-4 md:mb-5 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+                  <div className="mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                     {/* The site's one statement of availability. A chip here
                         and another in Contact both used to claim it, vaguely
                         and a year early. No pulse dot: it signalled
@@ -1198,7 +1198,7 @@ const App = () => {
                   </h1>
                   {/* One title. The line under it used to cycle through five
                       identities, from Product Designer to Circuit & Hardware. */}
-                  <p className="text-[1.05rem] md:text-[1.34rem] text-ink-body mb-5 lg:mb-6 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
+                  <p className="text-[1.05rem] md:text-[1.34rem] text-ink-body mb-5 lg:mb-8 leading-relaxed max-w-3xl animate-fade-in-up" style={{ animationDelay: '140ms' }}>
                     I'm <span className="font-semibold text-ink">Jash Bhatt</span>, a product designer in my final year at FLAME&nbsp;University.
                   </p>
 
@@ -1246,9 +1246,7 @@ const App = () => {
                 )}
               </div>
 
-              {/* data-lewis-floor: Lewis only shows in the hero when there's room
-                  for him below these cards (see LewisPet). */}
-              <div data-lewis-floor className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-8 w-full">
+              <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 md:mt-12 w-full">
                 {/* The hero's fade-up, continuing its stagger after the buttons
                     (380ms). On a wrapper, not the card: fadeInUp fills `both`,
                     so its final transform would stay on the card and override

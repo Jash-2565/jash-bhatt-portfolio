@@ -168,7 +168,6 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
     let drawnRow = NaN;
     let drawnFrame = NaN;
     let drawnScale = NaN;
-    let drawnHidden = false;
 
     /** Too little room to take a step: he stays put and only emotes. */
     const canWalk = () => maxX() - minX() >= petW() / 2;
@@ -310,19 +309,6 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
         node.style.width = `${CELL_W * scale}px`;
         node.style.height = `${CELL_H * scale}px`;
         node.style.backgroundSize = spriteStyle(scale).backgroundSize;
-      }
-
-      // In the hero he walks along the bottom of the screen, below the stat
-      // cards. On a screen too short to leave room for him there, he waits out
-      // of sight until a scroll makes some, instead of standing on the cards.
-      let hidden = false;
-      if (zoneRef.current === 'free') {
-        const floor = document.querySelector('[data-lewis-floor]')?.getBoundingClientRect();
-        if (floor && floor.height > 0) hidden = window.innerHeight - floor.bottom < CELL_H * scale + 8;
-      }
-      if (hidden !== drawnHidden) {
-        drawnHidden = hidden;
-        node.style.visibility = hidden ? 'hidden' : '';
       }
 
       if (x !== drawnX || lift !== drawnLift) {

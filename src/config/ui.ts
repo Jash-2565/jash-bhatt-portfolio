@@ -29,10 +29,9 @@ export const ui = {
       Above md the size is fluid rather than a flat 4.2rem. Fixed, it took no
       account of how narrow the hero column gets between md and full desktop:
       at 1024 the column is 605px, and the headline ran to seven lines there
-      while fitting in five on a 1440. The ceiling is 3.6rem (was 4.2rem): at
-      4.2rem the four-line headline pushed the stat cards to the bottom of a
-      laptop screen, leaving Lewis nowhere to walk but on top of them. */
-  h1: 'text-[clamp(1.6rem,6.4vw,2.6rem)] md:text-[clamp(2.6rem,5vw,3.6rem)] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
+      while fitting in five on a 1440. The ceiling is still 4.2rem, so anything
+      from ~1344px up renders exactly as before. */
+  h1: 'text-[clamp(1.6rem,6.4vw,2.6rem)] md:text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
   h2: 'text-[1.75rem] sm:text-3xl md:text-4xl',
   /** 44px minimum touch target, per WCAG 2.2 target-size guidance. */
   tapTarget: 'min-h-11 min-w-11',

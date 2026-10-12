@@ -74,9 +74,8 @@
    empty margin on an external monitor (at 2560px it filled half the screen).
 
    The scale follows whichever of width and height is tighter. The height
-   reference is 736px: the hero's stat cards end at ~645px at the base size,
-   and this keeps them inside the first screen with room left below for
-   Lewis to walk without standing on them: on a 1920×1080 monitor the browser leaves ~960px
+   reference is 816px, a little taller than the hero at the base size (it
+   ends at ~800px), so the hero always fits one screen: on a 1920×1080 monitor the browser leaves ~960px
    of height, and scaling on width alone pushed the hero past the fold. On an
    ultrawide, height is the limit, so some margin remains there by design.
    Floored at the user's own default size; the 3x cap only guards against
@@ -86,7 +85,7 @@
    few things measured in pixels: icons below, Lewis, the circuit ground. */
 @media (min-width: 1441px) {
   html {
-    font-size: clamp(100%, min(100vw / 90, 100vh / 46), 300%);
+    font-size: clamp(100%, min(100vw / 90, 100vh / 51), 300%);
   }
 }
 
