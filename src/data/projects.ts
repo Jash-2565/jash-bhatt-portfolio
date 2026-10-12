@@ -279,7 +279,7 @@ export const projects: Project[] = [
         },
         {
           title: "Review and Testing",
-          content: "My first draft still followed the form: ask for the details, then the invoice, then return a result. My colleagues and I tested it repeatedly on real invoices, more than six kinds of them, from photos of paper invoices to PDFs and images of digital ones, and each round changed the flow. The business department did the final review and asked for changes before the agent went live.",
+          content: "My colleagues and I tested it repeatedly on real invoices, more than six of them, from photos of paper invoices to PDFs and images of digital ones, and each round would require some fine tuning in the prompt. The business department did the final review and asked for changes if any before the agent went live.",
           cards: [
             { title: "Lead review · Edge cases", body: "What happens when an invoice is incomplete, a value is missing, or a claim falls outside the rules." },
             { title: "Lead review · Compliance", body: "Every approval had to trace back to the policy rule that allowed it." },
