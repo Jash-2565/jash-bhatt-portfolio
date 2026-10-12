@@ -232,7 +232,7 @@ export const projects: Project[] = [
         {
           title: "From Policy to Rules",
           content: "The BRD described creche reimbursement as policy prose. An agent can't act on prose, so my first job was turning each clause into a check: what it's checked against, what happens when it fails, and what the agent says then.\n\nWriting the failure path for every rule up front meant no claim could fall through a gap the form used to hide.",
-          labels: ["5 rules", "3 documents", "1 question asked"],
+          labels: ["5 rules", "3 documents"],
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Rule-Map.svg`,
@@ -322,7 +322,7 @@ export const projects: Project[] = [
         },
         {
           title: "Reflection",
-          content: "When the interface is a conversation, validation has to be clear in the moment it matters. My first draft asked what a form would; the shipped agent asks one question and reads the rest. And the migration taught me that the most valuable design work is sometimes questioning the foundation everyone else is building on."
+          content: "When the interface is a conversation, validation has to be clear in the moment it matters. And the migration taught me that the most valuable design work is sometimes questioning the foundation everyone else is building on."
         }
       ]
     }
