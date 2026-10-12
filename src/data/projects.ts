@@ -242,7 +242,7 @@ export const projects: Project[] = [
         },
         {
           title: "Scripting the Conversation",
-          content: "With the rules fixed, I scripted the conversation turn by turn: the happy path first, then every point where a rule could take the employee off it.\n\nThe script also decides the form of each reply. Anything the employee has to check or keep (the fields read from the invoice, the claim summary, the Request ID) arrives as an Adaptive Card. Questions and explanations stay as plain text.",
+          content: "With the rules fixed, I scripted the conversation turn by turn: the happy path first, then every point where a rule could take the employee off it.\n\nAdaptive Cards come in where the agent might get something wrong. The fields it reads from the documents, and the claim summary, are shown as interactive cards, so the employee can correct a mistake on the card instead of typing it out.",
           cards: [
             { title: "Ask one question", body: "Whether the creche is empanelled is the one thing no document answers, and it ends the flow earliest. So it's asked first, and it's the only question." },
             { title: "Read, don't ask", body: "Every field the form asked for comes from the invoice, the birth certificate, and the registration certificate instead." },
@@ -257,16 +257,17 @@ export const projects: Project[] = [
         },
         {
           title: "Who Decides What",
-          content: "Replacing a form with an agent means deciding what the agent may do without asking. I drew the line by asking one question of every step: is there one right answer in the policy, or does someone have to choose?",
+          content: "People's jobs and money are involved, so the agent can't improvise. The policy is loaded into its context before every task, and its prompts tell it to follow that policy exactly, nothing more and nothing less. Its job is only to make submitting a claim easier: the reimbursement itself is handled by a different department.",
           table: {
             caption: "The creche agent's autonomy, step by step.",
             columns: ["The agent", "In the creche flow", "Why"],
             rows: [
-              ["Decides alone", "Reads the invoice and certificates, checks the invoice date and the child's age, applies the city cap.", "Each check has one right answer. Asking the employee would bring the form back."],
-              ["Rejects alone, with the rule", "Invoices over 2 months old; children under 6 months or 10 and over.", "The policy is a hard line, so a person in the loop only adds a wait. The message names the rule."],
-              ["Asks first", "A daycare claim (child aged 6 to 10), and the final summary before anything is submitted.", "One is a judgement call, the other moves money. The employee decides both."],
-              ["Hands over", "Claims for company-empanelled creches go to the admin team.", "They follow a different process the agent doesn't own."],
-              ["Stops safely", "If the CHROMA call fails, nothing is submitted; the details are saved and the employee is asked to try again.", "A half-submitted claim is worse than none."]
+              ["Decides alone", "Reads the invoice and certificates, and checks the invoice date, the child's age and the city cap.", "Every check is written into the policy it's given, with one right answer."],
+              ["Rejects alone", "Any document that doesn't meet the prompt's criteria, such as an invoice over 2 months old.", "It can only reject against those criteria, and the message names the one that failed."],
+              ["Always asks first", "Shows a summary of the claim before anything is sent to CHROMA.", "Nothing is submitted that the employee hasn't seen and confirmed."],
+              ["Points elsewhere", "For a company-empanelled creche, tells the employee to contact administration.", "That process sits outside the agent; it only says where to go."],
+              ["Stops safely", "If the CHROMA call fails, nothing is submitted, and the employee is told something went wrong on the back end.", "It can never say a claim was submitted when it wasn't."],
+              ["Never", "Pays out the money.", "Reimbursement belongs to a different department. The agent's job ends at a submitted claim."]
             ]
           }
         },
@@ -283,12 +284,12 @@ export const projects: Project[] = [
         },
         {
           title: "Review and Testing",
-          content: "My first draft still followed the form: ask for the details, then the invoice, then return a result. My team lead's review pushed it past the happy path, and testing on real invoices changed it three more times.",
+          content: "My first draft still followed the form: ask for the details, then the invoice, then return a result. My colleagues and I tested it repeatedly on real invoices, more than six kinds of them, from photos of paper invoices to PDFs and images of digital ones, and each round changed the flow. The business department did the final review and asked for changes before the agent went live.",
           cards: [
             { title: "Lead review · Edge cases", body: "What happens when an invoice is incomplete, a value is missing, or a claim falls outside the rules." },
             { title: "Lead review · Compliance", body: "Every approval had to trace back to the policy rule that allowed it." },
             { title: "1 · OCR misreads", body: "Blurry invoices produced wrong amounts and dates. The extracted fields now appear in the chat, and a full summary comes before anything is submitted." },
-            { title: "2 · Unexplained rejections", body: "People didn't understand why a claim was refused. Every check now names its rule and number: 2 months, the age band, the cap and the amount over it." },
+            { title: "2 · Unexplained rejections", body: "A refusal with no reason left the claim at a dead end. Every check now names its rule and number: 2 months, the age band, the cap and the amount over it." },
             { title: "3 · Too many questions", body: "Asking for every detail felt like the form again. The agent now asks one question and reads the rest from the documents." }
           ],
           images: [
