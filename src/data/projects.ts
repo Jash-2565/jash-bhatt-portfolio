@@ -280,19 +280,6 @@ export const projects: Project[] = [
         {
           title: "Review and Testing",
           content: "My colleagues and I tested it repeatedly on real invoices, more than six of them, from photos of paper invoices to PDFs and images of digital ones, and each round would require some fine tuning in the prompt. The business department did the final review and asked for changes if any before the agent went live.",
-          cards: [
-            { title: "Lead review · Edge cases", body: "What happens when an invoice is incomplete, a value is missing, or a claim falls outside the rules." },
-            { title: "Lead review · Compliance", body: "Every approval had to trace back to the policy rule that allowed it." },
-            { title: "1 · OCR misreads", body: "Blurry invoices produced wrong amounts and dates. The extracted fields now appear in the chat, and a full summary comes before anything is submitted." },
-            { title: "2 · Unexplained rejections", body: "A refusal with no reason left the claim at a dead end. Every check now names its rule and number: 2 months, the age band, the cap and the amount over it." },
-            { title: "3 · Too many questions", body: "Asking for every detail felt like the form again. The agent now asks one question and reads the rest from the documents." }
-          ],
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-V1-V2.svg`,
-              caption: "The first draft against the shipped flow. The numbered steps are the three changes testing forced."
-            }
-          ]
         },
         {
           title: "Every Branch, Playable",

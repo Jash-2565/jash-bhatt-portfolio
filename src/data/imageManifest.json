@@ -165,6 +165,25 @@
       1440
     ]
   },
+  "/images/HR Genie/HR-Genie-Thumbnail 2.webp": {
+    "w": 1424,
+    "h": 1068,
+    "v": [
+      480,
+      960
+    ]
+  },
+  "/images/HR Genie/HR-Genie-Thumbnail-480 2.webp": {
+    "w": 480,
+    "h": 360
+  },
+  "/images/HR Genie/HR-Genie-Thumbnail-960 2.webp": {
+    "w": 960,
+    "h": 720,
+    "v": [
+      480
+    ]
+  },
   "/images/HR Genie/HR-Genie-Thumbnail.webp": {
     "w": 2400,
     "h": 1800,
@@ -809,10 +828,6 @@
   "/images/HR Genie/HR-Genie-Creche-Flow.svg": {
     "w": 1600,
     "h": 760
-  },
-  "/images/HR Genie/HR-Genie-Creche-V1-V2.svg": {
-    "w": 1600,
-    "h": 660
   },
   "/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg": {
     "w": 1600,
