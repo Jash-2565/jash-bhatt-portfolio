@@ -199,8 +199,8 @@ export const projects: Project[] = [
           content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows. They sit inside FINAI / Employee Blu, the company-wide agent roadmap, under the name HR Genie.",
           stats: [
             { value: "800+", label: "Agents on the FINAI roadmap" },
-            { value: "3", label: "HR agents I built" },
-            { value: "17", label: "Topics I migrated to Gen 2" }
+            { value: "3", label: "HR Sub-Agents I Built" },
+            { value: "17", label: "Sub-Agents I migrated to Gen 2" }
           ],
           images: [
             {
