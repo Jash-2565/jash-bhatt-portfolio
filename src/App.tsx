@@ -1655,7 +1655,7 @@ const App = () => {
                 </Reveal>
 
                 <Reveal variant="rise-soft" delay={140}>
-                  <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-ink mb-5 md:mb-9`}>Expertise</h2>
+                  <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-ink mb-5 md:mb-9`}>Skills</h2>
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center gap-3 mb-4">
