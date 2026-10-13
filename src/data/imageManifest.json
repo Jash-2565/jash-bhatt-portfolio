@@ -156,34 +156,6 @@
       1440
     ]
   },
-  "/images/ETSConnect/ETSConnect-Thumbnail 2.webp": {
-    "w": 2133,
-    "h": 1600,
-    "v": [
-      480,
-      960,
-      1440
-    ]
-  },
-  "/images/ETSConnect/ETSConnect-Thumbnail-1440 2.webp": {
-    "w": 1440,
-    "h": 1080,
-    "v": [
-      480,
-      960
-    ]
-  },
-  "/images/ETSConnect/ETSConnect-Thumbnail-480 2.webp": {
-    "w": 480,
-    "h": 360
-  },
-  "/images/ETSConnect/ETSConnect-Thumbnail-960 2.webp": {
-    "w": 960,
-    "h": 720,
-    "v": [
-      480
-    ]
-  },
   "/images/ETSConnect/ETSConnect-Thumbnail.webp": {
     "w": 2400,
     "h": 1800,
