@@ -1717,7 +1717,7 @@ const App = () => {
                       <div className="opacity-80">
                         <h4 className="text-base font-medium text-ink-body">Cambridge International Education</h4>
                         <p className="text-sm text-ink-muted">VIBGYOR High School, NIBM, Pune</p>
-                        <p className="text-xs text-ink-muted mt-0.5">2018 – 2023</p>
+                        <p className="text-xs text-ink-muted mt-0.5">June 2018 – March 2023</p>
                       </div>
                     </div>
                   </div>
