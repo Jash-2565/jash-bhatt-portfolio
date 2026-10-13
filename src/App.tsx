@@ -1695,12 +1695,12 @@ const App = () => {
                       <div>
                         <h4 className="text-lg font-bold text-ink">AI Agent Development Intern</h4>
                         <p className="text-ink-body font-medium">Bajaj Finance · Agentic AI Unit</p>
-                        <p className="text-sm text-accent-deep font-medium mt-1">Summer 2026</p>
+                        <p className="text-sm text-accent-deep font-medium mt-1">May – July 2026</p>
                       </div>
                       <div>
                         <h4 className="text-lg font-bold text-ink">UI/UX Intern</h4>
                         <p className="text-ink-body font-medium">RAHI Platform Technologies</p>
-                        <p className="text-sm text-accent-deep font-medium mt-1">Summer 2025</p>
+                        <p className="text-sm text-accent-deep font-medium mt-1">July – August 2025</p>
                       </div>
                     </div>
                   </div>
