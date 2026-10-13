@@ -343,7 +343,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Home.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Thumbnail.webp`,
-      role: "Design & build, solo",
+      role: "AI Agent Builder",
       sections: [
         {
           title: "Overview",
