@@ -1663,7 +1663,7 @@ const App = () => {
                         <h3 className="text-xl font-semibold tracking-tight text-ink">Design</h3>
                       </div>
                       <PipeList
-                        items={['Product Design', 'UI/UX Design', 'Agentic AI Workflows', 'Design Systems', 'Circuit Design', 'Industrial Design', 'Generative AI in Design']}
+                        items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design Systems', 'Industrial Design']}
                         flow="column"
                         className="text-sm font-medium text-accent-br"
                       />
