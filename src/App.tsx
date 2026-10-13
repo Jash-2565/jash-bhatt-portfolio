@@ -617,8 +617,18 @@ const App = () => {
     // Kept outside the callback, which only reports changes: after a manual
     // scroll ends, the section already on the line is still known.
     const onLine = new Set<HTMLElement>();
+    const atPageBottom = () =>
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50;
     const markLine = () => {
       if (isManualScroll.current) return;
+      // Contact is short enough that it may never reach the line, so the
+      // bottom of the page always means Contact. Checked here as well as on
+      // scroll: the observer can fire after the scroll handler and would
+      // otherwise put About back.
+      if (atPageBottom()) {
+        setActiveSection('contact');
+        return;
+      }
       const current = elements.find((el) => onLine.has(el));
       if (current?.dataset.nav) setActiveSection(current.dataset.nav);
     };
@@ -638,13 +648,15 @@ const App = () => {
 
     elements.forEach((el) => observer.observe(el));
 
-    // The contact section is short enough that it may never reach the line,
-    // so hitting the bottom of the page still pins it explicitly.
+    // Reaching the bottom marks Contact, and leaving it hands control back to
+    // the line. The section on the line often hasn't changed on the way back
+    // up (About is still there), so no observer entry fires, and Contact used
+    // to stay marked all the way up through About.
+    let wasAtBottom = false;
     const handleBottom = () => {
-      if (isManualScroll.current) return;
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
-        setActiveSection('contact');
-      }
+      const bottom = atPageBottom();
+      if (bottom !== wasAtBottom) markLine();
+      wasAtBottom = bottom;
     };
     window.addEventListener('scroll', handleBottom, { passive: true });
 
