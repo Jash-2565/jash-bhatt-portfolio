@@ -1710,6 +1710,7 @@ const App = () => {
                     <div className="space-y-4 md:space-y-6">
                       <div>
                         <h4 className="text-lg font-bold text-ink">Bachelor of Design (B.Des)</h4>
+                        <p className="text-ink-body">Minor in Marketing</p>
                         <p className="text-ink-body font-medium">FLAME University</p>
                         <p className="text-sm text-accent-deep font-medium mt-1">2023 – 2027</p>
                       </div>
