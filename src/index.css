@@ -472,12 +472,16 @@ label {
   .surface-hover {
     transition: transform 180ms ease;
   }
-  .surface-hover:hover {
-    transform: translateY(-2px);
-  }
-  .surface-hover:hover::before,
-  .surface-hover:hover::after {
-    border-color: rgb(var(--accent-rgb) / 0.85);
+  /* Mouse only, like the card rules above: on touch a tap left the card
+     lifted and lit until the next tap somewhere else. */
+  @media (hover: hover) and (pointer: fine) {
+    .surface-hover:hover {
+      transform: translateY(-2px);
+    }
+    .surface-hover:hover::before,
+    .surface-hover:hover::after {
+      border-color: rgb(var(--accent-rgb) / 0.85);
+    }
   }
 
   /* Small controls: chips, pills, icon buttons. No corner marks — at this size
@@ -487,8 +491,10 @@ label {
     background: var(--surface-2);
     transition: color 180ms ease, background-color 180ms ease;
   }
-  .chip:hover {
-    background: rgb(var(--accent-rgb) / 0.14);
+  @media (hover: hover) and (pointer: fine) {
+    .chip:hover {
+      background: rgb(var(--accent-rgb) / 0.14);
+    }
   }
 
   /* Navigation bar. The material is on a pseudo-element so it can fade in on

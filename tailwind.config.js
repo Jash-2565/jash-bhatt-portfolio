@@ -6,6 +6,12 @@ export default {
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
+  // `hover:` only where there is a real hover. On touch, a tap fires :hover
+  // and it sticks until the next tap elsewhere, so a card stayed lifted and
+  // cyan after the reader had moved on. Tailwind 4's default; opt-in on 3.
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     // Stock Tailwind starts at sm:640px, which left every phone in the same
     // bucket. `xs` gives the 375px-class devices something to differ from.
