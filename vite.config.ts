@@ -8,11 +8,11 @@ import { fileURLToPath } from 'node:url'
 
 /**
  * onnxruntime-web references its .wasm binaries with `new URL(..., import.meta.url)`,
- * so Vite resolves them and copies a ~23MB duplicate into dist/assets. Nothing
+ * so Vite resolves them and copies a ~14MB duplicate into dist/assets. Nothing
  * ever requests that copy: YoloV8Demo sets `ort.env.wasm.wasmPaths` to
  * `/onnxruntime/`, which is served from public/. A network trace of the running
- * demo confirms only /onnxruntime/ort-wasm-simd-threaded.jsep.{mjs,wasm} is
- * fetched. Dropping the emitted duplicate takes ~23MB off every deploy without
+ * demo confirms only /onnxruntime/ort-wasm-simd-threaded.wasm is
+ * fetched. Dropping the emitted duplicate takes ~14MB off every deploy without
  * changing a byte of what the browser loads.
  */
 const dropBundledOrtWasm = (): Plugin => ({

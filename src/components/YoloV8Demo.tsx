@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import * as ort from 'onnxruntime-web';
+// The CPU-only build. The default entry adds WebGPU (a 23MB .jsep.wasm instead
+// of 14MB) and has no WebGL backend at all, so the old `['webgl', 'wasm']`
+// request always fell through to wasm anyway.
+import * as ort from 'onnxruntime-web/wasm';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 const INPUT_SIZE = 640;
@@ -214,25 +217,13 @@ const YoloV8Demo = () => {
     setStatus('Loading model...');
     ort.env.wasm.numThreads = 1;
     ort.env.wasm.wasmPaths = wasmBaseUrl;
-    // Hint WebGL for faster inference when available.
-    // @ts-expect-error onnxruntime-web does not type the webgl env options
-    ort.env.webgl = { powerPreference: 'high-performance' };
 
-    let session: ort.InferenceSession;
-    let providerLabel = 'wasm';
-    try {
-      session = await ort.InferenceSession.create(modelUrl, {
-        executionProviders: ['webgl', 'wasm']
-      });
-      providerLabel = 'webgl';
-    } catch {
-      session = await ort.InferenceSession.create(modelUrl, {
-        executionProviders: ['wasm']
-      });
-    }
+    const session = await ort.InferenceSession.create(modelUrl, {
+      executionProviders: ['wasm']
+    });
     sessionRef.current = session;
     setStatus('Model ready');
-    setDebug(`Model loaded (${providerLabel}). Input: ${session.inputNames.join(', ')} | Output: ${session.outputNames.join(', ')}`);
+    setDebug(`Model loaded (wasm). Input: ${session.inputNames.join(', ')} | Output: ${session.outputNames.join(', ')}`);
     return session;
   };
 
