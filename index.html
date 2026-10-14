@@ -18,6 +18,9 @@
          connection before the stylesheet asks for them. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Linked here rather than @imported from index.css, which made the font
+         CSS wait for the app stylesheet to download before it could start. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Oxanium:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap" />
 
     <!-- Open Graph — link previews on LinkedIn, Slack, Discord, iMessage, Facebook.
          scripts/prerender.mjs rewrites these per route at build time, so each
