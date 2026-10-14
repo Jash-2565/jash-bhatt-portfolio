@@ -45,7 +45,7 @@ const ZOOMABLE = 'cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-v
  * stop, no Enter/Space. They stay divs rather than becoming buttons because
  * each one carries grid/flex sizing a button would fight with, so the role and
  * the key handling are supplied explicitly instead. Esc closes the lightbox
- * (see the handler in App.tsx), so the loop is completable without a mouse.
+ * (see the handler in Lightbox.tsx), so the loop is completable without a mouse.
  */
 const zoomProps = (
   src: string | undefined,

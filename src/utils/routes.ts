@@ -34,6 +34,13 @@ const SECTION_PATHS: Record<string, MobilePage> = {
   contact: 'contact',
 };
 
+const MOBILE_PAGES: MobilePage[] = ['home', 'work', 'about', 'contact'];
+export const isMobilePage = (value: string): value is MobilePage =>
+  (MOBILE_PAGES as string[]).includes(value);
+
+/** Explorations is its own view, so Work stays the marked nav item while there. */
+export const sectionForAnchor = (section: string) => (section === 'explorations' ? 'work' : section);
+
 const slugSet = new Set(projects.map((p) => p.slug));
 const slugById = new Map(projects.map((p) => [p.id, p.slug]));
 

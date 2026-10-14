@@ -40,7 +40,7 @@ Real paths, not hashes:
 | `/work/<slug>` | A case study |
 
 The routing is still entirely client-side; `src/utils/routes.ts` resolves the URL
-and `App.tsx` pushes to it. What the paths buy is a `<head>` a scraper can read.
+and `src/hooks/useSiteNavigation.ts` pushes to it. What the paths buy is a `<head>` a scraper can read.
 `scripts/prerender.mjs` runs after `vite build` and writes one HTML file per
 route with its own title, description, canonical and OG tags, so each case study
 gets its own link preview. Add a project and it appears there automatically — the
@@ -61,11 +61,13 @@ engines treat as a defect, and which tells a visitor with a stale link nothing.
 
 ```
 src/
-  App.tsx           Home, Work, About, Contact — one scroll at lg+, paged below it
+  App.tsx           Page composition: nav, the current view, lightbox, footer
   components/       UI components; the three demos are lazy-loaded
+    home/           Home, Work, About, Contact sections — one scroll at lg+, paged below it
   config/           Curation and ordering of projects, shared Tailwind class strings
   data/             Case-study content, generated image manifest, demo source listings
-  hooks/            useInView, useIsMobile, usePointerFine
+  hooks/            useSiteNavigation (views, URL, history), useScrollSpy, useDocumentMeta,
+                    useInView, useIsMobile, usePointerFine
   types/            Shared content and project types
   utils/            Base-URL prefix, route table, srcset lookup, small formatters
 public/
