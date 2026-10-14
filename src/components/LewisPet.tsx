@@ -53,6 +53,26 @@ const IDLE: Record<'normal' | 'restless', [number, number]> = { normal: [3, 8], 
 
 const STORAGE_KEY = 'lewis-pet-dismissed';
 
+/** localStorage throws outright, rather than returning null, when the browser
+    blocks site data (Safari's "Block all cookies", some embedded webviews).
+    The root error boundary would then swap the whole site for its fallback
+    over a decoration, so a failed read just means "not dismissed". */
+const readDismissed = () => {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+};
+const writeDismissed = (value: boolean) => {
+  try {
+    if (value) window.localStorage.setItem(STORAGE_KEY, 'true');
+    else window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Blocked storage: the choice lasts for this page view only.
+  }
+};
+
 /** Mirrors `ui.shell` (max-w-[84rem], lg:px-12): the left edge of the content
     column, centred in the viewport. Left of it is the margin he keeps to while
     the work is being read. Both are rem, so they grow with the layout above
@@ -95,7 +115,7 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
   const enabled = usePointerFine();
   const [dismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return window.localStorage.getItem(STORAGE_KEY) === 'true';
+    return readDismissed();
   });
   /** Written by the pointer handlers, drained by the loop. A ref rather than
       state: greeting him must not re-render the page, and the loop owns the
@@ -104,7 +124,7 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
 
   useEffect(() => {
     const summon = () => {
-      window.localStorage.removeItem(STORAGE_KEY);
+      writeDismissed(false);
       setDismissed(false);
     };
     window.addEventListener(SUMMON_EVENT, summon);
@@ -403,7 +423,7 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
         type="button"
         onClick={(e) => {
           e.stopPropagation();
-          window.localStorage.setItem(STORAGE_KEY, 'true');
+          writeDismissed(true);
           setDismissed(true);
         }}
         aria-label="Send Lewis away"
