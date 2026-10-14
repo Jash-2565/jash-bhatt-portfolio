@@ -1174,7 +1174,8 @@ export const projects: Project[] = [
           content: "Each chart follows from the question, not from what was easy to draw.",
           cards: [
             { title: "How much of seven years had music in it?", body: "A question about density over a long span, so eight concentric rings, one sliver per day." },
-            { title: "Do songs get retired, or just played less?", body: "A question about a lifetime, so the ten most-played get a row each across seven years." }
+            { title: "Do songs get retired, or just played less?", body: "A question about a lifetime, so the ten most-played get a row each across seven years." },
+            { title: "Who was on top, and when?", body: "A question about rank changing over time, so a race you can play or scrub, counted two ways: the running total, or each year from zero." }
           ],
           images: [
             {
@@ -1184,6 +1185,10 @@ export const projects: Project[] = [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Songs.webp`,
               caption: "Ten songs, seven years, one row each. All ten are still in rotation."
+            },
+            {
+              src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Race.webp`,
+              caption: "January 2023, the month my all-time number one took the lead, by half an hour. Before that, Kygo had led for 32 months, and ended up twelfth."
             }
           ]
         },
@@ -1197,7 +1202,7 @@ export const projects: Project[] = [
             },
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Records.webp`,
-              caption: "Chapter V runs gold. Album art is pulled in and each record's grooves are drawn per track, brighter where it was played more."
+              caption: "Chapter IV runs gold. Album art is pulled in and each record's grooves are drawn per track, brighter where it was played more."
             }
           ]
         },
