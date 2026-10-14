@@ -76,7 +76,9 @@ const AutoVideo = ({ src, alt = '', captioned = false, className = '' }: AutoVid
       muted
       loop
       playsInline
-      autoPlay={!reduced}
+      // No `autoPlay`: it makes the browser fetch and start every clip on the
+      // page at load, offscreen ones included, overriding preload="metadata".
+      // The IntersectionObserver above starts each one as it scrolls in.
       controls={reduced}
       preload="metadata"
     >
