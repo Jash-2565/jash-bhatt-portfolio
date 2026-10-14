@@ -44,10 +44,22 @@ export interface Workflow {
   edges: FlowEdge[];
   /** Labels for the bottom progress bar, one per main step. */
   steps: string[];
-  /** Badge for the backend call, pulsing while an `api` event plays. */
-  apiBadge?: { x: number; y: number; w: number; h: number; label: string; anchor: string };
+  /**
+   * Badge for a backend call, pulsing while the anchor node's `api` event
+   * plays. Below the anchor, or beside it when its y sits within the node.
+   */
+  apiBadge?: ApiBadge | ApiBadge[];
   /** Overrides for the outcome pill, e.g. { reject: "Blocked" }. */
   outcomeLabels?: Partial<Record<EndTone, string>>;
+}
+
+export interface ApiBadge {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label: string;
+  anchor: string;
 }
 
 /* ------------------------------------------------------------------- chat */
@@ -73,7 +85,8 @@ export type ChatEvent =
   | { kind: "user"; text: string }
   /** A centred status chip, e.g. "Topic invoked". */
   | { kind: "system"; text: string; tone?: "accent" | "ok" | "bad" | "warn" }
-  | { kind: "file"; files: { name: string; size: string }[] }
+  /** Files the user uploads, or with `fetched` ones the agent retrieves. */
+  | { kind: "file"; files: { name: string; size: string }[]; fetched?: boolean }
   | { kind: "ocr"; title: string; fields: Field[] }
   | {
       kind: "cap";

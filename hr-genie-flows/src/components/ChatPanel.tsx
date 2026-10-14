@@ -71,7 +71,11 @@ function Event({ e, t }: { e: TimedEvent; t: number }) {
     case "system":
       return <SystemChip text={ev.text} tone={ev.tone} local={local} />;
     case "file":
-      return <Appear local={local} side="right"><FileCard files={ev.files} local={local} /></Appear>;
+      return (
+        <Appear local={local} side={ev.fetched ? "left" : "right"}>
+          <FileCard files={ev.files} fetched={ev.fetched} local={local} />
+        </Appear>
+      );
     case "ocr":
       return <Appear local={local}><OcrCard event={ev} local={local} /></Appear>;
     case "cap":

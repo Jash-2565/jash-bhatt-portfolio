@@ -1,14 +1,15 @@
 # HR Genie agent flows
 
-Animated walkthroughs of HR Genie agents: **Creche Reimbursement** and
-**Apply Leave** (FTC Bot, BRD Module 1). A flowchart of the 10 steps sits on
-the left, the live chat on the right, and a progress bar runs along the
+Animated walkthroughs of HR Genie agents: **Creche Reimbursement**,
+**Apply Leave** (FTC Bot, BRD Module 1) and **Mediclaim Card** retrieval. A
+flowchart of the agent's steps sits on the left, the live chat on the right, and a progress bar runs along the
 bottom. It's built on a fixed 1920×1080 stage for screen recording.
 
 ```bash
 npm install
 npm run dev        # http://localhost:5190  (creche)
                    # http://localhost:5190/?flow=leave
+                   # http://localhost:5190/?flow=mediclaim
 ```
 
 **Controls:** Space plays or pauses. ← and → step through beats. R restarts.
@@ -18,8 +19,8 @@ Keys 1–9 pick a scenario. The scenario is also in the URL
 ## On the portfolio
 
 `npm run build:site` builds into `../public/demos/hr-genie-flows/`, and the
-HR Genie case study embeds `creche.html` and `leave.html` from there. Those
-two pages are `index.html` with `data-flow` set, so each one is pinned to a
+HR Genie case study embeds `creche.html`, `leave.html` and `mediclaim.html`
+from there. Those pages are `index.html` with `data-flow` set, so each one is pinned to a
 single agent. Rebuild and commit the output after any change here.
 
 ## How it works
@@ -58,7 +59,7 @@ Event kinds: `agent`, `user`, `system`, `file`, `ocr`, `cap`, `summary`, `api`,
 
 `compile()` turns the beats into absolute timestamps. Everything on screen is
 then a pure function of the playhead `t`: the travelling dot, the typewriter,
-the cap bar, the confetti and the Request ID roll. That's why seeking,
+the cap bar and the Request ID roll. That's why seeking,
 stepping and speed changes are exact, and why the export can render frame by
 frame. You don't mark branches as "not taken" yourself. Any node or edge off
 the scenario's path fades out once the decision before it is made.
@@ -97,7 +98,8 @@ the scenario's path fades out once the decision before it is made.
    nine scenarios.
 
 **New node or branch?** Add it to `nodes` and `edges` in that agent's
-`workflow.ts`.
+`workflow.ts`. Mediclaim has only five steps, so its workflow lays out its
+own centred column instead of using the shared grid in `layout.ts`.
 
 **New agent?** Add `content/<agent>/workflow.ts` and `scenarios.ts`, register
 the agent in `content/flows.ts`, and copy `leave.html` with its `data-flow`

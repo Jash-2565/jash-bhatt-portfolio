@@ -174,7 +174,9 @@ export function nodeView(tl: Timeline, t: number, id: string, terminal: boolean)
   const opacity = fadeAt === undefined ? 1 : 1 - 0.82 * easeOut(progress(t, fadeAt, FADE_MS));
   if (!tb || t < tb.arrive) return { status: "idle", opacity, since: 0 };
   const last = tb.index === tl.beats.length - 1;
-  const status: NodeStatus = terminal ? "ended" : t >= tb.end && !last ? "done" : "active";
+  // The last beat stays active through its hold, unless the playhead has run
+  // off the end of a flow that finishes on a step rather than a terminal.
+  const status: NodeStatus = terminal ? "ended" : t >= tb.end && (!last || t >= tl.total) ? "done" : "active";
   return { status, opacity, since: tb.arrive, note: tb.beat.note, noteTone: tb.beat.noteTone };
 }
 

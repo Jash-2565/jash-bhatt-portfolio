@@ -24,7 +24,7 @@ function Check({ className = "h-4 w-4" }: { className?: string }) {
 
 /* ---------------------------------------------------------------- files */
 
-export function FileCard({ files, local }: { files: Of<"file">["files"]; local: number }) {
+export function FileCard({ files, fetched, local }: { files: Of<"file">["files"]; fetched?: boolean; local: number }) {
   const reduced = useReduced();
   return (
     <div className="flex w-[78%] flex-col gap-2">
@@ -44,7 +44,7 @@ export function FileCard({ files, local }: { files: Of<"file">["files"]; local: 
                   <div className="h-full rounded-full bg-accent" style={{ width: `${p * 100}%` }} />
                 </div>
                 <span className="w-[124px] shrink-0 whitespace-nowrap text-right text-[12px] text-slate-400">
-                  {p < 1 ? `Uploading ${Math.round(p * 100)}%` : f.size}
+                  {p < 1 ? `${fetched ? "Fetching" : "Uploading"} ${Math.round(p * 100)}%` : f.size}
                 </span>
               </div>
             </div>
@@ -300,7 +300,6 @@ export function EndCard({ event, local }: { event: Of<"end">; local: number }) {
       className="relative w-[90%] rounded-2xl border-2 p-4"
       style={{ borderColor: tone.hex, background: tone.fill, transform: `translateX(${shake}px)`, boxShadow: `0 0 32px ${tone.hex}33` }}
     >
-      {success && !reduced && <Confetti local={local} />}
       <div className="flex items-center gap-3">
         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full" style={{ background: `${tone.hex}26`, color: tone.hex }}>
           {success ? <Check className="h-5 w-5" /> : <span className="text-[20px] font-bold leading-none">{event.tone === "redirect" ? "↪" : "!"}</span>}
@@ -377,53 +376,6 @@ function CountIn({ id, local, reduced }: { id: string; local: number; reduced: b
         );
       })}
     </>
-  );
-}
-
-const CONFETTI = Array.from({ length: 70 }, (_, i) => {
-  // Deterministic pseudo-random so every replay and export frame matches.
-  const r = (n: number) => {
-    const x = Math.sin(i * 12.9898 + n * 78.233) * 43758.5453;
-    return x - Math.floor(x);
-  };
-  const angle = lerp(-160, -20, r(1)) * (Math.PI / 180);
-  const speed = lerp(0.35, 0.85, r(2));
-  return {
-    vx: Math.cos(angle) * speed,
-    vy: Math.sin(angle) * speed,
-    spin: lerp(-0.8, 0.8, r(3)),
-    w: lerp(6, 11, r(4)),
-    h: lerp(4, 7, r(5)),
-    delay: r(6) * 120,
-    color: ["#01f5d1", "#4ade80", "#fbbf24", "#f1f5f9", "#f472b6", "#60a5fa"][i % 6],
-  };
-});
-
-function Confetti({ local }: { local: number }) {
-  const life = 1900;
-  if (local > life + 200) return null;
-  return (
-    <div className="pointer-events-none absolute left-1/2 top-1/2 z-10">
-      {CONFETTI.map((c, i) => {
-        const age = Math.max(0, local - c.delay);
-        const x = c.vx * age;
-        const y = c.vy * age + 0.0006 * age * age;
-        const fade = 1 - clamp01((age - life * 0.6) / (life * 0.4));
-        return (
-          <span
-            key={i}
-            className="absolute rounded-[2px]"
-            style={{
-              width: c.w,
-              height: c.h,
-              background: c.color,
-              opacity: age > 0 ? fade : 0,
-              transform: `translate(${x}px, ${y}px) rotate(${c.spin * age}deg)`,
-            }}
-          />
-        );
-      })}
-    </div>
   );
 }
 

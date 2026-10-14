@@ -14,7 +14,9 @@ export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
   const stepOf = (nodeId: string) => workflow.nodes.find((n) => n.id === nodeId)?.step;
   const last = tl.beats[tl.beats.length - 1];
   const endNode = workflow.nodes.find((n) => n.id === last.beat.node && n.kind === "end");
-  const outcome = endNode?.tone && t >= last.arrive ? TONE[endNode.tone] : null;
+  // A flow that ends on a step rather than a terminal succeeds once it finishes.
+  const tone = endNode ? endNode.tone : t >= tl.total ? "success" : undefined;
+  const outcome = tone && t >= last.arrive ? TONE[tone] : null;
 
   return (
     <div className="flex items-center gap-6">
@@ -67,7 +69,7 @@ export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
             : { borderColor: "#243140", color: "#7d8b9a" }
         }
       >
-        {outcome ? (workflow.outcomeLabels?.[endNode!.tone!] ?? outcome.label) : "In progress"}
+        {outcome ? (workflow.outcomeLabels?.[tone!] ?? outcome.label) : "In progress"}
       </div>
     </div>
   );

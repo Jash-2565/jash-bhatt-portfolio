@@ -1,4 +1,4 @@
-import type { EndTone, FlowEdge, FlowNode, Workflow } from "../engine/types";
+import type { ApiBadge as Badge, EndTone, FlowEdge, FlowNode, Workflow } from "../engine/types";
 import {
   along,
   edgeView,
@@ -35,7 +35,9 @@ export function Flowchart({ workflow, tl, t, label }: Props & { label: string })
       {workflow.edges.map((e) => (
         <Edge key={e.id} edge={e} tl={tl} t={t} />
       ))}
-      {workflow.apiBadge && <ApiBadge workflow={workflow} tl={tl} t={t} />}
+      {[workflow.apiBadge ?? []].flat().map((b) => (
+        <ApiBadge key={b.anchor} badge={b} workflow={workflow} tl={tl} t={t} />
+      ))}
       {workflow.nodes.map((n) => (
         <Node key={n.id} node={n} tl={tl} t={t} />
       ))}
@@ -307,9 +309,8 @@ function SideContent({ node, lit }: { node: FlowNode; lit: boolean }) {
 
 /* ------------------------------------------------------------ api badge */
 
-function ApiBadge({ workflow, tl, t }: Props) {
+function ApiBadge({ badge: b, workflow, tl, t }: Props & { badge: Badge }) {
   const reduced = useReduced();
-  const b = workflow.apiBadge!;
   const anchor = workflow.nodes.find((n) => n.id === b.anchor)!;
   const call = tl.events.find((e) => e.event.kind === "api" && tl.beats[e.beat].beat.node === b.anchor);
   const calling = call && t >= call.start && t < call.start + call.dur;
@@ -321,14 +322,16 @@ function ApiBadge({ workflow, tl, t }: Props) {
   const color = calling ? ACCENT : finished ? (ok ? TONE.success.hex : TONE.error.hex) : "#5b6b7b";
   const phase = call ? ((t - call.start) % 900) / 900 : 0;
   const top = b.y - b.h / 2;
+  // Beside the anchor when the badge sits level with it, otherwise below.
+  const beside = Math.abs(b.y - anchor.y) < anchor.h / 2;
+  const link = beside
+    ? { x1: anchor.x + anchor.w / 2, y1: b.y, x2: b.x - b.w / 2, y2: b.y }
+    : { x1: b.x, y1: anchor.y + anchor.h / 2, x2: b.x, y2: top };
 
   return (
     <g opacity={opacity}>
       <line
-        x1={b.x}
-        y1={anchor.y + anchor.h / 2}
-        x2={b.x}
-        y2={top}
+        {...link}
         stroke={calling ? ACCENT : IDLE_EDGE}
         strokeWidth={2}
         strokeDasharray="4 4"

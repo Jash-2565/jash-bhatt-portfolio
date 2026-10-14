@@ -300,6 +300,15 @@ export const projects: Project[] = [
           }
         },
         {
+          title: "Mediclaim, the Simple Case",
+          content: "Not every agent needs a rule map. The Mediclaim agent fetches a document: the employee asks for their own Mediclaim card or their parent's, the agent takes their email ID and employee code from their details, and a custom API uses the code to pull that card from the Azure Blob Storage that holds every employee's cards. The card goes to the employee's email, and the agent confirms in the chat that it has been sent.",
+          liveEmbed: {
+            src: `${PUBLIC_URL}/demos/hr-genie-flows/mediclaim.html`,
+            title: "Mediclaim card walkthrough",
+            caption: "Built in React from the agent's logic. Illustrative employee details."
+          }
+        },
+        {
           title: "Leading a Platform Migration",
           callout: { text: "From building what I was asked to, to shaping how the team builds." },
           content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent added to a roadmap that size.",
