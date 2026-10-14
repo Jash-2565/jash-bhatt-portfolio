@@ -547,7 +547,9 @@ const App = () => {
       title: string,
       description: string,
       path: string,
-      image = `${SITE_ORIGIN}/og-image.png`,
+      // The same card scripts/prerender.mjs bakes into every route. There are
+      // no per-project images; /og/<slug>.png was never generated and 404'd.
+      image = `${SITE_ORIGIN}/og-image.jpg`,
       imageAlt = 'Jash Bhatt — product designer, with a portrait of Jash.'
     ) => {
       const url = `${SITE_ORIGIN}${path === '/' ? '/' : path}`;
@@ -569,7 +571,7 @@ const App = () => {
         `${selectedProject.title} — ${selectedProject.category} | Jash Bhatt`,
         selectedProject.description,
         `/work/${selectedProject.slug}`,
-        `${SITE_ORIGIN}/og/${selectedProject.slug}.png`,
+        undefined,
         `${selectedProject.title} — ${selectedProject.category}`
       );
       return;
