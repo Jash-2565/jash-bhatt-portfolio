@@ -232,6 +232,8 @@ h1 em{font-style:normal;color:var(--accent)}
 .surprise .say{font-size:clamp(22px,3.5vw,40px);line-height:1.18;font-weight:750;
   letter-spacing:-.035em;margin:0;max-width:18ch}
 .surprise .say em{font-style:normal;color:var(--accent)}
+/* a second highlight, a warmer pink beside the chapter's violet, for a name */
+.surprise .say em.alt{color:#f29ccf}
 .surprise .exp{color:var(--muted);margin-top:20px;max-width:40ch;font-size:15px}
 /* ── words, set at the size of how often you played them ──────────────────── */
 .wordlist{display:flex;flex-direction:column;gap:2px}
@@ -472,11 +474,6 @@ footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);fon
 .site-back:hover,.site-back:focus-visible{color:#3EC873;border-color:rgba(62,200,115,.45)}
 @media (max-width:640px){.site-back{top:8px;left:8px;padding:7px 10px;font-size:11px}}
 
-/* The framing line under the hero lead. */
-.hero .byline{margin:22px 0 0;max-width:46ch;font:400 13px/1.7 ui-sans-serif,system-ui,sans-serif;
-  color:#7e858c;letter-spacing:.01em}
-.hero .byline a{color:#3EC873;text-decoration:none;border-bottom:1px solid rgba(62,200,115,.35)}
-.hero .byline a:hover{border-bottom-color:#3EC873}
 </style>
 </head>
 <body>
@@ -498,12 +495,6 @@ footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);fon
   <h1 id="headline"></h1>
   <p class="lead" id="lead"></p>
   <div class="dates" id="daterange"></div>
-  <!-- The piece addresses "you" throughout, borrowing Wrapped's own voice.
-       The history is mine, and without saying so the second person reads as a
-       template that was never filled in. -->
-  <p class="byline">The history is mine — seven years of my own Spotify export.
-    The second person is borrowed from Wrapped, which is the thing this is
-    arguing with. <a href="https://jashbhatt.com/work/soundtrack-seven-years">How it was built &rarr;</a></p>
   <div class="cue"><i></i>Scroll</div>
 </header>
 
@@ -936,7 +927,7 @@ $('#framing').innerHTML=[
   {v:nf(D.streak.days),l:`day streak — you have not missed a day since ${fmtD(D.streak.from)}`},
 ].map(t=>`<div><div class="v${t.a?' a':''}">${t.v}</div><div class="l">${t.l}</div></div>`).join('');
 
-$('#q1').innerHTML=`For ${HL.years.toLowerCase()} years, one artist has never really left.`;
+$('#q1').innerHTML=`Across ${HL.years.toLowerCase()} years, <em>one artist</em> came out on top.`;
 
 /* ── bars ─────────────────────────────────────────────────────────────────── */
 function barList(host,items,opt={}){
@@ -1295,7 +1286,7 @@ function spinKick(){if(SPIN.run||REDUCED)return;SPIN.run=true;SPIN.last=performa
 (function(){
   const P=X.possession, d=P.daily, mx=Math.max(...d);
   $('#posSay').innerHTML=`For <em>${P.days} days straight</em>, you did not let a single day
-    pass without ${esc(P.name)}.`;
+    pass without <em class="alt">${esc(P.name)}</em>.`;
   $('#posExp').innerHTML=`${fmtD(P.from)} to ${fmtD(P.to)} — <b>${nf(P.plays)} plays across
     ${P.days} consecutive days</b>, never once skipping a day. Not a playlist you left on:
     a decision you made every morning for six weeks.`;
