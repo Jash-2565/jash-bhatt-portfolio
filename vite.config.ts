@@ -90,6 +90,11 @@ export default defineConfig(() => ({
     host: '127.0.0.1',
     port: 5177,
     strictPort: false,
+    // node_modules is a symlink to node_modules.nosync (kept out of iCloud),
+    // and the watcher's built-in node_modules ignore does not match the real
+    // path. Stray change events in there — a dependency's tsconfig.json —
+    // forced a full page reload every few seconds.
+    watch: { ignored: ['**/node_modules.nosync/**'] },
   },
   build: {
     rollupOptions: {
