@@ -493,7 +493,6 @@ footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);fon
   <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
   <div class="kicker" id="heroKicker"></div>
   <h1 id="headline"></h1>
-  <p class="lead" id="lead"></p>
   <div class="dates" id="daterange"></div>
   <div class="cue"><i></i>Scroll</div>
 </header>
@@ -895,9 +894,6 @@ function drawOnScroll(path){
 document.title=`The Soundtrack of ${HL.years} Years`;
 $('#heroKicker').textContent=`Extended Streaming History · ${HL.yearSpan}`;
 $('#headline').innerHTML=`The soundtrack of<br><em>${HL.years.toLowerCase()} years</em>.`;
-$('#lead').innerHTML=`Every song you played since ${HL.firstYear}, and what it says about you.
-  It comes to <b>${nf(M.streams)} plays</b> — ${F.straightDays} days of sound, if you had
-  played it all end to end without ever stopping.`;
 $('#daterange').textContent=fmtD(M.first)+'  →  '+fmtD(M.last)+'   ·   '+nf(M.spanDays)+' days';
 $('#chap1Line').innerHTML=`Seven years of listening leaves a shape. Here is yours, in four
   numbers — and then in everything else.`;
