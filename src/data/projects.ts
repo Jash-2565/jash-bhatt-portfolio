@@ -204,8 +204,8 @@ export const projects: Project[] = [
           ],
           images: [
             {
-              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Scale.svg`,
-              caption: "Where HR Genie's agents sit within FINAI / Employee Blu."
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Double-Diamond.svg`,
+              caption: "The Agentic AI team's process as a double diamond. The business discovers and defines each agent; I built from the BRD handover through develop and deliver. Alongside, I was learning how the company works today, the agent system it's moving to, and Copilot Studio itself."
             }
           ]
         },
@@ -215,7 +215,11 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Creche-Flow.svg`,
-              caption: "The goal, shown on creche claims: a manual, multi-day review becomes a single conversation."
+              caption: "A creche claim before HR Genie: five steps, each one manual, and a returned claim starts over."
+            },
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Chroma-Mockup.svg`,
+              caption: "A recreation of what a CHROMA claim form looks like, not a screenshot of the real system. Every rule HR checks later is missing from the screen."
             }
           ]
         },

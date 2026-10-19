@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 860" font-family="'Helvetica Neue', Arial, sans-serif">
+  <text x="80" y="52" font-size="15" font-weight="700" fill="#94A3B8" letter-spacing="1">HOW THE AGENTIC AI TEAM TAKES AN AGENT FROM IDEA TO LIVE</text>
+
+  <!-- space labels -->
+  <g font-size="13" font-weight="700" letter-spacing="1" text-anchor="middle">
+    <path d="M80 112 V100 H790 V112" fill="none" stroke="#2C4A7C" stroke-width="2"/>
+    <text x="435" y="90" fill="#7C93B8">PROBLEM SPACE · LED BY THE BUSINESS</text>
+    <path d="M800 112 V100 H1520 V112" fill="none" stroke="#01F5D1" stroke-width="2.5"/>
+    <text x="1160" y="90" fill="#01F5D1">WHERE I BUILT</text>
+  </g>
+
+  <!-- diamond 1: discover / define -->
+  <path d="M80 300 L435 130 L790 300 L435 470 Z" fill="#101E36" stroke="#2C4A7C" stroke-width="2"/>
+  <line x1="435" y1="130" x2="435" y2="470" stroke="#2C4A7C" stroke-dasharray="6 6"/>
+
+  <!-- diamond 2: develop / deliver -->
+  <path d="M810 300 L1165 130 L1520 300 L1165 470 Z" fill="#0B1F2E" stroke="#01F5D1" stroke-width="2.5"/>
+  <line x1="1165" y1="130" x2="1165" y2="470" stroke="#0E7490" stroke-dasharray="6 6"/>
+
+  <g text-anchor="middle">
+    <text x="258" y="296" font-size="26" font-weight="700" fill="#CBD5E1">Discover</text>
+    <text x="258" y="322" font-size="12" font-weight="700" fill="#5F7699" letter-spacing="2">DIVERGE</text>
+    <text x="612" y="296" font-size="26" font-weight="700" fill="#CBD5E1">Define</text>
+    <text x="612" y="322" font-size="12" font-weight="700" fill="#5F7699" letter-spacing="2">CONVERGE</text>
+    <text x="988" y="296" font-size="26" font-weight="700" fill="#F1F5F9">Develop</text>
+    <text x="988" y="322" font-size="12" font-weight="700" fill="#67E8F9" letter-spacing="2">DIVERGE</text>
+    <text x="1342" y="296" font-size="26" font-weight="700" fill="#F1F5F9">Deliver</text>
+    <text x="1342" y="322" font-size="12" font-weight="700" fill="#67E8F9" letter-spacing="2">CONVERGE</text>
+  </g>
+
+  <!-- handover point -->
+  <circle cx="800" cy="300" r="11" fill="#01F5D1" stroke="#0b1730" stroke-width="4"/>
+  <g text-anchor="middle">
+    <text x="800" y="348" font-size="14" font-weight="700" fill="#01F5D1" letter-spacing="1">BRD</text>
+    <text x="800" y="368" font-size="13" fill="#9FB3D1">handover</text>
+  </g>
+
+  <!-- what happens in each phase -->
+  <g text-anchor="middle">
+    <text x="258" y="530" font-size="17" font-weight="700" fill="#CBD5E1">Spot manual workflows</text>
+    <text x="258" y="556" font-size="14" fill="#7C93B8">Forms, hand checks, email chases</text>
+
+    <text x="612" y="530" font-size="17" font-weight="700" fill="#CBD5E1">Write the BRD</text>
+    <text x="612" y="556" font-size="14" fill="#7C93B8">Policy and requirements for each agent</text>
+
+    <text x="988" y="530" font-size="17" font-weight="700" fill="#F1F5F9">Rules, script, messages</text>
+    <text x="988" y="556" font-size="14" fill="#BAE6E6">Built in Copilot Studio</text>
+    <text x="988" y="580" font-size="14" fill="#BAE6E6">+ led the move to Gen 2</text>
+
+    <text x="1342" y="530" font-size="17" font-weight="700" fill="#F1F5F9">Test and ship</text>
+    <text x="1342" y="556" font-size="14" fill="#BAE6E6">Real invoices, then business sign-off</text>
+  </g>
+
+  <!-- what I was learning alongside -->
+  <defs>
+    <marker id="arrowL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9ec8ff"/>
+    </marker>
+  </defs>
+  <line x1="80" y1="626" x2="1520" y2="626" stroke="#1E2E4A"/>
+  <text x="80" y="662" font-size="13" font-weight="700" fill="#9ec8ff" letter-spacing="1">LEARNING THE COMPANY</text>
+  <rect x="80" y="676" width="710" height="64" rx="32" fill="#101E36" stroke="#4B74E7" stroke-dasharray="6 5"/>
+  <g text-anchor="middle">
+    <text x="258" y="703" font-size="16" font-weight="700" fill="#DCE7FB">The current system</text>
+    <text x="258" y="725" font-size="13" fill="#93A9C8">CHROMA forms, manual checks, email</text>
+    <text x="612" y="703" font-size="16" font-weight="700" fill="#DCE7FB">The system they're building</text>
+    <text x="612" y="725" font-size="13" fill="#93A9C8">FINAI / Employee Blu agents</text>
+  </g>
+  <line x1="410" y1="708" x2="452" y2="708" stroke="#9ec8ff" stroke-width="2.5" marker-end="url(#arrowL)"/>
+
+  <text x="80" y="782" font-size="13" font-weight="700" fill="#9ec8ff" letter-spacing="1">LEARNING MICROSOFT COPILOT STUDIO · IN PARALLEL</text>
+  <rect x="80" y="796" width="710" height="56" rx="28" fill="#101E36" stroke="#4B74E7" stroke-dasharray="6 5"/>
+  <text x="435" y="830" font-size="15" fill="#DCE7FB" text-anchor="middle">Topics and nodes, Power Fx, Adaptive Cards, Power Automate</text>
+  <path d="M790 824 H960" fill="none" stroke="#9ec8ff" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrowL)"/>
+  <text x="972" y="829" font-size="14" font-weight="600" fill="#BAE6E6">put to use in every build</text>
+</svg>
