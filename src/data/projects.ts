@@ -227,7 +227,7 @@ export const projects: Project[] = [
         {
           title: "How I Worked",
           phase: "Define",
-          content: "Every agent went through the same six stages, from the Business Requirement Document to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement is a flow I worked on and it shows the entire process of creating an agent flow.",
+          content: "Every agent went through the same six stages, from the Business Requirement Document to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement, one of the agents I built, shows the whole process end to end.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Process.svg`,
@@ -267,7 +267,7 @@ export const projects: Project[] = [
         {
           title: "Scripting the Conversation",
           phase: "Develop",
-          content: "With the rules fixed, I scripted the conversation in the flow that was intended by connecting all the necessary nodes.\n\nAdaptive Cards come in to display a summary of certain information and is editable by the user. The fields it reads from the documents, and the claim summary, are shown as interactive cards, so the employee can correct a mistake on the card instead of typing it out.",
+          content: "With the rules fixed, I scripted the conversation and built it as a flow of connected nodes in Copilot Studio.\n\nAdaptive Cards show the employee what the agent read from their documents, plus a summary of the claim. Both are editable, so a mistake is fixed on the card instead of typed out again.",
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conversation-Script.svg`,
@@ -290,7 +290,7 @@ export const projects: Project[] = [
         {
           title: "Review and Testing",
           phase: "Deliver",
-          content: "My colleagues and I tested it repeatedly on real invoices, more than six of them, from photos of paper invoices to PDFs and images of digital ones, and each round would require some fine tuning in the prompt. The business department did the final review and asked for changes if any before the agent went live.",
+          content: "My colleagues and I tested it on real invoices in every format we could find: photos of paper invoices, PDFs, and images of digital ones. Each round meant fine-tuning the prompt. The business team gave the final review before the agent went live.",
         },
         {
           title: "Every Branch, Playable",
