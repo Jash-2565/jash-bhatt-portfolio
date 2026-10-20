@@ -211,6 +211,7 @@ export const projects: Project[] = [
         },
         {
           title: "The Problem",
+          phase: "Discover",
           content: "Employees used CHROMA, a form-based HRMS, to apply for leave and claim reimbursements. Each request meant multi-step forms, manual validation, and email follow-ups.\n\nEmployees filled in fields without seeing the rules behind them, and only found out something was wrong when a request came back. HR then checked each claim by hand and chased missing details by email.",
           images: [
             {
@@ -225,6 +226,7 @@ export const projects: Project[] = [
         },
         {
           title: "How I Worked",
+          phase: "Define",
           content: "Every agent went through the same six stages, from the Business Requirement Document to a live agent in Copilot Studio. Review and testing looped back into the script until the flow held up. Creche Reimbursement is a flow I worked on and it shows the entire process of creating an agent flow.",
           images: [
             {
@@ -235,6 +237,7 @@ export const projects: Project[] = [
         },
         {
           title: "From Policy to Rules",
+          phase: "Define",
           content: "The BRD described creche reimbursement as policy prose. An agent can't act on prose, so my first job was turning each clause into a check: what it's checked against, what happens when it fails, and what the agent says then.\n\nWriting the failure path for every rule up front meant no claim could fall through a gap the form used to hide.",
           labels: ["5 rules", "3 documents"],
           images: [
@@ -245,17 +248,8 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Scripting the Conversation",
-          content: "With the rules fixed, I scripted the conversation in the flow that was intended by connecting all the necessary nodes.\n\nAdaptive Cards come in to display a summary of certain information and is editable by the user. The fields it reads from the documents, and the claim summary, are shown as interactive cards, so the employee can correct a mistake on the card instead of typing it out.",
-          images: [
-            {
-              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conversation-Script.svg`,
-              caption: "The creche script, recreated: ten turns on the happy path, and each exit a rule can take."
-            }
-          ]
-        },
-        {
           title: "Who Decides What",
+          phase: "Define",
           content: "People's jobs and money are involved, so the agent can't improvise. The policy is loaded into its context before every task, and its prompts tell it to follow that policy exactly, nothing more and nothing less. Its job is only to make submitting a claim easier: the reimbursement itself is handled by a different department.",
           table: {
             caption: "The creche agent's autonomy, step by step.",
@@ -271,7 +265,19 @@ export const projects: Project[] = [
           }
         },
         {
+          title: "Scripting the Conversation",
+          phase: "Develop",
+          content: "With the rules fixed, I scripted the conversation in the flow that was intended by connecting all the necessary nodes.\n\nAdaptive Cards come in to display a summary of certain information and is editable by the user. The fields it reads from the documents, and the claim summary, are shown as interactive cards, so the employee can correct a mistake on the card instead of typing it out.",
+          images: [
+            {
+              src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conversation-Script.svg`,
+              caption: "The creche script, recreated: ten turns on the happy path, and each exit a rule can take."
+            }
+          ]
+        },
+        {
           title: "Writing the Hard Messages",
+          phase: "Develop",
           callout: { text: "Every rule a form enforces silently now has to be said out loud." },
           content: "A form can grey out a button. A conversation has to explain itself. Each rejection and failure got its own message, written to name the rule, give the number, and say what happens next.",
           images: [
@@ -283,10 +289,12 @@ export const projects: Project[] = [
         },
         {
           title: "Review and Testing",
+          phase: "Deliver",
           content: "My colleagues and I tested it repeatedly on real invoices, more than six of them, from photos of paper invoices to PDFs and images of digital ones, and each round would require some fine tuning in the prompt. The business department did the final review and asked for changes if any before the agent went live.",
         },
         {
           title: "Every Branch, Playable",
+          phase: "Deliver",
           content: "The creche agent's full logic as an interactive walkthrough. Pick a scenario to watch a claim move through the flowchart and the chat together: the happy path with a capped amount, an empanelled creche pointed to administration, a stale invoice, each child-age rule, and a failed submission.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/creche.html`,
@@ -296,6 +304,7 @@ export const projects: Project[] = [
         },
         {
           title: "Apply Leave, Same Method",
+          phase: "Deliver",
           content: "Apply Leave went through the same six stages, starting from BRD Module 1 for fixed-term contract employees. The rule map covered five leave types (Privileged Leave, Sick Leave, Casual Leave, Leave without Pay and Maternity Leave), each with its own balance, caps, overlap and block rules. The script asks for a supporting document only when a rule needs one, and every blocked request explains its rule in the chat: the monthly CL cap, LWP while balance remains, or dates that overlap an approved leave.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/leave.html`,
@@ -305,6 +314,7 @@ export const projects: Project[] = [
         },
         {
           title: "Mediclaim, the Simple Case",
+          phase: "Deliver",
           content: "Not every agent needs a rule map. The Mediclaim agent fetches a document: the employee asks for their own Mediclaim card or their parent's, the agent takes their email ID and employee code from their details, and a custom API uses the code to pull that card from the Azure Blob Storage that holds every employee's cards. The card goes to the employee's email, and the agent confirms in the chat that it has been sent.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/mediclaim.html`,
@@ -313,23 +323,23 @@ export const projects: Project[] = [
           }
         },
         {
-          title: "Leading a Platform Migration",
-          callout: { text: "From building what I was asked to, to shaping how the team builds." },
+          title: "Proposing a Platform Migration",
+          callout: { text: "From building what I was asked to, to questioning how the team builds." },
           content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent added to a roadmap that size.",
           cards: [
             { title: "Spotted it", body: "Gen 1 worked, but it would not scale to the roadmap ahead." },
             { title: "Proved it", body: "I built a proof of concept on Gen 2's no-code, skill-based approach." },
-            { title: "Pitched it", body: "I made the case to leadership, and the recommendation was adopted." },
-            { title: "Led it", body: "I migrated all 17 topics, and built Local Conveyance on Gen 2 as the template." }
+            { title: "Pitched it", body: "I made the case to leadership, and they approved a trial." },
+            { title: "Trialled it", body: "I migrated 17 sub-agents, and built Local Conveyance natively on Gen 2." }
           ],
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg`,
-              caption: "The Gen 1 vs Gen 2 comparison I used to make the case for migration — 17 topics migrated as a result."
+              caption: "The Gen 1 vs Gen 2 comparison I used to make the case for migration — 17 sub-agents migrated in the trial."
             },
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conveyance-Architecture.svg`,
-              caption: "Local Conveyance, the first topic I built natively on Gen 2: input, validation, calculation, output. It became the template for future topics."
+              caption: "Local Conveyance, the first topic I built natively on Gen 2: input, validation, calculation, output."
             }
           ]
         },

@@ -2,6 +2,10 @@ import type { ImgHTMLAttributes } from 'react';
 
 export interface Section {
   title: string;
+  /** The double-diamond phase this section belongs to, shown in its
+      numbered eyebrow. Sections without one (intros, reflections) show the
+      number alone. */
+  phase?: 'Discover' | 'Define' | 'Develop' | 'Deliver';
   content: string;
   listItems?: string[];
   /** Big-number tiles, e.g. market size. Short value, one-line label. */

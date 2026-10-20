@@ -9,14 +9,14 @@
   <!-- top banner -->
   <g transform="translate(500,36)">
     <rect width="600" height="52" rx="26" fill="#0f1c33" stroke="#2563EB" stroke-opacity="0.6"/>
-    <text x="300" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#9ec8ff">17 TOPICS MIGRATED · GEN 1 → GEN 2</text>
+    <text x="300" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#9ec8ff">TRIAL · 17 SUB-AGENTS MIGRATED · GEN 1 → GEN 2</text>
   </g>
 
   <!-- column headers -->
   <text x="400" y="150" text-anchor="middle" font-size="30" font-weight="700" fill="#94A3B8">Gen 1 — Legacy</text>
   <text x="400" y="180" text-anchor="middle" font-size="15" fill="#64748B">Node-based canvas</text>
 
-  <text x="1200" y="150" text-anchor="middle" font-size="30" font-weight="700" fill="#01F5D1">Gen 2 — Adopted</text>
+  <text x="1200" y="150" text-anchor="middle" font-size="30" font-weight="700" fill="#01F5D1">Gen 2 — Trialled</text>
   <text x="1200" y="180" text-anchor="middle" font-size="15" fill="#7EE8DA">No-code, skill-based</text>
 
   <!-- recommended badge -->
@@ -84,10 +84,10 @@
     </g>
     <g transform="translate(920,580)">
       <path d="M-6 -5 l4 5 l8 -10" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="24" y="0">Local Conveyance built natively as the template</text>
+      <text x="24" y="0">Local Conveyance built natively on Gen 2</text>
     </g>
   </g>
-  <text x="1200" y="770" text-anchor="middle" font-size="15" fill="#7EE8DA">Proposed by me, evaluated via a POC, adopted by leadership</text>
+  <text x="1200" y="770" text-anchor="middle" font-size="15" fill="#7EE8DA">Proposed by me, proven with a POC, approved for a trial</text>
 
   <!-- arrow between -->
   <g transform="translate(800,500)">
@@ -95,5 +95,5 @@
     <path d="M-12 0 h20 M0 -12 l12 12 l-12 12" stroke="#01F5D1" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
-  <text x="800" y="920" text-anchor="middle" font-size="18" font-weight="600" fill="#F1F5F9">I led the full migration — 17 topics, Gen 1 → Gen 2.</text>
+  <text x="800" y="920" text-anchor="middle" font-size="18" font-weight="600" fill="#F1F5F9">I ran the trial migration — 17 sub-agents, Gen 1 → Gen 2.</text>
 </svg>
