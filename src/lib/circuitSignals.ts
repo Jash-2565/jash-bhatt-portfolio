@@ -8,6 +8,8 @@
 
 import { BAND, band } from './circuitBoard';
 import type { Line } from './circuitBoard';
+import { QUIET_FEATHER, measureQuiet } from './quietZones';
+import type { Zone } from './quietZones';
 
 type Trace = {
   pts: Line;
@@ -36,12 +38,9 @@ type Signal = {
 type Flash = { x: number; y: number; born: number };
 
 const GLOW_RADIUS = 190; // css px around the pointer
-// Text stays on a still ground. Everything the live layer draws is cut out
-// around these, with a soft edge, so a signal fades before it reaches a line
-// of copy and the cursor light never sits under what is being read.
-const QUIET_SELECTOR = '#root :is(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, label, th, td, .label, .ghost-number)';
-const QUIET_PAD = 28; // css px of clearance before the feathered edge
-const QUIET_FEATHER = 14; // blur radius of that edge
+// Text stays on a still ground (see lib/quietZones). Everything the live layer
+// draws is cut out around it with a soft edge, so a signal fades before it
+// reaches a line of copy and the cursor light never sits under what is read.
 const QUIET_REFRESH_MS = 400;
 const FLASH_MS = 650;
 const MAX_SIGNALS = 7;
@@ -123,7 +122,7 @@ export function createSignalField(
   // Quiet zones in page coordinates, re-measured at most every
   // QUIET_REFRESH_MS while drawing — often enough to follow reveals and view
   // changes, rarely enough that the layout reads cost nothing.
-  let quiet: { x: number; y: number; w: number; h: number }[] = [];
+  let quiet: Zone[] = [];
   let quietAt = -Infinity;
   // Not every engine has a canvas filter; without one the cut is hard-edged.
   const canFeather = ctx !== null && 'filter' in ctx;
@@ -202,20 +201,11 @@ export function createSignalField(
     }, 900 + Math.random() * 1400);
   };
 
-  const measureQuiet = (now: number) => {
+  // Page coordinates: measured from the document's origin, which sits
+  // scrollY above the viewport's.
+  const refreshQuiet = (now: number) => {
     quietAt = now;
-    const sy = window.scrollY;
-    quiet = [];
-    for (const el of document.querySelectorAll(QUIET_SELECTOR)) {
-      const r = el.getBoundingClientRect();
-      if (!r.width || !r.height) continue;
-      quiet.push({
-        x: r.left - QUIET_PAD,
-        y: r.top + sy - QUIET_PAD,
-        w: r.width + QUIET_PAD * 2,
-        h: r.height + QUIET_PAD * 2,
-      });
-    }
+    quiet = measureQuiet(0, -window.scrollY);
   };
 
   /** Cut everything drawn so far out from around the text on screen. */
@@ -238,7 +228,7 @@ export function createSignalField(
 
   const draw = (now: number, dt: number) => {
     if (!ctx) return;
-    if (now - quietAt > QUIET_REFRESH_MS) measureQuiet(now);
+    if (now - quietAt > QUIET_REFRESH_MS) refreshQuiet(now);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
     const oy = offsetY();

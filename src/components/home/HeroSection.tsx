@@ -123,7 +123,6 @@ const HeroSection = ({ isMobile, scrollToSection }: HeroSectionProps) => (
               <div className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-ink-muted mb-1.5">
                 <span className="stat-led" aria-hidden="true" />
                 {stat.label}
-                <span className="label ml-auto text-ink-faint" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
               </div>
               <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-ink [text-wrap:balance]">{stat.value}</div>
           </div>

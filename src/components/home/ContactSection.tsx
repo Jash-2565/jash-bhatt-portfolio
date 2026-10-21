@@ -15,7 +15,7 @@ const ContactSection = () => (
     <div className={ui.shell}>
       <div className="grid md:grid-cols-[1.15fr_1fr] gap-6 md:gap-16 md:items-center">
         <Reveal variant="rise-soft">
-          <p className={`${ui.eyebrow} section-index mb-3 lg:mb-5`}>03 · Contact</p>
+          <p className={`${ui.eyebrow} section-index mb-3 lg:mb-5`}>Contact</p>
           {/* The page's last word, so it is set larger than the other section
               heads — closer to the hero's scale than to theirs. */}
           <h2 id="contact-heading" className="text-[2rem] sm:text-4xl md:text-5xl lg:text-[3.25rem] leading-[1.05] font-display text-ink mb-3 lg:mb-6 [text-wrap:balance]">

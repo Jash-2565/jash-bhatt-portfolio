@@ -44,7 +44,7 @@ const AboutSection = () => (
     <div className={ui.shell}>
       <div className="grid md:grid-cols-2 gap-10 md:gap-16">
         <Reveal variant="rise-soft">
-          <p className={`${ui.eyebrow} section-index mb-3`}>02 · About</p>
+          <p className={`${ui.eyebrow} section-index mb-3`}>About</p>
           <h2 id="about-heading" className={`${ui.h2} font-display text-ink mb-5 md:mb-8`}>About Me</h2>
           <div className="space-y-4 md:space-y-6 text-base md:text-lg text-ink-body leading-relaxed">
             <p>
@@ -63,12 +63,10 @@ const AboutSection = () => (
           <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-ink mb-5 md:mb-8`}>Skills</h2>
           <div className="space-y-5">
             <SkillChip
-              designator="U1"
               title="Design"
               items={['Agentic AI Workflows', 'Product Design', 'Circuit Design', 'Generative AI in Design', 'UI/UX Design', 'Design System', 'Industrial Design']}
             />
             <SkillChip
-              designator="U2"
               title="Tools & Tech"
               items={['Figma', 'Python', 'React.js', 'n8n', 'Microsoft Copilot Studio', 'Arduino IDE', 'Fusion 360', 'Adobe Suite']}
             />

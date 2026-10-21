@@ -35,7 +35,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
         mask is overridden, here and on the bar, so the header is
         simply there: it sits in view on arrival. */}
     <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
-      <p className={`${ui.eyebrow} section-index mb-3`}>01 · Work</p>
+      <p className={`${ui.eyebrow} section-index mb-3`}>Work</p>
       <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
       <p className="text-ink-body max-w-2xl mb-5 md:mb-6">Each one taken from a question to a working build: what I designed, why, and what I built to prove it.</p>
       <Reveal variant="grow-width" className="max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
