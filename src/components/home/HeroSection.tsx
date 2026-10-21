@@ -1,19 +1,16 @@
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import ResponsiveImage from '../ResponsiveImage';
 import Magnetic from '../Magnetic';
-import HeroParticles from '../HeroParticles';
 import { ui, operatorStats } from '../../config/ui';
 import { PUBLIC_URL } from '../../utils/getBaseUrl';
 import { scaledSlot } from '../../utils/imageSources';
 
 interface HeroSectionProps {
   isMobile: boolean;
-  isTransitioning: boolean;
-  activeSection: string;
   scrollToSection: (sectionId: string) => void;
 }
 
-const HeroSection = ({ isMobile, isTransitioning, activeSection, scrollToSection }: HeroSectionProps) => (
+const HeroSection = ({ isMobile, scrollToSection }: HeroSectionProps) => (
   <section
     id="home"
     data-nav="home"
@@ -32,7 +29,9 @@ const HeroSection = ({ isMobile, isTransitioning, activeSection, scrollToSection
     // colour edge in the page at the point the hero ends.
     className={`relative lg:min-h-[calc(100vh-5rem)] pt-[calc(var(--nav-h)+1rem)] pb-4 lg:pt-24 lg:pb-10 ${ui.scrollMt} overflow-hidden bg-transparent`}
   >
-    {!isTransitioning && activeSection === 'home' && <HeroParticles />}
+    {/* No backdrop of its own. The hero's floating node network used to
+        sit here; the live circuit ground now does that job page-wide, and
+        two competing networks on one screen read as noise. */}
     <div className={`${ui.shell} relative`}>
       <div className="grid lg:grid-cols-12 gap-10 items-stretch">
         <div className="lg:col-span-8 lg:h-full lg:flex lg:flex-col">
@@ -82,7 +81,7 @@ const HeroSection = ({ isMobile, isTransitioning, activeSection, scrollToSection
         {!isMobile && (
           <div className="hidden lg:block lg:col-span-4 lg:h-full animate-fade-in-up" style={{ animationDelay: '220ms' }}>
             <div className="surface surface-marks surface-hover max-w-[20.25rem] h-full lg:ml-auto rounded-3xl p-4 flex flex-col">
-              <div className="rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
+              <div className="portrait-scan relative rounded-2xl overflow-hidden flex-1 min-h-[18rem]">
                 <ResponsiveImage
                   src={`${PUBLIC_URL}/images/Jash-portrait.webp`}
                   alt="Portrait of Jash Bhatt"
@@ -93,6 +92,13 @@ const HeroSection = ({ isMobile, isTransitioning, activeSection, scrollToSection
                   // 1050px default and pulled the full-size original.
                   sizes={`${scaledSlot(292)}, 292px`}
                 />
+              </div>
+              {/* A figure caption, as on a drawing: who, and where. Pune's
+                  coordinates rather than a status — the availability chip
+                  is the one place that speaks to timing. */}
+              <div className="label flex items-center justify-between gap-3 pt-3 text-ink-muted" aria-hidden="true">
+                <span>Fig. 01 — Jash</span>
+                <span className="text-accent/80">18.52°N 73.86°E</span>
               </div>
             </div>
           </div>
@@ -114,7 +120,11 @@ const HeroSection = ({ isMobile, isTransitioning, activeSection, scrollToSection
                   1.75vw and the ceiling at 1.6rem, since the 84rem
                   shell stops widening the card at 357px.
                   Re-measure if any operatorStats value gets longer. */}
-              <div className="text-xs uppercase tracking-[0.16em] text-ink-muted mb-1.5">{stat.label}</div>
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-ink-muted mb-1.5">
+                <span className="stat-led" aria-hidden="true" />
+                {stat.label}
+                <span className="label ml-auto text-ink-faint" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              </div>
               <div className="text-[clamp(1.1rem,1.75vw,1.6rem)] font-bold text-ink [text-wrap:balance]">{stat.value}</div>
           </div>
           </div>
@@ -124,9 +134,12 @@ const HeroSection = ({ isMobile, isTransitioning, activeSection, scrollToSection
     </div>
 
     {/* Desktop only. On mobile the portrait card below now sits partly in
-        view at rest, which advertises the scroll better than an arrow. */}
-    <div className="hidden lg:flex lg:mt-7 justify-center animate-nudge text-ink-muted">
-      <ChevronDown size={32} />
+        view at rest, which advertises the scroll better than an arrow.
+        A probe rather than a chevron: a short trace with a signal running
+        down it, into the board the work section sits on. */}
+    <div className="hidden lg:flex lg:mt-7 flex-col items-center gap-2 text-ink-muted" aria-hidden="true">
+      <span className="label">Scroll</span>
+      <span className="scroll-probe" />
     </div>
   </section>
 );

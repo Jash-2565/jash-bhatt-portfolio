@@ -35,6 +35,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
         mask is overridden, here and on the bar, so the header is
         simply there: it sits in view on arrival. */}
     <Reveal className="mb-10 sm:mb-14 md:mb-16 max-w-2xl max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
+      <p className={`${ui.eyebrow} section-index mb-3`}>01 · Work</p>
       <h2 id="work-heading" className={`${ui.h2} font-display text-ink mb-3 md:mb-4`}>Selected Projects</h2>
       <p className="text-ink-body max-w-2xl mb-5 md:mb-6">Each one taken from a question to a working build: what I designed, why, and what I built to prove it.</p>
       <Reveal variant="grow-width" className="max-md:![mask-image:none] max-md:![-webkit-mask-image:none]">
@@ -42,7 +43,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
       </Reveal>
     </Reveal>
 
-    <div className="space-y-8 sm:space-y-12 md:space-y-32">
+    <div className="space-y-8 sm:space-y-12 md:space-y-24">
       {featuredProjects.map((project, index) => {
         const projectThumbnail =
           project.content.thumbnailImage ?? project.content.heroImage;
@@ -86,7 +87,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
 
               {/* Image Column (7 cols) */}
               <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
-                <TiltCard>
+                <TiltCard className="relative">
                 <div
                   // Radius lives on the tile rather than on the card's
                   // overflow clip: WebKit does not clip a composited
@@ -124,6 +125,12 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
                   )}
 
                 </div>
+                {/* A signal running the module's frame on hover — the
+                    board's pulses at card scale. Outside the tile, whose
+                    overflow clip would cut the stroke in half. */}
+                <svg className="module-trace" aria-hidden="true">
+                  <rect x="0" y="0" width="100%" height="100%" rx="4" pathLength="100" />
+                </svg>
                 </TiltCard>
               </div>
 
@@ -133,7 +140,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
                     long as "Experimental Prototyping". */}
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-2 md:gap-x-4 mb-3 md:mb-5">
                   <span className="ghost-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-                  <span className="h-px w-4 md:w-10 shrink-0 bg-gradient-to-r from-accent/50 to-transparent" />
+                  <span className="meta-trace w-4 md:w-12" aria-hidden="true" />
                   <span className="text-ink-muted text-[0.6875rem] md:text-xs font-mono uppercase tracking-[0.08em] md:tracking-[0.2em]">{project.category}</span>
                   {project.content.sections.some((section) => section.demoId) && (
                     <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-sm bg-accent/10 text-accent-br text-[0.6875rem] font-semibold uppercase tracking-[0.1em] whitespace-nowrap">
@@ -149,6 +156,15 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
                 <p className="text-ink-body text-[0.95rem] md:text-lg leading-relaxed mb-4 md:mb-6 line-clamp-3 md:line-clamp-none">
                   {project.description}
                 </p>
+
+                {/* The module's datasheet: what I did and when. Above md
+                    only — on a phone the card is already a full screen. */}
+                <dl className="hidden md:grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1.5 mb-6 pt-4 border-t border-[var(--rule)] text-sm">
+                  <dt className="label pt-0.5 text-ink-muted">Role</dt>
+                  <dd className="text-ink-body">{project.content.role}</dd>
+                  <dt className="label pt-0.5 text-ink-muted">When</dt>
+                  <dd className="text-ink-body">{project.timeline}</dd>
+                </dl>
 
                 {/* A span, not a control: the whole card is the link, and
                     a button can't nest inside an anchor. It keeps the

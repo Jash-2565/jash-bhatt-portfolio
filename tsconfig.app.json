@@ -24,5 +24,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  /* iCloud conflict copies (`Foo 2.tsx`), gitignored for the same reason. They
+     go stale the moment the original changes and then fail the typecheck.
+     (tsconfig globs have no character classes, so `?` stands in for the digit.) */
+  "exclude": ["src/**/* ?.ts", "src/**/* ?.tsx"]
 }

@@ -392,10 +392,11 @@ label {
    ============================================================ */
 
 @layer components {
-  /* Static circuit-trace ground (CircuitGround.tsx). One board as tall as the
+  /* Circuit-trace ground (CircuitGround.tsx). One board as tall as the
      page, scrolling with it, rather than a fixed tile the content slid over —
-     which showed the same patch of routing on every screen. It never animates:
-     it is structure, not atmosphere.
+     which showed the same patch of routing on every screen. The board itself
+     never moves; the live canvas above it (.circuit-live) is what lights the
+     routing around the cursor and carries signals along it.
      The SVG draws in currentColor; the stroke and pad alphas live in the
      component, so this colour sets the overall strength. */
   .circuit-ground {
@@ -410,6 +411,14 @@ label {
   }
   .circuit-ground svg {
     display: block;
+  }
+  /* Window-sized and fixed, so it costs one screen of pixels however long the
+     page is. Under the content (z-10) like the board, so opaque panes and
+     images always cover it. */
+  .circuit-live {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
   }
 
   /* Phones draw the board 1.25x larger (in the component) and a little
@@ -545,6 +554,335 @@ label {
   }
 }
 
+/* ============================================================
+   LIVE CIRCUIT
+   ------------------------------------------------------------
+   The board behind the page carries signals (circuitSignals.ts);
+   these are the same idea at component scale — a scan across the
+   portrait, status LEDs, a probe, a signal tracing a module's
+   frame. One vocabulary: a bright head on a fading tail.
+   ============================================================ */
+
+/* One pass of a scan line down the portrait as the hero settles. */
+.portrait-scan::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(var(--accent-rgb) / 0) 42%,
+    rgb(var(--accent-rgb) / 0.22) 49%,
+    rgb(var(--accent-bright-rgb) / 0.7) 50%,
+    transparent 50.6%
+  );
+  background-size: 100% 220%;
+  background-repeat: no-repeat;
+  background-position: 0 120%;
+  animation: portrait-scan 1.5s cubic-bezier(0.45, 0, 0.2, 1) 500ms both;
+}
+@keyframes portrait-scan {
+  0% { background-position: 0 120%; opacity: 1; }
+  85% { opacity: 1; }
+  100% { background-position: 0 -20%; opacity: 0; }
+}
+
+/* Status LED on the hero readouts: dim at rest, lit while the card is. */
+.stat-led {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 1px;
+  background: rgb(var(--accent-rgb) / 0.45);
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .surface-hover:hover .stat-led {
+    background: rgb(var(--accent-bright-rgb));
+    box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.8);
+  }
+}
+
+/* Scroll probe: a short trace with a signal running down it. */
+.scroll-probe {
+  position: relative;
+  width: 1px;
+  height: 2.75rem;
+  background: rgb(var(--accent-rgb) / 0.22);
+  overflow: hidden;
+}
+.scroll-probe::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1rem;
+  background: linear-gradient(180deg, transparent, rgb(var(--accent-bright-rgb)));
+  animation: probe 1.8s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+}
+@keyframes probe {
+  0% { top: -1rem; }
+  70%, 100% { top: 100%; }
+}
+
+/* Section index above each home heading: a lit pad, then the number.
+   Block-level flex, not inline-flex: inline, it sat on a 24px body line box
+   and pushed its heading 6px below the one beside it. */
+.section-index {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.section-index::before {
+  content: '';
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 9999px;
+  background: rgb(var(--accent-rgb));
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15);
+}
+
+/* Project index to category: a trace ending on a pad, which a signal runs
+   along while the card is hovered. */
+.meta-trace {
+  position: relative;
+  height: 1px;
+  flex-shrink: 0;
+  background: rgb(var(--accent-rgb) / 0.35);
+}
+.meta-trace::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--accent-rgb) / 0.6);
+  background: var(--ground);
+  transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+.meta-trace::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-bright-rgb)) 80%, transparent);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  background-position: -100% 0;
+  opacity: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .meta-trace::before {
+    opacity: 1;
+    animation: meta-signal 1.1s ease-in infinite;
+  }
+  .group:hover .meta-trace::after {
+    background: rgb(var(--accent-bright-rgb));
+    box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.8);
+  }
+}
+@keyframes meta-signal {
+  to { background-position: 200% 0; }
+}
+
+/* A module's frame, traced by two signals chasing round it on hover. */
+.module-trace {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.module-trace rect {
+  fill: none;
+  stroke: rgb(var(--accent-bright-rgb));
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 9 41;
+  opacity: 0;
+  transition: opacity 250ms ease;
+  filter: drop-shadow(0 0 3px rgb(var(--accent-rgb) / 0.8));
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .module-trace rect {
+    opacity: 1;
+    animation: module-trace 3.2s linear infinite;
+  }
+}
+@keyframes module-trace {
+  to { stroke-dashoffset: -100; }
+}
+
+/* Skill groups as IC packages (SkillChip.tsx). The body is an ordinary
+   opaque pane; the notch marks pin 1's end, and each skill is a pin leaving
+   the body's edge. Pins are drawn from the item outward, so they need the
+   body's horizontal padding: --ic-pad is that padding, --ic-pin the length
+   of lead left showing outside. */
+.ic-chip {
+  --ic-pad: 1.25rem;
+  --ic-pin: 0.75rem;
+  position: relative;
+  background: var(--surface-1);
+  padding: 1.125rem var(--ic-pad) 1.25rem;
+  border-radius: 3px;
+  margin-inline: var(--ic-pin);
+}
+@media (min-width: 768px) {
+  .ic-chip {
+    --ic-pad: 1.5rem;
+    padding-block: 1.375rem 1.5rem;
+  }
+}
+.ic-chip::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 1.25rem;
+  height: 0.625rem;
+  margin-left: -0.625rem;
+  border-radius: 0 0 9999px 9999px;
+  background: var(--ground);
+}
+.ic-pin {
+  position: relative;
+  display: flex;
+  gap: 0.625rem;
+  align-items: baseline;
+}
+.ic-pin::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: calc(-1 * (var(--ic-pad) + var(--ic-pin)));
+  width: var(--ic-pin);
+  height: 2px;
+  border-radius: 1px;
+  background: rgb(var(--accent-rgb) / 0.35);
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+/* On two columns the even pins leave the right-hand edge. */
+@media (min-width: 640px) {
+  .ic-pin:nth-child(even)::before {
+    left: auto;
+    right: calc(-1 * (var(--ic-pad) + var(--ic-pin)));
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .ic-pin:hover::before {
+    background: rgb(var(--accent-bright-rgb));
+    box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.8);
+  }
+}
+
+/* Experience and education hung on a trace, one pad per entry. A signal runs
+   down the trace every few seconds. */
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  padding-left: 1.75rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.3125rem;
+  top: 0.4rem;
+  bottom: 0.5rem;
+  width: 1px;
+  background: rgb(var(--accent-rgb) / 0.3);
+}
+.timeline::after {
+  content: '';
+  position: absolute;
+  left: 0.3125rem;
+  top: 0.4rem;
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(180deg, transparent, rgb(var(--accent-bright-rgb)));
+  opacity: 0;
+  animation: timeline-signal 4.5s cubic-bezier(0.55, 0, 0.45, 1) 1s infinite;
+}
+/* `top` rather than a transform, so the run is a percentage of the trace's
+   own length however many entries hang on it. */
+@keyframes timeline-signal {
+  0% { top: 0.4rem; opacity: 0; }
+  8% { opacity: 1; }
+  45% { opacity: 1; }
+  55%, 100% { top: calc(100% - 3rem); opacity: 0; }
+}
+.timeline-node {
+  position: relative;
+}
+.timeline-node::before {
+  content: '';
+  position: absolute;
+  /* Centred on the trace: the list's 1.75rem indent, back to its 0.3125rem. */
+  left: -1.75rem;
+  top: 0.15rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--accent-rgb) / 0.7);
+  background: var(--ground);
+}
+.timeline-node[data-lit]::before {
+  background: rgb(var(--accent-rgb));
+  border-color: rgb(var(--accent-rgb));
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15), 0 0 10px rgb(var(--accent-rgb) / 0.5);
+}
+
+/* Contact: a trace from the copy forking into the two cards, spanning the
+   4rem column gap. The viewBox is stretched to the box, so strokes are kept
+   at screen width with non-scaling-stroke and the pad is HTML, not a circle
+   that would stretch with it. */
+.contact-fork {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: 4rem;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.contact-fork path {
+  fill: none;
+  stroke: rgb(var(--accent-rgb) / 0.35);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.contact-fork path.contact-fork-signal {
+  stroke: rgb(var(--accent-bright-rgb));
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-dasharray: 16 84;
+  stroke-dashoffset: 16;
+  animation: fork-signal 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.contact-fork path.contact-fork-signal--late {
+  animation-delay: 1.3s;
+}
+@keyframes fork-signal {
+  0% { stroke-dashoffset: 16; opacity: 1; }
+  80% { stroke-dashoffset: -84; opacity: 1; }
+  81%, 100% { stroke-dashoffset: -84; opacity: 0; }
+}
+.contact-fork-pad {
+  position: absolute;
+  right: calc(100% + 4rem - 0.3125rem);
+  top: 50%;
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-top: -0.3125rem;
+  border-radius: 9999px;
+  background: rgb(var(--accent-rgb));
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15), 0 0 10px rgb(var(--accent-rgb) / 0.5);
+}
+
 /* Respect the user's motion preference — collapse every custom motion to a short fade. */
 @media (prefers-reduced-motion: reduce) {
   .chip {
@@ -559,6 +897,12 @@ label {
     transition: none !important;
   }
   .animate-nudge,
+  .contact-fork-signal,
+  .timeline::after,
+  .scroll-probe::after,
+  .meta-trace::before,
+  .module-trace rect,
+  .portrait-scan::after,
   .accent-shimmer,
   .pulse-dot::after,
   .copy-ripple,

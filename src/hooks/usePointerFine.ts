@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
  * hasn't asked for reduced motion.
  *
  * Every cursor-linked flourish on this site — the custom cursor, tilt cards,
- * magnetic buttons, the hero particle network, the case-study hero parallax —
+ * magnetic buttons, the case-study hero parallax —
  * is meaningless on a touchscreen and costs real frames there. Gating on this
  * hook lets those components opt out entirely rather than run a mouse-only
  * effect that a phone can never trigger.

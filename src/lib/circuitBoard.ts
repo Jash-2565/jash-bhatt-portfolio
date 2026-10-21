@@ -38,7 +38,11 @@ function rng(seed: number) {
   };
 }
 
-export type Band = { traces: string; pads: string };
+/** One trace as a flat [x0, y0, x1, y1, …] polyline in board units, for the
+    live layer (CircuitGround's canvas), which runs signals along the routing
+    rather than redrawing it. */
+export type Line = number[];
+export type Band = { traces: string; pads: string; lines: Line[] };
 
 function pad(x: number, y: number, r: number) {
   return `M${x - r} ${y}a${r} ${r} 0 1 0 ${r * 2} 0a${r} ${r} 0 1 0 ${-r * 2} 0`;
@@ -50,6 +54,7 @@ function buildBand(index: number): Band {
   const top = index * BAND;
   const traces: string[] = [];
   const pads: string[] = [];
+  const lines: Line[] = [];
   const maybePad = (x: number, y: number) => {
     if (rand() < 0.35) pads.push(pad(x, y, rand() < 0.5 ? 2.4 : 3));
   };
@@ -65,17 +70,21 @@ function buildBand(index: number): Band {
     const end = rand() < 0.5 ? WIDTH : pick(30, COLS - 10) * UNIT;
     let y = baseY;
     let d = `M${x} ${y}`;
+    const line: Line = [x, y];
     while (x < end) {
       x = Math.min(end, x + pick(2, 7) * UNIT);
       d += ` H${x}`;
+      line.push(x, y);
       if (x >= end) break;
       const dy = y === baseY ? (rand() < 0.5 ? -UNIT : UNIT) : baseY - y;
       x += UNIT;
       y += dy;
       d += ` L${x} ${y}`;
+      line.push(x, y);
       maybePad(x, y);
     }
     traces.push(d);
+    lines.push(line);
     if (end < WIDTH) pads.push(pad(x, y, 3));
   }
 
@@ -93,12 +102,21 @@ function buildBand(index: number): Band {
       const start = top + pick(1, 6) * UNIT;
       const stop = start + pick(3, 8) * UNIT;
       traces.push(`M${laneX} ${start} V${stop}`);
+      lines.push([laneX, start, laneX, stop]);
       pads.push(pad(laneX, start, 2.6), pad(laneX, stop, 2.6));
       continue;
     }
     traces.push(
       `M${laneX} ${top} V${jogAt} L${laneX + dir} ${jogAt + UNIT} V${jogAt + UNIT + jogLen} L${laneX} ${jogAt + 2 * UNIT + jogLen} V${top + BAND}`
     );
+    lines.push([
+      laneX, top,
+      laneX, jogAt,
+      laneX + dir, jogAt + UNIT,
+      laneX + dir, jogAt + UNIT + jogLen,
+      laneX, jogAt + 2 * UNIT + jogLen,
+      laneX, top + BAND,
+    ]);
     maybePad(laneX + dir, jogAt + UNIT);
   }
 
@@ -109,14 +127,16 @@ function buildBand(index: number): Band {
     const len = pick(2, 3) * UNIT;
     if (rand() < 0.5) {
       traces.push(`M${x} ${y} H${x + len}`);
+      lines.push([x, y, x + len, y]);
       pads.push(pad(x + len, y, 3));
     } else {
       traces.push(`M${x} ${y} V${y + len}`);
+      lines.push([x, y, x, y + len]);
       pads.push(pad(x, y + len, 3));
     }
   }
 
-  return { traces: traces.join(' '), pads: pads.join(' ') };
+  return { traces: traces.join(' '), pads: pads.join(' '), lines };
 }
 
 const bandCache = new Map<number, Band>();

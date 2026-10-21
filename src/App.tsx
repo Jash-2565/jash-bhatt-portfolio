@@ -167,12 +167,7 @@ const App = () => {
         >
           {/* Hero Section */}
           {showsPage('home') && (
-            <HeroSection
-              isMobile={isMobile}
-              isTransitioning={isTransitioning}
-              activeSection={activeSection}
-              scrollToSection={scrollToSection}
-            />
+            <HeroSection isMobile={isMobile} scrollToSection={scrollToSection} />
           )}
 
           {isMobile && mobilePage === 'home' && (
