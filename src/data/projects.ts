@@ -18,7 +18,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Hero.svg`,
       thumbnailImage: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Thumbnail.webp`,
-      role: "Research, market analysis, concept design",
+      role: "Business Designer",
       team: ["Sharvani", "Hrishika", "Vasuman"],
       sections: [
         {
@@ -490,7 +490,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/WePick/WePick-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/WePick/wepick-thumbnail.webp`,
-      role: "UX research, UI design, prototyping",
+      role: "UI/UX Designer",
       team: ["Dhruv Tolani", "Yash Khanna"],
       sections: [
         {
@@ -606,7 +606,7 @@ export const projects: Project[] = [
       // tiny once a square tile contains it. This is the same lockup trimmed to
       // its own edges so it fills the tile.
       thumbnailImage: `${PUBLIC_URL}/images/RAHI/RAHI-Thumbnail.webp`,
-      role: "Component design, interaction specs",
+      role: "UI/UX Intern",
       sections: [
         {
           title: "Internship Focus",
@@ -719,7 +719,7 @@ export const projects: Project[] = [
       // A tighter crop of the same shot, so the card and the hero are not the
       // identical image seen twice in a row.
       thumbnailImage: `${PUBLIC_URL}/images/Revela/Revela-Thumbnail.webp`,
-      role: "Circuit designer",
+      role: "Circuit Designer",
       team: ["Khushii Mehta", "Kaushal Gajipara", "Parinita Shiralige"],
       sections: [
         {
@@ -871,7 +871,7 @@ export const projects: Project[] = [
     sectionAccent: "bg-rose-100",
     content: {
       heroImage: `${PUBLIC_URL}/images/Dino Spread/dino-spread-hero.webp`,
-      role: "Industrial design, prototyping",
+      role: "Industrial Designer",
       team: ["Analise Pereira"],
       sections: [
         {
@@ -976,7 +976,7 @@ export const projects: Project[] = [
     content: {
       heroImage: `${PUBLIC_URL}/images/SolarLink/SolarLink-Hero.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/SolarLink/Solarlink-thumbnail.webp`,
-      role: "Research & synthesis, journey mapping, experience design",
+      role: "Service Designer",
       team: ["Khushii Mehta", "Kaushal Gajipara"],
       sections: [
         {
@@ -1266,7 +1266,7 @@ export const projects: Project[] = [
       // screenshot that would be out of date the moment a demo changes.
       heroImage: `${PUBLIC_URL}/images/python.webp`,
       thumbnailImage: `${PUBLIC_URL}/images/python.webp`,
-      role: "Design & build",
+      role: "Developer",
       sections: [
         {
           title: "YOLOv8 Live Object Detection",
@@ -1308,7 +1308,7 @@ export const projects: Project[] = [
     sectionAccent: "bg-rose-100",
     content: {
       heroImage: `${PUBLIC_URL}/images/Tinkering/tinkering-hero-2.webp`,
-      role: "Circuit design, firmware, assembly",
+      role: "Electronics Prototyper",
       team: ["Dhruv Tolani"],
       sections: [
         {
