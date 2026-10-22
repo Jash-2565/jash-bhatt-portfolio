@@ -87,7 +87,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
 
               {/* Image Column (7 cols) */}
               <div className={`md:col-span-7 ${index % 2 === 1 ? 'md:order-2' : ''}`}>
-                <TiltCard className="relative">
+                <TiltCard>
                 <div
                   // Radius lives on the tile rather than on the card's
                   // overflow clip: WebKit does not clip a composited
@@ -125,12 +125,6 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
                   )}
 
                 </div>
-                {/* A signal running the module's frame on hover — the
-                    board's pulses at card scale. Outside the tile, whose
-                    overflow clip would cut the stroke in half. */}
-                <svg className="module-trace" aria-hidden="true">
-                  <rect x="0" y="0" width="100%" height="100%" rx="4" pathLength="100" />
-                </svg>
                 </TiltCard>
               </div>
 

@@ -559,8 +559,8 @@ label {
    ------------------------------------------------------------
    The board behind the page carries signals (circuitSignals.ts);
    these are the same idea at component scale — a scan across the
-   portrait, status LEDs, a probe, a signal tracing a module's
-   frame. One vocabulary: a bright head on a fading tail.
+   portrait, status LEDs, a probe, a pulse along a trace. One
+   vocabulary: a bright head on a fading tail.
    ============================================================ */
 
 /* One pass of a scan line down the portrait as the hero settles. */
@@ -684,35 +684,6 @@ label {
 }
 @keyframes meta-signal {
   to { background-position: 200% 0; }
-}
-
-/* A module's frame, traced by two signals chasing round it on hover. */
-.module-trace {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-.module-trace rect {
-  fill: none;
-  stroke: rgb(var(--accent-bright-rgb));
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-dasharray: 9 41;
-  opacity: 0;
-  transition: opacity 250ms ease;
-  filter: drop-shadow(0 0 3px rgb(var(--accent-rgb) / 0.8));
-}
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .module-trace rect {
-    opacity: 1;
-    animation: module-trace 3.2s linear infinite;
-  }
-}
-@keyframes module-trace {
-  to { stroke-dashoffset: -100; }
 }
 
 /* Skill groups as IC packages (SkillChip.tsx). The body is an ordinary
@@ -901,7 +872,6 @@ label {
   .timeline::after,
   .scroll-probe::after,
   .meta-trace::before,
-  .module-trace rect,
   .portrait-scan::after,
   .accent-shimmer,
   .pulse-dot::after,
