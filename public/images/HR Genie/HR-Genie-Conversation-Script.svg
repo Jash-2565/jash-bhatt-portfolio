@@ -98,7 +98,7 @@
     <text x="1060" y="570" fill="#FCA5A5" font-weight="700">Under 6 mo · 10+</text>
     <text x="1060" y="591" fill="#E2B4B4" font-size="13.5">Auto-rejected</text>
     <rect x="1300" y="546" width="260" height="56" rx="12" fill="#211b0b" stroke="#92400E"/>
-    <text x="1320" y="570" fill="#FCD34D" font-weight="700">6–10 years</text>
+    <text x="1320" y="570" fill="#FCD34D" font-weight="700">6–9 years</text>
     <text x="1320" y="591" fill="#E8D7A8" font-size="13.5">Daycare, employee confirms</text>
 
     <line x1="980" y1="726" x2="1036" y2="726" stroke="#F87171" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowExit)"/>

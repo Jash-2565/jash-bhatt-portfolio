@@ -9,7 +9,7 @@ export const projects: Project[] = [
     category: "Business Design",
     timeline: "Business design course, 2026",
     description: "The bottleneck wasn't the fleet, it was winning contracts. So we built a B2B procurement marketplace.",
-    tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modeling"],
+    tags: ["Business Design", "Market Research", "Stakeholder Mapping", "Service Strategy", "Business Modelling"],
     color: "bg-[#F3EFFF]",
     accentColor: "text-[#8B5CF6]",
     hoverColor: "group-hover:text-[#7C3AED]",
@@ -61,18 +61,18 @@ export const projects: Project[] = [
           title: "What We Found",
           content: "Six findings, each a place where the system works differently from how it describes itself.",
           cards: [
-            { title: "Risk over price", body: "In our conversations, 95–97% on-time SLAs and safety decided the vendor, which makes choosing one a risk decision, not a cost one." },
-            { title: "Gated access", body: "The RFP process is structured, but only vendors the buyer already knows get invited." },
-            { title: "Split trust", body: "Trust is built informally before a vendor gets in, then enforced formally after selection." },
-            { title: "Visibility, not capability", body: "Qualified vendors lose out simply because nobody has heard of them." },
-            { title: "Price, not discovery", body: "Procurement haggles within a fixed pool instead of looking for a better-fitting vendor." },
-            { title: "Control, not connection", body: "Technology runs routing and tracking, but never connects buyers with new vendors." }
+            { title: "Risk Over Price", body: "In our conversations, 95–97% on-time SLAs and safety decided the vendor, which makes choosing one a risk decision, not a cost one." },
+            { title: "Gated Access", body: "The RFP process is structured, but only vendors the buyer already knows get invited." },
+            { title: "Split Trust", body: "Trust is built informally before a vendor gets in, then enforced formally after selection." },
+            { title: "Visibility, Not Capability", body: "Qualified vendors lose out simply because nobody has heard of them." },
+            { title: "Price, Not Discovery", body: "Procurement haggles within a fixed pool instead of looking for a better-fitting vendor." },
+            { title: "Control, Not Connection", body: "Technology runs routing and tracking, but never connects buyers with new vendors." }
           ]
         },
         {
           title: "The Direction Shift",
           callout: { text: "The client's problem wasn't operations. It was winning contracts." },
-          content: "Vendors can't be found, and corporates can't find anyone new. Both sides described the same gap from opposite ends.\n\nThe obvious move was to stay inside the brief and optimize one operator. We rejected it: operations were already standardized, and the buyers' procurement systems were closed to us. So we moved from the company to the ecosystem. If the market has no way for supply and demand to meet, the fix is the missing marketplace, which solves it for the client and for everyone else too.",
+          content: "Vendors can't be found, and corporates can't find anyone new. Both sides described the same gap from opposite ends.\n\nThe obvious move was to stay inside the brief and optimise one operator. We rejected it: operations were already standardised, and the buyers' procurement systems were closed to us. So we moved from the company to the ecosystem. If the market has no way for supply and demand to meet, the fix is the missing marketplace, which solves it for the client and for everyone else too.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-System-Inefficiency.svg`,
@@ -85,8 +85,8 @@ export const projects: Project[] = [
           ]
         },
         {
-          title: "Prioritizing the Opportunity",
-          content: "We mapped every idea, from EV fleets to event transport, against business and customer value. Only a centralized procurement platform scored high on both, and it was the only idea that addressed the contract bottleneck.",
+          title: "Prioritising the Opportunity",
+          content: "We mapped every idea, from EV fleets to event transport, against business and customer value. Only a centralised procurement platform scored high on both, and it was the only idea that addressed the contract bottleneck.",
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Priority-Matrix.svg`,
@@ -98,15 +98,15 @@ export const projects: Project[] = [
           title: "ETSConnect",
           content: "A B2B procurement marketplace where verified corporates and verified transport providers find each other, bid, check compliance, and sign contracts in one place. Both sides are vetted before they get access, so neither is dealing with noise or unverified operators.",
           cards: [
-            { title: "Save time", body: "A structured digital RFQ replaces weeks of calls and email chains." },
-            { title: "Reduce risk", body: "Verified providers, tracked compliance, and auditable bid records." },
-            { title: "Control costs", body: "Side-by-side bids stop over-pricing and set data-backed contract values." },
-            { title: "Safer commutes", body: "Only compliance-verified providers can bid on a route." }
+            { title: "Save Time", body: "A structured digital RFQ replaces weeks of calls and email chains." },
+            { title: "Reduce Risk", body: "Verified providers, tracked compliance, and auditable bid records." },
+            { title: "Control Costs", body: "Side-by-side bids stop over-pricing and set data-backed contract values." },
+            { title: "Safer Commutes", body: "Only compliance-verified providers can bid on a route." }
           ],
           images: [
             {
               src: `${PUBLIC_URL}/images/ETSConnect/ETSConnect-Pillars.svg`,
-              caption: "Vendor discovery, bid comparison, compliance management, and contract finalization on one platform."
+              caption: "Vendor discovery, bid comparison, compliance management, and contract finalisation on one platform."
             }
           ]
         },
@@ -137,7 +137,7 @@ export const projects: Project[] = [
             }
           ],
           cta: {
-            text: "Open the prototype",
+            text: "Open the Prototype",
             url: "https://people-vital-30894278.figma.site/"
           }
         },
@@ -158,10 +158,10 @@ export const projects: Project[] = [
           },
           content: "We took the concept to one person on the buying side of this exact process. One conversation is a first reaction, not validation, but his pushback changed how we framed it:",
           cards: [
-            { title: "Don't over-restrict", body: "Gating too tightly would rebuild the closed network we set out to open." },
-            { title: "Partial pricing", body: "Show benchmarks, but not so much that providers lose negotiating power." },
-            { title: "Employee ratings", body: "Let riders rate providers, so service quality is visible, not anecdotal." },
-            { title: "Trust is the barrier", body: "Adoption will be slowed by trust and process, not technology." }
+            { title: "Don't Over-Restrict", body: "Gating too tightly would rebuild the closed network we set out to open." },
+            { title: "Partial Pricing", body: "Show benchmarks, but not so much that providers lose negotiating power." },
+            { title: "Employee Ratings", body: "Let riders rate providers, so service quality is visible, not anecdotal." },
+            { title: "Trust Is the Barrier", body: "Adoption will be slowed by trust and process, not technology." }
           ],
           listItems: [
             "Next, we'd put the RFQ flow in front of three procurement managers and three operators, and see who would post or bid on a real route.",
@@ -199,8 +199,8 @@ export const projects: Project[] = [
           content: "I spent this internship as a designer and builder on Bajaj Finance's Agentic AI team, shipping conversational agents that replace manual HR workflows. They sit inside FINAI / Employee Blu, the company-wide agent roadmap, under the name HR Genie.",
           stats: [
             { value: "800+", label: "Agents on the FINAI roadmap" },
-            { value: "3", label: "HR Sub-Agents I Built" },
-            { value: "17", label: "Sub-Agents I migrated to Gen 2" }
+            { value: "3", label: "HR sub-agents I built" },
+            { value: "17", label: "Sub-agents I migrated to Gen 2" }
           ],
           images: [
             {
@@ -255,7 +255,7 @@ export const projects: Project[] = [
             caption: "The creche agent's autonomy, step by step.",
             columns: ["The agent", "In the creche flow", "Why"],
             rows: [
-              ["Decides alone", "Reads the invoice and certificates, and checks the invoice date, the child's age and the city cap.", "Every check is written into the policy it's given, with one right answer."],
+              ["Decides alone", "Reads the invoice and certificates, and checks the invoice date, the child's age, and the city cap.", "Every check is written into the policy it's given, with one right answer."],
               ["Rejects alone", "Any document that doesn't meet the prompt's criteria, such as an invoice over 2 months old.", "It can only reject against those criteria, and the message names the one that failed."],
               ["Always asks first", "Shows a summary of the claim before anything is sent to CHROMA.", "Nothing is submitted that the employee hasn't seen and confirmed."],
               ["Points elsewhere", "For a company-empanelled creche, tells the employee to contact administration.", "That process sits outside the agent; it only says where to go."],
@@ -305,7 +305,7 @@ export const projects: Project[] = [
         {
           title: "Apply Leave, Same Method",
           phase: "Deliver",
-          content: "Apply Leave went through the same six stages, starting from BRD Module 1 for fixed-term contract employees. The rule map covered five leave types (Privileged Leave, Sick Leave, Casual Leave, Leave without Pay and Maternity Leave), each with its own balance, caps, overlap and block rules. The script asks for a supporting document only when a rule needs one, and every blocked request explains its rule in the chat: the monthly CL cap, LWP while balance remains, or dates that overlap an approved leave.",
+          content: "Apply Leave went through the same six stages, starting from BRD Module 1 for fixed-term contract employees. The rule map covered five leave types (Privileged Leave, Sick Leave, Casual Leave, Leave without Pay, and Maternity Leave), each with its own balance, caps, overlap, and block rules. The script asks for a supporting document only when a rule needs one, and every blocked request explains its rule in the chat: the monthly CL cap, LWP while balance remains, or dates that overlap an approved leave.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/leave.html`,
             title: "Apply Leave walkthrough",
@@ -327,10 +327,10 @@ export const projects: Project[] = [
           callout: { text: "From building what I was asked to, to questioning how the team builds." },
           content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent added to a roadmap that size.",
           cards: [
-            { title: "Spotted it", body: "Gen 1 worked, but it would not scale to the roadmap ahead." },
-            { title: "Proved it", body: "I built a proof of concept on Gen 2's no-code, skill-based approach." },
-            { title: "Pitched it", body: "I made the case to leadership, and they approved a trial." },
-            { title: "Trialled it", body: "I migrated 17 sub-agents, and built Local Conveyance natively on Gen 2." }
+            { title: "Spotted It", body: "Gen 1 worked, but it would not scale to the roadmap ahead." },
+            { title: "Proved It", body: "I built a proof of concept on Gen 2's no-code, skill-based approach." },
+            { title: "Pitched It", body: "I made the case to leadership, and they approved a trial." },
+            { title: "Trialled It", body: "I migrated 17 sub-agents, and built Local Conveyance natively on Gen 2." }
           ],
           images: [
             {
@@ -374,7 +374,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Landing.webp`,
-              caption: "ClassFlow landing page — V2.0, AI-powered"
+              caption: "ClassFlow landing page — V2.0, AI-powered."
             }
           ]
         },
@@ -402,12 +402,12 @@ export const projects: Project[] = [
         {
           title: "Designing for Trust",
           callout: { text: "A professor is trusting this tool with their entire semester." },
-          content: "The model can misread a request, so the design question was what it may do without asking. My answer: it can read, ask and suggest on its own, but only the professor changes the calendar.",
+          content: "The model can misread a request, so the design question was what it may do without asking. My answer: it can read, ask, and suggest on its own, but only the professor changes the calendar.",
           cards: [
-            { title: "Three kinds of reply", body: "Each response either answers, asks for what's missing, or proposes a change. Keeping the three apart means a question is never mistaken for an edit." },
-            { title: "Review before apply", body: "A change arrives as a card to apply, discard, or replace. Nothing changes silently, because a schedule edit is the one thing that's costly to get wrong." },
-            { title: "Nothing dropped", body: "Extra topics go into an event's notes, and empty sessions become placeholders, so the calendar never quietly loses part of the syllabus." },
-            { title: "Fails in the open", body: "If the model can't be reached, ClassFlow says so after a few retries instead of guessing at a schedule." }
+            { title: "Three Kinds of Reply", body: "Each response either answers, asks for what's missing, or proposes a change. Keeping the three apart means a question is never mistaken for an edit." },
+            { title: "Review Before Apply", body: "A change arrives as a card to apply, discard, or replace. Nothing changes silently, because a schedule edit is the one thing that's costly to get wrong." },
+            { title: "Nothing Dropped", body: "Extra topics go into an event's notes, and empty sessions become placeholders, so the calendar never quietly loses part of the syllabus." },
+            { title: "Fails in the Open", body: "If the model can't be reached, ClassFlow says so after a few retries instead of guessing at a schedule." }
           ],
           table: {
             caption: "What ClassFlow does on its own, and what it leaves to the professor.",
@@ -446,7 +446,7 @@ export const projects: Project[] = [
         {
           title: "Under the Hood",
           callout: { text: "The AI reads the request. Plain code builds the calendar, so the output is always predictable." },
-          content: "Every message to Gemini 2.5 Flash carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions. When the API is overloaded, a request is retried at 500ms, 1s and 1.8s before the error is shown.",
+          content: "Every message to Gemini 2.5 Flash carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions. When the API is overloaded, a request is retried at 500 ms, 1 s, and 1.8 s before the error is shown.",
           imageLayout: 'row',
           imageHeight: 'h-[15rem] sm:h-[22rem]',
           imageCrop: true,
@@ -461,10 +461,10 @@ export const projects: Project[] = [
           title: "After the First Import",
           content: "The features that matter once the semester is running, not just on day one.",
           cards: [
-            { title: "Many courses, one calendar", body: "Each course gets its own colour, and clashes between them are flagged." },
+            { title: "Many Courses, One Calendar", body: "Each course gets its own colour, and clashes between them are flagged." },
             { title: "Undo", body: "The last 10 changes per course, so trying things is safe." },
-            { title: "Assignment tracker", body: "Given, check-in, and due dates appear on the calendar as markers." },
-            { title: "Sign in with Google", body: "Courses and schedules save to your account and follow you across sessions. Guest mode is there for a first try." }
+            { title: "Assignment Tracker", body: "Given, check-in, and due dates appear on the calendar as markers." },
+            { title: "Sign in With Google", body: "Courses and schedules save to your account and follow you across sessions. Guest mode is there for a first try." }
           ]
         },
         {
@@ -530,7 +530,7 @@ export const projects: Project[] = [
           content: "Goal: enable faster, clearer purchase decisions by bringing social feedback and product discovery into one shared shopping experience. We designed three modes, one for each social context a purchase can sit in.",
           listItems: [
             "WE Mode — real-time group shopping with shared browsing and shared decisions.",
-            "ME Mode — personalized recommendations for shopping alone.",
+            "ME Mode — personalised recommendations for shopping alone.",
             "THEM Mode — guided shopping for gifting or needs-based purchasing.",
             "Shared Cart — a single space to collect opinions and compare options, instead of scattered chats.",
             "AI Feedback Summary — condenses group reactions into a clear accept/reject read.",
@@ -561,7 +561,7 @@ export const projects: Project[] = [
         },
         {
           title: "Visual Identity & Moodboard",
-          content: "To define the aesthetic direction of WePick, we curated a moodboard focusing on vibrant, energetic colors and clean, modern typography. The goal was to create an interface that feels fun, social, and trustworthy.",
+          content: "To define the aesthetic direction of WePick, we curated a moodboard focusing on vibrant, energetic colours and clean, modern typography. The goal was to create an interface that feels fun, social, and trustworthy.",
           images: [
             {
               src: `${PUBLIC_URL}/images/WePick/wepick-moodboard.webp`,
@@ -571,7 +571,7 @@ export const projects: Project[] = [
         },
         {
           title: "Design System",
-          content: "Before moving to high-fidelity screens, we established a comprehensive design system including typography, color palettes, and component libraries to ensure consistency across the application.",
+          content: "Before moving to high-fidelity screens, we established a comprehensive design system including typography, colour palettes, and component libraries to ensure consistency across the application.",
           images: [
             {
               src: `${PUBLIC_URL}/images/WePick/WePick Design System 2.webp`,
@@ -581,7 +581,7 @@ export const projects: Project[] = [
         },
         {
           title: "Final Output",
-          content: "The final deliverable included a polished app walkthrough demonstrating the “WePick” flow. You can experience the interactive prototype directly below, inviting friends and voting in real-time.",
+          content: "The final deliverable included a polished app walkthrough demonstrating the “WePick” flow. You can experience the interactive prototype directly below, inviting friends and voting in real time.",
           embedUrl: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FZSnz5vTUKNzYNRuOs1uxWt%2FWePick%3Fnode-id%3D0-1%26t%3DvsCOeZePPSny2dOa-1"
         }
       ]
@@ -593,7 +593,7 @@ export const projects: Project[] = [
     title: "RAHI Design System v2",
     category: "UI Design Internship",
     timeline: "Internship, July – August 2025",
-    description: "Designed reusable desktop components for RAHI Platform Technologies design system v2, with a strong focus on keyboard-first interaction and state clarity.",
+    description: "Designed reusable desktop components for RAHI Platform Technologies' design system v2, with a strong focus on keyboard-first interaction and state clarity.",
     tags: ["Figma", "Design Systems", "Desktop UX", "Component Variants", "Interaction Design"],
     color: "bg-[#E7F6F4]",
     accentColor: "text-[#16A197]",
@@ -610,7 +610,7 @@ export const projects: Project[] = [
       sections: [
         {
           title: "Internship Focus",
-          content: "At RAHI Platform Technologies, I contributed to version 2 of the design system for desktop software and web interfaces. The work centered on defining consistent component behavior, clear state communication, and scalable variant structure for future product teams."
+          content: "At RAHI Platform Technologies, I contributed to version 2 of the design system for desktop software and web interfaces. The work centred on defining consistent component behaviour, clear state communication, and scalable variant structure for future product teams."
         },
         {
           title: "What I Designed",
@@ -630,67 +630,67 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-buttons.webp`,
-              caption: "Button system with large, medium, and small variants"
+              caption: "Button system with large, medium, and small variants."
             }
           ]
         },
         {
           title: "Text Boxes",
-          content: "Input fields were standardized with status-based feedback and optional prefix/suffix icons to support finance and operations-heavy data entry use cases.",
+          content: "Input fields were standardised with status-based feedback and optional prefix/suffix icons to support finance and operations-heavy data entry use cases.",
           images: [
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-textboxes.webp`,
-              caption: "Text-box variants with warning, invalid, and disabled states"
+              caption: "Text-box variants with warning, invalid, and disabled states."
             }
           ]
         },
         {
           title: "Dropdowns and Accordions",
-          content: "I created dropdown and accordion behavior libraries that support helper text, error messaging, multi-select chips, and expandable content blocks while maintaining predictable spacing and state transitions.",
+          content: "I created dropdown and accordion behaviour libraries that support helper text, error messaging, multi-select chips, and expandable content blocks while maintaining predictable spacing and state transitions.",
           imageLayout: "grid",
           imageHeight: "h-[15rem] sm:h-[22rem] md:h-[30rem]",
           images: [
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-dropdown.webp`,
               bgClass: "bg-[#ededed]",
-              caption: "Dropdown component patterns across states and use cases"
+              caption: "Dropdown component patterns across states and use cases."
             },
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-accordian.webp`,
               bgClass: "bg-[#ededed]",
-              caption: "Accordion structures for compact and content-rich layouts"
+              caption: "Accordion structures for compact and content-rich layouts."
             }
           ]
         },
         {
           title: "Calendar and Time Picker",
-          content: "I designed a calendar + date-time picker system optimized for desktop usage and keyboard navigation. The patterns cover compact and expanded layouts, selected-date states, clear visual feedback, and predictable focus behavior.",
+          content: "I designed a calendar + date-time picker system optimised for desktop usage and keyboard navigation. The patterns cover compact and expanded layouts, selected-date states, clear visual feedback, and predictable focus behaviour.",
           imageLayout: "mixed",
           imageHeight: "md:h-[20rem]",
           images: [
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-Calendar-1.webp`,
-              caption: "Calendar states showing selected date and date-range behavior"
+              caption: "Calendar states showing selected date and date-range behaviour."
             },
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-timepicker.webp`,
-              caption: "Time-picker states for keyboard-first entry"
+              caption: "Time-picker states for keyboard-first entry."
             },
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-calendar.webp`,
               fullWidth: true,
               containerClass: "w-full md:max-w-[25rem]",
-              caption: "Compact combined calendar and time picker"
+              caption: "Compact combined calendar and time picker."
             }
           ]
         },
         {
           title: "Data Visualisation Components",
-          content: "I designed chart templates for line, scatter, combo, and radial styles with consistent titles, legends, axes, and utility controls for dashboard-level readability.",
+          content: "I designed chart templates for line, area, scatter, combo, and radial styles with consistent titles, legends, axes, and utility controls for dashboard-level readability.",
           images: [
             {
               src: `${PUBLIC_URL}/images/RAHI/RAHI-graphs.webp`,
-              caption: "Line, scatter, and progress chart templates"
+              caption: "Line, area, scatter, combo, and radial chart templates."
             }
           ]
         },
@@ -731,11 +731,11 @@ export const projects: Project[] = [
           callout: { text: "How might we help young children find their belongings on their own, in a way that feels playful and magical?" },
           content: "Children learn best through movement, touch, and objects that respond to them, so the technology had to fade into the background. That set strict requirements:",
           cards: [
-            { title: "Zero screens", body: "No display and no app, anywhere in the system." },
+            { title: "Zero Screens", body: "No display and no app, anywhere in the system." },
             { title: "Instant", body: "Under 100 ms perceived latency, so movement and light feel linked." },
             { title: "Continuous", body: "Not “found or not found”, but “warmer, warmer, here.”" },
-            { title: "No instructions", body: "Meant to be readable by a four-year-old on first pick-up." },
-            { title: "Low power", body: "Enough battery to last through play." },
+            { title: "No Instructions", body: "Meant to be readable by a four-year-old on first pick-up." },
+            { title: "Low Power", body: "Enough battery to last through play." },
             { title: "Safe", body: "Fully enclosed hardware in a child's hands." }
           ]
         },
@@ -749,7 +749,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Revela/Exploded View.webp`,
-              caption: "Exploded view of the system architecture"
+              caption: "Exploded view of the system architecture."
             }
           ]
         },
@@ -761,7 +761,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Revela/Low-Fidelity Prototype Testing.gif`,
-              caption: "Low-fidelity prototype testing"
+              caption: "Low-fidelity prototype testing."
             }
           ]
         },
@@ -772,27 +772,27 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Revela/wand-red-glow.webp`,
-              caption: "Far: Red Light"
+              caption: "Far: red light."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/wand-yellow-glow.webp`,
-              caption: "Approaching: Yellow Light"
+              caption: "Approaching: yellow light."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/wand-green-glow.webp`,
-              caption: "Near: Green Light"
+              caption: "Near: green light."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/wand-white-glow.webp`,
-              caption: "Found: Pulsing white light"
+              caption: "Found: pulsing white light."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/wand-purple-glow.webp`,
-              caption: "Found all Beacons: Purple Light"
+              caption: "All beacons found: purple light."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/wand-orange-glow.webp`,
-              caption: "Not Connected to Beacon: Orange Light"
+              caption: "Not connected to a beacon: orange light."
             }
           ]
         },
@@ -803,15 +803,15 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Revela/wand-creation.gif`,
-              caption: "Wand creation process"
+              caption: "Wand creation process."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/wamd-creation-2.webp`,
-              caption: "Wand creation detail"
+              caption: "Wand creation detail."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/tag-printing.gif`,
-              caption: "Tag printing process"
+              caption: "Tag printing process."
             }
           ]
         },
@@ -819,24 +819,24 @@ export const projects: Project[] = [
           title: "Bench Testing, and What Broke",
           content: "We tested soldering quality on the bench and tuned the distance response in a room. These were engineering tests, run by the team. Most of what failed came down to power and space, and those failures are why no child got to use the wand.",
           cards: [
-            { title: "Unstable power", body: "ESP32s failed on shaky power delivery, and charging modules degraded with use." },
+            { title: "Unstable Power", body: "ESP32s failed on shaky power delivery, and charging modules degraded with use." },
             { title: "LEDs", body: "Strips failed after repeated reassembly, and uneven diffusion made colours harder to read." },
-            { title: "Wiring stress", body: "Tight internal space kept straining the connections." },
-            { title: "Heat vs battery", body: "Brightness had to be balanced against battery life and heat in a small enclosure." }
+            { title: "Wiring Stress", body: "Tight internal space kept straining the connections." },
+            { title: "Heat vs Battery", body: "Brightness had to be balanced against battery life and heat in a small enclosure." }
           ],
           imageLayout: "techSplit",
           images: [
             {
               src: `${PUBLIC_URL}/images/Revela/esp32-soldering.gif`,
-              caption: "ESP32 soldering and assembly"
+              caption: "ESP32 soldering and assembly."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/distance-testing.gif`,
-              caption: "Distance-response testing"
+              caption: "Distance-response testing."
             },
             {
               src: `${PUBLIC_URL}/images/Revela/distance-testing-2.gif`,
-              caption: "Extended distance validation"
+              caption: "Extended distance validation."
             }
           ]
         },
@@ -850,7 +850,7 @@ export const projects: Project[] = [
           content: "The intended interaction in twelve seconds, animated rather than filmed: a child walks the wand toward a lost backpack, and the light moves from red to yellow to green, then pulses white when it's found.",
           video: {
             src: `${PUBLIC_URL}/images/Revela/revela-demo.mp4`,
-            caption: "Animated demo of the proximity-to-colour interaction"
+            caption: "Animated demo of the proximity-to-colour interaction."
           }
         }
       ]
@@ -863,7 +863,7 @@ export const projects: Project[] = [
     category: "Industrial Design",
     timeline: "Industrial design course, 2024",
     description: "A dinosaur-themed jam and butter dispenser for school and college canteens — eliminating messy countertops and shared utensils through a playful, pull-to-dispense pump mechanism.",
-    tags: ["Physical Prototyping", "Sketching", "3D Modeling"],
+    tags: ["Physical Prototyping", "Sketching", "3D Modelling"],
     color: "bg-rose-50",
     accentColor: "text-[#E23167]",
     hoverColor: "group-hover:text-rose-900",
@@ -897,7 +897,7 @@ export const projects: Project[] = [
         },
         {
           title: "Ideation & Mechanism Design",
-          content: "We chose a Dinosaur theme to hide the mechanism and create a sense of joy for the target users (kids/students). The form factor allows for a fun interaction where pulling the head/lever dispenses the condiment.\n\nDispensing Action: The jam comes out from the dinosaur's mouth. The teeth act as the dispensing nozzle to control flow. The user pulls down the head to trigger the pump mechanism inside.",
+          content: "We chose a dinosaur theme to hide the mechanism and create a sense of joy for the target users (kids/students). The form factor allows for a fun interaction where pulling the head/lever dispenses the condiment.\n\nDispensing Action: The jam comes out from the dinosaur's mouth. The teeth act as the dispensing nozzle to control flow. The user pulls down the head to trigger the pump mechanism inside.",
           imageLayout: 'row',
           imageHeight: 'md:h-80',
           images: [
@@ -913,7 +913,7 @@ export const projects: Project[] = [
         },
         {
           title: "Prototyping Journey",
-          content: "As part of the project, we created a low-fidelity prototype using XPS foam, reinforced with Plaster of Paris to add structural strength and allow surface finishing. The final form was finished using acrylic paint. Alongside this, we explored multiple form iterations across different shapes and sizes to evaluate ergonomics, proportions, and overall form before finalizing a direction.",
+          content: "As part of the project, we created a low-fidelity prototype using XPS foam, reinforced with Plaster of Paris to add structural strength and allow surface finishing. The final form was finished using acrylic paint. Alongside this, we explored multiple form iterations across different shapes and sizes to evaluate ergonomics, proportions, and overall form before finalising a direction.",
           imageLayout: 'mixed',
           imageHeight: 'md:h-[21rem]',
           images: [
@@ -934,7 +934,7 @@ export const projects: Project[] = [
         },
         {
           title: "Final Prototype",
-          content: "Our final prototype displayed during our design jury.",
+          content: "Our final prototype, on display at the design jury.",
           imageLayout: 'row',
           imageHeight: 'md:h-96',
           images: [
@@ -986,17 +986,17 @@ export const projects: Project[] = [
         {
           title: "The Problem",
           callout: { text: "Solar doesn't fail because people don't care. It fails because deciding together is hard." },
-          content: "Costs are falling and subsidies exist, yet solar keeps becoming next year's agenda. Society decisions take 2–3x longer than individual homes, and over 60% of residents cite unclear information as a bigger barrier than cost.",
+          content: "Costs are falling and subsidies exist, yet solar keeps becoming next year's agenda. Society decisions take 2–3x longer than an individual homeowner's, and over 60% of residents cite unclear information as a bigger barrier than cost.",
           stats: [
             { value: "124 GW", label: "India's rooftop solar potential" },
             { value: "~11 GW", label: "Actually installed" },
             { value: "<20%", label: "Of installs from housing societies" }
           ],
           cards: [
-            { title: "Fragmented information", body: "What residents hear is conflicting, and mostly comes from vendors." },
-            { title: "Clashing opinions", body: "Many stakeholders, no shared picture to argue from." },
-            { title: "Fear of the wrong call", body: "Committees won't risk an irreversible decision for the whole building." },
-            { title: "No neutral guide", body: "The only advice available is a sales pitch." }
+            { title: "Fragmented Information", body: "What residents hear is conflicting, and mostly comes from vendors." },
+            { title: "Clashing Opinions", body: "Many stakeholders, no shared picture to argue from." },
+            { title: "Fear of the Wrong Call", body: "Committees won't risk an irreversible decision for the whole building." },
+            { title: "No Neutral Guide", body: "The only advice available is a sales pitch." }
           ],
           images: [
             {
@@ -1022,7 +1022,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/SolarLink/SolarLink-Current-Journey.webp`,
-              caption: "The current 7-stage solar installation journey",
+              caption: "The current 7-stage solar installation journey.",
               fullWidth: true
             }
           ]
@@ -1034,7 +1034,7 @@ export const projects: Project[] = [
           cards: [
             { title: "Neutral", body: "Not vendor-driven, so trust can come before execution." },
             { title: "Collective", body: "Built for a committee deciding together, not one buyer." },
-            { title: "Low-risk", body: "Reduce the fear around long-term commitments." },
+            { title: "Low-Risk", body: "Reduce the fear around long-term commitments." },
             { title: "Discussable", body: "Make solar something residents can understand and talk about." }
           ],
           imageLayout: "grid",
@@ -1096,10 +1096,10 @@ export const projects: Project[] = [
           title: "Redefined Journey",
           content: "Solar doesn't move faster by pushing harder. It moves when people feel ready, so success is measured in decision friction and trust, not panels installed.",
           cards: [
-            { title: "Structured learning", body: "Instead of fragmented information." },
-            { title: "Neutral facilitation", body: "Instead of vendor bias." },
-            { title: "Transparent comparison", body: "Instead of endless discussion." },
-            { title: "Confidence before approvals", body: "Instead of delayed decisions." }
+            { title: "Structured Learning", body: "Instead of fragmented information." },
+            { title: "Neutral Facilitation", body: "Instead of vendor bias." },
+            { title: "Transparent Comparison", body: "Instead of endless discussion." },
+            { title: "Confidence Before Approvals", body: "Instead of delayed decisions." }
           ],
           images: [
             {
@@ -1153,7 +1153,7 @@ export const projects: Project[] = [
           // resolves the directory to index.html, but Vite's dev server
           // answers it with the SPA shell instead.
           cta: {
-            text: "Read the whole thing",
+            text: "Read the Whole Thing",
             url: `${PUBLIC_URL}/spotify-wrapped/index.html`
           }
         },
@@ -1168,8 +1168,8 @@ export const projects: Project[] = [
           cards: [
             { title: "Deduplicated", body: "Spotify re-chunks the whole history on every export, so the twelve files overlap: 915 rows appeared twice and were dropped." },
             { title: "UTC to IST", body: "Timestamps were converted before any question about time of day." },
-            { title: "Guests credited", body: "The export names only the album artist. 16,253 streams with a guest in the track title are parsed into an alternate view, never silently merged." },
-            { title: "Checked twice", body: "Every published figure is re-derived by a second script that shares no code with the builder." }
+            { title: "Guests Credited", body: "The export names only the album artist. 16,253 streams with a guest in the track title are parsed into an alternate view, never silently merged." },
+            { title: "Checked Twice", body: "Every published figure is re-derived by a second script that shares no code with the builder." }
           ]
         },
         {
@@ -1187,9 +1187,9 @@ export const projects: Project[] = [
           title: "Picking the Chart for the Question",
           content: "Each chart follows from the question, not from what was easy to draw.",
           cards: [
-            { title: "How much of seven years had music in it?", body: "A question about density over a long span, so eight concentric rings, one sliver per day." },
-            { title: "Do songs get retired, or just played less?", body: "A question about a lifetime, so the ten most-played get a row each across seven years." },
-            { title: "Who was on top, and when?", body: "A question about rank changing over time, so a race you can play or scrub, counted two ways: the running total, or each year from zero." }
+            { title: "How Much of Seven Years Had Music in It?", body: "A question about density over a long span, so eight concentric rings, one sliver per day." },
+            { title: "Do Songs Get Retired, or Just Played Less?", body: "A question about a lifetime, so the ten most-played get a row each across seven years." },
+            { title: "Who Was on Top, and When?", body: "A question about rank changing over time, so a race you can play or scrub, counted two ways: the running total, or each year from zero." }
           ],
           images: [
             {
@@ -1224,10 +1224,10 @@ export const projects: Project[] = [
           title: "Shipping It as One File",
           content: "The headlines are generated too. Re-run the pipeline on a fresh export and the sentences change with it.",
           cards: [
-            { title: "One file", body: "Data and album artwork inlined. It opens from a disk with the network off." },
-            { title: "No third parties", body: "No server, no build step, and no outside requests once the page is open." },
-            { title: "Reduced motion", body: "One observer drives every reveal. With reduced motion, the numbers land finished." },
-            { title: "A dated snapshot", body: "On purpose: the live API is missing fields half the piece depends on." }
+            { title: "One File", body: "Data and album artwork inlined. It opens from a disk with the network off." },
+            { title: "No Third Parties", body: "No server, no build step, and no outside requests once the page is open." },
+            { title: "Reduced Motion", body: "One observer drives every reveal. With reduced motion, the numbers land finished." },
+            { title: "A Dated Snapshot", body: "On purpose: the live API is missing fields half the piece depends on." }
           ],
           images: [
             {
@@ -1240,7 +1240,7 @@ export const projects: Project[] = [
             }
           ],
           cta: {
-            text: "Open the live piece",
+            text: "Open the Live Piece",
             url: `${PUBLIC_URL}/spotify-wrapped/index.html`
           }
         }
@@ -1271,7 +1271,7 @@ export const projects: Project[] = [
         {
           title: "YOLOv8 Live Object Detection",
           content: "Turn on your camera and a real neural network runs in your browser. Nothing is uploaded: I exported the YOLOv8 model to ONNX, and it runs through WebAssembly on your device.",
-          labels: ["Runs on your device", "ONNX + WebAssembly", "11 MB, loaded on start"],
+          labels: ["Runs on your device", "ONNX + WebAssembly", "11 MB, loads on first run"],
           demoId: "yolov8"
         },
         {
@@ -1287,7 +1287,7 @@ export const projects: Project[] = [
           demoId: "movie-recs"
         },
         {
-          title: "Why These Run In The Browser",
+          title: "Why These Run in the Browser",
           content: "All three started as Python scripts on my laptop. They're here because a portfolio you can poke at is worth more than one you have to take on trust.\n\nRunning the detector on-device is a privacy decision as much as a technical one: nothing to upload means nothing to explain. The model and the recommender's dataset only load when you ask for them, so the page stays light."
         }
       ]
@@ -1317,7 +1317,7 @@ export const projects: Project[] = [
         },
         {
           title: "Circuit Diagram",
-          content: "My teammate and I decided to build a double 7-segment display that counts down and, at zero, closes a relay to start a motor spinning. Every segment is discrete LEDs rather than a display module, so the whole thing had to be wired and mapped by hand.",
+          content: "My teammate and I decided to build a double 7-segment display that counts down and, at zero, closes a relay to start a motor spinning. Every segment is made of discrete LEDs rather than a display module, so the whole thing had to be wired and mapped by hand.",
           listItems: [
             "36 LEDs, wired as two hand-built 7-segment digits",
             "ESP32 driving the segment mapping and countdown logic",
@@ -1328,40 +1328,40 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Tinkering/Circuit-Design.webp`,
-              caption: "Circuit diagram experiment",
+              caption: "Circuit diagram experiment.",
               whiteBg: true
             }
           ]
         },
         {
           title: "First Light Test",
-          content: "Initial power-on of the first 7-segment LED to validate wiring and segment mapping.",
+          content: "Initial power-on of the first 7-segment digit to validate wiring and segment mapping.",
           imageLayout: "row",
           imageHeight: "md:h-[28rem]",
           images: [
             {
               src: `${PUBLIC_URL}/images/Tinkering/segment-1-light.webp`,
-              caption: "First light-up of the 1st 7-segment LED"
+              caption: "First light-up of the first 7-segment digit."
             },
             {
               src: `${PUBLIC_URL}/images/Tinkering/soldering.webp`,
-              caption: "Soldering the connections"
+              caption: "Soldering the connections."
             }
           ]
         },
         {
           title: "Prototype Countdown",
-          content: "The coded prototype driving a 1-segment and 2-segment countdown sequence.",
+          content: "The coded prototype driving a 1-digit and 2-digit countdown sequence.",
           imageLayout: "row",
           imageHeight: "md:h-[28rem]",
           images: [
             {
               src: `${PUBLIC_URL}/images/Tinkering/1-segment-countdown.gif`,
-              caption: "1-segment countdown"
+              caption: "1-digit countdown."
             },
             {
               src: `${PUBLIC_URL}/images/Tinkering/2-segment-countdown.gif`,
-              caption: "2-segment countdown"
+              caption: "2-digit countdown."
             }
           ]
         },
@@ -1373,7 +1373,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Tinkering/final-countdown.gif`,
-              caption: "Final working prototype countdown"
+              caption: "Final working prototype countdown."
             }
           ]
         },

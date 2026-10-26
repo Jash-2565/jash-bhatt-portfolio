@@ -292,7 +292,7 @@ const MovieRecsDemo = () => {
             onClick={() => setArmed(true)}
             className="mt-4 min-h-11 px-5 rounded-sm text-sm font-semibold bg-accent text-ink-inverse hover:bg-accent-br transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ground)]"
           >
-            Load dataset (1.4 MB)
+            Load Dataset (1.4 MB)
           </button>
         </div>
       ) : (

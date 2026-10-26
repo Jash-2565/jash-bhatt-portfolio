@@ -17,7 +17,7 @@ const nodes: FlowNode[] = [
   side({ id: "end-stale", kind: "end", tone: "reject", title: "Auto-rejected", subtitle: "Invoice > 2 months old", x: LANE_A, y: ROWS[4] }),
   side({ id: "end-infant", kind: "end", tone: "reject", title: "Auto-rejected", subtitle: "Child under 6 months", x: LANE_B, y: 140 }),
   side({ id: "end-over10", kind: "end", tone: "reject", title: "Auto-rejected", subtitle: "Child 10 years or older", x: LANE_B, y: 215 }),
-  side({ id: "daycare", kind: "branch", step: 7, title: "Daycare claim", subtitle: "6–10 yrs · user confirms", x: LANE_B, y: 290 }),
+  side({ id: "daycare", kind: "branch", step: 7, title: "Daycare claim", subtitle: "6–9 yrs · user confirms", x: LANE_B, y: 290 }),
   side({ id: "end-success", kind: "end", tone: "success", title: "Request ID issued", subtitle: "Claim submitted", x: LANE_B, y: 610 }),
   side({ id: "end-fail", kind: "end", tone: "error", title: "Not submitted", subtitle: "Backend error", x: LANE_B, y: 700 }),
 ];

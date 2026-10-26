@@ -157,7 +157,7 @@ async function main() {
       urlPath: '/work',
       title: 'Selected Work | Jash Bhatt',
       description:
-        'Eleven projects, each taken from a question to a working build: HR agents at Bajaj Finance, a semester planner for professors, a wand for children, a B2B marketplace and more.',
+        'Eleven projects, each taken from a question to a working build: HR agents at Bajaj Finance, a semester planner for professors, a wand for children, a B2B marketplace, and more.',
       imageAlt: home.imageAlt,
     },
     {
@@ -173,7 +173,7 @@ async function main() {
       urlPath: '/contact',
       title: 'Contact | Jash Bhatt',
       description:
-        'Product designer, graduating 2027 and open to full-time roles from August 2027. Email, LinkedIn and résumé.',
+        'Product designer, graduating 2027 and open to full-time roles from August 2027. Email, LinkedIn, and résumé.',
       imageAlt: home.imageAlt,
     },
     {
@@ -318,7 +318,7 @@ async function main() {
       <h1>That page isn't here.</h1>
       <p>The link may be out of date, or the address may have a typo in it. The work is all one click away.</p>
       <div class="links">
-        <a class="primary" href="/work">See the work</a>
+        <a class="primary" href="/work">See the Work</a>
         <a class="secondary" href="/">Home</a>
       </div>
     </div>

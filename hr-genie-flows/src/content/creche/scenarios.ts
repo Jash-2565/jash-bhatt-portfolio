@@ -243,7 +243,7 @@ const failure = (): Beat => ({
       kind: "end",
       tone: "error",
       title: "Claim not submitted",
-      detail: "Due to error on backend your claim was not submitted",
+      detail: "Due to an error on the backend, your claim was not submitted",
     },
     { kind: "agent", text: "Something went wrong on our side, so your claim hasn't been submitted. Please try again later." },
   ],
@@ -391,7 +391,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: "daycare",
-    label: "Child 6–10 years",
+    label: "Child 6–9 years",
     blurb: "Flagged as a daycare claim and confirmed by the employee",
     beats: (() => {
       const c: Claim = {
@@ -421,7 +421,7 @@ export const scenarios: Scenario[] = [
             { kind: "user", text: "Yes, file it as daycare" },
           ],
         },
-        ...toSubmit(c, true, "e-daycare-summary", "Daycare (6–10 years)"),
+        ...toSubmit(c, true, "e-daycare-summary", "Daycare (6–9 years)"),
         success(c, "CR-2026-048377"),
       ];
     })(),

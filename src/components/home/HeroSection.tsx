@@ -46,7 +46,7 @@ const HeroSection = ({ isMobile, scrollToSection }: HeroSectionProps) => (
             </span>
           </div>
           <h1 className={`${ui.h1} font-display text-ink mb-3.5 md:mb-5 animate-fade-in-up`} style={{ animationDelay: '60ms' }}>
-            I design and build <span className="accent-shimmer font-semibold">intelligent products</span> that combine AI, software, and human-centered interaction.
+            I design and build <span className="accent-shimmer font-semibold">intelligent products</span> that combine AI, software, and human-centred interaction.
           </h1>
           {/* One title. The line under it used to cycle through five
               identities, from Product Designer to Circuit & Hardware. */}

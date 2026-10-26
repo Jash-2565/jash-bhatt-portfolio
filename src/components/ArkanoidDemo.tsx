@@ -490,7 +490,7 @@ const ArkanoidDemo = () => {
         clampSpeed(ball, state.globalMaxBallSpeed);
       });
       state.powerupTimers.fast = POWERUP_DURATION.fast;
-      state.powerupMessage = 'Ball Fast!';
+      state.powerupMessage = 'Ball Sped Up!';
       state.powerupColor = CYAN;
     } else if (type === 'multi_ball') {
       state.multiballTriggeredFrame = true;
@@ -1173,7 +1173,7 @@ const ArkanoidDemo = () => {
           <p className="text-xs text-ink-muted">
             {isTouch
               ? 'Drag on the board to move. Tap to launch. Run Demo to start.'
-              : 'Arrow keys to move. Tap to launch. Shift for boost. ESC pauses.'}
+              : 'Arrow keys to move. Space to launch. Shift for boost. Esc pauses.'}
           </p>
         </div>
       </div>

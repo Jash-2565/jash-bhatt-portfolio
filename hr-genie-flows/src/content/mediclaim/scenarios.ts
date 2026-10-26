@@ -62,7 +62,7 @@ const send = (): Beat => ({
 const close = (r: Request): Beat => ({
   node: "close",
   via: "e-send-close",
-  events: [{ kind: "agent", text: `Your ${r.route === "e-parent" ? "parent's " : ""}Mediclaim has been sent on your email.` }],
+  events: [{ kind: "agent", text: `Your ${r.route === "e-parent" ? "parent's " : ""}Mediclaim has been sent to your email.` }],
 });
 
 const play = (r: Request): Beat[] => [trigger(r), details(r), retrieve(r), send(), close(r)];

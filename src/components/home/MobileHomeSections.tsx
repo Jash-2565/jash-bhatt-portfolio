@@ -106,7 +106,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
           onClick={() => scrollToSection('work')}
           className={`${ui.btnBase} ${ui.btnSecondary} mt-5 w-full text-[0.95rem]`}
         >
-          See all projects <ArrowRight size={16} />
+          See All Projects <ArrowRight size={16} />
         </button>
       </Reveal>
     </section>

@@ -397,7 +397,7 @@ export const scenarios: Scenario[] = [
       return [
         ...throughValidation(l, false),
         blocked(
-          "You have PL, SL and CL balance available. You cannot apply LWP if you have balance in PL/SL/CL.",
+          "You have PL, SL and CL balance available. You cannot apply for LWP if you have balance in PL/SL/CL.",
           undefined,
           "Leave is used in priority order: PL → CL → SL → LWP.",
         ),
@@ -444,7 +444,7 @@ export const scenarios: Scenario[] = [
             kind: "end",
             tone: "error",
             title: "Leave not submitted",
-            detail: "FTC system temporarily unavailable. Please try later or contact HRP HR Team.",
+            detail: "FTC system temporarily unavailable. Please try again later or contact HRP HR Team.",
           },
         ],
       },

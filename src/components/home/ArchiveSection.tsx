@@ -20,7 +20,7 @@ const ArchiveSection = ({ handleProjectClick }: ArchiveSectionProps) => {
           arrival. */}
       <Reveal className="mb-8 w-fit">
         <p className={`${ui.eyebrow} mb-1`}>Also worth a look</p>
-        <h2 id="archive-heading" className={`${ui.h2} font-display text-ink`}>More work</h2>
+        <h2 id="archive-heading" className={`${ui.h2} font-display text-ink`}>More Work</h2>
         <Reveal variant="grow-width">
           <div className="mt-3 h-1 w-24 rounded-sm bg-gradient-to-r from-accent to-accent-deep"></div>
         </Reveal>

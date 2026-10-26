@@ -102,7 +102,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                 href={`mailto:${CONTACT_EMAIL}`}
                 className="inline-flex min-h-12 items-center rounded-sm bg-[var(--surface-2)] px-6 sm:px-8 font-mono text-sm uppercase tracking-[0.08em] text-ink transition-colors hover:text-accent-br focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                Email me
+                Email Me
               </a>
             </div>
             <p className="mt-8 text-sm text-ink-muted">

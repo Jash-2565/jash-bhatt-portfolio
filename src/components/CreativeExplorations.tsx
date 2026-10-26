@@ -265,7 +265,7 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <LewisSprite animation="waving" scale={0.19} />
             </div>
-            <h2 className="text-xl font-bold text-ink">Lewis — a desktop pet</h2>
+            <h2 className="text-xl font-bold text-ink">Lewis — A Desktop Pet</h2>
           </div>
           <p className="text-ink-body text-sm md:text-base mb-1.5">
             A chibi pixel-art pet for macOS, inspired by Sir Lewis Hamilton in a black
