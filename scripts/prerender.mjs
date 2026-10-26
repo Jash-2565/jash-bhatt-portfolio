@@ -267,13 +267,10 @@ async function main() {
   body{margin:0;min-height:100svh;display:flex;align-items:center;position:relative;overflow-x:clip;
     background:var(--ground);color:var(--ink);font-family:'Sora',sans-serif;line-height:1.6;
     -webkit-font-smoothing:antialiased}
-  /* The page background's board, at the same strength and phone scale. */
+  /* The page background's board, at the same strength; none on the mobile layout. */
   .circuit{position:absolute;inset:0;overflow:hidden;pointer-events:none;color:rgb(var(--accent-rgb) / .5)}
   .circuit svg{display:block;width:${WIDTH}px;height:${boardH}px}
-  @media (max-width:767px){
-    .circuit{color:rgb(var(--accent-rgb) / .38)}
-    .circuit svg{width:${WIDTH * 1.25}px;height:${boardH * 1.25}px}
-  }
+  @media (max-width:1023.98px){.circuit{display:none}}
   .wrap{position:relative;z-index:1;width:100%;max-width:56rem;margin:0 auto;padding:3rem 1.25rem;
     display:flex;flex-direction:column-reverse;gap:2rem}
   @media (min-width:720px){

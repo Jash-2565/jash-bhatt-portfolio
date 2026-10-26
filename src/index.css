@@ -421,11 +421,11 @@ label {
     pointer-events: none;
   }
 
-  /* Phones draw the board 1.25x larger (in the component) and a little
-     fainter, as the tile used to be. */
-  @media (max-width: 767px) {
+  /* None on the mobile layout (below lg): a solid ground. App doesn't mount
+     CircuitGround there; this covers the error screen's static board. */
+  @media (max-width: 1023.98px) {
     .circuit-ground {
-      color: rgb(var(--accent-rgb) / 0.38);
+      display: none;
     }
   }
 

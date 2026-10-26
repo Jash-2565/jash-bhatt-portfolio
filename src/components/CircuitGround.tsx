@@ -23,11 +23,9 @@ import { getUiScale, subscribeUiScale } from '../utils/uiScale';
 // text boxes, drawn small and stretched up, so the upscale itself softens the
 // edge. It is redrawn only when the layout may have moved.
 
-// Phones draw the same board 1.25× larger, as the tile used to be, so it
-// reads as routing rather than as noise. Above 1440px it scales with the rest
-// of the layout (see utils/uiScale), so the traces keep their weight beside
-// the content instead of thinning out on a monitor.
-const PHONE = '(max-width: 767px)';
+// Desktop layout only; App leaves it out below lg. Above 1440px it scales
+// with the rest of the layout (see utils/uiScale), so the traces keep their
+// weight beside the content instead of thinning out on a monitor.
 // The text mask is drawn at an eighth of the page's size: a 1440×10,000 page
 // is a 180×1250 image.
 const MASK_SCALE = 1 / 8;
@@ -35,23 +33,14 @@ const MASK_SCALE = 1 / 8;
 export default function CircuitGround() {
   const ref = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
-  const [isPhone, setIsPhone] = useState(false);
-  const uiScale = useSyncExternalStore(subscribeUiScale, getUiScale, () => 1);
-  const scale = isPhone ? 1.25 : uiScale;
+  const scale = useSyncExternalStore(subscribeUiScale, getUiScale, () => 1);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const observer = new ResizeObserver(([entry]) => setHeight(entry.contentRect.height));
     observer.observe(el);
-    const phone = window.matchMedia(PHONE);
-    const sync = () => setIsPhone(phone.matches);
-    sync();
-    phone.addEventListener('change', sync);
-    return () => {
-      observer.disconnect();
-      phone.removeEventListener('change', sync);
-    };
+    return () => observer.disconnect();
   }, []);
 
   // Only whole bands change the drawing, so resizes inside a band are free.

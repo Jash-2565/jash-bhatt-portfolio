@@ -85,9 +85,6 @@ const App = () => {
       {/* Same `/work/[slug]` grouping as Analytics, so vitals for the case studies
           pool into one row rather than eleven thin ones. */}
       <SpeedInsights route={analyticsLocation(analyticsRoute).route} />
-      {/* Circuit-trace ground: one board the height of the page, scrolling
-          with it. Sits behind everything; all page content is lifted above it
-          with `relative z-10`. */}
       {/* First focusable thing in the document. It used to sit after the
           back-to-top button and the pet's dismiss button, so the first two Tab
           stops were an invisible control and a decoration — which is precisely
@@ -108,7 +105,12 @@ const App = () => {
       >
         Skip to content
       </a>
-      <CircuitGround />
+      {/* Circuit-trace ground: one board the height of the page, scrolling
+          with it. Sits behind everything; all page content is lifted above it
+          with `relative z-10`. Desktop only: on the mobile layout the signals
+          read as flicker with no visible board behind them, so the ground is
+          the plain --ground colour there. */}
+      {!isMobile && <CircuitGround />}
       <CursorGlow />
       {/* Every width: the mobile nav is a hamburger menu, so nothing else takes
           a long page back to the top. */}

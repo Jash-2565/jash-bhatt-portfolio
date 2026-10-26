@@ -54,13 +54,13 @@ export default class ErrorBoundary extends Component<Props, State> {
 
     return (
       <div className="relative min-h-[100svh] flex items-center overflow-x-clip bg-[var(--ground)] text-ink">
-        {/* .circuit-ground gives the colour and the phone strength; the size
+        {/* .circuit-ground gives the colour and hides it on mobile; the size
             is set here because this board is fixed rather than measured. */}
         <div className="circuit-ground" aria-hidden="true">
           <svg
             viewBox={`0 0 ${WIDTH} ${boardH}`}
             fill="none"
-            className="w-[3840px] h-[1536px] max-md:w-[4800px] max-md:h-[1920px]"
+            className="w-[3840px] h-[1536px]"
           >
             <path
               d={traces}
