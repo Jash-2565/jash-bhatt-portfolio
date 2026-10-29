@@ -14,9 +14,9 @@ const FEATURED_PROJECT_SLUGS = new Set([
 const PROJECT_ORDER_PRIORITY: Record<string, number> = {
   'hr-genie': 0,
   classflow: 1,
-  revela: 2,
-  etsconnect: 3,
-  'soundtrack-seven-years': 4,
+  'soundtrack-seven-years': 2,
+  revela: 3,
+  etsconnect: 4,
   // Secondary list. The Rahi system leads it as the strongest of the remaining
   // work, then the self-directed builds, with the earliest coursework trailing.
   'rahi-design-system-v2': 5,
