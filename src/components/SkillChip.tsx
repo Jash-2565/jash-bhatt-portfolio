@@ -13,7 +13,7 @@ type SkillChipProps = {
 export default function SkillChip({ title, items }: SkillChipProps) {
   return (
     <div className="ic-chip">
-      <h3 className="text-xl font-semibold tracking-tight text-ink mb-4 md:mb-5">{title}</h3>
+      <h3 className="font-display text-xl md:text-2xl text-ink mb-4 md:mb-5">{title}</h3>
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5">
         {items.map((item, index) => (
           <li key={item} className="ic-pin text-sm font-medium text-accent-br">

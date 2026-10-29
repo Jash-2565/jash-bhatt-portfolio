@@ -24,7 +24,7 @@ const education: TimelineEntry[] = [
 /** A run of entries hung on one trace, each on its own pad. */
 const Timeline = ({ heading, entries }: { heading: string; entries: TimelineEntry[] }) => (
   <div>
-    <h3 className="text-xl font-semibold tracking-tight text-ink mb-5">{heading}</h3>
+    <h3 className="font-display text-2xl md:text-[1.75rem] text-ink mb-5">{heading}</h3>
     <ol className="timeline">
       {entries.map((entry) => (
         <li key={entry.title} className={`timeline-node ${entry.minor ? 'opacity-80' : ''}`} data-lit={entry.lit ? 'true' : undefined}>
@@ -43,9 +43,8 @@ const AboutSection = () => (
   <section id="about" data-nav="about" aria-labelledby="about-heading" className={`${ui.section} ${ui.scrollMt}`}>
     <div className={ui.shell}>
       <div className="grid md:grid-cols-2 gap-10 md:gap-16">
-        <Reveal variant="rise-soft">
-          <p className={`${ui.eyebrow} section-index mb-3`}>About</p>
-          <h2 id="about-heading" className={`${ui.h2} font-display text-ink mb-5 md:mb-8`}>About Me</h2>
+        <Reveal variant="rise">
+          <h2 id="about-heading" className={`${ui.h2} font-display text-ink mb-6 md:mb-10`}>About me</h2>
           <div className="space-y-4 md:space-y-6 text-base md:text-lg text-ink-body leading-relaxed">
             <p>
               I grew up in Pune and I'm still here, in my final year of design at FLAME University. Two things pulled me into design: taking things apart to see how they work, and caring how they look once they're put back together.
@@ -56,11 +55,8 @@ const AboutSection = () => (
           </div>
         </Reveal>
 
-        <Reveal variant="rise-soft" delay={140}>
-          {/* Aligned with "About Me": the eyebrow's line is held open so the
-              two headings share a baseline. */}
-          <p className={`${ui.eyebrow} mb-3 invisible max-md:hidden`} aria-hidden="true">&nbsp;</p>
-          <h2 className={`${ui.h2} font-display font-semibold tracking-tight text-ink mb-5 md:mb-8`}>Skills</h2>
+        <Reveal variant="rise" delay={100}>
+          <h2 className={`${ui.h2} font-display text-ink mb-6 md:mb-10`}>Skills</h2>
           <div className="space-y-5">
             <SkillChip
               title="Design"
@@ -78,7 +74,7 @@ const AboutSection = () => (
           own full-width row below the two-column grid rather than being
           split across it — that way they start on the same baseline and
           their traces line up. They stack in this order on a phone. */}
-      <Reveal variant="rise-soft" delay={200}>
+      <Reveal variant="rise" delay={160}>
         <div className="mt-12 md:mt-20 grid md:grid-cols-2 gap-10 md:gap-16">
           <Timeline heading="Experience" entries={experience} />
           <Timeline heading="Education" entries={education} />

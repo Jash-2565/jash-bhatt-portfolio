@@ -553,7 +553,7 @@ const ProjectDetail = ({
   };
 
   return (
-    <div className={`relative z-10 text-ink min-h-screen transition-all duration-300 ease-in-out transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+    <div className={`relative z-10 text-ink min-h-screen transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
       {/* Project Hero */}
       <div className="w-full pt-[calc(var(--nav-h)+2rem)] pb-12 md:pt-32 md:pb-24 border-b border-white/10">
@@ -564,14 +564,14 @@ const ProjectDetail = ({
             className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-ink-body hover:text-accent active:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-            Back to Projects
+            Back to projects
           </button>
 
           <div className="flex flex-wrap items-center gap-3 mb-5 md:mb-8">
-            <span className={`text-xs font-bold tracking-widest uppercase ${heroMutedTextClass}`}>{project.category}</span>
+            <span className={`text-sm md:text-base font-medium ${heroMutedTextClass}`}>{project.category}</span>
           </div>
 
-          <h1 className={`text-[clamp(1.9rem,7.5vw,2.5rem)] md:text-6xl font-bold mb-5 md:mb-8 tracking-tight leading-[1.12] md:leading-tight [text-wrap:balance] ${heroTextClass}`}>{project.title}</h1>
+          <h1 className={`font-display text-[clamp(2.25rem,9vw,3rem)] md:text-[5.25rem] mb-5 md:mb-8 leading-[1.02] md:leading-[0.96] [text-wrap:balance] ${heroTextClass}`}>{project.title}</h1>
           <p className={`text-base md:text-xl leading-relaxed max-w-2xl font-light ${heroBodyTextClass}`}>
             {project.description}
           </p>
@@ -669,7 +669,7 @@ const ProjectDetail = ({
               <div key={idx} className="surface surface-marks rounded-3xl border-l-2 border-accent/50 p-5 sm:p-8 md:p-10">
                 <div className="mb-6">
                   {section.demoId && <div className={`${ui.eyebrow} tracking-[0.35em] mb-3`}>Live demo</div>}
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-ink mb-3">{section.title}</h2>
+                  <h2 className="font-display text-2xl sm:text-3xl md:text-[2.5rem] leading-[1.05] text-ink mb-3">{section.title}</h2>
                   <p className="text-base md:text-lg text-ink-body leading-relaxed whitespace-pre-line max-w-[42rem]">{section.content}</p>
                   {section.labels && (
                     <ul className="mt-4 flex flex-wrap gap-2">
@@ -722,7 +722,7 @@ const ProjectDetail = ({
                     {String(idx + 1).padStart(2, '0')} / {String(project.content.sections.length).padStart(2, '0')}
                   </span>
                   <div className={`h-1 ${project.sectionAccent} mb-4 transition-all duration-300 group-hover:w-14 ${isActive ? 'w-14 opacity-100' : 'w-8 opacity-80'}`}></div>
-                  <h2 className={`text-xl font-bold tracking-tight leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-ink'}`}>{section.title}</h2>
+                  <h2 className={`font-display text-2xl leading-tight transition-colors duration-300 ${isActive ? 'text-white' : 'text-ink'}`}>{section.title}</h2>
                 </div>
 
                 {/* Right Column: Content. The reveal that used to wrap this
@@ -765,7 +765,7 @@ const ProjectDetail = ({
                       {section.stats.map((stat, i) => (
                         <div key={i} className={`${ui.cardBase} p-4 md:p-5 flex flex-row-reverse justify-end items-center gap-4 sm:flex-col-reverse sm:items-start sm:justify-start sm:gap-2`}>
                           <dt className={`${ui.eyebrow} !tracking-[0.12em] leading-relaxed`}>{stat.label}</dt>
-                          <dd className="m-0 flex-shrink-0 whitespace-nowrap min-w-[5.5rem] sm:min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight">{stat.value}</dd>
+                          <dd className="m-0 flex-shrink-0 whitespace-nowrap min-w-[5.5rem] sm:min-w-0 font-display text-3xl md:text-[2.75rem] text-white">{stat.value}</dd>
                         </div>
                       ))}
                     </dl>
@@ -973,7 +973,7 @@ const ProjectDetail = ({
                   {/* `line-clamp`, not `truncate`: a single-line ellipsis cut
                       "Agentic AI / Enterpris…" at 320px and would have cut
                       "The Soundtrack of Seven Years" too. */}
-                  <h3 className="mt-2 text-xl xs:text-2xl md:text-3xl font-bold text-ink line-clamp-2 group-hover:text-accent transition-colors [text-wrap:balance]">
+                  <h3 className="mt-2 font-display text-2xl xs:text-3xl md:text-[2.75rem] leading-[1.02] text-ink line-clamp-2 group-hover:text-accent transition-colors [text-wrap:balance]">
                     {nextProject.title}
                   </h3>
                   <p className="mt-1 text-sm text-ink-muted line-clamp-2">{nextProject.category}</p>
@@ -994,7 +994,7 @@ const ProjectDetail = ({
             onClick={() => onBack()}
             className="group -ml-3 min-h-11 px-3 rounded-sm text-base font-medium text-ink-body hover:text-accent active:bg-white/10 transition-colors flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to projects
           </button>
           <span className="hidden md:flex items-center gap-2 text-xs text-ink-muted">
             <kbd className="chip px-2 py-1 rounded font-mono text-[0.625rem] text-ink-muted">Esc</kbd>

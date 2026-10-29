@@ -47,7 +47,9 @@ const wipes: Record<WipeVariant, { position: string; from: string }> = {
 // slide into place.
 // `lift` is for the Work cards: they reveal as they enter the screen rather
 // than before it, so the motion has to be large enough to be seen.
-const rises: Record<RiseVariant, number> = { rise: 12, 'rise-soft': 6, lift: 40 };
+// `rise` is 20px: at 12px the section heads, now set at 56px, barely seemed
+// to move.
+const rises: Record<RiseVariant, number> = { rise: 20, 'rise-soft': 8, lift: 40 };
 
 const isWipe = (v: RevealVariant): v is WipeVariant => v in wipes;
 const isRise = (v: RevealVariant): v is RiseVariant => v in rises;
@@ -72,9 +74,10 @@ export default function Reveal({
   children,
   variant = 'wipe-right',
   delay = 0,
-  // Short on purpose: a reveal is a courtesy, and a slow one is content the
-  // reader is kept waiting for.
-  duration = 400,
+  // A reveal is a courtesy, and a slow one is content the reader is kept
+  // waiting for. On the strong ease-out most of the travel is over in the
+  // first ~150ms; the rest is the settle.
+  duration = 560,
   as = 'div',
   className = '',
   style,
@@ -95,7 +98,8 @@ export default function Reveal({
   // spends its first third accelerating — at this length that reads as a
   // hesitation before the edge commits. Starting at speed and settling
   // instead keeps a longer reveal feeling smooth rather than slow.
-  const ease = 'cubic-bezier(0.33, 1, 0.68, 1)';
+  // The site-wide --ease-out: arrives at speed and settles long.
+  const ease = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
   const wipe = isWipe(variant) ? wipes[variant] : null;
   const travel = isRise(variant) ? rises[variant] : null;

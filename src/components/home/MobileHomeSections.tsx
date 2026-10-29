@@ -45,7 +45,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
         <dl className="border-y border-white/10 divide-y divide-white/10">
           {operatorStats.map((stat) => (
             <div key={`mobile-stat-${stat.label}`} className="py-2.5">
-              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-ink-muted">{stat.label}</dt>
+              <dt className="text-[0.8125rem] text-ink-muted">{stat.label}</dt>
               <dd className="text-[0.95rem] font-semibold text-ink mt-0.5">{stat.value}</dd>
             </div>
           ))}
@@ -60,7 +60,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
 
     <section aria-labelledby="home-featured-heading" className={`${ui.shell} pt-14 sm:pt-16 pb-12 sm:pb-16`}>
       <Reveal variant="rise-soft" className="mb-6">
-        <h2 id="home-featured-heading" className="text-2xl font-display text-ink">Selected Projects</h2>
+        <h2 id="home-featured-heading" className="text-[2rem] leading-[1.05] font-display text-ink">Selected projects</h2>
       </Reveal>
 
       <div className="grid grid-cols-1 gap-4">
@@ -73,7 +73,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
                 href={`#${project.slug}`}
                 onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                 aria-label={`Open case study for ${project.title}`}
-                className={`group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
+                className={`press group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
               >
                 <div className={`shrink-0 w-20 h-20 rounded-xl overflow-hidden ${containedBackdrop ?? 'bg-[var(--surface-1)]'}`}>
                   {!thumbnail.includes('placeholder') ? (
@@ -91,8 +91,8 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[0.6875rem] font-mono uppercase tracking-[0.14em] text-ink-muted">{project.category}</p>
-                  <h3 className="mt-1 text-base font-bold text-ink group-active:text-accent transition-colors">{project.title}</h3>
+                  <p className="text-[0.8125rem] text-ink-muted">{project.category}</p>
+                  <h3 className="mt-0.5 font-display text-lg text-ink group-active:text-accent transition-colors">{project.title}</h3>
                 </div>
                 <ArrowRight size={18} className="shrink-0 text-ink-faint" />
               </a>
@@ -106,7 +106,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
           onClick={() => scrollToSection('work')}
           className={`${ui.btnBase} ${ui.btnSecondary} mt-5 w-full text-[0.95rem]`}
         >
-          See All Projects <ArrowRight size={16} />
+          See all projects <ArrowRight size={16} />
         </button>
       </Reveal>
     </section>

@@ -2,10 +2,12 @@ import type { GalleryItem } from '../types';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 export const ui = {
-  // Controls are square-cornered and mono-labelled: the radius scale in
-  // tailwind.config.js tops out at 4px, so `rounded` here is 2px, not a pill.
-  btnBase: 'inline-flex items-center justify-center gap-2 min-h-12 px-6 py-3.5 sm:px-8 sm:py-4 rounded font-mono text-sm uppercase tracking-[0.08em] transition-all duration-200',
-  btnPrimary: 'bg-accent text-ink-inverse hover:bg-accent-br hover:-translate-y-0.5',
+  // Controls are square-cornered: the radius scale in tailwind.config.js tops
+  // out at 4px, so `rounded` here is 2px, not a pill. Sentence case in the
+  // text face — the tracked mono caps read as a terminal prompt, not a button.
+  // `press` (index.css) scales to 0.97 on pointer-down.
+  btnBase: 'press inline-flex items-center justify-center gap-2 min-h-12 px-6 py-3.5 sm:px-7 sm:py-4 rounded text-[0.95rem] font-semibold',
+  btnPrimary: 'bg-accent text-ink-inverse hover:bg-accent-br',
   // Filled rather than outlined: with .surface unoutlined a control needs the
   // raised tone to read as a control against a --surface-1 pane.
   btnSecondary: 'surface surface-hover !bg-[var(--surface-2)] text-ink hover:text-accent-br',
@@ -31,8 +33,10 @@ export const ui = {
       at 1024 the column is 605px, and the headline ran to seven lines there
       while fitting in five on a 1440. The ceiling is still 4.2rem, so anything
       from ~1344px up renders exactly as before. */
-  h1: 'text-[clamp(1.6rem,6.4vw,2.6rem)] md:text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.12] md:leading-[1.05] [text-wrap:balance]',
-  h2: 'text-[1.75rem] sm:text-3xl md:text-4xl',
+  h1: 'text-[clamp(1.85rem,7.8vw,2.75rem)] md:text-[clamp(2.6rem,4.8vw,4.4rem)] leading-[1.1] md:leading-[1.04] [text-wrap:balance]',
+  /** Section heads are set big and tight — the step from body copy to a head
+      is what gives each section its first read. */
+  h2: 'text-[2.25rem] sm:text-5xl md:text-[3.5rem] leading-[1.05]',
   /** 44px minimum touch target, per WCAG 2.2 target-size guidance. */
   tapTarget: 'min-h-11 min-w-11',
   /** The site's focus indicator. index.css also sets a `:focus-visible`

@@ -54,6 +54,15 @@
   }
 }
 
+/* Motion tokens. Every new transition reads these rather than retyping a
+   curve: a strong ease-out for things arriving and answering, an in-out for
+   things moving across the screen. */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 /* One focus indicator, everywhere.
    The nav buttons and the hero CTAs carried no focus style at all and fell
    through to the UA default — Chrome's thin orange ring, which reads as a
@@ -138,60 +147,36 @@ label {
   padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 }
 
+/* Oxanium for display, the face the JB wordmark is drawn in. */
 .font-display {
   font-family: 'Oxanium', sans-serif;
   letter-spacing: 0.01em;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* The JB wordmark keeps the face it was drawn in. */
+.font-mark {
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-/* Accent-word shimmer — used on hero headline highlights. */
+/* Accent words in a headline. Solid: the travelling gradient that used to run
+   through them pulled the eye off the sentence every three seconds. */
 .accent-shimmer {
-  background-image: linear-gradient(
-    90deg,
-    rgb(var(--accent-rgb)) 0%,
-    rgb(var(--accent-bright-rgb)) 35%,
-    rgb(var(--accent-rgb)) 55%,
-    rgb(var(--accent-deep-rgb)) 80%,
-    rgb(var(--accent-rgb)) 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: shimmer 3s linear infinite;
+  color: rgb(var(--accent-rgb));
 }
 
-/* Cyan glow lift used on project cards and contact cards on hover. */
-.card-glow {
-  transition: transform 180ms ease;
+/* Press feedback for anything pressable: answers on pointer-down, before the
+   click lands. */
+.press {
+  transition: transform 160ms var(--ease-out), background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
-@media (hover: hover) and (pointer: fine) {
-  .card-glow:hover {
-    transform: translateY(-2px);
-  }
-  .card-glow:hover::before,
-  .card-glow:hover::after {
-    border-color: rgb(var(--accent-rgb) / 0.85);
-  }
-}
-/* Touch gets a press state instead of a hover state. */
-@media (hover: none) {
-  .card-glow:active {
-    transform: scale(0.99);
-  }
-  .card-glow:active::before,
-  .card-glow:active::after {
-    border-color: rgb(var(--accent-rgb) / 0.85);
-  }
+.press:active {
+  transform: scale(0.97);
 }
 
 /* Project-card inner image parallax (driven by CSS vars set from a mousemove
-   handler). Layers on top of the existing tilt. */
+   handler). */
 .card-parallax {
   width: 100%;
   height: 100%;
@@ -282,25 +267,6 @@ label {
   will-change: transform;
 }
 
-/* Cyan ripple emitted from the click point on the copy-email card. */
-.copy-ripple {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
-  border-radius: 9999px;
-  background: rgb(var(--accent-rgb) / 0.4);
-  pointer-events: none;
-  transform: scale(0);
-  animation: copy-ripple 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  z-index: 0;
-}
-
-@keyframes copy-ripple {
-  0% { transform: scale(0); opacity: 0.6; }
-  100% { transform: scale(26); opacity: 0; }
-}
-
 /* Lewis's idle loop as pure CSS, for surfaces with no script to drive the
    sprite: the crash screen (and, in its own inline copy, the static 404).
    Row 0 of the atlas, 6 frames at 0.18s; the element sets --lewis-cell to
@@ -334,35 +300,6 @@ label {
   0% { transform: scale(1); opacity: 0.7; }
   70% { transform: scale(2.8); opacity: 0; }
   100% { transform: scale(2.8); opacity: 0; }
-}
-
-/* 3D tilt wrapper for project imagery. */
-.tilt-card {
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-  transform-style: preserve-3d;
-}
-
-/* Outlined editorial index numbers on project cards. */
-.ghost-number {
-  font-family: 'Oxanium', sans-serif;
-  font-weight: 700;
-  font-size: 2.7rem;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px rgb(var(--accent-rgb) / 0.45);
-  transition: color 300ms ease, -webkit-text-stroke-color 300ms ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .ghost-number {
-    color: rgb(var(--accent-rgb) / 0.18);
-    -webkit-text-stroke-color: rgb(var(--accent-rgb) / 0.85);
-  }
-}
-@media (max-width: 767px) {
-  .ghost-number {
-    font-size: 1.6rem;
-  }
 }
 
 /* Nav underline indicator — positioned absolutely inside the nav button row. */
@@ -625,67 +562,6 @@ label {
   70%, 100% { top: 100%; }
 }
 
-/* Section index above each home heading: a lit pad, then the number.
-   Block-level flex, not inline-flex: inline, it sat on a 24px body line box
-   and pushed its heading 6px below the one beside it. */
-.section-index {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-.section-index::before {
-  content: '';
-  width: 0.4375rem;
-  height: 0.4375rem;
-  border-radius: 9999px;
-  background: rgb(var(--accent-rgb));
-  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15);
-}
-
-/* Project index to category: a trace ending on a pad, which a signal runs
-   along while the card is hovered. */
-.meta-trace {
-  position: relative;
-  height: 1px;
-  flex-shrink: 0;
-  background: rgb(var(--accent-rgb) / 0.35);
-}
-.meta-trace::after {
-  content: '';
-  position: absolute;
-  right: -3px;
-  top: -2px;
-  width: 5px;
-  height: 5px;
-  border-radius: 9999px;
-  border: 1px solid rgb(var(--accent-rgb) / 0.6);
-  background: var(--ground);
-  transition: background-color 200ms ease, box-shadow 200ms ease;
-}
-.meta-trace::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgb(var(--accent-bright-rgb)) 80%, transparent);
-  background-size: 50% 100%;
-  background-repeat: no-repeat;
-  background-position: -100% 0;
-  opacity: 0;
-}
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .meta-trace::before {
-    opacity: 1;
-    animation: meta-signal 1.1s ease-in infinite;
-  }
-  .group:hover .meta-trace::after {
-    background: rgb(var(--accent-bright-rgb));
-    box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.8);
-  }
-}
-@keyframes meta-signal {
-  to { background-position: 200% 0; }
-}
-
 /* Skill groups as IC packages (SkillChip.tsx). The body is an ordinary
    opaque pane; the notch marks pin 1's end, and each skill is a pin leaving
    the body's edge. Pins are drawn from the item outward, so they need the
@@ -805,6 +681,219 @@ label {
   box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15), 0 0 10px rgb(var(--accent-rgb) / 0.5);
 }
 
+/* Respect the user's motion preference — collapse every custom motion to a short fade. */
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition: background-color 200ms ease;
+  }
+  .surface-hover:hover,
+  .chip:hover {
+    transform: none;
+  }
+  /* The glyph still becomes an X — it just snaps instead of morphing. */
+  .menu-glyph-bar {
+    transition: none !important;
+  }
+  .animate-nudge,
+  .timeline::after,
+  .scroll-probe::after,
+  .portrait-scan::after,
+  .accent-shimmer,
+  .pulse-dot::after,
+  .lewis-idle {
+    animation: none !important;
+  }
+  .magnetic-btn {
+    transition: none;
+    transform: none !important;
+  }
+  .card-parallax {
+    transition: none;
+    transform: none !important;
+  }
+  .card-media:hover .card-parallax {
+    transform: none !important;
+  }
+  .accent-shimmer {
+    background: none;
+    -webkit-text-fill-color: rgb(var(--accent-rgb));
+    color: rgb(var(--accent-rgb));
+  }
+  .nav-underline {
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   RENEWAL — motion and interaction layer
+   ------------------------------------------------------------
+   Everything here reads the motion tokens in :root. Entrances use
+   --ease-out; nothing animates layout properties.
+   ============================================================ */
+
+/* Hero headline: each word rises out of its own clipped line box.
+   The box is padded and pulled back by the same amount, so descenders
+   are not shaved off at tight leading. */
+.rise-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-block: 0.06em 0.14em;
+  margin-block: -0.06em -0.14em;
+}
+.rise-word-inner {
+  display: inline-block;
+  animation: rise-word 900ms var(--ease-out) var(--rise-delay, 0ms) both;
+}
+@keyframes rise-word {
+  from { transform: translateY(108%); }
+  to { transform: translateY(0); }
+}
+
+/* A lit status LED: the one steady light on the first screen. */
+.stat-led--on {
+  background: rgb(var(--accent-rgb));
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15);
+}
+
+/* The portrait eases in a touch on hover, inside its fixed frame. */
+.portrait-img {
+  transition: transform 700ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .portrait-card:hover .portrait-img {
+    transform: scale(1.035);
+  }
+}
+
+/* Contained artwork (the Spotify chart) gets the same answer to the pointer
+   as the cover images, without the parallax it has no room for. */
+.card-contain {
+  transition: transform 700ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .card-media:hover .card-contain {
+    transform: scale(1.03);
+  }
+}
+
+/* Explorations entry: four photographs stacked like prints, each turned a
+   little. On hover they fan out to the left, nearest first. Frames are the
+   opaque surface, so no board shows through a print. */
+.photo-fan {
+  position: relative;
+  width: 6rem;
+  height: 4.5rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+.photo-fan-card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--surface-2);
+  outline: 2px solid var(--surface-1);
+  transform: rotate(calc((var(--i) - 1.5) * 4deg));
+  transition: transform 420ms var(--ease-out);
+  transition-delay: calc((3 - var(--i)) * 30ms);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .photo-fan-card {
+    transform: translateX(calc((var(--i) - 3) * 3.4rem)) rotate(calc((var(--i) - 1.5) * 3deg)) translateY(-2px);
+    transition-delay: calc(var(--i) * 30ms);
+  }
+}
+
+/* Reduced motion for the layer above: words and prints arrive in place, and
+   nothing travels on hover. Colour changes stay. */
+@media (prefers-reduced-motion: reduce) {
+  .rise-word-inner {
+    animation: none !important;
+    transform: none;
+  }
+  .group:hover .photo-fan-card,
+  .portrait-card:hover .portrait-img,
+  .card-media:hover .card-contain,
+  .press:active {
+    transform: none !important;
+  }
+  .group:hover .photo-fan-card {
+    transform: rotate(calc((var(--i) - 1.5) * 4deg)) !important;
+  }
+}
+
+/* Contact (restored from the original design) ------------------------------ */
+
+/* Cyan glow lift used on project cards and contact cards on hover. */
+.card-glow {
+  transition: transform 180ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card-glow:hover {
+    transform: translateY(-2px);
+  }
+  .card-glow:hover::before,
+  .card-glow:hover::after {
+    border-color: rgb(var(--accent-rgb) / 0.85);
+  }
+}
+/* Touch gets a press state instead of a hover state. */
+@media (hover: none) {
+  .card-glow:active {
+    transform: scale(0.99);
+  }
+  .card-glow:active::before,
+  .card-glow:active::after {
+    border-color: rgb(var(--accent-rgb) / 0.85);
+  }
+}
+
+/* Cyan ripple emitted from the click point on the copy-email card. */
+.copy-ripple {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 9999px;
+  background: rgb(var(--accent-rgb) / 0.4);
+  pointer-events: none;
+  transform: scale(0);
+  animation: copy-ripple 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  z-index: 0;
+}
+
+@keyframes copy-ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(26); opacity: 0; }
+}
+
+/* Section index above each home heading: a lit pad, then the number.
+   Block-level flex, not inline-flex: inline, it sat on a 24px body line box
+   and pushed its heading 6px below the one beside it. */
+.section-index {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.section-index::before {
+  content: '';
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 9999px;
+  background: rgb(var(--accent-rgb));
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15);
+}
+
+
 /* Contact: a trace from the copy forking into the two cards, spanning the
    4rem column gap. The viewBox is stretched to the box, so strokes are kept
    at screen width with non-scaling-stroke and the pad is HTML, not a circle
@@ -854,66 +943,16 @@ label {
   box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.15), 0 0 10px rgb(var(--accent-rgb) / 0.5);
 }
 
-/* Respect the user's motion preference — collapse every custom motion to a short fade. */
+
 @media (prefers-reduced-motion: reduce) {
-  .chip {
-    transition: background-color 200ms ease;
-  }
-  .surface-hover:hover,
-  .chip:hover {
-    transform: none;
-  }
-  /* The glyph still becomes an X — it just snaps instead of morphing. */
-  .menu-glyph-bar {
-    transition: none !important;
-  }
-  .animate-nudge,
   .contact-fork-signal,
-  .timeline::after,
-  .scroll-probe::after,
-  .meta-trace::before,
-  .portrait-scan::after,
-  .accent-shimmer,
-  .pulse-dot::after,
-  .copy-ripple,
-  .lewis-idle {
+  .copy-ripple {
     animation: none !important;
-  }
-  .tilt-card,
-  .magnetic-btn {
-    transition: none;
-    transform: none !important;
-  }
-  .card-parallax {
-    transition: none;
-    transform: none !important;
-  }
-  .card-media:hover .card-parallax {
-    transform: none !important;
-  }
-  .ghost-number {
-    transition: none;
-  }
-  .accent-shimmer {
-    background: none;
-    -webkit-text-fill-color: rgb(var(--accent-rgb));
-    color: rgb(var(--accent-rgb));
   }
   .card-glow {
     transition: none;
   }
   .card-glow:hover {
     transform: none;
-  }
-  .nav-underline {
-    transition: none;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
   }
 }

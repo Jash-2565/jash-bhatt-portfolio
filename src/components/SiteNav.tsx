@@ -192,7 +192,7 @@ const SiteNav = ({
               aria-label="Jash Bhatt — home"
               className="flex-shrink-0 -ml-2 px-2 flex items-center justify-center min-h-11 min-w-11 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              <span className="text-[1.85rem] md:text-[2.1rem] font-display tracking-tight text-accent">JB</span>
+              <span className="text-[1.85rem] md:text-[2.1rem] font-mark tracking-tight text-accent">JB</span>
             </button>
 
             {/* Desktop Menu — `lg`, matching where the paged mobile layout
@@ -227,7 +227,7 @@ const SiteNav = ({
                 href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
                 target="_blank"
                 rel="noreferrer"
-                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 rounded-sm border border-accent text-accent font-mono text-xs uppercase tracking-[0.08em] hover:bg-accent hover:text-ink-inverse transition-all duration-200 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="group ml-2 inline-flex items-center gap-1.5 min-h-11 px-4 press rounded-sm border border-accent text-accent text-sm font-semibold hover:bg-accent hover:text-ink-inverse whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 {/* Spaced with `gap`, not a literal space: the arrow glyph has
                     almost no left side bearing, so a single space reads tight.

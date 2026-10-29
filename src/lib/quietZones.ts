@@ -5,7 +5,7 @@
 // still ground, and both layers agree on exactly where that is.
 
 export const QUIET_SELECTOR =
-  '#root :is(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, label, th, td, .label, .ghost-number)';
+  '#root :is(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, label, th, td, .label)';
 /** Clearance around the text before the feathered edge begins, in css px. */
 export const QUIET_PAD = 28;
 /** Blur radius of that edge, in css px. */
