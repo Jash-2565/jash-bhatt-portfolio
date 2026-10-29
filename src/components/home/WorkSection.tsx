@@ -29,16 +29,9 @@ interface WorkSectionProps {
 
 const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
   <section id="work" data-nav="work" aria-labelledby="work-heading" className={`${ui.section} ${ui.shell} ${ui.scrollMt}`}>
-    {/* Heading left, its one-line brief answering it on the right, on a
-        shared baseline. Below md they stack. */}
-    <div className="grid md:grid-cols-12 gap-4 md:gap-8 md:items-end mb-12 sm:mb-16 md:mb-24">
-      <Reveal variant="rise" className="md:col-span-7">
-        <h2 id="work-heading" className={`${ui.h2} font-display text-ink`}>Selected projects</h2>
-      </Reveal>
-      <Reveal variant="rise" delay={80} className="md:col-span-5">
-        <p className="text-ink-body text-base md:text-lg leading-relaxed max-w-md md:ml-auto">Each one taken from a question to a working build: what I designed, why, and what I built to prove it.</p>
-      </Reveal>
-    </div>
+    <Reveal variant="rise" className="mb-12 sm:mb-16 md:mb-24">
+      <h2 id="work-heading" className={`${ui.h2} font-display text-ink`}>Selected projects</h2>
+    </Reveal>
 
     <div className="space-y-10 sm:space-y-14 md:space-y-28">
       {featuredProjects.map((project, index) => {
