@@ -374,7 +374,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Landing.webp`,
-              caption: "ClassFlow landing page — V2.0, AI-powered."
+              caption: "The landing page. Its hero is a small week calendar with a clash already flagged, so the product explains itself."
             }
           ]
         },
@@ -430,16 +430,16 @@ export const projects: Project[] = [
           imageHeight: "auto",
           images: [
             {
-              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Calendar-March.webp`,
-              caption: "Month. Deadlines show as colour-coded markers, like DUE: Midterm Essay on March 1."
+              src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Calendar-Month.webp`,
+              caption: "Month. Each course keeps its colour, and the red chips on 28 October are a clash between two courses."
             },
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Week-View.webp`,
-              caption: "Week. Exact session times, with the Mon/Wed/Fri pattern visible at a glance."
+              caption: "Week. Exact times on a grid, the clash shown side by side in red, and a line marking the current time."
             },
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-List-View.webp`,
-              caption: "List. Every session across every course, searchable."
+              caption: "List. Every session across every course in date order, with search."
             }
           ]
         },
@@ -453,7 +453,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/ClassFlow/ClassFlow-Chatbot-Only.webp`,
-              caption: "The chatbot panel, the only way schedules get in."
+              caption: "The chat panel, the only way schedules get in: type the course, or attach the syllabus."
             }
           ]
         },

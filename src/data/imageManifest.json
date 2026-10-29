@@ -1,23 +1,14 @@
 {
-  "/images/ClassFlow/ClassFlow-Calendar-March.webp": {
-    "w": 2400,
-    "h": 1316,
-    "v": [
-      480,
-      960,
-      1440
-    ]
-  },
   "/images/ClassFlow/ClassFlow-Chatbot-Only.webp": {
-    "w": 845,
-    "h": 1220,
+    "w": 853,
+    "h": 1024,
     "v": [
       480
     ]
   },
   "/images/ClassFlow/ClassFlow-Home.webp": {
     "w": 2400,
-    "h": 1316,
+    "h": 1800,
     "v": [
       480,
       960,
@@ -26,7 +17,7 @@
   },
   "/images/ClassFlow/ClassFlow-Import-Chatbot.webp": {
     "w": 2400,
-    "h": 1316,
+    "h": 1260,
     "v": [
       480,
       960,
@@ -35,7 +26,7 @@
   },
   "/images/ClassFlow/ClassFlow-Landing.webp": {
     "w": 2400,
-    "h": 1316,
+    "h": 2063,
     "v": [
       480,
       960,
@@ -44,7 +35,7 @@
   },
   "/images/ClassFlow/ClassFlow-List-View.webp": {
     "w": 2400,
-    "h": 1316,
+    "h": 1425,
     "v": [
       480,
       960,
@@ -53,7 +44,7 @@
   },
   "/images/ClassFlow/ClassFlow-Thumbnail.webp": {
     "w": 2400,
-    "h": 1316,
+    "h": 1800,
     "v": [
       480,
       960,
@@ -62,7 +53,16 @@
   },
   "/images/ClassFlow/ClassFlow-Week-View.webp": {
     "w": 2400,
-    "h": 1316,
+    "h": 2302,
+    "v": [
+      480,
+      960,
+      1440
+    ]
+  },
+  "/images/ClassFlow/ClassFlow-Calendar-Month.webp": {
+    "w": 2400,
+    "h": 2226,
     "v": [
       480,
       960,
