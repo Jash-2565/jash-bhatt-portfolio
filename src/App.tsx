@@ -161,7 +161,7 @@ const App = () => {
            `ui.section` is `py-14 sm:py-20`. Home is exempt: the hero carries
            its own offset. */
         <div
-          className={`relative z-10 transition-all duration-300 ease-in-out transform ${
+          className={`relative z-10 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${
             isMobile && mobilePage !== 'home'
               ? 'pt-[calc(var(--nav-h)-2.5rem)] sm:pt-[calc(var(--nav-h)-4rem)]'
               : ''

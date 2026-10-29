@@ -25,10 +25,10 @@ const SiteFooter = () => (
           className="min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
         />
         <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="group min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
-          LinkedIn<span aria-hidden="true" className="ml-1 inline-block transition-all duration-200 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">↗</span>
+          LinkedIn<span aria-hidden="true" className="ml-1 inline-block transition-[opacity,transform] duration-200 ease-out [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">↗</span>
         </a>
         <a href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`} target="_blank" rel="noreferrer" className="group min-h-11 min-w-11 inline-flex items-center justify-center text-ink-body hover:text-accent transition-colors">
-          Résumé<span aria-hidden="true" className="ml-1 inline-block transition-all duration-200 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">↗</span>
+          Résumé<span aria-hidden="true" className="ml-1 inline-block transition-[opacity,transform] duration-200 ease-out [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">↗</span>
         </a>
       </nav>
       {/* `text-balance` so the credit doesn't leave "scratch." alone on a
