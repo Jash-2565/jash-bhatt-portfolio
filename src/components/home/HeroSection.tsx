@@ -2,7 +2,6 @@ import { ArrowRight } from 'lucide-react';
 import ResponsiveImage from '../ResponsiveImage';
 import Magnetic from '../Magnetic';
 import RiseWords from '../RiseWords';
-import PuneClock from '../PuneClock';
 import { ui, operatorStats } from '../../config/ui';
 import { PUBLIC_URL } from '../../utils/getBaseUrl';
 import { scaledSlot } from '../../utils/imageSources';
@@ -85,12 +84,8 @@ const HeroSection = ({ isMobile, scrollToSection }: HeroSectionProps) => (
                   sizes={`${scaledSlot(292)}, 292px`}
                 />
               </div>
-              {/* A figure caption, as on a drawing: who, where, and what time
-                  it is there — useful to anyone writing from another zone. */}
-              <figcaption className="label flex items-center justify-between gap-3 pt-3 text-ink-muted">
-                <span>Fig. 01 — Jash</span>
-                <PuneClock className="text-accent/90" />
-              </figcaption>
+              {/* A figure caption, as on a drawing. */}
+              <figcaption className="label pt-3 text-ink-muted">Fig. 01 — Jash</figcaption>
             </figure>
           </div>
         )}
