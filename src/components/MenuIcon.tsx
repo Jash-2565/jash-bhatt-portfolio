@@ -8,28 +8,20 @@ type Props = {
  * a code listing rather than a generic hamburger while keeping the familiar
  * shape that makes it recognisable as navigation.
  *
- * All three bars are positioned on the same axis (`top`) rather than one from
- * each edge — animating between `top` and `bottom` would jump instead of
- * sliding, since only one of the two can be the active property at a time.
- * In a 20px box with 2px bars, 9px is the centre line.
+ * Every bar is a full-width bar on the centre line, placed and shortened with
+ * `transform` alone (`.menu-glyph` in index.css). It used to animate `top` and
+ * `width`, which re-ran layout on every frame of the morph — while the menu
+ * drawer was animating beside it.
  */
 export default function MenuIcon({ open }: Props) {
-  const bar = 'menu-glyph-bar absolute right-0 h-[2px] rounded-sm transition-all duration-300 ease-out';
-
   return (
-    <span className="relative block h-5 w-6" aria-hidden="true">
+    <span className="menu-glyph relative block h-5 w-6" data-open={open} aria-hidden="true">
       {/* Top — full width, accent. Becomes one stroke of the X. */}
-      <span
-        className={`${bar} w-6 bg-accent ${open ? 'top-[9px] rotate-45' : 'top-[3px] rotate-0'}`}
-      />
+      <span className="menu-glyph-bar menu-glyph-top bg-accent" />
       {/* Middle — shortest bar. Fades so the X reads as two clean strokes. */}
-      <span
-        className={`${bar} top-[9px] bg-ink-body ${open ? 'w-6 opacity-0' : 'w-[15px] opacity-100'}`}
-      />
+      <span className="menu-glyph-bar menu-glyph-mid bg-ink-body" />
       {/* Bottom — mid length, giving the ragged left edge. */}
-      <span
-        className={`${bar} bg-ink-body ${open ? 'top-[9px] w-6 -rotate-45' : 'top-[15px] w-[20px] rotate-0'}`}
-      />
+      <span className="menu-glyph-bar menu-glyph-bot bg-ink-body" />
     </span>
   );
 }

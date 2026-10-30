@@ -59,6 +59,20 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
 
   const isManualScroll = useRef(false);
 
+  /**
+   * Fade the swapped-in page back up once it has actually painted.
+   *
+   * This used to be a fixed 50ms timer. On a phone, mounting the Work page or a
+   * case study takes longer than that, so the fade started while the browser
+   * was still building the page: the first frames of it were dropped and the
+   * page popped in part-way through. Two frames on, React has committed the new
+   * page and the browser has laid it out and painted it at opacity 0, so the
+   * fade runs on an idle main thread.
+   */
+  const fadeInAfterPaint = () => {
+    requestAnimationFrame(() => requestAnimationFrame(() => setIsTransitioning(false)));
+  };
+
   // --- Navigation & Transition Handlers ---
   const scrollToElementWithOffset = (
     element: HTMLElement,
@@ -112,7 +126,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       setCurrentView('explorations');
       setActiveSection('work');
       window.scrollTo(0, 0);
-      setTimeout(() => { setIsTransitioning(false); }, 50);
+      fadeInAfterPaint();
     }, 180);
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'explorations' });
@@ -137,7 +151,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
-        setTimeout(() => { setIsTransitioning(false); }, 50);
+        fadeInAfterPaint();
       }, leavingProject ? 300 : 160);
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
@@ -201,9 +215,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       setSelectedProject(project);
       setCurrentView('project');
       window.scrollTo(0, 0);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 50);
+      fadeInAfterPaint();
     }, 180);
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'project', slug: project.slug });
@@ -228,7 +240,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
-        setTimeout(() => { setIsTransitioning(false); }, 50);
+        fadeInAfterPaint();
       }, 300);
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });

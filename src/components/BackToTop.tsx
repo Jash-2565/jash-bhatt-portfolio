@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
+import { isScrollLocked } from '../utils/lockBodyScroll';
 
 // Floating back-to-top button — fades in after the user scrolls past the hero.
 // Shown at every width. It steps aside once the footer scrolls into view: on a
@@ -27,6 +28,8 @@ export default function BackToTop() {
     // evaluates, and counts as not scrolling up.
     let lastY = NaN;
     const onScroll = () => {
+      // An overlay pinning the page reads as a jump to the top.
+      if (isScrollLocked()) return;
       const { scrollHeight } = document.documentElement;
       const y = window.scrollY;
       const atFooter = window.innerHeight + y > scrollHeight - FOOTER_CLEARANCE;

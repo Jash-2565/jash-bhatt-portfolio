@@ -1,4 +1,20 @@
 /**
+ * How many overlays currently hold the lock. The menu and the lightbox can
+ * overlap (the lightbox opens from a page the menu was just closed over), so a
+ * plain flag would be cleared by whichever released first.
+ */
+let lockCount = 0;
+
+/**
+ * True while an overlay has the page pinned. Scroll listeners that derive state
+ * from `window.scrollY` check this: pinning the body drops scrollY to 0 and
+ * fires a scroll event, which otherwise reads as "back at the top of the page"
+ * — the nav's ground faded out and the back-to-top button hid under the open
+ * menu, then both came back as it closed.
+ */
+export const isScrollLocked = () => lockCount > 0;
+
+/**
  * Freeze the page behind an overlay, and give back a function that restores it.
  *
  * `body { overflow: hidden }` alone is the pattern that does not work on iOS
@@ -19,6 +35,7 @@ export const lockBodyScroll = () => {
     width: body.style.width,
   };
 
+  lockCount += 1;
   body.style.overflow = 'hidden';
   body.style.position = 'fixed';
   body.style.top = `${-scrollY}px`;
@@ -26,7 +43,13 @@ export const lockBodyScroll = () => {
   body.style.right = '0';
   body.style.width = '100%';
 
+  let released = false;
   return () => {
+    if (released) return;
+    released = true;
+    // Before the scrollTo below: the scroll event it fires lands on the real
+    // offset again, and listeners should take it.
+    lockCount -= 1;
     body.style.overflow = previous.overflow;
     body.style.position = previous.position;
     body.style.top = previous.top;

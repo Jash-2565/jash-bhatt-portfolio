@@ -56,9 +56,10 @@
 
 /* Motion tokens. Every new transition reads these rather than retyping a
    curve: a strong ease-out for things arriving and answering, an in-out for
-   things moving across the screen. */
+   things moving across the screen, an ease-in for things leaving. */
 :root {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
@@ -542,24 +543,29 @@ label {
 
 /* Scroll probe: a short trace with a signal running down it. */
 .scroll-probe {
+  --probe-h: 2.75rem;
   position: relative;
   width: 1px;
-  height: 2.75rem;
+  height: var(--probe-h);
   background: rgb(var(--accent-rgb) / 0.22);
   overflow: hidden;
 }
 .scroll-probe::after {
   content: '';
   position: absolute;
+  top: 0;
   left: 0;
   width: 1px;
   height: 1rem;
   background: linear-gradient(180deg, transparent, rgb(var(--accent-bright-rgb)));
   animation: probe 1.8s cubic-bezier(0.55, 0, 0.45, 1) infinite;
 }
+/* Runs on `transform`, not `top`: it loops forever on the first screen, and a
+   `top` animation re-ran layout on every frame for as long as the hero was up,
+   on the same main thread the page's own transitions need. */
 @keyframes probe {
-  0% { top: -1rem; }
-  70%, 100% { top: 100%; }
+  0% { transform: translateY(-100%); }
+  70%, 100% { transform: translateY(var(--probe-h)); }
 }
 
 /* Skill groups as IC packages (SkillChip.tsx). The body is an ordinary
@@ -646,19 +652,22 @@ label {
   position: absolute;
   left: 0.3125rem;
   top: 0.4rem;
+  bottom: 0.5rem;
   width: 1px;
-  height: 2.5rem;
-  background: linear-gradient(180deg, transparent, rgb(var(--accent-bright-rgb)));
+  background: linear-gradient(180deg, transparent, rgb(var(--accent-bright-rgb))) no-repeat;
+  background-size: 1px 2.5rem;
   opacity: 0;
   animation: timeline-signal 4.5s cubic-bezier(0.55, 0, 0.45, 1) 1s infinite;
 }
-/* `top` rather than a transform, so the run is a percentage of the trace's
-   own length however many entries hang on it. */
+/* The pseudo-element spans the whole trace and the signal is its background,
+   run from one end to the other with `background-position` — so the run is
+   still a percentage of the trace's own length however many entries hang on
+   it, without animating `top`, which re-ran layout every frame of the loop. */
 @keyframes timeline-signal {
-  0% { top: 0.4rem; opacity: 0; }
+  0% { background-position: 0 0; opacity: 0; }
   8% { opacity: 1; }
   45% { opacity: 1; }
-  55%, 100% { top: calc(100% - 3rem); opacity: 0; }
+  55%, 100% { background-position: 0 100%; opacity: 0; }
 }
 .timeline-node {
   position: relative;
@@ -693,6 +702,11 @@ label {
   /* The glyph still becomes an X — it just snaps instead of morphing. */
   .menu-glyph-bar {
     transition: none !important;
+  }
+  /* The menu still opens; the page behind stays where it is. */
+  .page-push[data-menu-open='true'],
+  .menu-drawer-item {
+    transform: none !important;
   }
   .animate-nudge,
   .timeline::after,
@@ -956,3 +970,93 @@ label {
     transform: none;
   }
 }
+
+/* ============================================================
+   Mobile menu
+   ------------------------------------------------------------
+   A drawer unrolls from under the nav while the page behind sinks
+   back. Opening runs the drawer curve; closing is quicker and eases
+   in, since a dismissed menu should get out of the way. Everything is
+   a transition on state that stays mounted, so a tap mid-animation
+   reverses from wherever it is.
+   ============================================================ */
+.menu-scrim {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms var(--ease-in);
+}
+.menu-scrim[data-open='true'] {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 460ms var(--ease-out);
+}
+
+/* `visibility` flips after the close finishes, taking the panel out of
+   the tab order; `pointer-events` goes the moment it starts closing. */
+.menu-drawer {
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  pointer-events: none;
+  transition: clip-path 240ms var(--ease-in), visibility 0s linear 240ms;
+}
+.menu-drawer[data-open='true'] {
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: clip-path 460ms var(--ease-drawer), visibility 0s;
+}
+
+/* The items ride down with the reveal rather than being uncovered in place. */
+.menu-drawer-item {
+  transform: translateY(-14px);
+  opacity: 0.4;
+  transition:
+    transform 240ms var(--ease-in),
+    opacity 240ms var(--ease-in),
+    background-color 200ms ease,
+    color 200ms ease;
+}
+.menu-drawer[data-open='true'] .menu-drawer-item {
+  transform: none;
+  opacity: 1;
+  transition:
+    transform 460ms var(--ease-drawer),
+    opacity 460ms var(--ease-out),
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+/* The page sinks 14px and settles to 97%, scaling about the top of the
+   screen — `--menu-push-y` is the scroll offset when the menu opened,
+   set by SiteNav. Below `lg` only, where the menu exists. */
+.page-push {
+  transform-origin: 50% calc(var(--menu-push-y, 0px) + var(--nav-h));
+  transition: transform 240ms var(--ease-in);
+}
+@media (max-width: 1023.98px) {
+  .page-push[data-menu-open='true'] {
+    transform: translateY(14px) scale(0.97);
+    transition: transform 460ms var(--ease-drawer);
+  }
+}
+
+/* Menu glyph. Each bar is full width on the centre line (9px in a 20px
+   box); the closed state moves and shortens it with transform alone,
+   keeping the ragged edge on the left by shifting a shortened bar right
+   by half what it lost. Same function list in both states, so the morph
+   interpolates cleanly. */
+.menu-glyph-bar {
+  position: absolute;
+  top: 9px;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  transition: transform 380ms var(--ease-out), opacity 160ms linear;
+}
+.menu-glyph-top { transform: translate(0, -6px) rotate(0) scaleX(1); }
+.menu-glyph-mid { transform: translate(4.5px, 0) rotate(0) scaleX(0.625); }
+.menu-glyph-bot { transform: translate(2px, 6px) rotate(0) scaleX(0.8333); }
+.menu-glyph[data-open='true'] .menu-glyph-top { transform: translate(0, 0) rotate(45deg) scaleX(1); }
+.menu-glyph[data-open='true'] .menu-glyph-mid { transform: translate(0, 0) rotate(0) scaleX(0.2); opacity: 0; }
+.menu-glyph[data-open='true'] .menu-glyph-bot { transform: translate(0, 0) rotate(-45deg) scaleX(1); }

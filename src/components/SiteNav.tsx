@@ -3,7 +3,7 @@ import type { RefObject } from 'react';
 import MenuIcon from './MenuIcon';
 import { ui } from '../config/ui';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
-import { lockBodyScroll } from '../utils/lockBodyScroll';
+import { isScrollLocked, lockBodyScroll } from '../utils/lockBodyScroll';
 import { sectionForAnchor } from '../utils/routes';
 import type { MobilePage, View } from '../types';
 
@@ -28,8 +28,6 @@ const SiteNav = ({
   setIsMenuOpen,
   scrollToSection,
 }: SiteNavProps) => {
-  // Keeps the panel mounted while its closing animation plays.
-  const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navItemsRef = useRef<HTMLDivElement | null>(null);
   const navButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -37,23 +35,27 @@ const SiteNav = ({
   const menuPanelRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState<{ left: number; width: number; visible: boolean }>({ left: 0, width: 0, visible: false });
 
-  // Mounting happens here rather than in an effect keyed on isMenuOpen: both
-  // flags land in the same commit, so the panel exists on the first render that
-  // plays the open animation. Closing leaves it mounted until animationend.
   const toggleMenu = () => {
-    if (isMenuOpen) {
-      setIsMenuOpen(false);
-      return;
+    if (!isMenuOpen) {
+      // The page behind sinks away from the nav as the menu opens (`.page-push`
+      // in index.css). It scales about the top of the screen, which on a
+      // scrolled page is this far down the content — read now, before the
+      // scroll lock drops scrollY to 0.
+      document.documentElement.style.setProperty('--menu-push-y', `${window.scrollY}px`);
     }
-    setShouldRenderMenu(true);
-    setIsMenuOpen(true);
+    setIsMenuOpen(!isMenuOpen);
   };
 
   // Nav surface condenses once content scrolls underneath it. Kept separate from
   // the section-spy handler above, which bails out on manual scroll and on the
   // project view — the nav should thicken in both cases.
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 12);
+    const onScroll = () => {
+      // The menu's scroll lock drops scrollY to 0; taken at face value the
+      // nav's ground faded out under the opening menu.
+      if (isScrollLocked()) return;
+      setIsScrolled(window.scrollY > 12);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -124,15 +126,14 @@ const SiteNav = ({
 
   // While the mobile menu is open, freeze the page behind it and move focus into
   // the panel — otherwise the page scrolls under the overlay on touch and
-  // keyboard focus stays stranded on the content below. Guarded on
-  // shouldRenderMenu too, so it can never run against a null panel ref.
+  // keyboard focus stays stranded on the content below.
   useEffect(() => {
-    if (!isMenuOpen || !shouldRenderMenu) return;
+    if (!isMenuOpen) return;
 
     const releaseScroll = lockBodyScroll();
     const opener = menuButtonRef.current;
-    // Captured now rather than read in cleanup: the panel is mounted for this
-    // effect's whole lifetime, and the ref may already be null by teardown.
+    // Captured now rather than read in cleanup, so teardown never depends on
+    // the ref still being set.
     const panel = menuPanelRef.current;
     panel?.querySelector<HTMLElement>('button, a')?.focus();
 
@@ -161,27 +162,15 @@ const SiteNav = ({
       // otherwise this would steal focus from wherever the user has moved on.
       if (panel?.contains(document.activeElement)) opener?.focus();
     };
-  }, [isMenuOpen, shouldRenderMenu]);
-
-  /**
-   * Belt-and-braces unmount for the menu panel.
-   *
-   * `shouldRenderMenu` is normally cleared by the panel's own `animationend`.
-   * That event is not guaranteed: a tab backgrounded mid-close stops advancing
-   * animation timelines, and a user stylesheet or extension setting
-   * `animation: none` removes it outright. Either way the panel — and its
-   * full-viewport scrim — would be stranded on screen, swallowing every tap on
-   * the page underneath. This clears it on a timer regardless.
-   */
-  useEffect(() => {
-    if (isMenuOpen || !shouldRenderMenu) return;
-    const timer = window.setTimeout(() => setShouldRenderMenu(false), 400);
-    return () => clearTimeout(timer);
-  }, [isMenuOpen, shouldRenderMenu]);
+  }, [isMenuOpen]);
 
   return (
     <>
-      <nav ref={navRef} data-scrolled={isScrolled} className="nav-bar fixed w-full z-50">
+      {/* `top-0` is load-bearing. Without it the bar sat at its static position,
+          which is the top of the body — and the scroll lock pins the body at
+          `top: -scrollY`, so on a scrolled page opening the menu carried the
+          whole nav, close button included, off the top of the screen. */}
+      <nav ref={navRef} data-scrolled={isScrolled} className="nav-bar fixed top-0 inset-x-0 z-50">
         <div className={ui.shell}>
           <div className="flex justify-between items-center h-[var(--nav-h)]">
             <button
@@ -256,74 +245,68 @@ const SiteNav = ({
         </div>
       </nav>
 
-      {/* Mobile Menu — dim scrim plus the sliding panel. The scrim gives the
-          menu an obvious tap-anywhere-to-dismiss target, which a bare dropdown
-          never had on touch. */}
-      {shouldRenderMenu && (
-        <>
-          <div
-            aria-hidden="true"
-            onClick={() => setIsMenuOpen(false)}
-            // `pointer-events-none` the moment the menu starts closing. Left
-            // interactive, an invisible full-viewport scrim sits over every
-            // card and link on the page for the length of the fade — and for
-            // good, if the animationend that unmounts it never arrives.
-            className={`lg:hidden fixed inset-0 top-[var(--nav-h)] z-40 bg-black/50 transition-opacity duration-300 ${
-              isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            }`}
-          />
-          <div
-            id="mobile-menu"
-            ref={menuPanelRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site menu"
-            onAnimationEnd={() => { if (!isMenuOpen) setShouldRenderMenu(false); }}
-            className={`lg:hidden panel-solid border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe ${
-              isMenuOpen ? 'animate-menu-open' : 'animate-menu-close pointer-events-none'
-            }`}
-          >
-            <div className="px-3 pt-3 pb-2 space-y-1">
-              {['Home', 'Work', 'About', 'Contact'].map((item) => {
-                const page = item.toLowerCase();
-                // A case study and Explorations sit under Work, so Work stays
-                // marked there.
-                const isCurrent = currentView === 'home'
-                  ? sectionForAnchor(mobilePage) === page
-                  : page === 'work';
-                return (
-                  <button
-                    key={item}
-                    onClick={() => scrollToSection(page)}
-                    aria-current={isCurrent ? 'page' : undefined}
-                    className={`flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl border-l-2 transition-colors ${
-                      isCurrent
-                        ? 'text-accent border-accent bg-accent/10'
-                        : 'text-ink border-transparent active:bg-white/10'
-                    }`}
-                  >
-                    {item}
-                    {isCurrent && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-                    )}
-                  </button>
-                );
-              })}
-              <a
-                href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex w-full items-center gap-2 min-h-12 px-4 mt-2 pt-4 border-t border-white/10 text-lg font-medium text-accent rounded-xl active:bg-white/10"
+      {/* Mobile Menu — dim scrim plus a drawer that unrolls from under the
+          nav while the page behind sinks back (motion in index.css, "Mobile
+          menu"). Both stay mounted and run on transitions rather than
+          keyframes: a tap mid-animation reverses from wherever they are,
+          where keyframes restarted from the first frame and flashed. The
+          scrim gives the menu an obvious tap-anywhere-to-dismiss target. */}
+      <div
+        aria-hidden="true"
+        onClick={() => setIsMenuOpen(false)}
+        data-open={isMenuOpen}
+        className="menu-scrim lg:hidden fixed inset-0 top-[var(--nav-h)] z-40 bg-black/60"
+      />
+      <div
+        id="mobile-menu"
+        ref={menuPanelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        data-open={isMenuOpen}
+        // Hidden with `visibility` once the close finishes, which also takes
+        // it out of the tab order and the accessibility tree.
+        className="menu-drawer lg:hidden panel-solid border-t border-white/10 fixed inset-x-0 top-[var(--nav-h)] z-50 pb-safe"
+      >
+        <div className="px-3 pt-3 pb-2 space-y-1">
+          {['Home', 'Work', 'About', 'Contact'].map((item) => {
+            const page = item.toLowerCase();
+            // A case study and Explorations sit under Work, so Work stays
+            // marked there.
+            const isCurrent = currentView === 'home'
+              ? sectionForAnchor(mobilePage) === page
+              : page === 'work';
+            return (
+              <button
+                key={item}
+                onClick={() => scrollToSection(page)}
+                aria-current={isCurrent ? 'page' : undefined}
+                className={`menu-drawer-item flex w-full items-center justify-between min-h-12 px-4 text-lg font-medium rounded-xl border-l-2 ${
+                  isCurrent
+                    ? 'text-accent border-accent bg-accent/10'
+                    : 'text-ink border-transparent active:bg-white/10'
+                }`}
               >
-                Résumé (PDF)
-                <span aria-hidden="true">↗</span>
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
-            </div>
-          </div>
-        </>
-      )}
+                {item}
+                {isCurrent && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+                )}
+              </button>
+            );
+          })}
+          <a
+            href={`${PUBLIC_URL}/Jash_Bhatt_Resume.pdf`}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+            className="menu-drawer-item flex w-full items-center gap-2 min-h-12 px-4 mt-2 pt-4 border-t border-white/10 text-lg font-medium text-accent rounded-xl active:bg-white/10"
+          >
+            Résumé (PDF)
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
     </>
   );
 };

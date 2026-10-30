@@ -147,6 +147,11 @@ const App = () => {
         scrollToSection={scrollToSection}
       />
 
+      {/* Everything in flow, in one box the open mobile menu can push back
+          (`.page-push` in index.css). Nothing fixed lives inside it — a
+          transform would re-anchor it to this box. `flex-1 flex-col` keeps
+          the footer's `mt-auto` working as it did on the root. */}
+      <div className="page-push flex flex-1 flex-col" data-menu-open={isMenuOpen}>
       {/* CONDITIONAL RENDERING: HOME OR PROJECT VIEW.
           `tabIndex={-1}` so the skip link above can move focus here — the old
           target was a plain <section>, which scrolls but cannot be focused. */}
@@ -233,6 +238,7 @@ const App = () => {
       </main>
 
       <SiteFooter />
+      </div>
     </div>
   );
 };
