@@ -552,7 +552,7 @@ const ProjectDetail = ({
   };
 
   return (
-    <div className={`relative z-10 text-ink min-h-screen transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+    <div data-leaving={isTransitioning} className="page-fade relative z-10 text-ink min-h-screen">
 
       {/* Project Hero */}
       <ProjectHero project={project} onBack={() => onBack()} />

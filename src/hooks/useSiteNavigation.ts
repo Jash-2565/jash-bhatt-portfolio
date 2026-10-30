@@ -39,6 +39,13 @@ const INITIAL_VIEW: View =
  *
  * `navRef` is the fixed nav bar: start-aligned scrolls clear its height.
  */
+/**
+ * How long a page takes to fade out before the next one is swapped in. Matches
+ * the leaving transition on `.page-fade` in index.css. Every swap used to wait
+ * 160–300ms on a 300ms fade, which left the screen black between pages.
+ */
+const PAGE_FADE_OUT_MS = 120;
+
 export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLElement | null>) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>(() =>
@@ -152,7 +159,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       setTimeout(() => {
         show();
         fadeInAfterPaint();
-      }, 180);
+      }, PAGE_FADE_OUT_MS);
     }
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'explorations' });
@@ -168,7 +175,6 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     // offset/alignment logic below applies.
     if (isMobile) {
       const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'home';
-      const leavingProject = currentView !== 'home';
       setIsMenuOpen(false);
       const show = () => {
         setCurrentView('home');
@@ -184,7 +190,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setTimeout(() => {
           show();
           fadeInAfterPaint();
-        }, leavingProject ? 300 : 160);
+        }, PAGE_FADE_OUT_MS);
       }
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
@@ -215,7 +221,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
           setIsTransitioning(false);
           setTimeout(() => { isManualScroll.current = false; }, 300);
         }, 50);
-      }, 300);
+      }, PAGE_FADE_OUT_MS);
     } else {
       const element = document.getElementById(anchorId);
       if (element) {
@@ -265,7 +271,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       setTimeout(() => {
         show();
         fadeInAfterPaint();
-      }, 180);
+      }, PAGE_FADE_OUT_MS);
     }
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'project', slug: project.slug });
@@ -308,7 +314,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setTimeout(() => {
           show();
           fadeInAfterPaint();
-        }, 300);
+        }, PAGE_FADE_OUT_MS);
       }
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
@@ -332,7 +338,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         }
         setIsTransitioning(false);
       }, 50);
-    }, 300);
+    }, PAGE_FADE_OUT_MS);
     if (options?.updateHistory !== false) {
       updateHistory(homeRoute(sectionId));
     }

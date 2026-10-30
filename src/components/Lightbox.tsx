@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import ResponsiveImage from './ResponsiveImage';
 import { ui } from '../config/ui';
@@ -35,6 +35,20 @@ const Lightbox = ({ image, onClose }: LightboxProps) => {
   const isWhiteBgLightboxImage = image.src.includes('Circuit-Design.webp');
   const lightboxAspect = mediaAspect(image.src);
 
+  // Plays the closing animation, then asks the parent to unmount. The scroll
+  // lock is released by that unmount, so the page can't move under the image
+  // while it fades.
+  const [closing, setClosing] = useState(false);
+  const requestClose = useCallback(() => setClosing(true), []);
+  useEffect(() => {
+    if (!closing) return;
+    // animationend is the normal route; this covers a backgrounded tab or a
+    // stylesheet that removes the animation, either of which would otherwise
+    // leave an invisible full-screen layer swallowing every tap.
+    const timer = window.setTimeout(onClose, 260);
+    return () => clearTimeout(timer);
+  }, [closing, onClose]);
+
   // Lightbox escape, focus, and scroll lock
   useEffect(() => {
     const releaseScroll = lockBodyScroll();
@@ -47,7 +61,7 @@ const Lightbox = ({ image, onClose }: LightboxProps) => {
         // without this, one press closed the image *and* left the case study.
         // Now Escape dismisses the topmost thing and a second press goes back.
         event.stopPropagation();
-        onClose();
+        requestClose();
         return;
       }
 
@@ -76,19 +90,23 @@ const Lightbox = ({ image, onClose }: LightboxProps) => {
       releaseScroll();
       document.removeEventListener('keydown', handleKeyDown, true);
     };
-  }, [image, onClose]);
+  }, [image, requestClose]);
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center scrim animate-fade-in"
-      onClick={onClose}
+      className="lightbox fixed inset-0 z-[60] flex items-center justify-center scrim"
+      data-closing={closing}
+      onClick={requestClose}
+      onAnimationEnd={(event) => {
+        if (closing && event.target === event.currentTarget) onClose();
+      }}
       role="dialog"
       aria-modal="true"
       aria-label={image.alt ? `Image preview: ${image.alt}` : 'Image preview'}
     >
       <button
         className={`chip absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-10 flex items-center justify-center text-white rounded-sm shadow-lg ${ui.tapTarget}`}
-        onClick={onClose}
+        onClick={requestClose}
         ref={lightboxCloseRef}
         aria-label="Close image preview"
       >
@@ -96,7 +114,7 @@ const Lightbox = ({ image, onClose }: LightboxProps) => {
       </button>
       <div
         className="h-full w-full overflow-auto overscroll-contain flex items-center justify-center p-4 [touch-action:pinch-zoom]"
-        onClick={onClose}
+        onClick={requestClose}
       >
         <figure className="m-0 flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
           {/* Every image and clip opens as large as the screen allows, at
@@ -107,7 +125,7 @@ const Lightbox = ({ image, onClose }: LightboxProps) => {
               width that fills the height left after the caption,
               whichever is smaller. */}
           <div
-            className={`relative overflow-hidden rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : 'bg-[var(--surface-1)]'}`}
+            className={`lightbox-frame relative overflow-hidden rounded-lg shadow-2xl ${isWhiteBgLightboxImage ? 'bg-white p-2' : 'bg-[var(--surface-1)]'}`}
             style={{
               aspectRatio: lightboxAspect,
               width: `min(calc(100vw - 2rem), calc((100dvh - 9rem) * ${lightboxAspect}))`,

@@ -13,9 +13,8 @@ interface ExplorationsViewProps {
 /** Explorations — a full page at every width, like a case study. */
 const ExplorationsView = ({ isTransitioning, scrollToSection, onImageClick }: ExplorationsViewProps) => (
   <div
-    className={`relative z-10 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${
-      isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-    }`}
+    data-leaving={isTransitioning}
+    className="page-fade relative z-10"
   >
     <section
       id="explorations"

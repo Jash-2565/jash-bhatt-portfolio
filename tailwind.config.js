@@ -55,10 +55,6 @@ export default {
         "3xl": "4px",
       },
       keyframes: {
-        fadeIn: {
-          "0%": { opacity: 0 },
-          "100%": { opacity: 1 },
-        },
         fadeInUp: {
           "0%": { opacity: 0, transform: "translateY(12px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
@@ -69,7 +65,6 @@ export default {
         },
       },
       animation: {
-        "fade-in": "fadeIn 500ms ease-out both",
         "fade-in-up": "fadeInUp 650ms ease-out both",
         nudge: "nudge 2.4s ease-in-out infinite",
       },

@@ -1082,3 +1082,44 @@ label {
 .card-expand :is(a, button) {
   pointer-events: none;
 }
+
+/* Page swap (useSiteNavigation's isTransitioning → data-leaving). A quick
+   crossfade: the page leaving fades out in 120ms, easing in, with no
+   movement; the one arriving fades up over 280ms, rising 8px. It used to be a
+   300ms fade with a 16px drop each way, and the swap waited on it, so the
+   screen sat black between the two pages for ~220ms — ~450ms going to
+   Explorations. The drop to 8px happens after the fade, unseen, so the
+   arriving page has somewhere to rise from. */
+.page-fade {
+  transition:
+    opacity 280ms var(--ease-out),
+    transform 280ms var(--ease-out);
+}
+.page-fade[data-leaving='true'] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 120ms var(--ease-in),
+    transform 0s linear 120ms;
+}
+
+/* Image viewer (Lightbox.tsx). Opens with the scrim fading in and the image
+   settling up from 96%; closes in 160ms, easing in, before it unmounts. It
+   used to take a 500ms fade to open and vanished on close. */
+.lightbox {
+  animation: lightbox-fade-in 200ms var(--ease-out) both;
+}
+.lightbox-frame {
+  animation: lightbox-frame-in 260ms var(--ease-out) both;
+}
+.lightbox[data-closing='true'] {
+  pointer-events: none;
+  animation: lightbox-fade-out 160ms var(--ease-in) both;
+}
+.lightbox[data-closing='true'] .lightbox-frame {
+  animation: lightbox-frame-out 160ms var(--ease-in) both;
+}
+@keyframes lightbox-fade-in { from { opacity: 0; } }
+@keyframes lightbox-fade-out { to { opacity: 0; } }
+@keyframes lightbox-frame-in { from { transform: scale(0.96); } }
+@keyframes lightbox-frame-out { to { transform: scale(0.97); } }
