@@ -5,6 +5,7 @@ import { orderedProjects } from '../config/projects';
 import { parseLocation, routeToPath, hasLegacyHash, isMobilePage, sectionForAnchor } from '../utils/routes';
 import type { Route } from '../utils/routes';
 import type { Project, MobilePage, View } from '../types';
+import type { CardExpandRequest } from '../components/CardExpand';
 import { useScrollSpy } from './useScrollSpy';
 
 // A case study opened from a card scrolls back to that card. Centring it is
@@ -73,6 +74,24 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     requestAnimationFrame(() => requestAnimationFrame(() => setIsTransitioning(false)));
   };
 
+  /**
+   * The card-expand transition between a card and its case study (phones
+   * only; see components/CardExpand). Null when none is running.
+   */
+  const [cardExpand, setCardExpand] = useState<CardExpandRequest | null>(null);
+  const cardExpandId = useRef(0);
+  const endCardExpand = () => setCardExpand(null);
+  const canExpandCards = () =>
+    isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /**
+   * True while handling a Back or Forward the browser is already animating
+   * itself — Safari's edge-swipe on iPhone. Running our own transition on top
+   * of that played the page change twice and flashed black at the end, so
+   * those swap instantly.
+   */
+  const browserAnimated = useRef(false);
+
   // --- Navigation & Transition Handlers ---
   const scrollToElementWithOffset = (
     element: HTMLElement,
@@ -120,14 +139,21 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
    */
   const openExplorations = (options?: { updateHistory?: boolean }) => {
     setIsMenuOpen(false);
-    setIsTransitioning(true);
-    setTimeout(() => {
+    const show = () => {
       setSelectedProject(null);
       setCurrentView('explorations');
       setActiveSection('work');
       window.scrollTo(0, 0);
-      fadeInAfterPaint();
-    }, 180);
+    };
+    if (browserAnimated.current) {
+      show();
+    } else {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        show();
+        fadeInAfterPaint();
+      }, 180);
+    }
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'explorations' });
     }
@@ -144,15 +170,22 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'home';
       const leavingProject = currentView !== 'home';
       setIsMenuOpen(false);
-      setIsTransitioning(true);
-      setTimeout(() => {
+      const show = () => {
         setCurrentView('home');
         setSelectedProject(null);
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
-        fadeInAfterPaint();
-      }, leavingProject ? 300 : 160);
+      };
+      if (browserAnimated.current) {
+        show();
+      } else {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          show();
+          fadeInAfterPaint();
+        }, leavingProject ? 300 : 160);
+      }
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
       }
@@ -208,22 +241,40 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
 
   const openProject = (
     project: Project,
-    options?: { updateHistory?: boolean }
+    options?: { updateHistory?: boolean; source?: HTMLElement | null }
   ) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
+    const show = () => {
       setSelectedProject(project);
       setCurrentView('project');
       window.scrollTo(0, 0);
-      fadeInAfterPaint();
-    }, 180);
+    };
+    if (browserAnimated.current) {
+      show();
+    } else if (options?.source && canExpandCards()) {
+      // Grow the tapped card into the case study.
+      setCardExpand({
+        id: ++cardExpandId.current,
+        project,
+        dir: 'open',
+        card: options.source,
+        swap: show,
+        done: endCardExpand,
+      });
+    } else {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        show();
+        fadeInAfterPaint();
+      }, 180);
+    }
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'project', slug: project.slug });
     }
   };
 
-  const handleProjectClick = (project: Project) => {
-    openProject(project);
+  /** `source` is the card that was tapped, which the case study grows out of. */
+  const handleProjectClick = (project: Project, source?: HTMLElement | null) => {
+    openProject(project, { source });
   };
 
   const handleBackToHome = (options?: { updateHistory?: boolean; sectionId?: string }) => {
@@ -233,15 +284,32 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     // to the card the case study was opened from.
     if (isMobile) {
       const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'work';
-      setIsTransitioning(true);
-      setTimeout(() => {
+      const show = () => {
         setCurrentView('home');
         setSelectedProject(null);
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
-        fadeInAfterPaint();
-      }, 300);
+      };
+      if (browserAnimated.current) {
+        show();
+      } else if (page === 'work' && currentView === 'project' && selectedProject && canExpandCards()) {
+        // Shrink the case study back into its card on Work.
+        setCardExpand({
+          id: ++cardExpandId.current,
+          project: selectedProject,
+          dir: 'close',
+          card: null,
+          swap: show,
+          done: endCardExpand,
+        });
+      } else {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          show();
+          fadeInAfterPaint();
+        }, 300);
+      }
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
       }
@@ -325,7 +393,10 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
 
   // Handle browser back/forward
   useEffect(() => {
-    const handleRouteChange = () => {
+    const handleRouteChange = (event: Event) => {
+      browserAnimated.current = Boolean((event as PopStateEvent & { hasUAVisualTransition?: boolean }).hasUAVisualTransition);
+      // Whatever runs below reads it synchronously; nothing after this event should.
+      queueMicrotask(() => { browserAnimated.current = false; });
       // These branches all navigate with `updateHistory: false`, so they skip
       // the funnel that normally reports the view.
       const nextRoute = parseLocation();
@@ -433,6 +504,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     activeSection,
     activeNavItem,
     isTransitioning,
+    cardExpand,
     analyticsRoute,
     isMenuOpen,
     setIsMenuOpen,

@@ -7,7 +7,7 @@ import { onInPageLink } from '../../utils/inPageLink';
 import type { Project } from '../../types';
 
 interface ArchiveSectionProps {
-  handleProjectClick: (project: Project) => void;
+  handleProjectClick: (project: Project, source?: HTMLElement | null) => void;
 }
 
 const ArchiveSection = ({ handleProjectClick }: ArchiveSectionProps) => {
@@ -37,7 +37,7 @@ const ArchiveSection = ({ handleProjectClick }: ArchiveSectionProps) => {
               <a
                 href={`#${project.slug}`}
                 id={`project-${project.id}`}
-                onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
+                onClick={(event) => onInPageLink(event, () => handleProjectClick(project, event.currentTarget))}
                 aria-label={`Open case study for ${project.title}`}
                 className={`press group h-full w-full text-left flex items-center gap-3 sm:gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
               >

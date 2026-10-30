@@ -5,8 +5,9 @@ import ResponsiveImage from './ResponsiveImage';
 import DemoVideo from './DemoVideo';
 import LiveEmbed from './LiveEmbed';
 import Reveal from './Reveal';
+import ProjectHero from './ProjectHero';
 import type { LightboxImage, Project, Section } from '../types';
-import { PROJECT_HERO_THEMES, DEFAULT_PROJECT_HERO_THEME, CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
+import { CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
 import { ui } from '../config/ui';
 import { formatNameList } from '../utils/formatNameList';
 import { usePointerFine } from '../hooks/usePointerFine';
@@ -206,13 +207,11 @@ const ProjectDetail = ({
 
   if (!project) return null;
 
-  const projectHeroTheme = PROJECT_HERO_THEMES[project.slug] ?? DEFAULT_PROJECT_HERO_THEME;
   const isPythonCodes = project.slug === 'python-codes';
   const isCountdownMotorControl = project.slug === 'tinkering';
   const nextThumbnailBackdrop = nextProject
     ? CONTAINED_THUMBNAIL_BACKDROPS[nextProject.slug]
     : undefined;
-  const { heroTextClass, heroMutedTextClass, heroBodyTextClass } = projectHeroTheme;
 
   const renderDemoBlock = (section: Section) => {
     if (!section.demoId) return null;
@@ -556,27 +555,7 @@ const ProjectDetail = ({
     <div className={`relative z-10 text-ink min-h-screen transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
       {/* Project Hero */}
-      <div className="w-full pt-[calc(var(--nav-h)+2rem)] pb-12 md:pt-32 md:pb-24 border-b border-white/10">
-        <div className={ui.shell}>
-          <button
-            type="button"
-            onClick={() => onBack()}
-            className="group -ml-3 flex items-center gap-2 min-h-11 px-3 rounded-sm mb-6 md:mb-12 transition-colors text-sm font-medium text-ink-body hover:text-accent active:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-            Back to projects
-          </button>
-
-          <div className="flex flex-wrap items-center gap-3 mb-5 md:mb-8">
-            <span className={`text-sm md:text-base font-medium ${heroMutedTextClass}`}>{project.category}</span>
-          </div>
-
-          <h1 className={`font-display text-[clamp(2.25rem,9vw,3rem)] md:text-[5.25rem] mb-5 md:mb-8 leading-[1.02] md:leading-[0.96] [text-wrap:balance] ${heroTextClass}`}>{project.title}</h1>
-          <p className={`text-base md:text-xl leading-relaxed max-w-2xl font-light ${heroBodyTextClass}`}>
-            {project.description}
-          </p>
-        </div>
-      </div>
+      <ProjectHero project={project} onBack={() => onBack()} />
 
       {/* Main Content Area */}
       {/* lg:pb-28 leaves room above the footer for Lewis, who walks along

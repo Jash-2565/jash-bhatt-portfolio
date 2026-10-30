@@ -1060,3 +1060,25 @@ label {
 .menu-glyph[data-open='true'] .menu-glyph-top { transform: translate(0, 0) rotate(45deg) scaleX(1); }
 .menu-glyph[data-open='true'] .menu-glyph-mid { transform: translate(0, 0) rotate(0) scaleX(0.2); opacity: 0; }
 .menu-glyph[data-open='true'] .menu-glyph-bot { transform: translate(0, 0) rotate(-45deg) scaleX(1); }
+
+
+/* Card-expand page transition (CardExpand.tsx). Starts invisible: the
+   component shows it on the frame its animations begin, so the setup —
+   cloning the card, decoding its image — never flashes. `touch-action: none`
+   stops a drag mid-transition from scrolling the page underneath. */
+.card-expand {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0;
+  touch-action: none;
+}
+.card-expand-surface {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ground);
+}
+.card-expand :is(a, button) {
+  pointer-events: none;
+}

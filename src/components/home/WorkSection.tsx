@@ -24,7 +24,7 @@ import type { Project } from '../../types';
   };
 
 interface WorkSectionProps {
-  handleProjectClick: (project: Project) => void;
+  handleProjectClick: (project: Project, source?: HTMLElement | null) => void;
 }
 
 const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
@@ -57,7 +57,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
             id={`project-${project.id}`}
             className="work-card group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--ground)] rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
             aria-label={`Open case study for ${project.title}`}
-            onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
+            onClick={(event) => onInPageLink(event, () => handleProjectClick(project, event.currentTarget))}
           >
             <div className="grid md:grid-cols-12 gap-0 md:gap-10 items-center">
 

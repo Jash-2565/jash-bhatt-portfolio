@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
-const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
+// One loader for the lazy component and the idle-time prefetch below, so the
+// prefetch warms exactly the chunk the component will ask for.
+const loadProjectDetail = () => import('./components/ProjectDetail');
+const ProjectDetail = lazy(loadProjectDetail);
 // The desktop pet is ~0.5MB of sprite sheet for a flourish. Splitting it out
 // keeps that off the critical path; it mounts once the page is idle.
 const LewisPet = lazy(() => import('./components/LewisPet'));
@@ -9,6 +12,7 @@ import BackToTop from './components/BackToTop';
 import CursorGlow from './components/CursorGlow';
 import CircuitGround from './components/CircuitGround';
 import SiteNav from './components/SiteNav';
+import CardExpand from './components/CardExpand';
 import SiteFooter from './components/SiteFooter';
 import Lightbox from './components/Lightbox';
 import ExplorationsView from './components/ExplorationsView';
@@ -47,6 +51,7 @@ const App = () => {
     handleProjectClick,
     handleBackToHome,
     handleNextProject,
+    cardExpand,
   } = useSiteNavigation(isMobile, navRef);
   useDocumentMeta(currentView, selectedProject, mobilePage);
 
@@ -73,6 +78,25 @@ const App = () => {
     const handle = w.requestIdleCallback(() => setShowPet(true), { timeout: 3000 });
     return () => w.cancelIdleCallback?.(handle);
   }, [isMobile]);
+
+  /**
+   * Fetch the case-study code once the page is idle. Left to the first tap,
+   * opening a case study sat on an empty screen while ~64KB downloaded, then
+   * the page appeared with no transition at all.
+   */
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const prefetch = () => { loadProjectDetail().catch(() => {}); };
+    if (!w.requestIdleCallback) {
+      const t = window.setTimeout(prefetch, 2000);
+      return () => clearTimeout(t);
+    }
+    const handle = w.requestIdleCallback(prefetch, { timeout: 4000 });
+    return () => w.cancelIdleCallback?.(handle);
+  }, []);
 
   return (
     /* Flex column with `mt-auto` on the footer: on a page short enough to fit
@@ -146,6 +170,10 @@ const App = () => {
         setIsMenuOpen={setIsMenuOpen}
         scrollToSection={scrollToSection}
       />
+
+      {/* Phones: grows a tapped card into its case study and back. Above the
+          page, below the nav (z-40 against the nav's z-50). */}
+      {cardExpand && <CardExpand key={cardExpand.id} request={cardExpand} />}
 
       {/* Everything in flow, in one box the open mobile menu can push back
           (`.page-push` in index.css). Nothing fixed lives inside it — a
