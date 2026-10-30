@@ -76,22 +76,69 @@ const cloneCard = (card: HTMLElement, rect: DOMRect) => {
 };
 
 /**
- * A free-standing copy of the card's title. Its type is copied from the
- * computed style rather than the classes: the Archive titles size themselves
- * from their column with container units, which a detached copy has no
- * column to read.
+ * Where each word of a title sits on screen, and which line it is on,
+ * measured without touching its DOM.
  */
-const cloneTitle = (h3: HTMLElement) => {
-  const rect = h3.getBoundingClientRect();
-  const cs = getComputedStyle(h3);
-  const title = document.createElement('div');
-  title.textContent = h3.textContent;
-  Object.assign(title.style, {
-    position: 'fixed', left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`,
-    margin: '0', font: cs.font, letterSpacing: cs.letterSpacing, lineHeight: cs.lineHeight,
-    color: cs.color, textWrap: 'balance', transformOrigin: '0 0',
+const wordBoxes = (el: HTMLElement) => {
+  const boxes: { word: string; rect: DOMRect; line: number }[] = [];
+  const range = document.createRange();
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    for (const match of (node.textContent ?? '').matchAll(/\S+/g)) {
+      range.setStart(node, match.index);
+      range.setEnd(node, match.index + match[0].length);
+      const rect = range.getBoundingClientRect();
+      const previous = boxes[boxes.length - 1];
+      const line = !previous ? 0 : previous.line + (rect.top - previous.rect.top > rect.height / 2 ? 1 : 0);
+      boxes.push({ word: match[0], rect, line });
+    }
+  }
+  return boxes;
+};
+
+/**
+ * The title as one free-standing span per word, set in the heading's type and
+ * sitting on that word in the heading, with the transform that lays it over
+ * the same word in the card's title.
+ *
+ * Per word because the two break their lines in different places — the
+ * heading is balanced, the card title isn't — so "The Soundtrack of / Seven
+ * Years" on the card is "The Soundtrack / of Seven Years" in the heading.
+ * Moving or crossfading the title as one block made "of" jump between lines;
+ * this way each word travels to wherever it lands.
+ *
+ * Card titles are balanced too, which makes the two break alike for every
+ * multi-line card title. What's left are the one-line Archive titles that
+ * wrap as a heading: a word changing line dips while it crosses the others,
+ * so the overlap reads as movement rather than a collision.
+ */
+const titleWords = (cardTitle: HTMLElement, heading: HTMLElement) => {
+  const from = wordBoxes(cardTitle);
+  const to = wordBoxes(heading);
+  if (from.length === 0 || from.length !== to.length) return [];
+  const card = getComputedStyle(cardTitle);
+  const head = getComputedStyle(heading);
+  return to.map(({ word, rect: b, line }, i) => {
+    const a = from[i].rect;
+    const crosses = line !== from[i].line;
+    const span = document.createElement('span');
+    span.textContent = word;
+    // A line box exactly the height of the glyphs, so the span's top is the
+    // measured top of the word.
+    Object.assign(span.style, {
+      position: 'fixed', left: `${b.left}px`, top: `${b.top}px`, margin: '0', whiteSpace: 'nowrap',
+      font: head.font, letterSpacing: head.letterSpacing, lineHeight: `${b.height}px`,
+      color: head.color, transformOrigin: '0 0',
+    });
+    const atCard: Keyframe = { transform: `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.height / b.height})`, color: card.color, opacity: 1 };
+    const atHeading: Keyframe = { transform: 'none', color: head.color, opacity: 1 };
+    const midway: Keyframe[] = crosses ? [{ opacity: 0.3, offset: 0.5 }] : [];
+    return {
+      span,
+      toHeading: [atCard, ...midway, atHeading],
+      toCard: [atHeading, ...midway, atCard],
+    };
   });
-  return title;
 };
 
 /** Cards and headings on screen around the card, with how far each moves away. */
@@ -139,7 +186,6 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
     const surface = overlay.firstElementChild as HTMLElement;
     const hero = surface.querySelector<HTMLElement>('[data-project-hero]')!;
     const h1 = hero.querySelector('h1')!;
-    h1.style.transformOrigin = '0 0';
     const heroParts = [...(hero.firstElementChild?.children ?? [])].filter((n) => n !== h1);
     const heroRule = getComputedStyle(hero).borderBottomColor;
     const { project } = request;
@@ -160,17 +206,6 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
       return { c, clip, full, bg: isClear(cs.backgroundColor) ? GROUND : cs.backgroundColor };
     };
 
-    /**
-     * The transform that lays `moving` over `target`'s box: translate plus a
-     * scale of the type size. Both titles scale about their top-left corner.
-     */
-    const between = (target: Element, moving: Element) => {
-      const a = target.getBoundingClientRect();
-      const b = moving.getBoundingClientRect();
-      const scale = parseFloat(getComputedStyle(target).fontSize) / parseFloat(getComputedStyle(moving).fontSize);
-      return `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${scale})`;
-    };
-
     const fadeAway = async () => {
       await play(overlay, [{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: EASE_OUT });
     };
@@ -186,9 +221,10 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
       }
       const { clip, full, bg } = geometry(card);
       const copy = add(cloneCard(card, rect));
-      const title = add(cloneTitle(h3));
-      const toHeading = between(h1, h3);
-      const fromCard = between(h3, h1);
+      const words = titleWords(h3, h1);
+      words.forEach(({ span }) => add(span));
+      // The words stand in for the heading until the overlay hands over.
+      if (words.length) h1.style.visibility = 'hidden';
       moved = neighboursOf(card);
       await decoded(copy);
       if (cancelled) return;
@@ -202,10 +238,9 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
         // end of the move shows a change.
         play(surface, [{ clipPath: clip, backgroundColor: bg }, { backgroundColor: LIFTED, offset: 0.35 }, { clipPath: full, backgroundColor: GROUND }], { duration: OPEN_MS, easing: EASE_DRAWER }),
         play(copy, [{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: EASE_OUT }),
-        // The two titles cross over in the first half of the move, so a
-        // different line break between them never shows as a jump.
-        play(title, [{ transform: 'none', opacity: 1 }, { opacity: 1, offset: 0.15 }, { opacity: 0, offset: 0.5 }, { transform: toHeading, opacity: 0 }], { duration: OPEN_MS, easing: EASE_DRAWER }),
-        play(h1, [{ transform: fromCard, opacity: 0 }, { opacity: 0, offset: 0.15 }, { opacity: 1, offset: 0.5 }, { transform: 'none', opacity: 1 }], { duration: OPEN_MS, easing: EASE_DRAWER }),
+        ...words.map(({ span, toHeading }) =>
+          play(span, toHeading, { duration: OPEN_MS, easing: EASE_DRAWER })),
+        !words.length && play(h1, [{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: EASE_OUT, delay: 200 }),
         play(hero, [{ borderBottomColor: 'transparent' }, { borderBottomColor: heroRule }], { duration: 300, easing: EASE_OUT, delay: 200 }),
         ...heroParts.map((part, i) =>
           play(part, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: EASE_OUT, delay: 200 + i * 40 })),
@@ -248,11 +283,11 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
       const rect = card.getBoundingClientRect();
       const { clip, full, bg } = geometry(card);
       const copy = add(cloneCard(card, rect));
-      const title = add(cloneTitle(h3));
       copy.style.opacity = '0';
-      title.style.opacity = '0';
-      const toCard = between(h3, h1);
-      const fromHeading = between(h1, h3);
+      const words = titleWords(h3, h1);
+      words.forEach(({ span }) => add(span));
+      // Swapped in where the heading already is, so nothing changes yet.
+      if (words.length) h1.style.visibility = 'hidden';
       moved = neighboursOf(card);
       card.style.visibility = 'hidden';
       await frames(1);
@@ -262,8 +297,9 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
         ...heroParts.map((part) => play(part, [{ opacity: 1 }, { opacity: 0 }], { duration: 120, easing: EASE_IN })),
         play(hero, [{ borderBottomColor: heroRule }, { borderBottomColor: 'transparent' }], { duration: 120, easing: EASE_IN }),
         play(surface, [{ clipPath: full, backgroundColor: GROUND }, { backgroundColor: LIFTED, offset: 0.65 }, { clipPath: clip, backgroundColor: bg }], { duration: CLOSE_MS, easing: EASE_DRAWER, delay: 60 }),
-        play(h1, [{ transform: 'none', opacity: 1 }, { opacity: 1, offset: 0.5 }, { opacity: 0, offset: 0.85 }, { transform: toCard, opacity: 0 }], { duration: CLOSE_MS, easing: EASE_DRAWER, delay: 60 }),
-        play(title, [{ transform: fromHeading, opacity: 0 }, { opacity: 0, offset: 0.5 }, { opacity: 1, offset: 0.85 }, { transform: 'none', opacity: 1 }], { duration: CLOSE_MS, easing: EASE_DRAWER, delay: 60 }),
+        ...words.map(({ span, toCard }) =>
+          play(span, toCard, { duration: CLOSE_MS, easing: EASE_DRAWER, delay: 60 })),
+        !words.length && play(h1, [{ opacity: 1 }, { opacity: 0 }], { duration: 120, easing: EASE_IN }),
         // The copy — thumbnail and all — fades in where the card already is
         // over most of the move, so the page closes around it rather than
         // uncovering it at the end. It is never scaled.

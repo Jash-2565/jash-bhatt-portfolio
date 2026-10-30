@@ -92,7 +92,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[0.8125rem] text-ink-muted">{project.category}</p>
-                  <h3 className="mt-0.5 font-display text-lg text-ink group-active:text-accent transition-colors">{project.title}</h3>
+                  <h3 className="mt-0.5 font-display text-lg [text-wrap:balance] text-ink group-active:text-accent transition-colors">{project.title}</h3>
                 </div>
                 <ArrowRight size={18} className="shrink-0 text-ink-faint" />
               </a>

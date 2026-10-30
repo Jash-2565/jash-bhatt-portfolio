@@ -113,7 +113,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
                   )}
                 </div>
 
-                <h3 className="font-display text-[2rem] md:text-5xl leading-[1] text-ink mb-3 md:mb-5 transition-colors duration-200 group-hover:text-accent">
+                <h3 className="font-display text-[2rem] md:text-5xl leading-[1] [text-wrap:balance] text-ink mb-3 md:mb-5 transition-colors duration-200 group-hover:text-accent">
                   {project.title}
                 </h3>
                 <p className="text-ink-body text-[0.95rem] md:text-lg leading-relaxed mb-5 md:mb-7 line-clamp-3 md:line-clamp-none">
