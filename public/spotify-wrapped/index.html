@@ -64,6 +64,8 @@ body{margin:0;background:var(--bg);color:var(--text);
    (.sub, .exp, .ln are capped in ch), so widening the shell stretches the charts and
    the artwork — the things that benefit — and never the paragraphs. */
 .wrap{max-width:min(1720px,95vw);margin:0 auto;padding:0 clamp(20px,2.6vw,44px)}
+/* phones: the 95vw cap plus 20px padding left a ~30px gutter; use the whole width */
+@media(max-width:640px){.wrap{max-width:none;padding:0 16px}}
 .bleed{width:100vw;margin-left:calc(50% - 50vw)}
 h2{font-size:clamp(28px,4.6vw,46px);line-height:1.04;margin:0 0 14px;letter-spacing:-.03em;font-weight:800}
 h3.min{font:600 11.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;
@@ -317,6 +319,10 @@ h1 em{font-style:normal;color:var(--accent)}
 @keyframes hotpulse{50%{outline-offset:5px;outline-color:transparent}}
 .clock .rl{font:700 11px/1 ui-monospace,Menlo,monospace;color:var(--dim);display:flex;align-items:center}
 .clock .cl{font:11px/1 ui-monospace,Menlo,monospace;color:var(--dim);text-align:center;padding-bottom:2px}
+/* phones: all 24 hours fit the screen instead of scrolling sideways */
+@media(max-width:640px){.clock{min-width:0;grid-template-columns:28px repeat(24,minmax(0,1fr));gap:2px}
+  .clock .cell{border-radius:2px}
+  .clock .rl,.clock .cl{font-size:9.5px}}
 .scale{display:flex;align-items:center;gap:7px;margin-top:18px;font-size:12px;color:var(--dim)}
 .scale i{width:13px;height:13px;border-radius:3px;display:block}
 
@@ -388,9 +394,9 @@ h1 em{font-style:normal;color:var(--accent)}
 #raceScrub::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--accent);
   border:3px solid var(--bg)}
 .ticks{position:absolute;left:8px;right:8px;top:12px;height:12px;pointer-events:none}
-.ticks span{position:absolute;transform:translateX(-50%);font:600 9.5px/1 ui-monospace,Menlo,monospace;
+.ticks span{position:absolute;transform:translateX(calc(-50% + var(--dx,0px)));font:600 9.5px/1 ui-monospace,Menlo,monospace;
   color:var(--dim);letter-spacing:.04em;white-space:nowrap}
-.ticks span::before{content:"";position:absolute;left:50%;top:-6px;width:1px;height:4px;
+.ticks span::before{content:"";position:absolute;left:calc(50% - var(--dx,0px));top:-6px;width:1px;height:4px;
   background:var(--line)}
 /* the stage */
 .stage{background:linear-gradient(180deg,var(--surface),var(--bg));border:1px solid var(--line);
@@ -456,6 +462,15 @@ table.data th,table.data td{text-align:left;padding:7px 12px 7px 0;border-bottom
   white-space:nowrap}
 table.data th{color:var(--dim);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em}
 table.data td.n{text-align:right;font-variant-numeric:tabular-nums}
+/* phones: keep song, artist, plays and hours; the two dates are what gives way */
+@media(max-width:640px){table.data{min-width:0;font-size:12.5px}
+  table.data th,table.data td{padding-right:8px}
+  table.data th:nth-child(n+6),table.data td:nth-child(n+6){display:none}
+  table.data td:nth-child(2),table.data td:nth-child(3){white-space:normal}}
+/* "Hover" means nothing on a touchscreen — there, every tooltip opens on a tap */
+.hv::before{content:"Hover"}
+@media(hover:none){.hv::before{content:"Tap"}}
+@media(pointer:coarse){.tabs button{min-height:40px}}
 details{margin-top:26px}
 summary{cursor:pointer;color:var(--dim);font-size:12.5px;list-style:none}
 summary::-webkit-details-marker{display:none}
@@ -529,7 +544,7 @@ footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);fon
   </div>
   <div class="bars" id="topartists"></div>
   <p class="tiny" style="margin-top:20px">Spotify's export credits only the album artist, so
-     <b id="featpct"></b> of your streams hide a guest. Hover any artist for their year by year.</p>
+     <b id="featpct"></b> of your streams hide a guest. <span class="hv"></span> any artist for their year by year.</p>
 </section>
 
 <!-- ══ III · the anthem ═════════════════════════════════════════════════ -->
@@ -552,7 +567,7 @@ footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);fon
   <p class="sub" id="albSub"></p>
   <div class="discs" id="discs"></div>
   <p class="tiny" style="margin-top:30px">One groove per track you have played off the record —
-     brighter where you played it more. Hover a groove for the song.</p>
+     brighter where you played it more. <span class="hv"></span> a groove for the song.</p>
 </section>
 
 <section class="quiet rule">
@@ -828,6 +843,8 @@ const fmtDL = s => new Date(s+'T00:00:00').toLocaleDateString('en-GB',{weekday:'
 const fmtM = s => {const d=new Date(s+'-01T00:00:00');
   return d.toLocaleDateString('en-GB',{month:'long',year:'numeric'})};
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// phones get charts drawn at their own width rather than a desktop chart to scroll sideways
+const PHONE = matchMedia('(max-width: 640px)').matches;
 const M=D.meta, F=D.framing, HL=D.headline;
 
 /* ── reveal + count-up ────────────────────────────────────────────────────
@@ -861,13 +878,19 @@ function autoWatch(){
 
 /* ── tooltip ──────────────────────────────────────────────────────────────── */
 const tip=$('#tip');
-function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;moveTip(e)}
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;shownAt=performance.now();moveTip(e)}
 function moveTip(e){const r=tip.getBoundingClientRect();
   let x=e.clientX+15,y=e.clientY+15;
   if(x+r.width>innerWidth-8)x=e.clientX-r.width-15;
   if(y+r.height>innerHeight-8)y=e.clientY-r.height-15;
   tip.style.left=x+'px';tip.style.top=Math.max(8,y)+'px'}
-function hideTip(){tip.style.opacity=0}
+// On touch, pointerleave fires the moment the finger lifts, which closed every tip
+// before it could be read. There a tip stays until the next tap elsewhere or a scroll.
+let touching=false, shownAt=0;
+function hideTip(){if(!touching)tip.style.opacity=0}
+addEventListener('pointerdown',e=>{touching=e.pointerType==='touch';
+  if(touching&&performance.now()-shownAt>80)tip.style.opacity=0},true);
+addEventListener('scroll',()=>{if(touching)tip.style.opacity=0},{passive:true});
 function bindTip(node,fn){
   node.addEventListener('pointerenter',e=>showTip(e,fn()));
   node.addEventListener('pointermove',moveTip);
@@ -1017,12 +1040,13 @@ $('#q2').innerHTML=`Seven years, ${nf(D.activeDays)} days with music. <em>Here i
   const list=D.topTracks.slice(0,10)
     .map(t=>({...t, d:X.trackDetail[t.name+'␟'+t.artist]})).filter(t=>t.d);
   if(!list.length)return;
-  const W=940, LAB=232, R=54, T=34, ROW=38, B=26;
+  // phones: the name sits above each lifeline instead of in a column beside it
+  const W=PHONE?340:940, LAB=PHONE?0:232, R=PHONE?40:54, T=34, ROW=PHONE?62:38, B=PHONE?42:26;
   const iw=W-LAB-R, H=T+ROW*list.length+B;
   const t0=new Date(M.first+'T00:00:00').getTime(), t1=new Date(M.last+'T00:00:00').getTime();
   const x=ms=>LAB+iw*(ms-t0)/(t1-t0);
   const dx=s=>x(new Date(s+'T00:00:00').getTime());
-  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:`min-width:${W*.72}px`});
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:PHONE?'':`min-width:${W*.72}px`});
   const maxYr=Math.max(...list.map(t=>Math.max(...t.d.yr)));
   D.yearList.forEach(Y=>{
     const gx=dx(Y+'-01-01'); if(gx<LAB-2)return;
@@ -1030,13 +1054,14 @@ $('#q2').innerHTML=`Seven years, ${nf(D.activeDays)} days with music. <em>Here i
     svg.appendChild(el('text',{x:gx,y:T-20,'text-anchor':'middle',class:'axtxt'},Y));
   });
   list.forEach((t,k)=>{
-    const y=T+k*ROW+ROW/2-4;
-    const art=cover(t.name,t.artist), tx=art?36:0;
-    if(art)svg.appendChild(el('image',{href:art,x:0,y:y-16,width:28,height:28,
-      preserveAspectRatio:'xMidYMid slice',rx:3}));
-    svg.appendChild(el('text',{x:tx,y:y-3,'data-fit':LAB-tx-14,
+    const y=PHONE?T+k*ROW+46:T+k*ROW+ROW/2-4, ny=PHONE?T+k*ROW+10:y-3;
+    const art=cover(t.name,t.artist), tx=art?(PHONE?31:36):0, fit=PHONE?W-tx-4:LAB-tx-14;
+    const lab=PHONE?{class:'serieslab'}:{};
+    if(art)svg.appendChild(el('image',{href:art,x:0,y:PHONE?ny-12:y-16,width:PHONE?24:28,
+      height:PHONE?24:28,preserveAspectRatio:'xMidYMid slice',rx:3}));
+    svg.appendChild(el('text',{...lab,x:tx,y:ny,'data-fit':fit,
       style:'font:650 12.5px ui-sans-serif,system-ui,sans-serif;fill:var(--text)'},t.name));
-    svg.appendChild(el('text',{x:tx,y:y+12,'data-fit':LAB-tx-14,
+    svg.appendChild(el('text',{...lab,x:tx,y:ny+15,'data-fit':fit,
       style:'font:11px ui-sans-serif,system-ui,sans-serif;fill:var(--muted)'},t.artist));
     const xa=dx(t.d.first), xb=dx(t.d.last);
     svg.appendChild(el('line',{x1:xa,x2:xb,y1:y,y2:y,stroke:'var(--line)','stroke-width':2,
@@ -1053,8 +1078,9 @@ $('#q2').innerHTML=`Seven years, ${nf(D.activeDays)} days with music. <em>Here i
     svg.appendChild(el('circle',{cx:xa,cy:y,r:2.6,fill:'var(--bg)',stroke:AC,'stroke-width':1.6}));
     svg.appendChild(el('text',{x:xb+9,y:y+4,class:'axtxt'},nf(t.plays)+'×'));
   });
-  svg.appendChild(el('text',{x:LAB,y:H-6,class:'axtxt'},
-    'ring = one year · bigger ring, more plays · line runs from the first play to the latest'));
+  (PHONE?['ring = one year · bigger ring, more plays','line runs from the first play to the latest']
+    :['ring = one year · bigger ring, more plays · line runs from the first play to the latest'])
+    .forEach((l,i,a)=>svg.appendChild(el('text',{x:LAB,y:H-6-16*(a.length-1-i),class:'axtxt'},l)));
   $('#lifelines').appendChild(svg);
   fitAll(svg);
   const thisYear=D.yearList[D.yearList.length-1];
@@ -1287,22 +1313,29 @@ function spinKick(){if(SPIN.run||REDUCED)return;SPIN.run=true;SPIN.last=performa
     ${P.days} consecutive days</b>, never once skipping a day. Not a playlist you left on:
     a decision you made every morning for six weeks.`;
   // one cell per day of the run, so the reader can see it never breaks
-  const CELL=22, GAP=4, W=P.days*(CELL+GAP)-GAP, H=CELL+40;
+  // phones fold the strip into rows of seven days, each row labelled with its first day
+  const COLS=PHONE?7:P.days, LW=PHONE?50:0, CELL=PHONE?36:22, GAP=4;
+  const rows=Math.ceil(P.days/COLS), GH=rows*(CELL+GAP)-GAP;
+  const W=LW+COLS*(CELL+GAP)-GAP, H=GH+(PHONE?44:40);
   const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',
-    style:`min-width:${Math.min(940,W)}px;max-width:${W}px`});
+    style:PHONE?'':`min-width:${Math.min(940,W)}px;max-width:${W}px`});
   d.forEach((n,i)=>{
     const day=new Date(P.from+'T00:00:00'); day.setDate(day.getDate()+i);
-    const key=day.toISOString().slice(0,10);
-    const r=el('rect',{x:i*(CELL+GAP),y:0,width:CELL,height:CELL,rx:4,fill:AC,
+    // local date, not toISOString: that is UTC, a day behind in India, so the
+    // tooltip disagreed with the label under the same square
+    const key=`${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
+    const cx=LW+(i%COLS)*(CELL+GAP), cy=Math.floor(i/COLS)*(CELL+GAP);
+    const r=el('rect',{x:cx,y:cy,width:CELL,height:CELL,rx:4,fill:AC,
       opacity:.28+.68*n/mx});
     bindTip(r,()=>`<div class="h">${fmtDL(key)} · day ${i+1} of ${P.days}</div>`+
       `<div class="r"><span>${esc(P.name)} plays</span><b>${n}</b></div>`);
     svg.appendChild(r);
-    if(i%7===0)svg.appendChild(el('text',{x:i*(CELL+GAP),y:CELL+16,class:'axtxt'},
-      day.getDate()+' '+MON[day.getMonth()]));
+    if(i%7===0)svg.appendChild(el('text',PHONE?{x:0,y:cy+CELL/2+4,class:'axtxt'}
+      :{x:cx,y:CELL+16,class:'axtxt'},day.getDate()+' '+MON[day.getMonth()]));
   });
-  svg.appendChild(el('text',{x:0,y:H-4,class:'axtxt'},
-    `each square is one day · darker means more plays · not one gap in ${P.days}`));
+  (PHONE?['each square is one day · darker means more plays',`not one gap in ${P.days}`]
+    :[`each square is one day · darker means more plays · not one gap in ${P.days}`])
+    .forEach((l,i,a)=>svg.appendChild(el('text',{x:0,y:H-4-16*(a.length-1-i),class:'axtxt'},l)));
   $('#posStrip').appendChild(svg);
   const rmax=Math.max(...P.runners.map(r=>r.days),P.days);
   $('#posRunners').innerHTML='<div class="runbars">'+P.runners.map(r=>
@@ -1468,12 +1501,12 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
 /* the timeline */
 (function(){
   // extra bottom room: the trip tags live between the axis and the year labels
-  const m=D.monthly,W=940,H=352,L=52,R=16,T=58,B=64,iw=W-L-R,ih=H-T-B;
+  const m=D.monthly,W=PHONE?340:940,H=PHONE?320:352,L=PHONE?38:52,R=16,T=58,B=64,iw=W-L-R,ih=H-T-B;
   const {maxH,stepH,max}=niceHours(Math.max(...m.map(d=>d.min))*1.04);
   const avg=m.reduce((a,b)=>a+b.min,0)/m.length;
   const x=i=>L+iw*i/(m.length-1),y=v=>T+ih-ih*v/max;
   const svg=el('svg',{viewBox:`-8 -8 ${W+16} ${H+16}`,class:'chart',
-    style:`min-width:${W*.62}px`});
+    style:PHONE?'':`min-width:${W*.62}px`});
   const g=el('linearGradient',{id:'ag',x1:0,y1:0,x2:0,y2:1});
   g.appendChild(el('stop',{offset:0,'stop-color':AC,'stop-opacity':.40}));
   g.appendChild(el('stop',{offset:1,'stop-color':AC,'stop-opacity':0}));
@@ -1481,7 +1514,7 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
   for(let h=0;h<=maxH;h+=stepH){
     svg.appendChild(el('line',{x1:L,x2:L+iw,y1:y(h*60),y2:y(h*60),class:'gridline',opacity:h?.55:1}));
     svg.appendChild(el('text',{x:L-9,y:y(h*60)+4,'text-anchor':'end',class:'axtxt'},h+'h'));}
-  m.forEach((d,i)=>{if(!d.m.endsWith('-01')&&i)return;
+  m.forEach((d,i)=>{if(!d.m.endsWith('-01')&&(i||PHONE))return;
     svg.appendChild(el('text',{x:x(i),y:H-13,'text-anchor':'middle',class:'axtxt'},d.m.slice(0,4)));});
   const line=m.map((d,i)=>(i?'L':'M')+x(i)+' '+y(d.min)).join(' ');
   svg.appendChild(el('path',{d:line+` L${x(m.length-1)} ${T+ih} L${L} ${T+ih} Z`,fill:'url(#ag)'}));
@@ -1542,7 +1575,7 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
     const i=idxOf(a.m); if(i<0) return;
     const up=a.kind!=='low', ax=x(i), ay=y(a.min);
     let ty=up?Math.max(T-32,ay-46):ay+34;
-    while(used.some(u=>Math.abs(u.x-ax)<150&&Math.abs(u.y-ty)<26))ty+=up?-30:30;
+    while(used.some(u=>Math.abs(u.x-ax)<(PHONE?110:150)&&Math.abs(u.y-ty)<26))ty+=up?-30:30;
     ty=Math.max(T-34,Math.min(T+ih+22,ty));
     used.push({x:ax,y:ty});
     svg.appendChild(el('line',{x1:ax,x2:ax,y1:ay+(up?-7:7),y2:ty+(up?12:-12),
@@ -1564,6 +1597,7 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
     const bx=x((fi+fidx(t.to))/2);
     let ax=bx;
     while(tagX.some(v=>Math.abs(v-ax)<28))ax+=28;
+    if(ax>W-6){ax=bx; while(tagX.some(v=>Math.abs(v-ax)<28))ax-=28;}
     tagX.push(ax);
     svg.appendChild(el('line',{x1:bx,x2:ax,y1:T+ih,y2:T+ih+12,stroke:'var(--s4)',
       'stroke-width':1,opacity:.7}));
@@ -1600,7 +1634,7 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
     Math.round(peak.min/60)} hours</b> — that is ${Math.round(peak.min/60/30*10)/10} hours a day,
     every day, for a month.${NT?` The gold bands are the <b>${NJ} trips</b> you took — Spotify
     logs the country each stream came from, so your holidays are in here whether you meant them
-    to be or not. One band is one journey; the tags beneath name each country. Hover a tag for
+    to be or not. One band is one journey; the tags beneath name each country. <span class="hv"></span> a tag for
     what was playing there.`:''}`;
   $('#tripNote').innerHTML=[
     (P&&P.loosePlays)?`A further ${nf(P.loosePlays)} streams connected from
@@ -1665,15 +1699,18 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
 
 /* the library */
 (function(){
-  const cum=D.explore.cum, W=940,H=300,L=56,R=150,T=18,B=40,iw=W-L-R,ih=H-T-B;
+  const cum=D.explore.cum, W=PHONE?340:940,H=PHONE?260:300,L=PHONE?44:56,R=PHONE?100:150,T=18,B=40,
+    iw=W-L-R,ih=H-T-B;
   const mx=Math.ceil(cum[cum.length-1].t/1000)*1000;
   const x=i=>L+iw*i/(cum.length-1), y=v=>T+ih-ih*v/mx;
-  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:`min-width:${W*.62}px`});
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:PHONE?'':`min-width:${W*.62}px`});
   for(let v=0;v<=mx;v+=1000){
     svg.appendChild(el('line',{x1:L,x2:L+iw,y1:y(v),y2:y(v),class:'gridline',opacity:v?.55:1}));
     svg.appendChild(el('text',{x:L-9,y:y(v)+4,'text-anchor':'end',class:'axtxt'},nf(v)));}
-  cum.forEach((d,i)=>{if(!d.m.endsWith('-01')&&i)return;
-    svg.appendChild(el('text',{x:x(i),y:H-14,'text-anchor':'middle',class:'axtxt'},d.m.slice(0,4)));});
+  cum.forEach((d,i)=>{if(!d.m.endsWith('-01')&&(i||PHONE))return;
+    // a phone has 26px a year here, too narrow for four digits
+    svg.appendChild(el('text',{x:x(i),y:H-14,'text-anchor':'middle',class:'axtxt'},
+      PHONE?"'"+d.m.slice(2,4):d.m.slice(0,4)));});
   const SER=[{k:'t',n:'Songs',c:S[0]},{k:'a',n:'Artists',c:S[2]}];
   SER.forEach(s=>{
     const p=el('path',{d:cum.map((d,i)=>(i?'L':'M')+x(i)+' '+y(d[s.k])).join(' '),
@@ -1832,9 +1869,49 @@ $('#loyal').innerHTML=D.loyalty.slice(0,8).map(d=>
       if(yr)at.push([i,MON[+mon[i].slice(5)-1][0]]);
       else if(isJan(i)||i===0)at.push([i,mon[i].slice(0,4)]);
     }
-    $('#raceTicks').innerHTML=at.map(([i,l])=>
-      `<span style="left:${hi>lo?100*(i-lo)/(hi-lo):0}%">${l}</span>`).join('');
+    // labels need room: on a phone the part-year start (2019) sat on top of the
+    // next January. Every label stays on one line; where two would touch, they
+    // slide apart just enough (keeping as close to their ticks as they can) while
+    // each tick mark stays on its true month. Only if they can't all fit is
+    // every other one left out.
+    const host=$('#raceTicks'), w=host.clientWidth||300, gap=5;
+    // how far a label may hang past either end of the track: on the left, into
+    // the space before the play button; on the right, to the edge of the column
+    const padL=20, padR=8;
+    const pct=i=>hi>lo?100*(i-lo)/(hi-lo):0;
+    let shown=at;
+    for(;;){
+      host.innerHTML=shown.map(([i,l])=>`<span style="left:${pct(i)}%">${l}</span>`).join('');
+      const els=[...host.children], wid=els.map(e=>e.offsetWidth);
+      if(wid.reduce((a,b)=>a+b+gap,-gap)<=w+padL+padR||shown.length<3){layout(els,wid);break}
+      shown=shown.filter((_,k)=>k%2===0);
+    }
+    function layout(els,wid){
+      const want=shown.map(([i])=>pct(i)*w/100);
+      // clusters of touching labels, each centred on its members' ticks
+      let cl=[];
+      want.forEach((x,k)=>{
+        cl.push({from:k,to:k,sum:x,n:1});
+        for(;;){
+          const c=cl[cl.length-1], span=c=>wid.slice(c.from,c.to+1).reduce((a,b)=>a+b+gap,-gap);
+          const place=c=>{const sw=span(c), first=wid[c.from]/2, last=wid[c.to]/2;
+            // centre of the group, as a run of labels, kept inside the track
+            let mid=c.sum/c.n;
+            let left=mid-(sw-first-last)/2-first;
+            left=Math.max(-padL,Math.min(left,w+padR-sw));
+            return left};
+          c.left=place(c);
+          const p=cl[cl.length-2];
+          if(!p||p.left+span(p)+gap<=c.left)break;
+          cl.splice(-2,2,{from:p.from,to:c.to,sum:p.sum+c.sum,n:p.n+c.n});
+        }
+      });
+      cl.forEach(c=>{let x=c.left;
+        for(let k=c.from;k<=c.to;k++){
+          els[k].style.setProperty('--dx',(x+wid[k]/2-want[k]).toFixed(1)+'px'); x+=wid[k]+gap}});
+    }
   }
+  addEventListener('resize',()=>ticks());
   $('#raceyears').innerHTML=
     years.map(y=>`<button aria-pressed="false" data-y="${y}">${y}</button>`).join('');
   function pickYear(y){
