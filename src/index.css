@@ -1124,12 +1124,11 @@ label {
 @keyframes lightbox-frame-in { from { transform: scale(0.96); } }
 @keyframes lightbox-frame-out { to { transform: scale(0.97); } }
 
-/* Floating "Back to projects" (FloatingBack.tsx). Rises in from below on
-   phones, where it sits at the bottom; drops in from above on desktop, where
-   it sits under the nav. Leaves faster than it arrives. */
+/* Floating "Back to projects" (FloatingBack.tsx). Drops in from just under
+   the nav and leaves faster than it arrives. */
 .floating-back {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(-8px);
   pointer-events: none;
   transition:
     opacity 160ms var(--ease-in),
@@ -1147,9 +1146,4 @@ label {
 }
 .floating-back[data-visible='true']:active {
   transform: scale(0.97);
-}
-@media (min-width: 1024px) {
-  .floating-back:not([data-visible='true']) {
-    transform: translateY(-8px);
-  }
 }
