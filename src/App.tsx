@@ -13,6 +13,7 @@ import CursorGlow from './components/CursorGlow';
 import CircuitGround from './components/CircuitGround';
 import SiteNav from './components/SiteNav';
 import CardExpand from './components/CardExpand';
+import FloatingBack from './components/FloatingBack';
 import SiteFooter from './components/SiteFooter';
 import Lightbox from './components/Lightbox';
 import ExplorationsView from './components/ExplorationsView';
@@ -174,6 +175,12 @@ const App = () => {
       {/* Phones: grows a tapped card into its case study and back. Above the
           page, below the nav (z-40 against the nav's z-50). */}
       {cardExpand && <CardExpand key={cardExpand.id} request={cardExpand} />}
+
+      {/* Case studies: the way back, once the header's link has scrolled off.
+          Keyed by project so each case study starts it hidden. */}
+      {currentView === 'project' && selectedProject && (
+        <FloatingBack key={selectedProject.id} onBack={() => handleBackToHome()} />
+      )}
 
       {/* Everything in flow, in one box the open mobile menu can push back
           (`.page-push` in index.css). Nothing fixed lives inside it — a
