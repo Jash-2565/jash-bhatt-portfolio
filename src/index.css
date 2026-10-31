@@ -1102,6 +1102,22 @@ label {
     opacity 120ms var(--ease-in),
     transform 0s linear 120ms;
 }
+/* Desktop: slower and softer. The old page eases out over 220ms, then the new
+   one rises 14px into place over 560ms on a long, gentle tail. The leave
+   duration must match DESKTOP_PAGE_FADE_OUT_MS in useSiteNavigation. */
+@media (min-width: 1024px) {
+  .page-fade {
+    transition:
+      opacity 560ms var(--ease-out),
+      transform 640ms var(--ease-out);
+  }
+  .page-fade[data-leaving='true'] {
+    transform: translateY(14px);
+    transition:
+      opacity 220ms var(--ease-in),
+      transform 0s linear 220ms;
+  }
+}
 
 /* Image viewer (Lightbox.tsx). Opens with the scrim fading in and the image
    settling up from 96%; closes in 160ms, easing in, before it unmounts. It

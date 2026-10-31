@@ -45,8 +45,11 @@ const INITIAL_VIEW: View =
  * 160–300ms on a 300ms fade, which left the screen black between pages.
  */
 const PAGE_FADE_OUT_MS = 120;
+/** Desktop leaves more gently (`.page-fade` at `lg` and up in index.css). */
+const DESKTOP_PAGE_FADE_OUT_MS = 220;
 
 export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLElement | null>) {
+  const pageFadeOutMs = isMobile ? PAGE_FADE_OUT_MS : DESKTOP_PAGE_FADE_OUT_MS;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>(() =>
     INITIAL_ROUTE.view === 'home' ? INITIAL_ROUTE.section : 'work'
@@ -159,7 +162,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       setTimeout(() => {
         show();
         fadeInAfterPaint();
-      }, PAGE_FADE_OUT_MS);
+      }, pageFadeOutMs);
     }
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'explorations' });
@@ -190,7 +193,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setTimeout(() => {
           show();
           fadeInAfterPaint();
-        }, PAGE_FADE_OUT_MS);
+        }, pageFadeOutMs);
       }
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
@@ -221,7 +224,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
           setIsTransitioning(false);
           setTimeout(() => { isManualScroll.current = false; }, 300);
         }, 50);
-      }, PAGE_FADE_OUT_MS);
+      }, pageFadeOutMs);
     } else {
       const element = document.getElementById(anchorId);
       if (element) {
@@ -271,7 +274,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       setTimeout(() => {
         show();
         fadeInAfterPaint();
-      }, PAGE_FADE_OUT_MS);
+      }, pageFadeOutMs);
     }
     if (options?.updateHistory !== false) {
       updateHistory({ view: 'project', slug: project.slug });
@@ -314,7 +317,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setTimeout(() => {
           show();
           fadeInAfterPaint();
-        }, PAGE_FADE_OUT_MS);
+        }, pageFadeOutMs);
       }
       if (options?.updateHistory !== false) {
         updateHistory({ view: 'home', section: page });
@@ -338,7 +341,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         }
         setIsTransitioning(false);
       }, 50);
-    }, PAGE_FADE_OUT_MS);
+    }, pageFadeOutMs);
     if (options?.updateHistory !== false) {
       updateHistory(homeRoute(sectionId));
     }
