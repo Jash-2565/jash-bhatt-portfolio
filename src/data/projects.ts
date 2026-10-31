@@ -357,7 +357,7 @@ export const projects: Project[] = [
     category: "AI Agent",
     timeline: "Personal project, 2026 – present",
     description: "AI course scheduling for professors — describe your semester in plain language, get a calendar.",
-    tags: ["React 19", "Vite 7", "Tailwind CSS", "Firebase", "Gemini 2.5 Flash", "Google Calendar API"],
+    tags: ["React 19", "Vite 7", "Tailwind CSS", "Firebase", "Cloud Functions", "Claude Haiku 5.5", "Google Calendar API"],
     color: "bg-[#F2F1FF]",
     accentColor: "text-[#746DD5]",
     hoverColor: "group-hover:text-[#4239C4]",
@@ -387,7 +387,7 @@ export const projects: Project[] = [
           content: "Describe the course once. Everything after that is review.",
           cards: [
             { title: "Describe", body: "Type topics by week, meeting days, times, and semester dates into the chat." },
-            { title: "Review", body: "Gemini fills a live Parsed Plan, then the full semester appears as a calendar." },
+            { title: "Review", body: "Claude fills a live Parsed Plan, then the full semester appears as a calendar." },
             { title: "Refine", body: "Edit events directly, or just ask: “Move the midterm to March 20.”" },
             { title: "Export", body: "Push to Google Calendar with a live progress bar, or download an .ics file. The .ics is written by hand, with no calendar library." }
           ],
@@ -406,6 +406,8 @@ export const projects: Project[] = [
           cards: [
             { title: "Three Kinds of Reply", body: "Each response either answers, asks for what's missing, or proposes a change. Keeping the three apart means a question is never mistaken for an edit." },
             { title: "Review Before Apply", body: "A change arrives as a card to apply, discard, or replace. Nothing changes silently, because a schedule edit is the one thing that's costly to get wrong." },
+            { title: "Checked Before Apply", body: "Every reply is checked before it can be applied. Impossible dates like 30 February, unreadable times, or an end before a start are dropped, and the reply says what was skipped. If nothing usable is left, it asks a question instead." },
+            { title: "One Card, One Undo", body: "A single message can add, remove, and edit events at once. It still arrives as one card, and applying it can be undone in one step." },
             { title: "Nothing Dropped", body: "Extra topics go into an event's notes, and empty sessions become placeholders, so the calendar never quietly loses part of the syllabus." },
             { title: "Fails in the Open", body: "If the model can't be reached, ClassFlow says so after a few retries instead of guessing at a schedule." }
           ],
@@ -446,7 +448,7 @@ export const projects: Project[] = [
         {
           title: "Under the Hood",
           callout: { text: "The AI reads the request. Plain code builds the calendar, so the output is always predictable." },
-          content: "Every message to Gemini 2.5 Flash carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions. When the API is overloaded, a request is retried at 500 ms, 1 s, and 1.8 s before the error is shown.",
+          content: "Every message goes to Claude Haiku 5.5 through a Firebase Cloud Function, so the API key stays in Google Secret Manager and never reaches the browser. The model is fixed on the server, with no fallback to another one. Each message carries the current schedule, a memory of the course so far, and the last 12 turns, so professors never repeat themselves. The model returns a recurring pattern; a deterministic engine turns it into dated sessions. When the API is overloaded, a request is retried at 500 ms, 1 s, and 1.8 s before the error is shown.",
           imageLayout: 'row',
           imageHeight: 'h-[15rem] sm:h-[22rem]',
           imageCrop: true,
@@ -462,9 +464,19 @@ export const projects: Project[] = [
           content: "The features that matter once the semester is running, not just on day one.",
           cards: [
             { title: "Many Courses, One Calendar", body: "Each course gets its own colour, and clashes between them are flagged." },
-            { title: "Undo", body: "The last 10 changes per course, so trying things is safe." },
+            { title: "Undo", body: "The last 50 changes, in one history across every course, so trying things is safe." },
             { title: "Assignment Tracker", body: "Given, check-in, and due dates appear on the calendar as markers." },
             { title: "Sign in With Google", body: "Courses and schedules save to your account and follow you across sessions. Guest mode is there for a first try." }
+          ]
+        },
+        {
+          title: "Hardening",
+          content: "The quiet failures were the ones worth fixing: nothing crashes, but a professor finds out weeks later that something moved. 38 automated tests (Vitest) now cover the scheduler and how AI replies are applied. They run in a US timezone on purpose, so date bugs show up on my machine first.",
+          cards: [
+            { title: "Dates That Stay Put", body: "West of UTC, dates were landing a day early. They now stay on the day the professor typed." },
+            { title: "Holidays Without Losing Work", body: "Adding a holiday rebuilds only the syllabus sessions. Events the AI added, and notes on sessions that didn't move, are kept." },
+            { title: "Guest Work Kept", body: "A course built in guest mode moves into the account on sign-in, instead of disappearing." },
+            { title: "An .ics That Re-imports Cleanly", body: "The hand-written export now follows the calendar standard (RFC 5545). Each event keeps a stable ID, so importing again updates the calendar instead of duplicating it." }
           ]
         },
         {
