@@ -845,6 +845,14 @@ const fmtM = s => {const d=new Date(s+'-01T00:00:00');
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // phones get charts drawn at their own width rather than a desktop chart to scroll sideways
 const PHONE = matchMedia('(max-width: 640px)').matches;
+// Wide screens have the opposite problem: a chart drawn 470 wide and stretched over a
+// 750px column blows its 11px labels up to 18px. There each chart is drawn at the width
+// it will get (never under its design width, less any viewBox padding), and grows in
+// height by the square root of that, so it gets a little taller rather than flatter.
+function fitW(host,w,h,pad=0){
+  const cw=PHONE?0:Math.floor((typeof host==='number'?host:$(host).clientWidth)-pad);
+  return cw>w?[cw,Math.round(h*Math.sqrt(cw/w))]:[w,h];
+}
 const M=D.meta, F=D.framing, HL=D.headline;
 
 /* ── reveal + count-up ────────────────────────────────────────────────────
@@ -1041,12 +1049,12 @@ $('#q2').innerHTML=`Seven years, ${nf(D.activeDays)} days with music. <em>Here i
     .map(t=>({...t, d:X.trackDetail[t.name+'␟'+t.artist]})).filter(t=>t.d);
   if(!list.length)return;
   // phones: the name sits above each lifeline instead of in a column beside it
-  const W=PHONE?340:940, LAB=PHONE?0:232, R=PHONE?40:54, T=34, ROW=PHONE?62:38, B=PHONE?42:26;
+  const W=PHONE?340:fitW('#lifelines',940,0)[0], LAB=PHONE?0:232, R=PHONE?40:54, T=34, ROW=PHONE?62:38, B=PHONE?42:26;
   const iw=W-LAB-R, H=T+ROW*list.length+B;
   const t0=new Date(M.first+'T00:00:00').getTime(), t1=new Date(M.last+'T00:00:00').getTime();
   const x=ms=>LAB+iw*(ms-t0)/(t1-t0);
   const dx=s=>x(new Date(s+'T00:00:00').getTime());
-  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:PHONE?'':`min-width:${W*.72}px`});
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:PHONE?'':`min-width:${940*.72}px`});
   const maxYr=Math.max(...list.map(t=>Math.max(...t.d.yr)));
   D.yearList.forEach(Y=>{
     const gx=dx(Y+'-01-01'); if(gx<LAB-2)return;
@@ -1353,14 +1361,16 @@ function spinKick(){if(SPIN.run||REDUCED)return;SPIN.run=true;SPIN.last=performa
     alone was ${s.peak}. Some artists don't arrive the first time you meet them.`;
   $('#sleepMore').innerHTML=s.runners.map(r=>
     `<span><b>${esc(r.name)}</b> · ${r.before} then ${nf(r.after)}<i>${nf(r.gapDays)}d gap</i></span>`).join('');
-  const W=470,H=250,L=8,R=8,T=44,B=26,iw=W-L-R,ih=H-T-B, bw=iw/v.length;
+  const [W,H]=fitW('#sleepChart',470,250),L=8,R=8,T=44,B=26,iw=W-L-R,ih=H-T-B, bw=iw/v.length;
   const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:'max-width:100%'});
   const i0=ms.indexOf(s.gapFrom.slice(0,7)), i1=ms.indexOf(s.gapTo.slice(0,7));
   // the silence is the point of the chart, so it is drawn, not implied
   if(i0>=0&&i1>i0){
     svg.appendChild(el('rect',{x:L+i0*bw,y:T-10,width:(i1-i0)*bw,height:ih+10,
       fill:'var(--surface-2)'}));
-    svg.appendChild(el('text',{x:L+(i0+(i1-i0)/2)*bw,y:T-18,'text-anchor':'middle',
+    // inside the band, not above it: above, it ran into the chart title when the
+    // silence starts near the left edge, as Khalid's does
+    svg.appendChild(el('text',{x:L+(i0+(i1-i0)/2)*bw,y:T+8,'text-anchor':'middle',
       class:'serieslab',style:'font:650 11px ui-sans-serif,system-ui,sans-serif;fill:var(--muted)'},
       nf(s.gapDays)+' days of nothing'));
   }
@@ -1404,7 +1414,7 @@ function spinKick(){if(SPIN.run||REDUCED)return;SPIN.run=true;SPIN.last=performa
   $('#coreStats').innerHTML=C.cum.filter(c=>[50,500,2000].includes(c.n)).map((c,i)=>
     `<div><div class="v${i===1?' a':''}">${c.pct}%</div><div class="l">of all listening is your
       top ${nf(c.n)} songs</div></div>`).join('');
-  const W=460,H=300,L=44,R=14,T=16,B=38,iw=W-L-R,ih=H-T-B;
+  const [W,H]=fitW('#coreCurve',460,300),L=44,R=14,T=16,B=38,iw=W-L-R,ih=H-T-B;
   const x=i=>L+iw*i/(curve.length-1), y=v=>T+ih-ih*v/100;
   const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:'max-width:100%'});
   const g=el('linearGradient',{id:'cg',x1:0,y1:0,x2:0,y2:1});
@@ -1501,12 +1511,12 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
 /* the timeline */
 (function(){
   // extra bottom room: the trip tags live between the axis and the year labels
-  const m=D.monthly,W=PHONE?340:940,H=PHONE?320:352,L=PHONE?38:52,R=16,T=58,B=64,iw=W-L-R,ih=H-T-B;
+  const m=D.monthly,[W,H]=PHONE?[340,320]:fitW('#monthly',940,352,16),L=PHONE?38:52,R=16,T=58,B=64,iw=W-L-R,ih=H-T-B;
   const {maxH,stepH,max}=niceHours(Math.max(...m.map(d=>d.min))*1.04);
   const avg=m.reduce((a,b)=>a+b.min,0)/m.length;
   const x=i=>L+iw*i/(m.length-1),y=v=>T+ih-ih*v/max;
   const svg=el('svg',{viewBox:`-8 -8 ${W+16} ${H+16}`,class:'chart',
-    style:PHONE?'':`min-width:${W*.62}px`});
+    style:PHONE?'':`min-width:${940*.62}px`});
   const g=el('linearGradient',{id:'ag',x1:0,y1:0,x2:0,y2:1});
   g.appendChild(el('stop',{offset:0,'stop-color':AC,'stop-opacity':.40}));
   g.appendChild(el('stop',{offset:1,'stop-color':AC,'stop-opacity':0}));
@@ -1650,9 +1660,12 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
 /* the eras */
 (function(){
   const E=D.eras, months=E.months, MAX=E.maxMonth;
-  const W=470,H=104,T=20,B=16, ih=H-T-B;
-  const x=i=>W*i/(months.length-1), y=v=>T+ih-ih*v/MAX;
   const host=$('#eras');
+  // drawn at one grid column's real width, wider or narrower: at four columns on a big
+  // screen, or one on a phone, a 470 drawing shrank its 9px year labels to 7px
+  const cw=Math.floor(parseFloat(getComputedStyle(host).gridTemplateColumns)-12)||470;
+  const W=cw, H=Math.max(104,Math.round(104*Math.sqrt(cw/470))),T=20,B=16, ih=H-T-B;
+  const x=i=>W*i/(months.length-1), y=v=>T+ih-ih*v/MAX;
   const loudest=E.series.reduce((a,b)=>b.peakMin>a.peakMin?b:a);
   E.series.forEach((s,k)=>{
     const cell=document.createElement('div');cell.className='era rise';
@@ -1699,11 +1712,11 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
 
 /* the library */
 (function(){
-  const cum=D.explore.cum, W=PHONE?340:940,H=PHONE?260:300,L=PHONE?44:56,R=PHONE?100:150,T=18,B=40,
+  const cum=D.explore.cum, [W,H]=PHONE?[340,260]:fitW('#growth',940,300),L=PHONE?44:56,R=PHONE?100:150,T=18,B=40,
     iw=W-L-R,ih=H-T-B;
   const mx=Math.ceil(cum[cum.length-1].t/1000)*1000;
   const x=i=>L+iw*i/(cum.length-1), y=v=>T+ih-ih*v/mx;
-  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:PHONE?'':`min-width:${W*.62}px`});
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,class:'chart',style:PHONE?'':`min-width:${940*.62}px`});
   for(let v=0;v<=mx;v+=1000){
     svg.appendChild(el('line',{x1:L,x2:L+iw,y1:y(v),y2:y(v),class:'gridline',opacity:v?.55:1}));
     svg.appendChild(el('text',{x:L-9,y:y(v)+4,'text-anchor':'end',class:'axtxt'},nf(v)));}
@@ -1980,7 +1993,7 @@ $('#loyal').innerHTML=D.loyalty.slice(0,8).map(d=>
     ${s.medianMin} minutes and ${s.avgTracks} songs. The longest ran ${nf(s.longestMin)} minutes
     on ${s.longestDate}, ${s.longestTracks} songs without a real break.`;
   const H2=s.hist, mx=Math.max(...H2.map(h=>h.n));
-  const W=440,H=170,L=6,R=6,T=8,B2=34,iw=W-L-R,ih=H-T-B2, bw=iw/H2.length;
+  const [W,H]=fitW('#sessionHist',440,170,12),L=6,R=6,T=8,B2=34,iw=W-L-R,ih=H-T-B2, bw=iw/H2.length;
   const svg=el('svg',{viewBox:`-6 -14 ${W+12} ${H+18}`,class:'chart',style:'max-width:100%'});
   H2.forEach((h,i)=>{
     const bh=ih*h.n/mx;
