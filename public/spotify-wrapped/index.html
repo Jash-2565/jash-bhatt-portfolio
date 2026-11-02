@@ -105,8 +105,11 @@ section.tall{padding:124px 0}
 
 /* ── hero ─────────────────────────────────────────────────────────────────── */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
-  padding:90px 0 60px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:-30% -20% auto;height:120%;
+  padding:90px 0 60px;position:relative}
+/* The glow spans the window, not the column the hero sits in: clipped to the column,
+   it stopped in a hard edge with a bare strip down each side of a wide screen.
+   Body's overflow-x:hidden keeps the 100vw from scrolling sideways. */
+.hero::before{content:"";position:absolute;top:-30%;left:calc(50% - 50vw);width:100vw;height:120%;
   background:radial-gradient(56% 52% at 18% 12%,rgba(62,200,115,.20),transparent 68%),
              radial-gradient(48% 48% at 86% 4%,rgba(57,135,229,.13),transparent 70%);
   pointer-events:none;z-index:0}
