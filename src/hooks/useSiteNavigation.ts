@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 import { projects } from '../data/projects';
-import { orderedProjects } from '../config/projects';
+import { orderedProjects, secondaryProjects } from '../config/projects';
 import { parseLocation, routeToPath, hasLegacyHash, isMobilePage, sectionForAnchor } from '../utils/routes';
 import type { Route } from '../utils/routes';
 import type { Project, MobilePage, View } from '../types';
@@ -12,6 +12,25 @@ import { useScrollSpy } from './useScrollSpy';
 // right on a wide screen; on a phone the card is nearly the full viewport, so
 // centring buries its title under the fixed nav — start-align it instead.
 const getProjectScrollAlignment = () => (window.innerWidth < 768 ? 'start' : 'center');
+
+/** The More work list and the Explorations card read as one block, so leaving
+    any of them lands on the block's heading rather than on the one card. */
+const MORE_WORK_ID = 'archive';
+const MORE_WORK_HEADING_ID = 'archive-heading';
+/** An element's top in the page, ignoring transforms. */
+const pageOffsetTop = (element: HTMLElement) => {
+  let top = 0;
+  for (let el: HTMLElement | null = element; el; el = el.offsetParent as HTMLElement | null) {
+    top += el.offsetTop;
+  }
+  return top;
+};
+
+const MORE_WORK_NUDGE = 24;
+/** The Explorations card, the last thing in that block. */
+export const EXPLORATIONS_ENTRY_ID = 'explorations-entry';
+const isMoreWork = (project: Project | null) =>
+  project !== null && secondaryProjects.some((p) => p.id === project.id);
 
 /**
  * The entry URL, resolved once, before the first render.
@@ -119,6 +138,36 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     window.scrollTo({ top: Math.max(0, top), behavior: options?.behavior ?? 'auto' });
   };
 
+  /** The paged mobile layout mounts Work at the top; once it has rendered,
+      move to More work instead. */
+  const scrollToMoreWorkAfterRender = () => {
+    setTimeout(() => {
+      const element = document.getElementById(MORE_WORK_ID);
+      if (element) scrollToElementWithOffset(element, 'start');
+    }, 50);
+  };
+
+  /** Desktop: the whole block, from the More work heading to the bottom of
+      the Explorations card, centred in the space below the nav, then nudged
+      MORE_WORK_NUDGE further down the page so the heading sits a little
+      closer to the nav. Taller than that space, it starts at the heading
+      instead. */
+  const centerMoreWork = () => {
+    // From the heading, not the section: at lg the section carries ~6rem of
+    // top padding that would count as part of the block.
+    const start = document.getElementById(MORE_WORK_HEADING_ID);
+    if (!start) return;
+    const end = document.getElementById(EXPLORATIONS_ENTRY_ID) ?? start;
+    const navHeight = navRef.current?.offsetHeight ?? 0;
+    // Layout offsets rather than getBoundingClientRect: both are still
+    // mid-Reveal here, and a rect would include the entrance transform.
+    const top = pageOffsetTop(start);
+    const bottom = pageOffsetTop(end) + end.offsetHeight;
+    const slack = Math.max(0, (window.innerHeight - navHeight - (bottom - top)) / 2);
+    const nudge = Math.min(slack, MORE_WORK_NUDGE);
+    window.scrollTo({ top: Math.max(0, top - navHeight - slack + nudge) });
+  };
+
   /**
    * Single funnel for every navigation. Writes a real path — `/work/hr-genie`,
    * `/about` — rather than a hash, so each view has a URL a scraper can be
@@ -178,6 +227,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     // offset/alignment logic below applies.
     if (isMobile) {
       const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'home';
+      const toMoreWork = currentView === 'explorations' && page === 'work';
       setIsMenuOpen(false);
       const show = () => {
         setCurrentView('home');
@@ -185,6 +235,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
+        if (toMoreWork) scrollToMoreWorkAfterRender();
       };
       if (browserAnimated.current) {
         show();
@@ -205,6 +256,8 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     // `gallery` has no anchor of its own here; it resolves to Work.
     const anchorId = sectionForAnchor(sectionId);
     const targetProjectId = selectedProject?.id ?? null;
+    const toMoreWork =
+      anchorId === 'work' && (currentView === 'explorations' || isMoreWork(selectedProject));
 
     if (currentView !== 'home') {
       setIsTransitioning(true);
@@ -217,7 +270,9 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
               ? `project-${targetProjectId}`
               : anchorId;
           const element = document.getElementById(targetId);
-          if (element) {
+          if (toMoreWork) {
+            centerMoreWork();
+          } else if (element) {
             const block = targetId === 'work' ? 'start' : getProjectScrollAlignment();
             scrollToElementWithOffset(element, block);
           }
@@ -293,12 +348,14 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     // to the card the case study was opened from.
     if (isMobile) {
       const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'work';
+      const toMoreWork = currentView === 'explorations' && page === 'work';
       const show = () => {
         setCurrentView('home');
         setSelectedProject(null);
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
+        if (toMoreWork) scrollToMoreWorkAfterRender();
       };
       if (browserAnimated.current) {
         show();
@@ -326,6 +383,8 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     }
 
     const targetProjectId = sectionId === 'work' ? (selectedProject?.id ?? null) : null;
+    const toMoreWork =
+      sectionId === 'work' && (currentView === 'explorations' || isMoreWork(selectedProject));
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentView('home');
@@ -335,7 +394,9 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         const targetId =
           targetProjectId !== null ? `project-${targetProjectId}` : sectionId;
         const element = document.getElementById(targetId);
-        if (element) {
+        if (toMoreWork) {
+          centerMoreWork();
+        } else if (element) {
           const block = sectionId === 'work' ? getProjectScrollAlignment() : 'start';
           scrollToElementWithOffset(element, block);
         }

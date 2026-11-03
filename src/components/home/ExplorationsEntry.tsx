@@ -3,6 +3,7 @@ import Reveal from '../Reveal';
 import ResponsiveImage from '../ResponsiveImage';
 import { ui, gallerySnippetItems } from '../../config/ui';
 import { onInPageLink } from '../../utils/inPageLink';
+import { EXPLORATIONS_ENTRY_ID } from '../../hooks/useSiteNavigation';
 
 interface ExplorationsEntryProps {
   openExplorations: () => void;
@@ -17,6 +18,7 @@ const ExplorationsEntry = ({ openExplorations }: ExplorationsEntryProps) => (
   <section data-nav="work" aria-label="Beyond case studies" className={`${ui.shell} pb-14 sm:pb-20`}>
     <Reveal variant="rise">
       <a
+        id={EXPLORATIONS_ENTRY_ID}
         href="#explorations"
         onClick={(event) => onInPageLink(event, () => openExplorations())}
         className={`${ui.cardBase} ${ui.cardHover} press group flex w-full items-center gap-6 p-5 sm:p-7 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}

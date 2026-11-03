@@ -300,7 +300,14 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
         await fadeAway();
         return request.done();
       }
-      card.scrollIntoView({ block: 'center' });
+      // A More work card lands with its section's heading at the top, so the
+      // list reads as one block — unless that leaves the card off-screen,
+      // where there would be nothing to shrink into.
+      const moreWork = card.closest<HTMLElement>('#archive');
+      moreWork?.scrollIntoView({ block: 'start' });
+      if (!moreWork || card.getBoundingClientRect().bottom > window.innerHeight) {
+        card.scrollIntoView({ block: 'center' });
+      }
       await frames(2);
       await decoded(card);
       if (cancelled) return;
