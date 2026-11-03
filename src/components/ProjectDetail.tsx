@@ -880,7 +880,7 @@ const ProjectDetail = ({
                         href={section.cta.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${ui.btnBase} surface surface-hover text-white`}
+                        className={`${ui.btnBase} ${section.cta.primary ? `${project.sectionAccent} text-ink-inverse hover:brightness-110` : 'surface surface-hover text-white'}`}
                       >
                         {section.cta.text} <ExternalLink size={20} className="opacity-80" />
                       </a>

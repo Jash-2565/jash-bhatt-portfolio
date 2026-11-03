@@ -17,7 +17,9 @@ export interface Section {
       paraphrased takeaway (rendered without quote marks for that reason). */
   callout?: { text: string; attribution?: string };
   images?: { src: string; caption: string; fullWidth?: boolean; borderless?: boolean; whiteBg?: boolean; containerClass?: string; bgClass?: string }[];
-  cta?: { text: string; url: string };
+  /** `primary` fills the button with the project's accent, for a link that
+      is the point of the page rather than a footnote to it. */
+  cta?: { text: string; url: string; primary?: boolean };
   embedUrl?: string;
   embedWide?: boolean;
   imageLayout?: 'row' | 'stack' | 'mixed' | 'grid' | 'techSplit' | 'storyboard' | 'justified';
