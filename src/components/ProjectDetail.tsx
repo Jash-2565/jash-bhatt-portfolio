@@ -861,7 +861,7 @@ const ProjectDetail = ({
                           ></iframe>
                         </div>
                       ) : (
-                        <div className="hidden md:block mt-12 w-full max-w-[22.5rem] mx-auto aspect-[9/19] bg-[var(--surface-1)] rounded-[2.5rem] overflow-hidden border-[0.5rem] border-[var(--surface-2)] shadow-2xl relative">
+                        <div className="hidden md:block mt-12 w-full max-w-[22.5rem] aspect-[9/19] bg-[var(--surface-1)] rounded-[2.5rem] overflow-hidden border-[0.5rem] border-[var(--surface-2)] shadow-2xl relative">
                           <iframe
                             src={section.embedUrl}
                             className="w-full h-full bg-white"

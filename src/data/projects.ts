@@ -601,7 +601,11 @@ export const projects: Project[] = [
         {
           title: "Final Output",
           content: "The final deliverable included a polished app walkthrough demonstrating the “WePick” flow. You can experience the interactive prototype directly below, inviting friends and voting in real time.",
-          embedUrl: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FZSnz5vTUKNzYNRuOs1uxWt%2FWePick%3Fnode-id%3D0-1%26t%3DvsCOeZePPSny2dOa-1"
+          embedUrl: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FZSnz5vTUKNzYNRuOs1uxWt%2FWePick%3Fnode-id%3D0-1%26t%3DvsCOeZePPSny2dOa-1",
+          cta: {
+            text: "Open in Figma",
+            url: "https://www.figma.com/proto/ZSnz5vTUKNzYNRuOs1uxWt/WePick?node-id=0-1&t=vsCOeZePPSny2dOa-1"
+          }
         }
       ]
     }
