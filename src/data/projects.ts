@@ -315,7 +315,7 @@ export const projects: Project[] = [
         {
           title: "Mediclaim, the Simple Case",
           phase: "Deliver",
-          content: "Not every agent needs a rule map. The Mediclaim agent fetches a document: the employee asks for their own Mediclaim card or their parent's, the agent takes their email ID and employee code from their details, and a custom API uses the code to pull that card from the Azure Blob Storage that holds every employee's cards. The card goes to the employee's email, and the agent confirms in the chat that it has been sent.",
+          content: "Employees used to raise an HR ticket just to get their Mediclaim card, then wait for someone in HR to email it back. Parents' cards, submitted at onboarding, were asked for just as often. I designed this agent with a teammate to handle both.\n\nNot every agent needs a rule map. The Mediclaim agent fetches a document: the employee asks for their own Mediclaim card or their parent's, the agent takes their email ID and employee code from their details, and a custom API uses the code to pull that card from the Azure Blob Storage that holds every employee's cards. The card goes to the employee's email, and the agent confirms in the chat that it has been sent.",
           liveEmbed: {
             src: `${PUBLIC_URL}/demos/hr-genie-flows/mediclaim.html`,
             title: "Mediclaim card walkthrough",
@@ -323,19 +323,19 @@ export const projects: Project[] = [
           }
         },
         {
-          title: "Proposing a Platform Migration",
-          callout: { text: "From building what I was asked to, to questioning how the team builds." },
-          content: "Partway through, I noticed the agents were being built on Copilot Studio's node-based Gen 1 architecture, which would get harder to maintain with every agent added to a roadmap that size.",
+          title: "Leading the Gen 2 Migration",
+          callout: { text: "Every rule from the node flows had to survive being rewritten as plain English." },
+          content: "Copilot Studio's Gen 2 launched in June: no node wiring, just agent behaviour written in plain English. I was asked to test whether it was better for the people building agents and for the employees using them. I built a mock agent with a few skills and APIs and pushed it until it broke. It was easier to build, and the agent came out smarter, better at reading what an employee meant.\n\nMy evaluation fed the unit's leads' decision to trial moving HR Genie onto Gen 2, and I was put in charge of migrating all 17 sub-agents. Every one went through the same four steps.",
           cards: [
-            { title: "Spotted It", body: "Gen 1 worked, but it would not scale to the roadmap ahead." },
-            { title: "Proved It", body: "I built a proof of concept on Gen 2's no-code, skill-based approach." },
-            { title: "Pitched It", body: "I made the case to leadership, and they approved a trial." },
-            { title: "Trialled It", body: "I migrated 17 sub-agents, and built Local Conveyance natively on Gen 2." }
+            { title: "Reverse-engineer", body: "Work out exactly what each Gen 1 topic was doing, and why." },
+            { title: "Rewrite", body: "Re-express the same logic as a structured plain-English skill." },
+            { title: "Verify", body: "Check every rule against the BRD and the original topic." },
+            { title: "Test and Fix", body: "Run it, find the holes, patch it. It was never right first time." }
           ],
           images: [
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Gen1-vs-Gen2.svg`,
-              caption: "The Gen 1 vs Gen 2 comparison I used to make the case for migration — 17 sub-agents migrated in the trial."
+              caption: "The Gen 1 vs Gen 2 comparison from my evaluation. 17 sub-agents migrated in the trial."
             },
             {
               src: `${PUBLIC_URL}/images/HR Genie/HR-Genie-Conveyance-Architecture.svg`,
@@ -345,7 +345,14 @@ export const projects: Project[] = [
         },
         {
           title: "Reflection",
-          content: "When the interface is a conversation, validation has to be clear in the moment it matters. And the migration taught me that the most valuable design work is sometimes questioning the foundation everyone else is building on."
+          callout: { text: "From my first node to leading the migration." },
+          content: "In three months I went from not knowing what Copilot Studio was, to shipping agents from a BRD, to being trusted with migrating all of HR Genie. Knowing it all folds into Employee Blu, one agent for every Bajaj Finance branch in India, gave me a bigger sense of what I was contributing to.",
+          cards: [
+            { title: "Where I Excelled", body: "Understanding the logic of what an agent should do. On the migration the logic already existed; carrying it into clear English without losing a rule was the real challenge, and I worked through it." },
+            { title: "Where I Can Grow", body: "I kept underestimating how long a production-ready agent takes: every “finished” flow revealed new holes. I also want to absorb a BRD fully on the first read, not keep rechecking it." },
+            { title: "What It Taught Me", body: "Patience with process. A single software permission could take days. I stopped treating delays as setbacks and started reprioritising the work in hand." },
+            { title: "What It Confirmed", body: "The internship grew from two months to three because I was enjoying it. It confirmed my path: building systems where the logic and the user experience matter equally." }
+          ]
         }
       ]
     }
