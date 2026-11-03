@@ -1206,7 +1206,7 @@ const ArkanoidDemo = () => {
             setIsRunning((prev) => !prev);
             event.currentTarget.blur();
           }}
-          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold bg-[var(--ground)] text-white hover:bg-[var(--surface-1)] disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold bg-accent text-ink-inverse hover:bg-accent-br disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {isRunning ? 'Pause Demo' : 'Run Demo'}
         </button>
@@ -1217,7 +1217,7 @@ const ArkanoidDemo = () => {
             setIsRunning(false);
             drawIdle();
           }}
-          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold text-ink hover:bg-accent/10 hover:text-accent-br transition"
+          className="min-h-11 px-4 py-2 rounded-sm text-sm font-semibold bg-[var(--surface-2)] ring-1 ring-inset ring-white/15 text-ink hover:text-accent-br hover:ring-accent/40 transition"
         >
           Reset
         </button>
