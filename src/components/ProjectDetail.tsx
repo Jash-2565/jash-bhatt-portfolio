@@ -826,16 +826,18 @@ const ProjectDetail = ({
                       and a 360px phone-frame inside a 340px column is worse than
                       no frame at all. Opening it in Figma's own app/site gives a
                       far better experience — and drops a heavy third-party frame
-                      from the mobile page. */}
+                      from the mobile page. A section with its own CTA already
+                      links out, so it skips the card rather than stack two
+                      links to the same board. */}
                   {section.embedUrl && (
                     <>
-                      <a
+                      {!section.cta && <a
                         href={section.embedUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`md:hidden mt-8 ${ui.cardBase} ${ui.cardHover} flex items-center gap-4 p-5 w-full`}
                       >
-                        <span className="shrink-0 p-3 bg-accent-deep/25 text-accent-br rounded-sm">
+                        <span className={`shrink-0 p-3 ${project.sectionAccent} text-ink-inverse rounded-sm`}>
                           <ExternalLink size={20} />
                         </span>
                         <span className="min-w-0 text-left">
@@ -846,7 +848,7 @@ const ProjectDetail = ({
                             Open in Figma ↗
                           </span>
                         </span>
-                      </a>
+                      </a>}
                       {section.embedWide ? (
                         <div className="hidden md:block mt-10 w-full rounded-2xl overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
                           <iframe
@@ -880,7 +882,7 @@ const ProjectDetail = ({
                         href={section.cta.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${ui.btnBase} ${section.cta.primary ? `${project.sectionAccent} text-ink-inverse hover:brightness-110` : 'surface surface-hover text-white'}`}
+                        className={`${ui.btnBase} ${project.sectionAccent} text-ink-inverse hover:brightness-110`}
                       >
                         {section.cta.text} <ExternalLink size={20} className="opacity-80" />
                       </a>

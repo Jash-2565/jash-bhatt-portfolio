@@ -17,9 +17,9 @@ export interface Section {
       paraphrased takeaway (rendered without quote marks for that reason). */
   callout?: { text: string; attribution?: string };
   images?: { src: string; caption: string; fullWidth?: boolean; borderless?: boolean; whiteBg?: boolean; containerClass?: string; bgClass?: string }[];
-  /** `primary` fills the button with the project's accent, for a link that
-      is the point of the page rather than a footnote to it. */
-  cta?: { text: string; url: string; primary?: boolean };
+  /** Filled with the project's accent: every CTA opens the work itself, so it
+      should be the most visible control in its section. */
+  cta?: { text: string; url: string };
   embedUrl?: string;
   embedWide?: boolean;
   imageLayout?: 'row' | 'stack' | 'mixed' | 'grid' | 'techSplit' | 'storyboard' | 'justified';

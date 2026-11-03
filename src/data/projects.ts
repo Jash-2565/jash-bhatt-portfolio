@@ -1173,8 +1173,7 @@ export const projects: Project[] = [
           // answers it with the SPA shell instead.
           cta: {
             text: "Read the Whole Thing",
-            url: `${PUBLIC_URL}/spotify-wrapped/index.html`,
-            primary: true
+            url: `${PUBLIC_URL}/spotify-wrapped/index.html`
           }
         },
         {
@@ -1261,8 +1260,7 @@ export const projects: Project[] = [
           ],
           cta: {
             text: "Open the Live Piece",
-            url: `${PUBLIC_URL}/spotify-wrapped/index.html`,
-            primary: true
+            url: `${PUBLIC_URL}/spotify-wrapped/index.html`
           }
         }
       ]
