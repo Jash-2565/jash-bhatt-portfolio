@@ -323,26 +323,59 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
   const handleBackToHome = (options?: { updateHistory?: boolean; sectionId?: string }) => {
     const sectionId = options?.sectionId ?? 'work';
 
-    // Paged mobile layout: return to the Work page rather than scrolling back
-    // to the card the case study was opened from.
+    // Paged mobile layout: back from a case study returns to the page it was
+    // opened from (Home or Work; the page stays set while a case study is
+    // open) and lands on its card there, so the reader picks up where they
+    // left the list.
     if (isMobile) {
-      const page: MobilePage = isMobilePage(sectionId) ? sectionId : 'work';
+      const requested = options?.sectionId;
+      const page: MobilePage = requested
+        ? (isMobilePage(requested) ? requested : 'work')
+        : (currentView === 'project' && mobilePage === 'home' ? 'home' : 'work');
       const toMoreWork = currentView === 'explorations' && page === 'work';
+      const fromProject = currentView === 'project' ? selectedProject : null;
       const show = () => {
         setCurrentView('home');
         setSelectedProject(null);
         setMobilePage(page);
         setActiveSection(sectionForAnchor(page));
         window.scrollTo(0, 0);
-        if (toMoreWork) scrollToMoreWorkAfterRender();
+      };
+      /** Once the Work page has rendered: scroll to where the reader left. */
+      const place = () => {
+        if (toMoreWork) {
+          const element = document.getElementById(MORE_WORK_ID);
+          if (element) scrollToElementWithOffset(element, 'start');
+          return;
+        }
+        const card = fromProject && document.querySelector<HTMLElement>(
+          `#main a[aria-label="Open case study for ${CSS.escape(fromProject.title)}"]`
+        );
+        if (!card) return;
+        // Measured ignoring transforms: the card may still be mid-reveal.
+        const navHeight = navRef.current?.offsetHeight ?? 0;
+        const toTop = (el: HTMLElement) => window.scrollTo(0, Math.max(0, pageOffsetTop(el) - navHeight - 16));
+        // A More work card lands with its section's heading at the top, so
+        // the list reads as one block — unless that leaves the card cut off.
+        const moreWork = card.closest<HTMLElement>(`#${MORE_WORK_ID}`);
+        if (moreWork) {
+          toTop(moreWork);
+          if (pageOffsetTop(card) + card.offsetHeight - window.scrollY <= window.innerHeight) return;
+        }
+        toTop(card);
       };
       if (browserAnimated.current) {
         show();
+        setTimeout(place, 50);
       } else {
         setIsTransitioning(true);
         setTimeout(() => {
           show();
-          fadeInAfterPaint();
+          // Placed before the fade-in, so the page appears where it lands.
+          setTimeout(() => {
+            place();
+            fadeInAfterPaint();
+          }, 50);
         }, pageFadeOutMs);
       }
       if (options?.updateHistory !== false) {
