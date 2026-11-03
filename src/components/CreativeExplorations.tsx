@@ -243,7 +243,8 @@ export default function CreativeExplorations({ onImageClick, showDivider = true 
             </div>
             <h2 className="text-xl font-bold text-ink">Lamborghini Jetski AI</h2>
           </div>
-          <p className="text-ink-body text-sm md:text-base mb-5 md:mb-6">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
+          <p className="text-ink-body text-sm md:text-base mb-1.5">Exploring automotive form language and aerodynamics through generative AI and prompt engineering.</p>
+          <p className="text-ink-muted text-xs md:text-sm mb-5 md:mb-6">Built alongside Shriya Sumeeth, Analise Pereira, Dhruv Tolani, Parth Nahata, and Melwin Shaji</p>
           <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {aiItems.map((item, i) => (
               <Thumb
