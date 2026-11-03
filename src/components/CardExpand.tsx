@@ -149,10 +149,13 @@ const titleWords = (cardTitle: HTMLElement, heading: HTMLElement) => {
       font: head.font, letterSpacing: head.letterSpacing, lineHeight: `${b.height}px`,
       color: head.color, transformOrigin: '0 0',
     });
-    const atCard: Keyframe = { transform: `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.height / b.height})`, color: card.color, opacity: 1 };
-    const atHeading: Keyframe = { transform: 'none', color: head.color, opacity: 1 };
+    // Colour is its own animation: one paint-only property in the same
+    // keyframes would pull the transform off the compositor with it.
+    const atCard: Keyframe = { transform: `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.height / b.height})`, opacity: 1 };
+    const atHeading: Keyframe = { transform: 'none', opacity: 1 };
     const midway: Keyframe[] = crosses ? [{ opacity: 0.3, offset: 0.5 }] : [];
-    return { span, toHeading: [atCard, ...midway, atHeading] };
+    const recolour: Keyframe[] = card.color === head.color ? [] : [{ color: card.color }, { color: head.color }];
+    return { span, toHeading: [atCard, ...midway, atHeading], recolour };
   });
 };
 
@@ -198,8 +201,9 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
-    const surface = overlay.firstElementChild as HTMLElement;
-    const hero = surface.querySelector<HTMLElement>('[data-project-hero]')!;
+    const panel = overlay.querySelector<HTMLElement>('.card-expand-panel')!;
+    const [cardTone, liftTone] = panel.children as unknown as [HTMLElement, HTMLElement];
+    const hero = overlay.querySelector<HTMLElement>('[data-project-hero]')!;
     const h1 = hero.querySelector('h1')!;
     const heroParts = [...(hero.firstElementChild?.children ?? [])].filter((n) => n !== h1);
     const heroRule = getComputedStyle(hero).borderBottomColor;
@@ -211,15 +215,37 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
     const added: HTMLElement[] = [];
     const add = (el: HTMLElement) => { overlay.appendChild(el); added.push(el); return el; };
 
+    /**
+     * The panel grows by transform alone, so the GPU can run it without the
+     * main thread. It is a plain block of colour, never content, so scaling
+     * it can't distort anything — except its corners, which are drawn
+     * elliptical so that, squashed to the card's size, they are the card's
+     * corners exactly. Its full size overhangs the screen by `m` on every
+     * side, which puts those corners off-screen once it has grown.
+     */
     const geometry = (target: HTMLElement) => {
       const box = overlay.getBoundingClientRect();
       const c = target.getBoundingClientRect();
       const cs = getComputedStyle(target);
-      const radius = cs.borderTopLeftRadius;
-      const clip = `inset(${c.top}px ${box.width - c.right}px ${box.height - c.bottom}px ${c.left}px round ${radius})`;
-      const full = `inset(0px 0px 0px 0px round 0px)`;
-      return { c, clip, full, bg: isClear(cs.backgroundColor) ? GROUND : cs.backgroundColor };
+      const r = parseFloat(cs.borderTopLeftRadius) || 0;
+      const m = Math.ceil(Math.max(
+        r ? (r * box.width) / (c.width - 2 * r) : 0,
+        r ? (r * box.height) / (c.height - 2 * r) : 0,
+      ));
+      const w = box.width + 2 * m;
+      const h = box.height + 2 * m;
+      const sx = c.width / w;
+      const sy = c.height / h;
+      Object.assign(panel.style, {
+        inset: 'auto', left: `${-m}px`, top: `${-m}px`, width: `${w}px`, height: `${h}px`,
+        borderRadius: `${r / sx}px / ${r / sy}px`,
+      });
+      cardTone.style.background = isClear(cs.backgroundColor) ? GROUND : cs.backgroundColor;
+      const atCard = `translate(${c.left + m}px, ${c.top + m}px) scale(${sx}, ${sy})`;
+      return { c, atCard };
     };
+
+    const promote = () => moved.forEach(({ el }) => { el.style.willChange = 'transform, opacity'; });
 
     const fadeAway = async () => {
       await play(overlay, [{ opacity: 1 }, { opacity: 0 }], { duration: HANDOFF_MS, easing: EASE_OUT });
@@ -238,15 +264,20 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
       // on the ground, and a panel the colour of the page behind it can't be
       // seen growing. It starts and ends on the real colours, so neither end
       // of the move shows a change.
-      { el: surface, keyframes: [{ clipPath: geo.clip, backgroundColor: geo.bg }, { backgroundColor: LIFTED, offset: 0.35 }, { clipPath: geo.full, backgroundColor: GROUND }], start: 0, duration: MOVE_MS, easing: EASE_DRAWER },
+      // The tones are stacked layers crossfading, not an animated colour, to
+      // stay on the compositor.
+      { el: panel, keyframes: [{ transform: geo.atCard }, { transform: 'none' }], start: 0, duration: MOVE_MS, easing: EASE_DRAWER },
+      { el: cardTone, keyframes: [{ opacity: 1 }, { opacity: 0, offset: 0.35 }, { opacity: 0 }], start: 0, duration: MOVE_MS, easing: 'linear' },
+      { el: liftTone, keyframes: [{ opacity: 0 }, { opacity: 1, offset: 0.35 }, { opacity: 0 }], start: 0, duration: MOVE_MS, easing: 'linear' },
       // The copy — thumbnail and all — fades where the card is over most of
       // the move, never scaled; closing, the page shrinks around it as it
       // fades back in rather than uncovering it at the end.
       { el: copy, keyframes: [{ opacity: 1 }, { opacity: 0 }], start: 0, duration: 300, easing: 'ease-out' },
       ...words.map(({ span, toHeading }) => ({ el: span, keyframes: toHeading, start: 0, duration: MOVE_MS, easing: EASE_DRAWER })),
-      ...(words.length ? [] : [{ el: h1, keyframes: [{ opacity: 0 }, { opacity: 1 }], start: 160, duration: 300, easing: EASE_OUT }]),
-      { el: hero, keyframes: [{ borderBottomColor: 'transparent' }, { borderBottomColor: heroRule }], start: 160, duration: 300, easing: EASE_OUT },
-      ...heroParts.map((part, i) => ({ el: part, keyframes: [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], start: Math.min(120 + i * 40, MOVE_MS - 260), duration: 260, easing: EASE_OUT })),
+      ...words.filter((w) => w.recolour.length).map(({ span, recolour }) => ({ el: span, keyframes: recolour, start: 0, duration: MOVE_MS, easing: EASE_DRAWER })),
+      ...(words.length ? [] : [{ el: h1, keyframes: [{ opacity: 0 }, { opacity: 1 }], start: 180, duration: 280, easing: EASE_OUT }]),
+      { el: hero, keyframes: [{ borderBottomColor: 'transparent' }, { borderBottomColor: heroRule }], start: 180, duration: 280, easing: EASE_OUT },
+      ...heroParts.map((part, i) => ({ el: part, keyframes: [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], start: Math.min(180 + i * 30, MOVE_MS - 240), duration: 240, easing: EASE_OUT })),
       ...moved.map(({ el, dy }) => ({ el, keyframes: [{ transform: 'none', opacity: 1 }, { transform: `translateY(${dy}px)`, opacity: 0 }], start: 0, duration: 380, easing: EASE_OUT })),
     ];
 
@@ -266,7 +297,8 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
       // The words stand in for the heading until the overlay hands over.
       if (words.length) h1.style.visibility = 'hidden';
       moved = neighboursOf(card);
-      await decoded(copy);
+      promote();
+      await decoded(copy, 150);
       if (cancelled) return;
 
       card.style.visibility = 'hidden';
@@ -321,6 +353,7 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
       // Swapped in where the heading already is, so nothing changes yet.
       if (words.length) h1.style.visibility = 'hidden';
       moved = neighboursOf(card);
+      promote();
       card.style.visibility = 'hidden';
       await frames(1);
       if (cancelled) return;
@@ -338,7 +371,7 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
     return () => {
       cancelled = true;
       if (card) card.style.visibility = '';
-      moved.forEach(({ el }) => el.getAnimations().forEach((a) => a.cancel()));
+      moved.forEach(({ el }) => { el.getAnimations().forEach((a) => a.cancel()); el.style.willChange = ''; });
       added.forEach((el) => el.remove());
       setRevealSkip(false);
     };
@@ -348,10 +381,12 @@ const CardExpand = ({ request }: { request: CardExpandRequest }) => {
 
   return (
     <div ref={overlayRef} className="card-expand" aria-hidden="true">
-      <div className="card-expand-surface">
-        <div className="text-ink">
-          <ProjectHero project={request.project} />
-        </div>
+      <div className="card-expand-panel">
+        <div />
+        <div style={{ background: LIFTED }} />
+      </div>
+      <div className="card-expand-hero text-ink">
+        <ProjectHero project={request.project} />
       </div>
     </div>
   );
