@@ -355,6 +355,13 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
         // Measured ignoring transforms: the card may still be mid-reveal.
         const navHeight = navRef.current?.offsetHeight ?? 0;
         const toTop = (el: HTMLElement) => window.scrollTo(0, Math.max(0, pageOffsetTop(el) - navHeight - 16));
+        // Home's three featured cards land as the whole section, heading
+        // just under the nav, so the reader sees the list they chose from.
+        const featured = card.closest<HTMLElement>('section[aria-labelledby="home-featured-heading"]');
+        if (featured) {
+          window.scrollTo(0, Math.max(0, pageOffsetTop(featured) - navHeight));
+          return;
+        }
         // A More work card lands with its section's heading at the top, so
         // the list reads as one block — unless that leaves the card cut off.
         const moreWork = card.closest<HTMLElement>(`#${MORE_WORK_ID}`);
