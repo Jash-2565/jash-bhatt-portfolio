@@ -5,7 +5,6 @@ import { orderedProjects, secondaryProjects } from '../config/projects';
 import { parseLocation, routeToPath, hasLegacyHash, isMobilePage, sectionForAnchor } from '../utils/routes';
 import type { Route } from '../utils/routes';
 import type { Project, MobilePage, View } from '../types';
-import type { CardExpandRequest } from '../components/CardExpand';
 import { useScrollSpy } from './useScrollSpy';
 
 // A case study opened from a card scrolls back to that card. Centring it is
@@ -103,15 +102,6 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     requestAnimationFrame(() => requestAnimationFrame(() => setIsTransitioning(false)));
   };
 
-  /**
-   * The card-expand transition between a card and its case study (phones
-   * only; see components/CardExpand). Null when none is running.
-   */
-  const [cardExpand, setCardExpand] = useState<CardExpandRequest | null>(null);
-  const cardExpandId = useRef(0);
-  const endCardExpand = () => setCardExpand(null);
-  const canExpandCards = () =>
-    isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /**
    * True while handling a Back or Forward the browser is already animating
@@ -305,7 +295,7 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
 
   const openProject = (
     project: Project,
-    options?: { updateHistory?: boolean; source?: HTMLElement | null }
+    options?: { updateHistory?: boolean }
   ) => {
     const show = () => {
       setSelectedProject(project);
@@ -314,16 +304,6 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     };
     if (browserAnimated.current) {
       show();
-    } else if (options?.source && canExpandCards()) {
-      // Grow the tapped card into the case study.
-      setCardExpand({
-        id: ++cardExpandId.current,
-        project,
-        dir: 'open',
-        card: options.source,
-        swap: show,
-        done: endCardExpand,
-      });
     } else {
       setIsTransitioning(true);
       setTimeout(() => {
@@ -336,9 +316,8 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     }
   };
 
-  /** `source` is the card that was tapped, which the case study grows out of. */
-  const handleProjectClick = (project: Project, source?: HTMLElement | null) => {
-    openProject(project, { source });
+  const handleProjectClick = (project: Project) => {
+    openProject(project);
   };
 
   const handleBackToHome = (options?: { updateHistory?: boolean; sectionId?: string }) => {
@@ -359,16 +338,6 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
       };
       if (browserAnimated.current) {
         show();
-      } else if (page === 'work' && currentView === 'project' && selectedProject && canExpandCards()) {
-        // Shrink the case study back into its card on Work.
-        setCardExpand({
-          id: ++cardExpandId.current,
-          project: selectedProject,
-          dir: 'close',
-          card: null,
-          swap: show,
-          done: endCardExpand,
-        });
       } else {
         setIsTransitioning(true);
         setTimeout(() => {
@@ -574,7 +543,6 @@ export function useSiteNavigation(isMobile: boolean, navRef: RefObject<HTMLEleme
     activeSection,
     activeNavItem,
     isTransitioning,
-    cardExpand,
     analyticsRoute,
     isMenuOpen,
     setIsMenuOpen,

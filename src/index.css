@@ -1062,42 +1062,6 @@ label {
 .menu-glyph[data-open='true'] .menu-glyph-bot { transform: translate(0, 0) rotate(-45deg) scaleX(1); }
 
 
-/* Card-expand page transition (CardExpand.tsx). Starts invisible: the
-   component shows it on the frame its animations begin, so the setup —
-   cloning the card, decoding its image — never flashes. `touch-action: none`
-   stops a drag mid-transition from scrolling the page underneath. */
-.card-expand {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  opacity: 0;
-  touch-action: none;
-}
-/* The panel that grows from the card. Moved by transform only (sized and
-   placed by CardExpand); its two tone layers crossfade over the ground and
-   stay hidden until an animation shows them. */
-.card-expand-panel {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  background: var(--ground);
-  transform-origin: 0 0;
-  will-change: transform;
-}
-.card-expand-panel > * {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  will-change: opacity;
-}
-.card-expand-hero {
-  position: absolute;
-  inset: 0;
-}
-.card-expand :is(a, button) {
-  pointer-events: none;
-}
-
 /* Page swap (useSiteNavigation's isTransitioning → data-leaving). A quick
    crossfade: the page leaving fades out in 120ms, easing in, with no
    movement; the one arriving fades up over 280ms, rising 8px. It used to be a

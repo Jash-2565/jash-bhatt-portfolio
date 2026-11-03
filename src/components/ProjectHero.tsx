@@ -5,20 +5,10 @@ import { ui } from '../config/ui';
 
 interface ProjectHeroProps {
   project: Project;
-  /** Omit for a non-interactive copy (the card-expand overlay draws one). */
   onBack?: () => void;
 }
 
-/**
- * The top of a case study: back link, category, title, summary.
- *
- * Its own component because it is drawn in two places that must match to the
- * pixel: the case study itself, and the card-expand overlay (CardExpand.tsx),
- * which grows a tapped card into this header and then hands over to the real
- * page underneath it. Any drift between the two shows as a jump at the
- * hand-over. Kept out of ProjectDetail's lazy chunk for the same reason — the
- * overlay needs it before that chunk has loaded.
- */
+/** The top of a case study: back link, category, title, summary. */
 const ProjectHero = ({ project, onBack }: ProjectHeroProps) => {
   const { heroTextClass, heroMutedTextClass, heroBodyTextClass } =
     PROJECT_HERO_THEMES[project.slug] ?? DEFAULT_PROJECT_HERO_THEME;

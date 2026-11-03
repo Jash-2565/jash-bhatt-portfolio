@@ -10,7 +10,7 @@ import { onInPageLink } from '../../utils/inPageLink';
 import type { Project } from '../../types';
 
 interface MobileHomeSectionsProps {
-  handleProjectClick: (project: Project, source?: HTMLElement | null) => void;
+  handleProjectClick: (project: Project) => void;
   scrollToSection: (sectionId: string) => void;
 }
 
@@ -71,7 +71,7 @@ const MobileHomeSections = ({ handleProjectClick, scrollToSection }: MobileHomeS
             <Reveal variant="rise" key={`preview-${project.id}`} delay={index * 80}>
               <a
                 href={`#${project.slug}`}
-                onClick={(event) => onInPageLink(event, () => handleProjectClick(project, event.currentTarget))}
+                onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
                 aria-label={`Open case study for ${project.title}`}
                 className={`press group w-full text-left flex items-center gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
               >

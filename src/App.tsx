@@ -12,7 +12,6 @@ import BackToTop from './components/BackToTop';
 import CursorGlow from './components/CursorGlow';
 import CircuitGround from './components/CircuitGround';
 import SiteNav from './components/SiteNav';
-import CardExpand from './components/CardExpand';
 import SiteFooter from './components/SiteFooter';
 import Lightbox from './components/Lightbox';
 import ExplorationsView from './components/ExplorationsView';
@@ -51,7 +50,6 @@ const App = () => {
     handleProjectClick,
     handleBackToHome,
     handleNextProject,
-    cardExpand,
   } = useSiteNavigation(isMobile, navRef);
   useDocumentMeta(currentView, selectedProject, mobilePage);
 
@@ -170,10 +168,6 @@ const App = () => {
         setIsMenuOpen={setIsMenuOpen}
         scrollToSection={scrollToSection}
       />
-
-      {/* Phones: grows a tapped card into its case study and back. Above the
-          page, below the nav (z-40 against the nav's z-50). */}
-      {cardExpand && <CardExpand key={cardExpand.id} request={cardExpand} />}
 
       {/* Everything in flow, in one box the open mobile menu can push back
           (`.page-push` in index.css). Nothing fixed lives inside it — a

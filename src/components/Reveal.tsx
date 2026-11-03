@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { useInView } from '../hooks/useInView';
-import { shouldSkipReveal } from '../utils/revealSkip';
 
 type WipeVariant = 'wipe-right' | 'wipe-left' | 'wipe-down' | 'grow-width';
 type RiseVariant = 'rise' | 'rise-soft' | 'lift';
@@ -86,9 +85,7 @@ export default function Reveal({
   rootMargin,
 }: RevealProps) {
   const { ref, inView } = useInView<HTMLElement>({ threshold, rootMargin });
-  // Already landed when the card-expand transition is mounting this page
-  // under its overlay; see utils/revealSkip.
-  const [settled, setSettled] = useState(shouldSkipReveal);
+  const [settled, setSettled] = useState(false);
 
   useEffect(() => {
     if (!inView || settled) return;
