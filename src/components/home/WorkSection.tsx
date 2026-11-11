@@ -55,6 +55,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
             key={project.id}
             href={`#${project.slug}`}
             id={`project-${project.id}`}
+            data-beckon
             className="work-card group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--ground)] rounded-2xl overflow-hidden md:overflow-visible md:rounded-none"
             aria-label={`Open case study for ${project.title}`}
             onClick={(event) => onInPageLink(event, () => handleProjectClick(project))}
@@ -65,6 +66,7 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
                   80ms behind it. */}
               <Reveal variant="rise" className={`md:col-span-7 ${flip ? 'md:order-2' : ''}`}>
                 <div
+                  data-beckon-target
                   // Radius lives on the tile rather than an ancestor's clip:
                   // WebKit does not clip a composited descendant (the
                   // parallax layer) to an ancestor's border-radius.
@@ -104,9 +106,9 @@ const WorkSection = ({ handleProjectClick }: WorkSectionProps) => (
               {/* Text column */}
               <Reveal variant="rise" delay={80} className={`md:col-span-5 px-5 pt-5 pb-6 md:p-0 ${flip ? 'md:order-1' : ''}`}>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3 md:mb-5 text-sm">
-                  <span className="text-ink-muted">{project.category}</span>
+                  <span className="label text-ink-muted">{project.category}</span>
                   {hasDemo && (
-                    <span className="inline-flex items-center gap-2 text-accent-br font-medium whitespace-nowrap">
+                    <span className="label inline-flex items-center gap-2 text-accent-br whitespace-nowrap">
                       <span className="pulse-dot" aria-hidden="true" />
                       Try it live
                     </span>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { lewisReact } from '../config/lewis';
 
 // Copy a fixed string to the clipboard, with a `copied` flag that holds for
 // `resetMs` so the caller can show a confirmation.
@@ -36,6 +37,9 @@ export function useCopyText(text: string, resetMs = 1800) {
       legacyCopy();
     }
     setCopied(true);
+    // Lewis celebrates a copied address. Only the contact email uses this
+    // hook; if it ever copies something else, move this to the caller.
+    lewisReact('jumping');
     window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => setCopied(false), resetMs);
   };

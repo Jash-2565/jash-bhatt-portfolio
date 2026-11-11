@@ -18,6 +18,7 @@ export default function ContactLinkCard({ href, icon, label, value }: ContactLin
       href={href}
       target="_blank"
       rel="noreferrer"
+      data-beckon
       className="surface surface-marks relative flex items-center gap-4 p-4 lg:p-5 w-full h-full rounded-2xl card-glow group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-gradient-to-b from-transparent via-accent/50 to-transparent rounded-sm" />

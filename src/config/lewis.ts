@@ -41,6 +41,19 @@ export type AnimationName = keyof typeof ANIMATIONS;
 /** The Explorations card fires this to bring the pet back after a dismissal. */
 export const SUMMON_EVENT = 'lewis:summon';
 
+/** Anything on the page can ask Lewis to react to what just happened. */
+export const REACT_EVENT = 'lewis:react';
+
+/**
+ * Lewis's job: he answers the reader's actions, so he reads as part of the
+ * page rather than a sticker on it. Copying the email gets a jump, a lost
+ * game of Arkanoid gets his "failed" slump, a fresh set of film picks gets
+ * a look-over. A no-op when he's away (dismissed, on touch, or not loaded).
+ */
+export const lewisReact = (animation: AnimationName) => {
+  window.dispatchEvent(new CustomEvent<AnimationName>(REACT_EVENT, { detail: animation }));
+};
+
 /** Background shorthand shared by every sprite surface. `pixelated` matters:
     the art is drawn at 192px and shown at around 80px, and bilinear scaling
     turns the linework to mush. */

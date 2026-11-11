@@ -38,6 +38,7 @@ const ArchiveSection = ({ handleProjectClick }: ArchiveSectionProps) => {
                 href={`#${project.slug}`}
                 id={`project-${project.id}`}
                 onClick={(event) => onInPageLink(event, () => handleProjectClick(project, event.currentTarget))}
+                data-beckon
                 aria-label={`Open case study for ${project.title}`}
                 className={`press group h-full w-full text-left flex items-center gap-3 sm:gap-4 p-4 ${ui.cardBase} ${ui.cardHover} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
               >
@@ -57,7 +58,7 @@ const ArchiveSection = ({ handleProjectClick }: ArchiveSectionProps) => {
                   )}
                 </div>
                 <div className="min-w-0 flex-1 [container-type:inline-size]">
-                  <p className="text-[0.8125rem] text-ink-muted">{project.category}</p>
+                  <p className="label text-ink-muted">{project.category}</p>
                   {/* On phones the size follows the column width (cqw) so the
                       longest one-line title, "RAHI Design System v2" at 12em,
                       always fits; it stays at 1rem whenever there is room. */}

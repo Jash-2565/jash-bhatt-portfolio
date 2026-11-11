@@ -45,6 +45,13 @@ const QUIET_REFRESH_MS = 400;
 const FLASH_MS = 650;
 const MAX_SIGNALS = 7;
 const MAX_HOPS = 6;
+// Beckoned signals sit above the ambient cap, so hovering a card always gets
+// an answer even while the scroll lanes are busy — but only just above it.
+const MAX_BECKONED = 3;
+/** How far from a hovered box a trace may end and still count as running to
+    it, in css px. Beyond this the signal reads as unrelated traffic. */
+const BECKON_REACH = 120;
+const BECKON_STAGGER_MS = 110;
 
 function measure(pts: Line): Trace {
   const cum = [0];
@@ -95,6 +102,9 @@ export type SignalField = {
   scrolled(direction: 1 | -1): void;
   /** A burst of signals from the routing on screen — the page powering up. */
   boot(): void;
+  /** Route a few signals in toward a box on screen (viewport coordinates):
+      the board answering what the reader is about to open. */
+  beckon(rect: { left: number; top: number; right: number; bottom: number }): void;
   destroy(): void;
 };
 
@@ -388,6 +398,58 @@ export function createSignalField(
       for (let i = 0; i < 5; i++) {
         window.setTimeout(() => spawn({ fast: i % 2 === 0 }), 250 + i * 180);
       }
+    },
+    beckon(rect) {
+      if (!opts.motion) return;
+      // The box in board units, and how far out from it a trace may end.
+      const oy = offsetY();
+      const l = rect.left / scale, r = rect.right / scale;
+      const t = (rect.top + oy) / scale, b = (rect.bottom + oy) / scale;
+      const reach = BECKON_REACH / scale;
+      const gap = (x: number, y: number) =>
+        Math.hypot(Math.max(l - x, 0, x - r), Math.max(t - y, 0, y - b));
+
+      // Every trace that ends just outside the box, with its other end well
+      // away, so the signal visibly travels in rather than flickering on the
+      // edge. An end inside the box doesn't count: the card is opaque and
+      // sits above the board, so a signal landing there lands out of sight.
+      // Each candidate runs toward its near end: +1 when that is the last point.
+      const runs: { trace: Trace; dir: 1 | -1; near: number }[] = [];
+      for (const tr of visibleTraces((x) => x.len > 80)) {
+        const n = tr.pts.length;
+        const startGap = gap(tr.pts[0], tr.pts[1]);
+        const endGap = gap(tr.pts[n - 2], tr.pts[n - 1]);
+        const near = Math.min(startGap, endGap);
+        const far = Math.max(startGap, endGap);
+        if (near <= 0 || near > reach || far - near < 60) continue;
+        // Most of the run has to be outside the box too, or the trip is
+        // spent under the card and only the last step shows.
+        const [mx, my] = pointAt(tr, tr.len / 2);
+        if (gap(mx, my) <= 0) continue;
+        runs.push({ trace: tr, dir: endGap < startGap ? 1 : -1, near });
+      }
+      if (!runs.length) return;
+
+      // The closest few, from different traces, a beat apart: three arrivals
+      // in quick succession read as the board converging, one at once as noise.
+      runs.sort((a, c) => a.near - c.near);
+      const picks = runs.slice(0, 6).sort(() => Math.random() - 0.5).slice(0, MAX_BECKONED);
+      picks.forEach((run, i) => {
+        window.setTimeout(() => {
+          if (destroyed || signals.length >= MAX_SIGNALS + MAX_BECKONED) return;
+          signals.push({
+            trace: run.trace,
+            at: 0,
+            dir: run.dir,
+            speed: 560 + Math.random() * 160,
+            tail: 130,
+            // Spent on arrival: it lands on the pad by the box and flashes
+            // there, instead of hopping on past what was hovered.
+            hops: MAX_HOPS,
+          });
+          start();
+        }, i * BECKON_STAGGER_MS);
+      });
     },
     destroy() {
       destroyed = true;

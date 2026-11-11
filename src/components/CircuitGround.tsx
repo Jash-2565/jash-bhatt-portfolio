@@ -14,9 +14,10 @@ import { getUiScale, subscribeUiScale } from '../utils/uiScale';
 //
 // Over it sits the live layer (lib/circuitSignals): a fixed canvas the size of
 // the window that lights the routing around the cursor and sends signals along
-// it — idly on a mouse, and down the lanes in the direction of travel as the
-// page scrolls, on every device. Under reduced motion only the cursor light
-// remains, since that moves only when the reader does.
+// it — idly on a mouse, down the lanes in the direction of travel as the
+// page scrolls, and in toward whatever `data-beckon` card is hovered. Under
+// reduced motion only the cursor light remains, since that moves only when
+// the reader does.
 //
 // Both layers stay clear of text (lib/quietZones). The live layer cuts its own
 // drawing each frame; the static board is masked by an image of the page's
@@ -69,8 +70,25 @@ export default function CircuitGround() {
     };
     const onLeave = () => field.pointer(null);
     const onResize = () => field.resize();
+    // The signature motion: hover anything marked `data-beckon` (the doors
+    // into a case study, Explorations, a contact route) and the board routes
+    // signals in to it. Once per entry — moving around inside the card sends
+    // nothing more — and only for a mouse, like the cursor light.
+    let beckoned: Element | null = null;
+    const onOver = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      const target = (e.target as Element | null)?.closest('[data-beckon]') ?? null;
+      if (target === beckoned) return;
+      beckoned = target;
+      // A card can name the part signals should run to (`data-beckon-target`):
+      // the Work cards point them at the image, since the text column beside
+      // it keeps the board quiet around itself.
+      const box = target?.querySelector('[data-beckon-target]') ?? target;
+      if (box) field.beckon(box.getBoundingClientRect());
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('pointerover', onOver, { passive: true });
     document.documentElement.addEventListener('pointerleave', onLeave);
     window.addEventListener('blur', onLeave);
     window.addEventListener('resize', onResize);
@@ -81,6 +99,7 @@ export default function CircuitGround() {
       clearTimeout(boot);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerover', onOver);
       document.documentElement.removeEventListener('pointerleave', onLeave);
       window.removeEventListener('blur', onLeave);
       window.removeEventListener('resize', onResize);

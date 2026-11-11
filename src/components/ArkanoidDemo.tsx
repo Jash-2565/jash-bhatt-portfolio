@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { lewisReact } from '../config/lewis';
 
 type RGB = [number, number, number];
 
@@ -958,6 +959,9 @@ const ArkanoidDemo = () => {
             state.timersFrozen = !state.multiballTriggeredFrame;
           } else {
             state.gameOver = true;
+            // Lewis takes the loss with you. Fires once: no balls are left
+            // to fall, so this branch can't be reached again until a restart.
+            lewisReact('failed');
           }
         }
       }

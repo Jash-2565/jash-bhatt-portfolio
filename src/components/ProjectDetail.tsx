@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, ExternalLink, Image as PhotoIcon, Copy, Check, C
 import ResponsiveImage from './ResponsiveImage';
 import DemoVideo from './DemoVideo';
 import LiveEmbed from './LiveEmbed';
-import Reveal from './Reveal';
 import ProjectHero from './ProjectHero';
 import type { LightboxImage, Project, Section } from '../types';
 import { CONTAINED_THUMBNAIL_BACKDROPS } from '../config/projects';
@@ -677,21 +676,12 @@ const ProjectDetail = ({
             {project.content.sections.map((section, idx) => {
               const isActive = idx === activeIdx;
               return (
-              // One reveal for the whole section, so the numbered heading and
-              // the body it belongs to arrive together as a single block —
-              // the same entrance the cards and prose on the home page use.
-              // The reveal sits outside the grid rather than being it, so the
-              // two columns stay direct children of the grid and the
-              // `data-section` hook the progress highlight reads stays on the
-              // row itself.
-              //
-              // The lift briefly puts the sticky heading under a transform.
-              // That is safe here: the reveal fires as the row enters from the
-              // bottom, where the heading is nowhere near the top of the
-              // viewport it eventually sticks to, and Reveal drops the
-              // transform entirely once the reveal lands.
-              <Reveal key={idx} variant="rise">
-              <div>
+              // No entrance. Each section used to rise in as one block as it
+              // scrolled up. That suits the home page, where cards are doors,
+              // but a case study is for reading, and prose that animates in
+              // keeps the reader waiting on it. Motion on this page belongs to
+              // moving between pages and to hover; the text is simply there.
+              <div key={idx}>
               <div data-section={idx} className="grid md:grid-cols-12 gap-5 md:gap-8 items-start group">
 
                 {/* Left Column: Heading */}
@@ -917,7 +907,6 @@ const ProjectDetail = ({
                   sits below the grid so the sticky heading doesn't ride over it. */}
               {section.liveEmbed && <LiveEmbed {...section.liveEmbed} />}
               </div>
-              </Reveal>
               );
             })}
           </div>
@@ -927,6 +916,7 @@ const ProjectDetail = ({
         {nextProject && (
           <div className="mt-16 md:mt-32">
             <button
+              data-beckon
               onClick={onNext}
               className="surface surface-marks surface-hover group relative w-full overflow-hidden rounded-3xl p-4 sm:p-6 md:p-8 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label={`Open next project: ${nextProject.title}`}

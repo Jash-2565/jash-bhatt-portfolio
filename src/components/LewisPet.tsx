@@ -5,6 +5,7 @@ import {
   ANIMATIONS,
   CELL_H,
   CELL_W,
+  REACT_EVENT,
   SUMMON_EVENT,
   framePosition,
   spriteStyle,
@@ -129,6 +130,17 @@ export default function LewisPet({ zone }: { zone: LewisZone }) {
     };
     window.addEventListener(SUMMON_EVENT, summon);
     return () => window.removeEventListener(SUMMON_EVENT, summon);
+  }, []);
+
+  // Reactions to what the reader does elsewhere on the page (lewisReact in
+  // config/lewis). Queued like a hover: the loop picks it up next frame.
+  useEffect(() => {
+    const react = (event: Event) => {
+      const name = (event as CustomEvent<AnimationName>).detail;
+      if (name in ANIMATIONS) requestRef.current = name;
+    };
+    window.addEventListener(REACT_EVENT, react);
+    return () => window.removeEventListener(REACT_EVENT, react);
   }, []);
 
   useEffect(() => {

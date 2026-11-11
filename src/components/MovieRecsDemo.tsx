@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { lewisReact } from '../config/lewis';
 import { PUBLIC_URL } from '../utils/getBaseUrl';
 
 type MovieRow = {
@@ -256,6 +257,8 @@ const MovieRecsDemo = () => {
 
     setMessage(`Top picks similar to "${movies[best.index].movie_title}":`);
     setResults(top);
+    // Lewis looks the picks over.
+    if (top.length) lewisReact('review');
   };
 
   const handleClear = () => {

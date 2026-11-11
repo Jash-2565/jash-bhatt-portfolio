@@ -21,6 +21,7 @@ const ExplorationsEntry = ({ openExplorations }: ExplorationsEntryProps) => (
         id={EXPLORATIONS_ENTRY_ID}
         href="#explorations"
         onClick={(event) => onInPageLink(event, () => openExplorations())}
+        data-beckon
         className={`${ui.cardBase} ${ui.cardHover} press group flex w-full items-center gap-6 p-5 sm:p-7 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
       >
         <div className="min-w-0 flex-1">
