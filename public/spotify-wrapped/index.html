@@ -1602,16 +1602,21 @@ $('#changeLine').innerHTML=`Your taste turned over, settled, then narrowed. All 
   });
   // the trips from chapter VI, dropped onto the same months — the graph stops being
   // abstract the moment you can see where you were
-  const tagX=[];
-  (X.places?X.places.trips:[]).forEach(t=>{
-    const fi=fidx(t.from); if(fi<0)return;
-    // two countries in one week land almost on top of each other — step the tags
-    // sideways so neither hides the other, and keep the leader line honest
-    const bx=x((fi+fidx(t.to))/2);
-    let ax=bx;
-    while(tagX.some(v=>Math.abs(v-ax)<28))ax+=28;
-    if(ax>W-6){ax=bx; while(tagX.some(v=>Math.abs(v-ax)<28))ax-=28;}
-    tagX.push(ax);
+  // Tags keep chronological order left to right: each sits under its own trip where it
+  // can, is pushed right of its neighbour when they collide, and if the run overflows
+  // the right edge the whole run is pulled back left. Order never swaps, so the
+  // leader lines can never cross.
+  const GAP=PHONE?26:28, HALF=13;
+  const tagList=(X.places?X.places.trips:[]).map(t=>{
+    const fi=fidx(t.from), ti=fidx(t.to);
+    return fi<0?null:{t,bx:x((fi+ti)/2)};
+  }).filter(Boolean).sort((p,q)=>p.bx-q.bx||(p.t.from<q.t.from?-1:1));
+  tagList.forEach((o,i)=>{o.ax=Math.max(o.bx,i?tagList[i-1].ax+GAP:L+HALF)});
+  const maxAx=W-HALF-2;
+  for(let i=tagList.length-1;i>=0;i--){
+    const lim=i===tagList.length-1?maxAx:tagList[i+1].ax-GAP;
+    if(tagList[i].ax>lim)tagList[i].ax=lim;}
+  tagList.forEach(({t,bx,ax})=>{
     svg.appendChild(el('line',{x1:bx,x2:ax,y1:T+ih,y2:T+ih+12,stroke:'var(--s4)',
       'stroke-width':1,opacity:.7}));
     const g=el('g');
