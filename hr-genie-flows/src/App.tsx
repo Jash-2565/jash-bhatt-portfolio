@@ -13,6 +13,13 @@ import { ProgressBar } from "./components/ProgressBar";
 const STAGE_W = 1920;
 const STAGE_H = 1080;
 
+// Phones get a portrait stage instead: at 1920 wide the frame scaled to ~0.2
+// and nothing was legible. 460 wide scales to ~0.9 on a phone column, and
+// the flowchart shows a 500×330 window that pans to the active step.
+const PHONE_W = 460;
+const PHONE_H = 880;
+const CAMERA = { w: 500, h: 330 };
+
 const params = new URLSearchParams(location.search);
 const EXPORT = params.has("export");
 
@@ -43,7 +50,7 @@ export default function App() {
   const scenario = scenarios.find((s) => s.id === scenarioId)!;
   const tl = useMemo(() => compile(workflow, scenario), [scenario]);
   const { t, playing, setPlaying, speed, setSpeed, seek, toggle } = useClock(tl.total, !EXPORT);
-  const scale = useStageScale();
+  const { scale, phone } = useStage();
 
   const chooseScenario = useCallback(
     (id: string) => {
@@ -105,6 +112,57 @@ export default function App() {
     };
   }, [tl, seek]);
 
+  const controls = !EXPORT && (
+    <Controls
+      scenarios={scenarios}
+      scenarioId={scenarioId}
+      onScenario={chooseScenario}
+      playing={playing}
+      onToggle={toggle}
+      onRestart={restart}
+      onBack={back}
+      onForward={forward}
+      speed={speed}
+      onSpeed={setSpeed}
+      compact={phone}
+    />
+  );
+
+  if (phone) {
+    return (
+      <ReducedMotion.Provider value={reduced}>
+        <div className="fixed inset-0 overflow-hidden bg-canvas">
+          <div
+            className="absolute left-1/2 top-1/2 flex flex-col gap-3 bg-canvas px-3.5 pb-3.5 pt-4"
+            style={{
+              width: PHONE_W,
+              height: PHONE_H,
+              transform: `translate(-50%, -50%) scale(${scale})`,
+              backgroundImage: "radial-gradient(circle at 30% 0%, rgba(1,245,209,0.06), transparent 55%)",
+            }}
+          >
+            <header>
+              <div className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-accent">HR Genie · Agent workflow</div>
+              <h1 className="mt-1 text-[22px] font-bold leading-tight text-slate-50">{flow.title}</h1>
+              <p className="mt-0.5 truncate text-[14px] text-slate-400">{scenario.blurb}</p>
+            </header>
+            {controls}
+            <section
+              className="shrink-0 overflow-hidden rounded-2xl border border-line bg-panel/60"
+              style={{ aspectRatio: `${CAMERA.w} / ${CAMERA.h}` }}
+            >
+              <Flowchart workflow={workflow} tl={tl} t={t} label={`${flow.title} workflow`} camera={CAMERA} />
+            </section>
+            <section className="min-h-0 flex-1">
+              <ChatPanel tl={tl} t={t} title={flow.topic} compact />
+            </section>
+            <ProgressBar workflow={workflow} tl={tl} t={t} onSeek={seek} compact />
+          </div>
+        </div>
+      </ReducedMotion.Provider>
+    );
+  }
+
   return (
     <ReducedMotion.Provider value={reduced}>
       <div className="fixed inset-0 overflow-hidden bg-canvas">
@@ -127,20 +185,7 @@ export default function App() {
                 </span>
               </h1>
             </div>
-            {!EXPORT && (
-              <Controls
-                scenarios={scenarios}
-                scenarioId={scenarioId}
-                onScenario={chooseScenario}
-                playing={playing}
-                onToggle={toggle}
-                onRestart={restart}
-                onBack={back}
-                onForward={forward}
-                speed={speed}
-                onSpeed={setSpeed}
-              />
-            )}
+            {controls}
           </header>
 
           <main className="mt-6 flex min-h-0 flex-1 gap-6">
@@ -181,13 +226,18 @@ function Legend() {
   );
 }
 
-function useStageScale() {
-  const get = () => Math.min(innerWidth / STAGE_W, innerHeight / STAGE_H);
-  const [scale, setScale] = useState(get);
+/** A portrait frame (the site's phone embed) gets the phone stage. */
+function useStage() {
+  const get = () => {
+    const phone = !EXPORT && innerHeight > innerWidth;
+    const [w, h] = phone ? [PHONE_W, PHONE_H] : [STAGE_W, STAGE_H];
+    return { phone, scale: Math.min(innerWidth / w, innerHeight / h) };
+  };
+  const [stage, setStage] = useState(get);
   useEffect(() => {
-    const onResize = () => setScale(get());
+    const onResize = () => setStage(get());
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-  return scale;
+  return stage;
 }

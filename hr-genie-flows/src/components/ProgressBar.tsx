@@ -7,9 +7,11 @@ interface Props {
   tl: Timeline;
   t: number;
   onSeek: (ms: number) => void;
+  /** Phones: bars only, with the current step named once underneath. */
+  compact?: boolean;
 }
 
-export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
+export function ProgressBar({ workflow, tl, t, onSeek, compact }: Props) {
   const current = beatAt(tl, t);
   const stepOf = (nodeId: string) => workflow.nodes.find((n) => n.id === nodeId)?.step;
   const last = tl.beats[tl.beats.length - 1];
@@ -18,9 +20,25 @@ export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
   const tone = endNode ? endNode.tone : t >= tl.total ? "success" : undefined;
   const outcome = tone && t >= last.arrive ? TONE[tone] : null;
 
+  const currentStep = stepOf(tl.beats[current].beat.node);
+  const pill = (
+    <div
+      className={`shrink-0 rounded-full border text-center font-semibold ${
+        compact ? "px-3 py-1 text-[13px]" : "w-[170px] px-4 py-2 text-[14px]"
+      }`}
+      style={
+        outcome
+          ? { borderColor: outcome.hex, color: outcome.hex, background: outcome.fill }
+          : { borderColor: "#243140", color: "#7d8b9a" }
+      }
+    >
+      {outcome ? (workflow.outcomeLabels?.[tone!] ?? outcome.label) : "In progress"}
+    </div>
+  );
+
   return (
-    <div className="flex items-center gap-6">
-      <div className="grid flex-1 gap-2" style={{ gridTemplateColumns: `repeat(${workflow.steps.length}, minmax(0, 1fr))` }}>
+    <div className={compact ? "flex flex-col gap-2.5" : "flex items-center gap-6"}>
+      <div className={`grid flex-1 ${compact ? "gap-1" : "gap-2"}`} style={{ gridTemplateColumns: `repeat(${workflow.steps.length}, minmax(0, 1fr))` }}>
         {workflow.steps.map((label, i) => {
           const n = i + 1;
           const beats = tl.beats.filter((b) => stepOf(b.beat.node) === n);
@@ -41,7 +59,8 @@ export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
               key={label}
               onClick={() => beats[0] && onSeek(beats[0].start)}
               disabled={!beats.length}
-              className="group text-left disabled:cursor-default"
+              aria-label={compact ? `Step ${n}: ${label}` : undefined}
+              className={`group text-left disabled:cursor-default ${compact ? "py-2" : ""}`}
             >
               <div className={`h-1.5 overflow-hidden rounded-full ${skipped ? "bg-line/40" : "bg-line"}`}>
                 <div
@@ -49,6 +68,7 @@ export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
                   style={{ width: `${(done ? 1 : fill) * 100}%`, opacity: done && !active ? 0.7 : 1 }}
                 />
               </div>
+              {!compact && (
               <div
                 className={`mt-2 flex items-center gap-1.5 text-[13px] font-medium ${
                   active ? "text-accent" : skipped ? "text-slate-600 line-through decoration-slate-700" : done ? "text-slate-300" : "text-slate-500"
@@ -57,20 +77,29 @@ export function ProgressBar({ workflow, tl, t, onSeek }: Props) {
                 <span className="tabular-nums opacity-70">{n}</span>
                 <span className="truncate">{label}</span>
               </div>
+              )}
             </button>
           );
         })}
       </div>
-      <div
-        className="w-[170px] shrink-0 rounded-full border px-4 py-2 text-center text-[14px] font-semibold"
-        style={
-          outcome
-            ? { borderColor: outcome.hex, color: outcome.hex, background: outcome.fill }
-            : { borderColor: "#243140", color: "#7d8b9a" }
-        }
-      >
-        {outcome ? (workflow.outcomeLabels?.[tone!] ?? outcome.label) : "In progress"}
-      </div>
+      {compact ? (
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0 truncate text-[14px] font-medium text-slate-300">
+            {currentStep && t < tl.total ? (
+              <>
+                <span className="tabular-nums text-accent">{currentStep}</span>
+                <span className="text-slate-600"> / {workflow.steps.length}</span>
+                <span className="ml-2">{workflow.steps[currentStep - 1]}</span>
+              </>
+            ) : (
+              <span className="text-slate-400">Walkthrough complete</span>
+            )}
+          </div>
+          {pill}
+        </div>
+      ) : (
+        pill
+      )}
     </div>
   );
 }

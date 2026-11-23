@@ -1,6 +1,7 @@
 import type { ApiBadge as Badge, EndTone, FlowEdge, FlowNode, Workflow } from "../engine/types";
 import {
   along,
+  beatAt,
   edgeView,
   nodeView,
   progress,
@@ -20,10 +21,52 @@ interface Props {
   t: number;
 }
 
-export function Flowchart({ workflow, tl, t, label }: Props & { label: string }) {
+/**
+ * On phones the whole chart is too small to read, so `camera` crops it to a
+ * window of that size that follows the active step. The window frames the
+ * step with its own terminals and API badges: it snaps to the half of the
+ * chart they sit in when they fit one (so the two-column flows hold still
+ * between steps), and zooms out just enough when they don't.
+ */
+export function Flowchart({
+  workflow,
+  tl,
+  t,
+  label,
+  camera,
+}: Props & { label: string; camera?: { w: number; h: number } }) {
+  const reduced = useReduced();
   const { w, h } = workflow.viewBox;
+  let shot: { x: number; y: number; k: number } | null = null;
+  if (camera) {
+    const id = tl.beats[beatAt(tl, t)].beat.node;
+    const node = workflow.nodes.find((n) => n.id === id) ?? workflow.nodes[0];
+    const framed = [
+      node,
+      ...workflow.edges
+        .filter((e) => e.from === node.id)
+        .map((e) => workflow.nodes.find((n) => n.id === e.to && n.kind !== "step"))
+        .filter((n): n is FlowNode => !!n),
+      ...[workflow.apiBadge ?? []].flat().filter((b) => b.anchor === node.id),
+    ];
+    const lo = Math.min(...framed.map((b) => b.x - b.w / 2));
+    const hi = Math.max(...framed.map((b) => b.x + b.w / 2));
+    const camW = Math.min(w, Math.max(camera.w, hi - lo + 40));
+    const camH = (camW * camera.h) / camera.w;
+    let x: number;
+    if (camW === camera.w && hi <= w / 2 + 10) x = 0;
+    else if (camW === camera.w && lo >= w / 2 - 10) x = w - camera.w;
+    else x = Math.min(Math.max((lo + hi) / 2 - camW / 2, 0), w - camW);
+    const y = Math.min(Math.max(node.y - camH / 2, 0), h - camH);
+    shot = { x, y, k: camera.w / camW };
+  }
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="h-full w-full" role="img" aria-label={label}>
+    <svg
+      viewBox={camera ? `0 0 ${camera.w} ${camera.h}` : `0 0 ${w} ${h}`}
+      className="h-full w-full"
+      role="img"
+      aria-label={label}
+    >
       <defs>
         <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
           <feGaussianBlur stdDeviation="7" />
@@ -32,15 +75,26 @@ export function Flowchart({ workflow, tl, t, label }: Props & { label: string })
           <feGaussianBlur stdDeviation="4" />
         </filter>
       </defs>
-      {workflow.edges.map((e) => (
-        <Edge key={e.id} edge={e} tl={tl} t={t} />
-      ))}
-      {[workflow.apiBadge ?? []].flat().map((b) => (
-        <ApiBadge key={b.anchor} badge={b} workflow={workflow} tl={tl} t={t} />
-      ))}
-      {workflow.nodes.map((n) => (
-        <Node key={n.id} node={n} tl={tl} t={t} />
-      ))}
+      <g
+        style={
+          shot
+            ? {
+                transform: `scale(${shot.k}) translate(${-shot.x}px, ${-shot.y}px)`,
+                transition: reduced ? undefined : "transform 700ms cubic-bezier(0.4, 0, 0.2, 1)",
+              }
+            : undefined
+        }
+      >
+        {workflow.edges.map((e) => (
+          <Edge key={e.id} edge={e} tl={tl} t={t} />
+        ))}
+        {[workflow.apiBadge ?? []].flat().map((b) => (
+          <ApiBadge key={b.anchor} badge={b} workflow={workflow} tl={tl} t={t} />
+        ))}
+        {workflow.nodes.map((n) => (
+          <Node key={n.id} node={n} tl={tl} t={t} />
+        ))}
+      </g>
     </svg>
   );
 }

@@ -12,19 +12,21 @@ interface Props {
   onForward: () => void;
   speed: number;
   onSpeed: (s: number) => void;
+  /** Phones: scenario picker on its own full-width row above the buttons. */
+  compact?: boolean;
 }
 
 const SPEEDS = [0.5, 1, 2];
 
 export function Controls(p: Props) {
   return (
-    <div className="flex items-center gap-3">
-      <label className="relative">
+    <div className={p.compact ? "grid grid-cols-[1fr_auto] gap-2.5" : "flex items-center gap-3"}>
+      <label className={`relative ${p.compact ? "col-span-2" : ""}`}>
         <span className="sr-only">Scenario</span>
         <select
           value={p.scenarioId}
           onChange={(e) => p.onScenario(e.target.value)}
-          className="h-11 appearance-none rounded-xl border border-line bg-raised pl-4 pr-10 text-[15px] font-medium text-slate-100 outline-none focus-visible:border-accent"
+          className={`h-11 appearance-none rounded-xl border border-line bg-raised pl-4 pr-10 text-[15px] font-medium text-slate-100 outline-none focus-visible:border-accent ${p.compact ? "w-full" : ""}`}
         >
           {p.scenarios.map((s, i) => (
             <option key={s.id} value={s.id}>
@@ -37,7 +39,7 @@ export function Controls(p: Props) {
         </svg>
       </label>
 
-      <div className="flex items-center gap-1 rounded-xl border border-line bg-raised p-1">
+      <div className="flex items-center gap-1 justify-self-start rounded-xl border border-line bg-raised p-1">
         <Btn label="Restart (R)" onClick={p.onRestart}>
           <path d="M3 8a5 5 0 1 0 1.5-3.5M3 2.5V5h2.5" />
         </Btn>

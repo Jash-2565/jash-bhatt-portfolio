@@ -15,7 +15,8 @@ import {
   SummaryCard,
 } from "./cards";
 
-export function ChatPanel({ tl, t, title }: { tl: Timeline; t: number; title: string }) {
+/** `compact` (phones) trims the header and drops the dummy input row. */
+export function ChatPanel({ tl, t, title, compact }: { tl: Timeline; t: number; title: string; compact?: boolean }) {
   const scroller = useRef<HTMLDivElement>(null);
   const visible = tl.events.filter((e) => t >= e.start);
 
@@ -27,8 +28,12 @@ export function ChatPanel({ tl, t, title }: { tl: Timeline; t: number; title: st
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-panel">
-      <header className="flex items-center gap-3 border-b border-line px-6 py-4">
-        <div className="grid h-10 w-10 place-items-center rounded-full bg-accent/15 text-[15px] font-bold text-accent ring-1 ring-accent/40">
+      <header className={`flex items-center gap-3 border-b border-line ${compact ? "px-4 py-2.5" : "px-6 py-4"}`}>
+        <div
+          className={`grid place-items-center rounded-full bg-accent/15 font-bold text-accent ring-1 ring-accent/40 ${
+            compact ? "h-8 w-8 text-[13px]" : "h-10 w-10 text-[15px]"
+          }`}
+        >
           HG
         </div>
         <div className="leading-tight">
@@ -41,7 +46,7 @@ export function ChatPanel({ tl, t, title }: { tl: Timeline; t: number; title: st
       </header>
       <div
         ref={scroller}
-        className="chat-scroll flex-1 overflow-y-auto px-6 py-5"
+        className={`chat-scroll flex-1 overflow-y-auto ${compact ? "px-4 py-4" : "px-6 py-5"}`}
         style={{ maskImage: "linear-gradient(to bottom, transparent 0, black 28px)" }}
       >
         <div className="flex min-h-full flex-col justify-end gap-3">
@@ -50,11 +55,13 @@ export function ChatPanel({ tl, t, title }: { tl: Timeline; t: number; title: st
           ))}
         </div>
       </div>
-      <footer className="border-t border-line px-5 py-3.5">
-        <div className="rounded-full border border-line bg-raised px-5 py-2.5 text-[14px] text-slate-500">
-          Type a message…
-        </div>
-      </footer>
+      {!compact && (
+        <footer className="border-t border-line px-5 py-3.5">
+          <div className="rounded-full border border-line bg-raised px-5 py-2.5 text-[14px] text-slate-500">
+            Type a message…
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
