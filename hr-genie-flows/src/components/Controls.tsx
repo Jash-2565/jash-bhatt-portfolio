@@ -12,7 +12,7 @@ interface Props {
   onForward: () => void;
   speed: number;
   onSpeed: (s: number) => void;
-  /** Phones: scenario picker on its own full-width row above the buttons. */
+  /** Phones: one row; the picker takes the spare width and speed is one button that cycles. */
   compact?: boolean;
 }
 
@@ -20,13 +20,15 @@ const SPEEDS = [0.5, 1, 2];
 
 export function Controls(p: Props) {
   return (
-    <div className={p.compact ? "grid grid-cols-[1fr_auto] gap-2.5" : "flex items-center gap-3"}>
-      <label className={`relative ${p.compact ? "col-span-2" : ""}`}>
+    <div className={`flex items-center ${p.compact ? "gap-2" : "gap-3"}`}>
+      <label className={`relative ${p.compact ? "min-w-0 flex-1" : ""}`}>
         <span className="sr-only">Scenario</span>
         <select
           value={p.scenarioId}
           onChange={(e) => p.onScenario(e.target.value)}
-          className={`h-11 appearance-none rounded-xl border border-line bg-raised pl-4 pr-10 text-[15px] font-medium text-slate-100 outline-none focus-visible:border-accent ${p.compact ? "w-full" : ""}`}
+          className={`h-11 appearance-none rounded-xl border border-line bg-raised font-medium text-slate-100 outline-none focus-visible:border-accent ${
+            p.compact ? "w-full truncate pl-3 pr-8 text-[14px]" : "pl-4 pr-10 text-[15px]"
+          }`}
         >
           {p.scenarios.map((s, i) => (
             <option key={s.id} value={s.id}>
@@ -34,12 +36,12 @@ export function Controls(p: Props) {
             </option>
           ))}
         </select>
-        <svg viewBox="0 0 16 16" className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" strokeWidth={2}>
+        <svg viewBox="0 0 16 16" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" strokeWidth={2}>
           <path d="M4 6l4 4 4-4" />
         </svg>
       </label>
 
-      <div className="flex items-center gap-1 justify-self-start rounded-xl border border-line bg-raised p-1">
+      <div className="flex shrink-0 items-center gap-1 rounded-xl border border-line bg-raised p-1">
         <Btn label="Restart (R)" onClick={p.onRestart}>
           <path d="M3 8a5 5 0 1 0 1.5-3.5M3 2.5V5h2.5" />
         </Btn>
@@ -54,6 +56,15 @@ export function Controls(p: Props) {
         </Btn>
       </div>
 
+      {p.compact ? (
+        <button
+          onClick={() => p.onSpeed(SPEEDS[(SPEEDS.indexOf(p.speed) + 1) % SPEEDS.length])}
+          aria-label={`Speed ${p.speed}×, tap to change`}
+          className="h-11 w-12 shrink-0 rounded-xl border border-line bg-raised text-[14px] font-semibold tabular-nums text-slate-200"
+        >
+          {p.speed}×
+        </button>
+      ) : (
       <div className="flex items-center rounded-xl border border-line bg-raised p-1" role="group" aria-label="Speed">
         {SPEEDS.map((s) => (
           <button
@@ -68,6 +79,7 @@ export function Controls(p: Props) {
           </button>
         ))}
       </div>
+      )}
     </div>
   );
 }

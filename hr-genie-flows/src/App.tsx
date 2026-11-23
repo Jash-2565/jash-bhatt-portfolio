@@ -15,10 +15,11 @@ const STAGE_H = 1080;
 
 // Phones get a portrait stage instead: at 1920 wide the frame scaled to ~0.2
 // and nothing was legible. 460 wide scales to ~0.9 on a phone column, and
-// the flowchart shows a 500×330 window that pans to the active step.
+// the flowchart shows a 500×260 window that pans to the active step. Kept
+// short enough that the frame doesn't fill a phone screen.
 const PHONE_W = 460;
-const PHONE_H = 880;
-const CAMERA = { w: 500, h: 330 };
+const PHONE_H = 700;
+const CAMERA = { w: 500, h: 260 };
 
 const params = new URLSearchParams(location.search);
 const EXPORT = params.has("export");
@@ -133,7 +134,7 @@ export default function App() {
       <ReducedMotion.Provider value={reduced}>
         <div className="fixed inset-0 overflow-hidden bg-canvas">
           <div
-            className="absolute left-1/2 top-1/2 flex flex-col gap-3 bg-canvas px-3.5 pb-3.5 pt-4"
+            className="absolute left-1/2 top-1/2 flex flex-col gap-2.5 bg-canvas px-3.5 pb-3 pt-3.5"
             style={{
               width: PHONE_W,
               height: PHONE_H,
@@ -142,8 +143,7 @@ export default function App() {
             }}
           >
             <header>
-              <div className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-accent">HR Genie · Agent workflow</div>
-              <h1 className="mt-1 text-[22px] font-bold leading-tight text-slate-50">{flow.title}</h1>
+              <h1 className="text-[21px] font-bold leading-tight text-slate-50">{flow.title}</h1>
               <p className="mt-0.5 truncate text-[14px] text-slate-400">{scenario.blurb}</p>
             </header>
             {controls}
