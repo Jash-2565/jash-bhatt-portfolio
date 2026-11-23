@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef, type ReactNode } from "react";
-import { TYPING_DOTS_MS, easeOut, progress, type TimedEvent, type Timeline } from "../engine/timeline";
+import { TYPING_DOTS_MS, easeInOut, easeOut, progress, type TimedEvent, type Timeline } from "../engine/timeline";
 import { useReduced } from "../engine/useClock";
 import {
   ApiCard,
   BalanceCard,
   CapCard,
+  CompactChat,
   ChecksCard,
   ChoiceCard,
   DatesCard,
@@ -15,25 +16,44 @@ import {
   SummaryCard,
 } from "./cards";
 
-/** `compact` (phones) trims the header and drops the dummy input row. */
+/**
+ * `compact` (phones) drops the header and the dummy input row, runs cards
+ * full width at a slightly smaller size, and scrolls so the newest message
+ * shows from its top: a card taller than the space left is never cut at the
+ * top, which is where its title and figures are.
+ */
 export function ChatPanel({ tl, t, title, compact }: { tl: Timeline; t: number; title: string; compact?: boolean }) {
   const scroller = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLDivElement>(null);
+  const reduced = useReduced();
   const visible = tl.events.filter((e) => t >= e.start);
 
-  // Keep the newest message in view as content grows.
+  // Keep the newest message in view as content grows. When it's taller than
+  // the chat (the creche claim summary on phones), open on its top, then
+  // scroll down through it at reading pace as its rows fill in.
+  const newest = visible[visible.length - 1];
   useLayoutEffect(() => {
     const el = scroller.current;
-    if (el) el.scrollTop = el.scrollHeight;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+    const last = list.current?.lastElementChild;
+    if (!last || !newest) return;
+    const box = el.getBoundingClientRect();
+    const over = last.getBoundingClientRect().top - box.top - 12;
+    if (over >= 0) return;
+    // Rects are in screen px; scrollTop is in the stage's px.
+    const k = el.offsetHeight / box.height;
+    const hidden = -over * k;
+    const p = reduced ? 1 : easeInOut(progress(t - newest.start, 700, Math.max(1600, hidden * 12)));
+    el.scrollTop -= hidden * (1 - p);
   });
 
   return (
+    <CompactChat.Provider value={!!compact}>
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-panel">
-      <header className={`flex items-center gap-3 border-b border-line ${compact ? "px-4 py-2.5" : "px-6 py-4"}`}>
-        <div
-          className={`grid place-items-center rounded-full bg-accent/15 font-bold text-accent ring-1 ring-accent/40 ${
-            compact ? "h-8 w-8 text-[13px]" : "h-10 w-10 text-[15px]"
-          }`}
-        >
+      {!compact && (
+      <header className="flex items-center gap-3 border-b border-line px-6 py-4">
+        <div className="grid h-10 w-10 place-items-center rounded-full bg-accent/15 text-[15px] font-bold text-accent ring-1 ring-accent/40">
           HG
         </div>
         <div className="leading-tight">
@@ -44,12 +64,13 @@ export function ChatPanel({ tl, t, title, compact }: { tl: Timeline; t: number; 
           <span className="h-2 w-2 rounded-full bg-ok" /> Online
         </div>
       </header>
+      )}
       <div
         ref={scroller}
-        className={`chat-scroll flex-1 overflow-y-auto ${compact ? "px-4 py-4" : "px-6 py-5"}`}
-        style={{ maskImage: "linear-gradient(to bottom, transparent 0, black 28px)" }}
+        className={`chat-scroll flex-1 overflow-y-auto ${compact ? "px-3 py-3" : "px-6 py-5"}`}
+        style={{ maskImage: `linear-gradient(to bottom, transparent 0, black ${compact ? 12 : 28}px)` }}
       >
-        <div className="flex min-h-full flex-col justify-end gap-3">
+        <div ref={list} className="flex min-h-full flex-col justify-end gap-3" style={compact ? { zoom: 0.86 } : undefined}>
           {visible.map((e) => (
             <Event key={`${tl.scenario.id}:${e.key}`} e={e} t={t} />
           ))}
@@ -63,6 +84,7 @@ export function ChatPanel({ tl, t, title, compact }: { tl: Timeline; t: number; 
         </footer>
       )}
     </div>
+    </CompactChat.Provider>
   );
 }
 

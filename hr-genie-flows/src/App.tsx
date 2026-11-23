@@ -15,11 +15,11 @@ const STAGE_H = 1080;
 
 // Phones get a portrait stage instead: at 1920 wide the frame scaled to ~0.2
 // and nothing was legible. 460 wide scales to ~0.9 on a phone column, and
-// the flowchart shows a 500×260 window that pans to the active step. Kept
+// the flowchart shows a 500×250 window that pans to the active step. Kept
 // short enough that the frame doesn't fill a phone screen.
 const PHONE_W = 460;
-const PHONE_H = 700;
-const CAMERA = { w: 500, h: 260 };
+const PHONE_H = 710;
+const CAMERA = { w: 500, h: 250 };
 
 const params = new URLSearchParams(location.search);
 const EXPORT = params.has("export");

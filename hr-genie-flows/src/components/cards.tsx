@@ -1,6 +1,11 @@
 import type { ChatEvent } from "../engine/types";
 import { clamp01, easeInOut, easeOut, progress } from "../engine/timeline";
+import { createContext, useContext } from "react";
 import { useReduced } from "../engine/useClock";
+
+/** Phones: cards run the chat's full width, so they wrap less and stay short. */
+export const CompactChat = createContext(false);
+const useFullWidth = () => (useContext(CompactChat) ? { width: "100%" } : undefined);
 import { TONE } from "./tone";
 
 type Of<K extends ChatEvent["kind"]> = Extract<ChatEvent, { kind: K }>;
@@ -10,7 +15,9 @@ const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`w-[90%] rounded-2xl border border-line bg-raised/70 p-4 ${className}`}>{children}</div>
+    <div className={`w-[90%] rounded-2xl border border-line bg-raised/70 p-4 ${className}`} style={useFullWidth()}>
+      {children}
+    </div>
   );
 }
 
@@ -228,6 +235,7 @@ export function SummaryCard({ event, local }: { event: Of<"summary">; local: num
   const rowAt = (i: number) => 300 + i * 170;
   const docAt = (i: number) => rowAt(event.rows.length) + 150 + i * 200;
   const seen = (ms: number) => (reduced ? (local >= ms ? 1 : 0) : easeOut(progress(local, ms, 260)));
+  const pad = useContext(CompactChat) ? "py-1" : "py-1.5";
   return (
     <Card className="w-[94%]">
       <div className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-slate-400">{event.title}</div>
@@ -237,8 +245,8 @@ export function SummaryCard({ event, local }: { event: Of<"summary">; local: num
             const p = seen(rowAt(i));
             return (
               <tr key={r.label} className="border-b border-line/70 last:border-0" style={{ opacity: p }}>
-                <td className="w-[38%] py-1.5 pr-3 align-top text-slate-400">{r.label}</td>
-                <td className="py-1.5 align-top">
+                <td className={`w-[38%] ${pad} pr-3 align-top text-slate-400`}>{r.label}</td>
+                <td className={`${pad} align-top`}>
                   <span className={r.accent ? "font-semibold text-accent" : "font-medium text-slate-100"}>{r.value}</span>
                   {r.detail && <div className={`text-[12.5px] ${r.warn ? "text-bad" : "text-slate-500"}`}>{r.detail}</div>}
                 </td>
@@ -294,11 +302,12 @@ export function EndCard({ event, local }: { event: Of<"end">; local: number }) {
   const tone = TONE[event.tone];
   const success = event.tone === "success";
   const shake = !success && !reduced && local < 520 ? Math.sin(local / 26) * 8 * (1 - local / 520) : 0;
+  const full = useFullWidth();
 
   return (
     <div
       className="relative w-[90%] rounded-2xl border-2 p-4"
-      style={{ borderColor: tone.hex, background: tone.fill, transform: `translateX(${shake}px)`, boxShadow: `0 0 32px ${tone.hex}33` }}
+      style={{ ...full, borderColor: tone.hex, background: tone.fill, transform: `translateX(${shake}px)`, boxShadow: `0 0 32px ${tone.hex}33` }}
     >
       <div className="flex items-center gap-3">
         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full" style={{ background: `${tone.hex}26`, color: tone.hex }}>
@@ -446,7 +455,7 @@ export function ChoiceCard({ event, local }: { event: Of<"choice">; local: numbe
 
 export function InfoCard({ event }: { event: Of<"info"> }) {
   return (
-    <div className="w-[86%] rounded-2xl border border-accent/30 bg-accent/[0.06] px-4 py-3">
+    <div className="w-[86%] rounded-2xl border border-accent/30 bg-accent/[0.06] px-4 py-3" style={useFullWidth()}>
       <div className="mb-1.5 flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wide text-accent">
         <span className="grid h-4 w-4 place-items-center rounded-full border border-accent text-[10px] normal-case">i</span>
         {event.title}
