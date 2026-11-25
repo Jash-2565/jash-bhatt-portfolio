@@ -47,10 +47,10 @@ const AboutSection = () => (
           <h2 id="about-heading" className={`${ui.h2} font-display text-ink mb-6 md:mb-10`}>About me</h2>
           <div className="space-y-4 md:space-y-6 text-base md:text-lg text-ink-body leading-relaxed">
             <p>
-              I grew up in Pune and I'm still here, in my final year of design at FLAME University. Two things pulled me into design: taking things apart to see how they work, and caring how they look once they're put back together.
+              I'm in my fourth year of design at FLAME University, and I've become hooked on AI agents, the kind that can think through a problem, pick up the right tools and act.
             </p>
             <p>
-              Both still shape how I work. I'd rather build a rough prototype and test it than argue about a mockup, and I keep going until a product behaves exactly the way someone expects it to.
+              Coming from UI/UX, product design and physical computing, I care most about making them useful in everyday life.
             </p>
           </div>
         </Reveal>
