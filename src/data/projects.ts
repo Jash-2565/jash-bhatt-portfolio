@@ -1198,11 +1198,11 @@ export const projects: Project[] = [
         {
           title: "What the Data Knew That I Didn't",
           callout: { text: "Four plays of Khalid. Then nothing for 663 days. Then 1,584." },
-          content: "The findings I kept are the ones no ranking would surface. Of 5,676 different songs played, 226 account for a third of everything I have played.",
+          content: "The findings I kept are the ones no ranking would surface. Seven made the cut, and each is drawn in the shape of its own story: a streak as a heartbeat that flatlines, a comeback as a waveform with 663 days of silence in it, two days as two till receipts.",
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Surprises.webp`,
-              caption: "Eight findings that no top-ten list would have surfaced. The clock plot compares one artist's hours against everything else played."
+              caption: "Two of the seven. Forty-one straight days of 5 Seconds of Summer beat like a heart monitor until 1 July, when the line goes flat."
             }
           ]
         },
@@ -1235,7 +1235,7 @@ export const projects: Project[] = [
           images: [
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Artists.webp`,
-              caption: "A chapter opening: the name at full size, four numbers, one paragraph, and only then the ranked list behind it."
+              caption: "A chapter opening: the name at full size, four numbers, one line, and only then the ranked list behind it."
             },
             {
               src: `${PUBLIC_URL}/images/Spotify/Soundtrack-Records.webp`,
